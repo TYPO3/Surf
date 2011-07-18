@@ -29,7 +29,7 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function execute($node, $application, $deployment, $options = array()) {
 		$path = $application->getOption('deploymentPath');
-		$this->shell->execute('mkdir -p ' . $path . '/shared/Data/Logs;mkdir -p ' . $path . '/shared/Data/Persistent;mkdir -p ' . $path . '/shared/Configuration;mkdir -p ' . $path . '/shared/Web/_Resources', $node, $deployment);
+		$this->shell->execute('mkdir -p ' . $path . '/shared/Data/Logs;mkdir -p ' . $path . '/shared/Data/Persistent;mkdir -p ' . $path . '/shared/Configuration', $node, $deployment);
 	}
 
 }

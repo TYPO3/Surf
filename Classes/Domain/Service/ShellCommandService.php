@@ -32,7 +32,7 @@ class ShellCommandService {
 			list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment);
 		}
 		if ($force && $exitCode !== 0) {
-			throw new \Exception('Command ' . $command . ' return non-zero return code', 1311007746);
+			throw new \Exception('Command returned non-zero return code', 1311007746);
 		}
 		return ($exitCode === 0 ? $returnedOutput : FALSE);
 	}
@@ -44,7 +44,7 @@ class ShellCommandService {
 	 * @return array
 	 */
 	protected function executeLocalCommand($command, $deployment) {
-		$deployment->getLogger()->log('Executing locally: "' . $command . '"', LOG_DEBUG);
+		$deployment->getLogger()->log('    (localhost): "' . $command . '"', LOG_DEBUG);
 		$returnedOutput = '';
 
 		$fp = popen($command, 'r');
@@ -66,7 +66,7 @@ class ShellCommandService {
 	 * @return array
 	 */
 	protected function executeRemoteCommand($command, $node, $deployment) {
-		$deployment->getLogger()->log('Executing on ' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
+		$deployment->getLogger()->log('    $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
 		$username = $node->getOption('username');
 		$hostname = $node->getHostname();
 		$returnedOutput = '';
@@ -74,7 +74,7 @@ class ShellCommandService {
 		// TODO Create SSH options
 		$fp = popen('ssh -A ' . $username . '@' . $hostname . ' ' . escapeshellarg($command) . ' 2>&1', 'r');
 		while (($line = fgets($fp)) !== FALSE) {
-			$deployment->getLogger()->log('> ' . rtrim($line));
+			$deployment->getLogger()->log('    > ' . rtrim($line));
 			$returnedOutput .= $line;
 		}
 		$exitCode = pclose($fp);

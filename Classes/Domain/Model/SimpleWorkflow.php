@@ -29,7 +29,7 @@ class SimpleWorkflow extends Workflow {
 		'test',
 		// Do symlink to current release
 		'switch',
-		// Delete temporary
+		// Delete temporary files or previous releases
 		'cleanup'
 	);
 
@@ -41,11 +41,21 @@ class SimpleWorkflow extends Workflow {
 	public function run(Deployment $deployment) {
 		parent::run($deployment);
 		$nodes = $deployment->getNodes();
-		foreach ($nodes as $node) {
-			foreach ($this->stages as $stage) {
+		foreach ($this->stages as $stage) {
+			foreach ($nodes as $node) {
 				foreach ($deployment->getApplications() as $application) {
-					// TODO Catch exceptions and do the transaction thingy
-					$this->executeStage($stage, $node, $application, $deployment);
+					try {
+						$this->executeStage($stage, $node, $application, $deployment);
+					} catch(\Exception $exception) {
+						if (array_search($stage, $this->stages) <= array_search('switch', $this->stages)) {
+							$deployment->getLogger()->log('Got exception "' . $exception->getMessage() . '" rolling back.', LOG_ERR);
+							$this->taskManager->rollback();
+						} else {
+							$deployment->getLogger()->log('Got exception "' . $exception->getMessage() . '" but after switch stage, no rollback necessary.', LOG_ERR);
+							$this->taskManager->reset();
+						}
+						return;
+					}
 				}
 			}
 		}
@@ -55,7 +65,7 @@ class SimpleWorkflow extends Workflow {
 	 * @return string
 	 */
 	public function getName() {
-		return 'Single node workflow';
+		return 'Simple workflow';
 	}
 
 }

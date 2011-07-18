@@ -14,15 +14,25 @@ namespace TYPO3\Deploy\Domain\Model;
 abstract class Task {
 
 	/**
-	 * Execute this action
+	 * Executes this action
 	 *
-	 * @param $node
-	 * @param $application
-	 * @param $deployment
-	 * @param $options
+	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param array $options
 	 * @return void
 	 */
 	abstract public function execute($node, $application, $deployment, $options = array());
+
+	/**
+	 * Rollback this task
+	 *
+	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @return void
+	 */
+	public function rollback($node, $application, $deployment) {}
 
 }
 ?>

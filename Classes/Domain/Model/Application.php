@@ -7,7 +7,7 @@ namespace TYPO3\Deploy\Domain\Model;
  *                                                                        */
 
 /**
- * An application
+ * A generic application
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -45,15 +45,9 @@ class Application {
 	 */
 	public function registerTasks($workflow) {
 		$workflow
-			->forStage('initialize', array(
-				'typo3.deploy:createdirectories'
-			))
-			->forStage('update', array(
-				'typo3.deploy:checkout'
-			))
-			->forStage('switch', array(
-				'typo3.deploy:symlink'
-			));
+			->forStage('initialize', 'typo3.deploy:createdirectories')
+			->forStage('update', 'typo3.deploy:checkout')
+			->forStage('switch', 'typo3.deploy:symlink');
 	}
 
 	/**

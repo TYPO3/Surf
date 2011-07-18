@@ -32,5 +32,17 @@ class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$this->shell->execute('cd ' . $targetPath . ' && ./flow3 typo3.flow3:doctrine:migrate', $node, $deployment, TRUE);
 	}
 
+	/**
+	 * Rollback the task
+	 *
+	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @return void
+	 */
+	public function rollback($node, $application, $deployment) {
+		// TODO Implement rollback of Doctrine migration
+	}
+
 }
 ?>

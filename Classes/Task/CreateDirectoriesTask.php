@@ -37,5 +37,18 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$this->shell->execute('mkdir -p ' . $path . '/releases;mkdir -p ' . $releasePath . ';mkdir -p ' . $path . '/shared', $node, $deployment);
 	}
 
+	/**
+	 * Rollback this task
+	 *
+	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @return void
+	 */
+	public function rollback($node, $application, $deployment) {
+		$releasePath = $deployment->getApplicationReleasePath($application);
+		$this->shell->execute('rm -rf ' . $releasePath, $node, $deployment);
+	}
+
 }
 ?>
