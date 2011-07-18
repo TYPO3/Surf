@@ -6,6 +6,9 @@ namespace TYPO3\Deploy\Domain\Service;
  *                                                                        *
  *                                                                        */
 
+use \TYPO3\Deploy\Domain\Model\Node;
+use \TYPO3\Deploy\Domain\Model\Deployment;
+
 /**
  * A shell command service
  *
@@ -22,7 +25,7 @@ class ShellCommandService {
 	 * @param boolean TRUE if this command has to return a successful return code
 	 * @return TRUE If the command execution was successful (zero return code)
 	 */
-	public function execute($command, $node, $deployment, $force = FALSE) {
+	public function execute($command, Node $node, Deployment $deployment, $force = FALSE) {
 		if ($node === NULL || $node->getHostname() === 'localhost') {
 			list($exitCode, $returnedOutput) = $this->executeLocalCommand($command, $deployment);
 		} else {
