@@ -31,9 +31,8 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$sharedPath = $application->getOption('deploymentPath') . '/shared';
 		$commands = array(
-			"mkdir -p $releasePath/Data/Logs",
+			"mkdir -p $releasePath/Data",
 			"ln -sf $sharedPath/Data/Logs $releasePath/Data/Logs",
-			"mkdir -p $releasePath/Data/Persistent",
 			"ln -sf $sharedPath/Data/Persistent $releasePath/Data/Persistent"
 		);
 		$this->shell->execute(implode(';', $commands), $node, $deployment);

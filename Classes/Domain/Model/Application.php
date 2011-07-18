@@ -6,6 +6,9 @@ namespace TYPO3\Deploy\Domain\Model;
  *                                                                        *
  *                                                                        */
 
+use \TYPO3\Deploy\Domain\Model\Workflow;
+use \TYPO3\Deploy\Domain\Model\Node;
+
 /**
  * A generic application
  *
@@ -43,7 +46,7 @@ class Application {
 	 *
 	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow
 	 */
-	public function registerTasks($workflow) {
+	public function registerTasks(Workflow $workflow) {
 		$workflow
 			->forStage('initialize', 'typo3.deploy:createdirectories')
 			->forStage('update', 'typo3.deploy:checkout')
@@ -94,7 +97,7 @@ class Application {
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @return void
 	 */
-	public function addNode(\TYPO3\Deploy\Domain\Model\Node $node) {
+	public function addNode(Node $node) {
 		$this->nodes[$node->getName()] = $node;
 	}
 

@@ -31,7 +31,7 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$currentPath = $application->getOption('deploymentPath') . '/current';
 		$previousPath = $application->getOption('deploymentPath') . '/previous';
-		$this->shell->execute('mv ' . $currentPath . ' ' . $previousPath . ' && ln -s ' . $releasePath . ' ' . $currentPath, $node, $deployment, TRUE);
+		$this->shell->execute('rm -f ' . $previousPath . ' && if [ -e ' . $currentPath . ' ]; then mv ' . $currentPath . ' ' . $previousPath . '; fi && ln -s ' . $releasePath . ' ' . $currentPath, $node, $deployment, TRUE);
 		$deployment->getLogger()->log('You are live!');
 	}
 

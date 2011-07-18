@@ -6,6 +6,10 @@ namespace TYPO3\Deploy\Domain\Model;
  *                                                                        *
  *                                                                        */
 
+use \TYPO3\Deploy\Domain\Model\Workflow;
+use \TYPO3\Deploy\Domain\Model\Application;
+use \TYPO3\Deploy\Domain\Model\Node;
+
 /**
  * A Deployment
  *
@@ -82,7 +86,7 @@ class Deployment {
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @return string
 	 */
-	public function getApplicationReleasePath(\TYPO3\Deploy\Domain\Model\Application $application) {
+	public function getApplicationReleasePath(Application $application) {
 		return $application->getOption('deploymentPath') . '/releases/' . $this->getReleaseIdentifier();
 	}
 
@@ -130,7 +134,7 @@ class Deployment {
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @return void
 	 */
-	public function addNode(\TYPO3\Deploy\Domain\Model\Node $node) {
+	public function addNode(Node $node) {
 		$this->nodes[$node->getName()] = $node;
 	}
 
@@ -147,7 +151,7 @@ class Deployment {
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @return void
 	 */
-	public function addApplication(\TYPO3\Deploy\Domain\Model\Application $application) {
+	public function addApplication(Application $application) {
 		$this->applications[$application->getName()] = $application;
 	}
 

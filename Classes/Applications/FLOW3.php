@@ -6,6 +6,8 @@ namespace TYPO3\Deploy\Applications;
  *                                                                        *
  *                                                                        */
 
+use \TYPO3\Deploy\Domain\Model\Workflow;
+
 /**
  * A FLOW3 application
  *
@@ -21,10 +23,12 @@ class FLOW3 extends \TYPO3\Deploy\Domain\Model\Application {
 	}
 
 	/**
+	 * Register tasks for this application
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow 
+	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow
+	 * @return void
 	 */
-	public function registerTasks($workflow) {
+	public function registerTasks(Workflow $workflow) {
 		parent::registerTasks($workflow);
 
 		$workflow
