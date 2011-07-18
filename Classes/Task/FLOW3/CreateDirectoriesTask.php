@@ -6,6 +6,10 @@ namespace TYPO3\Deploy\Task\FLOW3;
  *                                                                        *
  *                                                                        */
 
+use \TYPO3\Deploy\Domain\Model\Node;
+use \TYPO3\Deploy\Domain\Model\Application;
+use \TYPO3\Deploy\Domain\Model\Deployment;
+
 /**
  * A task to create FLOW3 specific directories
  *
@@ -27,7 +31,7 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
-	public function execute($node, $application, $deployment, $options = array()) {
+	public function execute(Node $node, Application $application, Deployment $deployment, $options = array()) {
 		$path = $application->getOption('deploymentPath');
 		$this->shell->execute('mkdir -p ' . $path . '/shared/Data/Logs;mkdir -p ' . $path . '/shared/Data/Persistent;mkdir -p ' . $path . '/shared/Configuration', $node, $deployment);
 	}

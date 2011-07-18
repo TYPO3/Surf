@@ -6,6 +6,10 @@ namespace TYPO3\Deploy\Task\FLOW3;
  *                                                                        *
  *                                                                        */
 
+use \TYPO3\Deploy\Domain\Model\Node;
+use \TYPO3\Deploy\Domain\Model\Application;
+use \TYPO3\Deploy\Domain\Model\Deployment;
+
 /**
  * A symlink task for linking shared directories
  *
@@ -27,7 +31,7 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
-	public function execute($node, $application, $deployment, $options = array()) {
+	public function execute(Node $node, Application $application, Deployment $deployment, $options = array()) {
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$sharedPath = $application->getOption('deploymentPath') . '/shared';
 		$commands = array(

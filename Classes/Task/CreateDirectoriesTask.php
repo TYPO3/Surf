@@ -6,6 +6,10 @@ namespace TYPO3\Deploy\Task;
  *                                                                        *
  *                                                                        */
 
+use \TYPO3\Deploy\Domain\Model\Node;
+use \TYPO3\Deploy\Domain\Model\Application;
+use \TYPO3\Deploy\Domain\Model\Deployment;
+
 /**
  * A task to create initial directories and the release directory for the current release
  *
@@ -27,14 +31,14 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
-	public function execute($node, $application, $deployment, $options = array()) {
+	public function execute(Node $node, Application $application, Deployment $deployment, $options = array()) {
 		$path = $application->getOption('deploymentPath');
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$result = $this->shell->execute('test -d ' . $path, $node, $deployment);
 		if ($result === FALSE) {
 			throw new \Exception('Deployment directory ' . $path . ' does not exist on ' . $node->getName(), 1311003253);
 		}
-		$this->shell->execute('mkdir -p ' . $path . '/releases;mkdir -p ' . $releasePath . ';mkdir -p ' . $path . '/shared', $node, $deployment);
+		$this->shell->execute('mkdir -p ' . $path . '/releases;mkdir -p ' . $path . '/shared', $node, $deployment);
 	}
 
 	/**
@@ -45,7 +49,7 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
-	public function rollback($node, $application, $deployment) {
+	public function rollback(Node $node, Application $application, Deployment $deployment) {
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$this->shell->execute('rm -rf ' . $releasePath, $node, $deployment);
 	}
