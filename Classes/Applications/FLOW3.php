@@ -35,11 +35,11 @@ class FLOW3 extends \TYPO3\Deploy\Domain\Model\Application {
 			->forApplication($this, 'initialize', array(
 				'typo3.deploy:flow3:createdirectories'
 			))
-			->forApplication($this, 'migrate', array(
-				'typo3.deploy:flow3:migrate'
-			))
 			->afterTask('typo3.deploy:checkout', array(
 				'typo3.deploy:flow3:symlink'
+			))
+			->forApplication($this, 'migrate', array(
+				'typo3.deploy:flow3:migrate'
 			));
 	}
 

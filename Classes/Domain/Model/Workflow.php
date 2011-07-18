@@ -55,6 +55,32 @@ abstract class Workflow {
 	}
 
 	/**
+	 * Remove the given task from all stages and applications
+	 *
+	 * @param string $task
+	 * @return void
+	 */
+	public function removeTask($removeTask) {
+		if (isset($this->tasks['stage'])) {
+			foreach ($this->tasks['stage'] as $applicationName => $tasksByStage) {
+				foreach ($tasksByStage as $stageName => $tasks) {
+					$this->tasks['stage'][$applicationName][$stageName] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
+				}
+			}
+		}
+		if (isset($this->tasks['after'])) {
+			foreach ($this->tasks['after'] as $taskName => $tasks) {
+				$this->tasks['after'][$taskName] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
+			}
+		}
+		if (isset($this->tasks['before'])) {
+			foreach ($this->tasks['before'] as $taskName => $tasks) {
+				$this->tasks['before'][$taskName] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
+			}
+		}
+	}
+
+	/**
 	 *
 	 * @param string $stage
 	 * @param string $application

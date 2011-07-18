@@ -14,13 +14,19 @@ use \TYPO3\Deploy\Domain\Model\Node;
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Application {
+abstract class Application {
 
 	/**
 	 * The name
 	 * @var string
 	 */
 	protected $name;
+
+	/**
+	 * The application hierarchy
+	 * @var string
+	 */
+	protected $hierarchy = array('_');
 
 	/**
 	 * The nodes for this application
@@ -48,9 +54,9 @@ class Application {
 	 */
 	public function registerTasks(Workflow $workflow) {
 		$workflow
-			->forStage('initialize', 'typo3.deploy:createdirectories')
-			->forStage('update', 'typo3.deploy:checkout')
-			->forStage('switch', 'typo3.deploy:symlink');
+			->forApplication($this, 'initialize', 'typo3.deploy:createdirectories')
+			->forApplication($this, 'update', 'typo3.deploy:checkout')
+			->forApplication($this, 'switch', 'typo3.deploy:symlink');
 	}
 
 	/**

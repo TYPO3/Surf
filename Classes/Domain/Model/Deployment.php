@@ -53,6 +53,11 @@ class Deployment {
 	protected $releaseIdentifier;
 
 	/**
+	 * @var array
+	 */
+	protected $initCallbacks = array();
+
+	/**
 	 *
 	 * @param string $name
 	 */
@@ -68,6 +73,17 @@ class Deployment {
 		foreach ($this->applications as $application) {
 			$application->registerTasks($this->workflow);
 		}
+		foreach ($this->initCallbacks as $callback) {
+			$callback();
+		}
+	}
+
+	/**
+	 *
+	 * @param callback $callback
+	 */
+	public function override($callback) {
+		$this->initCallbacks[] = $callback;
 	}
 
 	/**
