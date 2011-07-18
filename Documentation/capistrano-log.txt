@@ -1,0 +1,77 @@
+[Deprecation Warning] Naming tasks with before_ and after_ is deprecated, please see the new before() and after() methods. (Offending task name was after_setup)
+  * executing `deploy'
+  * executing `deploy:update'
+ ** transaction: start
+  * executing `deploy:update_code'
+    updating the cached checkout on all servers
+    executing locally: "git ls-remote ssh://review.networkteam.com:29418/flow3/projects/rossmann/distributions/MyRossmann.git master"
+  * executing "if [ -d /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy ]; then cd /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy && git fetch -q origin && git reset -q --hard 85a12ed9362ef21111e3e246e1de555fbdd984ed && git submodule -q init && for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.${mod}.url `git config -f .gitmodules --get submodule.${mod}.url` && echo Synced $mod; done && git submodule -q sync && git submodule -q update && git clean -q -d -x -f; else git clone -q ssh://review.networkteam.com:29418/flow3/projects/rossmann/distributions/MyRossmann.git /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy && cd /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy && git checkout -q -b deploy 85a12ed9362ef21111e3e246e1de555fbdd984ed && git submodule -q init && git submodule -q sync && git submodule -q update; fi"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Build/Common/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Application/Networkteam.MyRossmann/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Application/TYPO3.CouchDB/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Application/TYPO3.Faker/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Application/TYPO3.Soap/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Application/TYPO3.SwiftMailer/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Framework/Doctrine/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Framework/TYPO3.ExtJS/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Framework/TYPO3.FLOW3/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Framework/TYPO3.Fluid/.git/
+ ** [myrossmann-integration.dev.networkteam.com :: out] Initialized empty Git repository in /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy/Packages/Framework/TYPO3.Party/.git/
+    command finished
+    copying the cached version to /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926
+  * executing "cp -RPp /home/flow3-integration/sites/myrossmann-integration/shared/cached-copy /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926 && (echo 85a12ed9362ef21111e3e246e1de555fbdd984ed > /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926/REVISION)"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+  * executing `deploy:finalize_update'
+  * executing "chmod -R g+w /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+  * executing `deploy:symlink'
+  * executing "rm -f /home/flow3-integration/sites/myrossmann-integration/current && ln -s /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926 /home/flow3-integration/sites/myrossmann-integration/current"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+ ** transaction: commit
+    triggering after callbacks for `deploy:update'
+  * executing `deploy:cleanup'
+  * executing "ls -x /home/flow3-integration/sites/myrossmann-integration/releases"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+ ** keeping 1 of 2 deployed releases
+  * executing "rm -rf /home/flow3-integration/sites/myrossmann-integration/releases/20110718103603"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+  * executing `deploy:restart'
+    triggering after callbacks for `deploy'
+  * executing `deploy:set_permissions'
+  * executing "chmod -R g+w /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926/Configuration"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+  * executing `deploy:create_symlinks'
+  * executing "ln -sf /home/flow3-integration/sites/myrossmann-integration/shared/Data /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926/Data"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+  * executing "if [ -e /home/flow3-integration/sites/myrossmann-integration/shared/Web/_Resources/Static/Packages ]; then rm -f /home/flow3-integration/sites/myrossmann-integration/shared/Web/_Resources/Static/Packages/*; fi"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+  * executing "ln -sf /home/flow3-integration/sites/myrossmann-integration/shared/Web/_Resources /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926/Web/_Resources"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+  * executing "if [ -e /home/flow3-integration/sites/myrossmann-integration/shared/Configuration/Settings.yaml ]; then ln -sf /home/flow3-integration/sites/myrossmann-integration/shared/Configuration/Settings.yaml /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926/Configuration/Settings.yaml; fi"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
+  * executing "if [ -e /home/flow3-integration/sites/myrossmann-integration/shared/Configuration/Testing/Settings.yaml ]; then ln -sf /home/flow3-integration/sites/myrossmann-integration/shared/Configuration/Testing/Settings.yaml /home/flow3-integration/sites/myrossmann-integration/releases/20110718103926/Configuration/Testing/Settings.yaml; fi"
+    servers: ["myrossmann-integration.dev.networkteam.com"]
+    [myrossmann-integration.dev.networkteam.com] executing command
+    command finished
