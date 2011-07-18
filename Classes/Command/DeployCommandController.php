@@ -26,7 +26,7 @@ class DeployCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandControl
 	 */
 	public function deployCommand($deploymentName) {
 		$logger = new \TYPO3\FLOW3\Log\Logger();
-		$console = new \TYPO3\FLOW3\Log\Backend\ConsoleBackend();
+		$console = new \TYPO3\FLOW3\Log\Backend\ConsoleBackend(array('severityThreshold' => LOG_DEBUG));
 		$console->open();
 		$logger->setBackend($console);
 

@@ -44,8 +44,11 @@ class Application {
 	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow
 	 */
 	public function registerTasks($workflow) {
+		$workflow->forStage('prepare', array(
+			'typo3.deploy:createdirectories'
+		));
 		$workflow->forStage('update', array(
-			'typo3.deploy:checkout',
+			// 'typo3.deploy:checkout',
 			// ...
 		));
 		$workflow->forStage('switch', array(

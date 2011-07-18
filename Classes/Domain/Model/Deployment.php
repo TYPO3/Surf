@@ -44,6 +44,11 @@ class Deployment {
 	protected $logger;
 
 	/**
+	 * @var string
+	 */
+	protected $releaseIdentifier;
+
+	/**
 	 *
 	 * @param string $name
 	 */
@@ -55,6 +60,7 @@ class Deployment {
 	 * @return void
 	 */
 	public function init() {
+		$this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
 		foreach ($this->applications as $application) {
 			$application->registerTasks($this->workflow);
 		}
@@ -169,6 +175,14 @@ class Deployment {
 	 */
 	public function getLogger() {
 		return $this->logger;
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	public function getReleaseIdentifier() {
+		return $this->releaseIdentifier;
 	}
 
 }

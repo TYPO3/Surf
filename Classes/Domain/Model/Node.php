@@ -117,5 +117,23 @@ class Node {
 		$this->options = $options;
 	}
 
+	/**
+	 *
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function getOption($key) {
+		return $this->options[$key];
+	}
+
+	/**
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function setOption($key, $value) {
+		$this->options[$key] = $value;
+	}
+
 }
 ?>

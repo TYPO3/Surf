@@ -23,6 +23,7 @@ class DeploymentService {
 
 		$application = new \TYPO3\Deploy\Applications\FLOW3();
 		$application->setOption('repositoryUrl', 'ssh://review.networkteam.com:29418/flow3/projects/rossmann/distributions/MyRossmann.git');
+		$application->setOption('deploymentPath', '/home/flow3-integration/sites/myrossmann-deploy');
 
 		$deployment->addApplication($application);
 
@@ -44,7 +45,9 @@ class DeploymentService {
 
 		$node = new \TYPO3\Deploy\Domain\Model\Node('builder');
 		$node->setHostname('myrossmann-integration.dev.networkteam.com');
-		// $node->setRoles(array('FLOW3', 'CouchDB'));
+		$node->setOption('username', 'flow3-integration');
+
+		// TODO Make application options overridable per node
 
 		$application->addNode($node);
 		$deployment->addNode($node);
