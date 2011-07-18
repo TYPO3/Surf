@@ -24,32 +24,34 @@ class ShellCommandService {
 	 */
 	public function execute($command, $node, $deployment, $force = FALSE) {
 		if ($node === NULL || $node->getHostname() === 'localhost') {
-			$result = $this->executeLocalCommand($command, $deployment);
+			list($exitCode, $returnedOutput) = $this->executeLocalCommand($command, $deployment);
 		} else {
-			$result = $this->executeRemoteCommand($command, $node, $deployment);
+			list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment);
 		}
-		if ($force && !$result) {
+		if ($force && $exitCode !== 0) {
 			throw new \Exception('Command ' . $command . ' return non-zero return code', 1311007746);
 		}
-		return $result;
+		return ($exitCode === 0 ? $returnedOutput : FALSE);
 	}
 
 	/**
 	 *
 	 * @param string $command
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment 
-	 * @return boolean
+	 * @return array
 	 */
-	public function executeLocalCommand($command, $deployment) {
+	protected function executeLocalCommand($command, $deployment) {
 		$deployment->getLogger()->log('Executing locally: "' . $command . '"', LOG_DEBUG);
+		$returnedOutput = '';
 
 		$fp = popen($command, 'r');
 		while (($line = fgets($fp)) !== FALSE) {
 			$deployment->getLogger()->log('> ' . $line);
-	    }
-	    $result = pclose($fp);
+			$returnedOutput .= $line;
+		}
+		$exitCode = pclose($fp);
 
-		return $result === 0;
+		return array($exitCode, $returnedOutput);
 	}
 
 
@@ -58,21 +60,23 @@ class ShellCommandService {
 	 * @param string $command
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
-	 * @return boolean
+	 * @return array
 	 */
-	public function executeRemoteCommand($command, $node, $deployment) {
+	protected function executeRemoteCommand($command, $node, $deployment) {
 		$deployment->getLogger()->log('Executing on ' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
 		$username = $node->getOption('username');
 		$hostname = $node->getHostname();
+		$returnedOutput = '';
 
 		// TODO Create SSH options
 		$fp = popen('ssh -A ' . $username . '@' . $hostname . ' ' . escapeshellarg($command) . ' 2>&1', 'r');
 		while (($line = fgets($fp)) !== FALSE) {
 			$deployment->getLogger()->log('> ' . rtrim($line));
-	    }
-	    $result = pclose($fp);
+			$returnedOutput .= $line;
+		}
+		$exitCode = pclose($fp);
 
-		return $result === 0;
+		return array($exitCode, $returnedOutput);
 	}
 
 }
