@@ -18,11 +18,13 @@ class SimpleWorkflow extends Workflow {
 
 	protected $stages = array(
 		// Initialize directories etc. (first time deploy)
-		'prepare',
+		'initialize',
 		// Updates code
 		'update',
 		// Migrate (Doctrine, custom)
 		'migrate',
+		// Prepare final release (e.g. warmup)
+		'finalize',
 		// Smoke test
 		'test',
 		// Do symlink to current release
@@ -42,6 +44,7 @@ class SimpleWorkflow extends Workflow {
 		foreach ($nodes as $node) {
 			foreach ($this->stages as $stage) {
 				foreach ($deployment->getApplications() as $application) {
+					// TODO Catch exceptions and do the transaction thingy
 					$this->executeStage($stage, $node, $application, $deployment);
 				}
 			}

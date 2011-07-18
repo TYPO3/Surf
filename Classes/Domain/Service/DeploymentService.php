@@ -24,23 +24,9 @@ class DeploymentService {
 		$application = new \TYPO3\Deploy\Applications\FLOW3();
 		$application->setOption('repositoryUrl', 'ssh://review.networkteam.com:29418/flow3/projects/rossmann/distributions/MyRossmann.git');
 		$application->setOption('deploymentPath', '/home/flow3-integration/sites/myrossmann-deploy');
-
 		$deployment->addApplication($application);
 
 		$workflow = new \TYPO3\Deploy\Domain\Model\SimpleWorkflow();
-
-		/*
-		$workflow->when('update', array('application' => 'FLOW3'), function() {
-			
-		});
-		$workflow->before('update', array('application' => 'FLOW3'), function() {
-
-		});
-		$workflow->after('update', array('application' => 'FLOW3'), function() {
-
-		});
-		 *
-		 */
 		$deployment->setWorkflow($workflow);
 
 		$node = new \TYPO3\Deploy\Domain\Model\Node('builder');
@@ -50,6 +36,7 @@ class DeploymentService {
 		// TODO Make application options overridable per node
 
 		$application->addNode($node);
+
 		$deployment->addNode($node);
 		return $deployment;
 	}

@@ -7,11 +7,11 @@ namespace TYPO3\Deploy\Task\FLOW3;
  *                                                                        */
 
 /**
- * A FLOW3 migration task
+ * A symlink task for linking shared directories
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
+class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 
 	/**
 	 * @inject
@@ -20,7 +20,7 @@ class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
 	protected $shell;
 
 	/**
-	 * Execute this task
+	 * Executes this task
 	 *
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
@@ -28,8 +28,15 @@ class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute($node, $application, $deployment, $options = array()) {
-		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->execute('cd ' . $targetPath . ' && ./flow3 typo3.flow3:doctrine:migrate', $node, $deployment, TRUE);
+		$releasePath = $deployment->getApplicationReleasePath($application);
+		$sharedPath = $application->getOption('deploymentPath') . '/shared';
+		$commands = array(
+			"mkdir -p $releasePath/Data/Logs",
+			"ln -sf $sharedPath/Data/Logs $releasePath/Data/Logs",
+			"mkdir -p $releasePath/Data/Persistent",
+			"ln -sf $sharedPath/Data/Persistent $releasePath/Data/Persistent"
+		);
+		$this->shell->execute(implode(';', $commands), $node, $deployment);
 	}
 
 }

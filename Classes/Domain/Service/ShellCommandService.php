@@ -19,14 +19,19 @@ class ShellCommandService {
 	 * @param string $command
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node Node to execute command against, NULL means localhost
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param boolean TRUE if this command has to return a successful return code
 	 * @return TRUE If the command execution was successful (zero return code)
 	 */
-	public function execute($command, $node, $deployment) {
+	public function execute($command, $node, $deployment, $force = FALSE) {
 		if ($node === NULL || $node->getHostname() === 'localhost') {
-			return $this->executeLocalCommand($command, $deployment);
+			$result = $this->executeLocalCommand($command, $deployment);
 		} else {
-			return $this->executeRemoteCommand($command, $node, $deployment);
+			$result = $this->executeRemoteCommand($command, $node, $deployment);
 		}
+		if ($force && !$result) {
+			throw new \Exception('Command ' . $command . ' return non-zero return code', 1311007746);
+		}
+		return $result;
 	}
 
 	/**
@@ -60,7 +65,8 @@ class ShellCommandService {
 		$username = $node->getOption('username');
 		$hostname = $node->getHostname();
 
-		$fp = popen('ssh ' . $username . '@' . $hostname . ' ' . escapeshellarg($command) . ' 2>&1', 'r');
+		// TODO Create SSH options
+		$fp = popen('ssh -A ' . $username . '@' . $hostname . ' ' . escapeshellarg($command) . ' 2>&1', 'r');
 		while (($line = fgets($fp)) !== FALSE) {
 			$deployment->getLogger()->log('> ' . rtrim($line));
 	    }

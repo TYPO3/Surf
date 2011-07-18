@@ -51,6 +51,7 @@ abstract class Workflow {
 		if (!is_array($tasks)) $tasks = array($tasks);
 		if (!isset($this->tasks['stage']['_'][$stage])) $this->tasks['stage']['_'][$stage] = array();
 		$this->tasks['stage']['_'][$stage] = array_merge($this->tasks['stage']['_'][$stage], $tasks);
+		return $this;
 	}
 
 	/**
@@ -63,6 +64,31 @@ abstract class Workflow {
 		if (!is_array($tasks)) $tasks = array($tasks);
 		if (!isset($this->tasks['stage'][$application->getName()][$stage])) $this->tasks['stage'][$application->getName()][$stage] = array();
 		$this->tasks['stage'][$application->getName()][$stage] = array_merge($this->tasks['stage'][$application->getName()][$stage], $tasks);
+		return $this;
+	}
+
+	/**
+	 *
+	 * @param string $task
+	 * @param mixed $tasks
+	 */
+	public function afterTask($task, $tasks) {
+		if (!is_array($tasks)) $tasks = array($tasks);
+		if (!isset($this->tasks['after'][$task])) $this->tasks['after'][$task] = array();
+		$this->tasks['after'][$task] = array_merge($this->tasks['after'][$task], $tasks);
+		return $this;
+	}
+
+	/**
+	 *
+	 * @param string $task
+	 * @param mixed $tasks
+	 */
+	public function beforeTask($task, $tasks) {
+		if (!is_array($tasks)) $tasks = array($tasks);
+		if (!isset($this->tasks['before'][$task])) $this->tasks['before'][$task] = array();
+		$this->tasks['before'][$task] = array_merge($this->tasks['before'][$task], $tasks);
+		return $this;
 	}
 
 	/**
@@ -95,12 +121,24 @@ abstract class Workflow {
 	 * @return void
 	 */
 	protected function executeTask($task, $node, $application, $deployment) {
+		if (isset($this->tasks['before'][$task])) {
+			foreach ($this->tasks['before'][$task] as $beforeTask) {
+				$deployment->getLogger()->log('Task "' . $beforeTask . '" before "' . $task, LOG_DEBUG);
+				$this->executeTask($beforeTask, $node, $application, $deployment);
+			}
+		}
 		$deployment->getLogger()->log('Execute task "' . $task . '" on "' . $node->getName() . '" for application "' . $application->getName(), LOG_DEBUG);
 		$this->taskManager->execute($task, array(
 			'node' => $node,
 			'application' => $application,
 			'deployment' => $deployment
 		));
+		if (isset($this->tasks['after'][$task])) {
+			foreach ($this->tasks['after'][$task] as $beforeTask) {
+				$deployment->getLogger()->log('Task "' . $beforeTask . '" after "' . $task, LOG_DEBUG);
+				$this->executeTask($beforeTask, $node, $application, $deployment);
+			}
+		}
 	}
 
 }
