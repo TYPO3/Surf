@@ -78,6 +78,15 @@ class Deployment {
 	}
 
 	/**
+	 *
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @return string
+	 */
+	public function getApplicationReleasePath(\TYPO3\Deploy\Domain\Model\Application $application) {
+		return $application->getOption('deploymentPath') . '/releases/' . $this->getReleaseIdentifier();
+	}
+
+	/**
 	 * Get the Deployment's name
 	 *
 	 * @return string The Deployment's name

@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Deploy\Task;
+namespace TYPO3\Deploy\Task\FLOW3;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
@@ -7,7 +7,7 @@ namespace TYPO3\Deploy\Task;
  *                                                                        */
 
 /**
- * A task to create initial directories
+ * A task to create FLOW3 specific directories
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -29,11 +29,7 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function execute($node, $application, $deployment, $options = array()) {
 		$path = $application->getOption('deploymentPath');
-		$result = $this->shell->execute('test -d ' . $path, $node, $deployment);
-		if (!$result) {
-			throw new \Exception('Deployment directory ' . $path . ' does not exist on ' . $node->getName(), 1311003253);
-		}
-		$this->shell->execute('mkdir -p ' . $path . '/releases;mkdir -p ' . $path . '/shared', $node, $deployment);
+		$this->shell->execute('mkdir -p ' . $path . '/shared/Data/Logs;mkdir -p ' . $path . '/shared/Data/Persistent;mkdir -p ' . $path . '/shared/Configuration;mkdir -p ' . $path . '/shared/Web/_Resources', $node, $deployment);
 	}
 
 }

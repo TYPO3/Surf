@@ -27,6 +27,10 @@ class FLOW3 extends \TYPO3\Deploy\Domain\Model\Application {
 	public function registerTasks($workflow) {
 		parent::registerTasks($workflow);
 
+		$workflow->forApplication($this, 'prepare', array(
+			'typo3.deploy:flow3:createdirectories'
+		));
+
 		$workflow->forApplication($this, 'migrate', array(
 			'typo3.deploy:flow3:migrate'
 		));

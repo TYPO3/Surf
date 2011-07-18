@@ -42,7 +42,7 @@ class ShellCommandService {
 		while (($line = fgets($fp)) !== FALSE) {
 			$deployment->getLogger()->log('> ' . $line);
 	    }
-	    $result = fclose($fp);
+	    $result = pclose($fp);
 
 		return $result === 0;
 	}
@@ -64,7 +64,7 @@ class ShellCommandService {
 		while (($line = fgets($fp)) !== FALSE) {
 			$deployment->getLogger()->log('> ' . rtrim($line));
 	    }
-	    $result = fclose($fp);
+	    $result = pclose($fp);
 
 		return $result === 0;
 	}

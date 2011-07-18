@@ -28,7 +28,7 @@ class CheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute($node, $application, $deployment, $options = array()) {
-		$targetPath = $application->getOption('deploymentPath') . '/releases/' . $deployment->getReleaseIdentifier();
+		$targetPath = $deployment->getApplicationReleasePath($application);
 		$this->shell->execute('git clone --recursive ' . $application->getOption('repositoryUrl') . ' ' . $targetPath, $node, $deployment);
 	}
 
