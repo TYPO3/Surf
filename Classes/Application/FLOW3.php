@@ -7,6 +7,7 @@ namespace TYPO3\Deploy\Application;
  *                                                                        */
 
 use \TYPO3\Deploy\Domain\Model\Workflow;
+use \TYPO3\Deploy\Domain\Model\Deployment;
 
 /**
  * A FLOW3 application template
@@ -26,18 +27,19 @@ class FLOW3 extends \TYPO3\Deploy\Domain\Model\Application {
 	 * Register tasks for this application
 	 *
 	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
-	public function registerTasks(Workflow $workflow) {
-		parent::registerTasks($workflow);
+	public function registerTasks(Workflow $workflow, Deployment $deployment) {
+		parent::registerTasks($workflow, $deployment);
 
 		$workflow
 			->forApplication($this, 'initialize', array(
 				'typo3.deploy:flow3:createdirectories'
 			))
-			->afterTask('typo3.deploy:checkout', array(
+			->afterTask('typo3.deploy:gitcheckout', array(
 				'typo3.deploy:flow3:symlink'
-			))
+			), $this)
 			->forApplication($this, 'migrate', array(
 				'typo3.deploy:flow3:migrate'
 			));

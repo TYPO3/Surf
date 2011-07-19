@@ -39,9 +39,8 @@ class SimpleWorkflow extends Workflow {
 	);
 
 	/**
-	 * Sequentially execute the stages for each node, so
-	 * first all nodes will go through the initialize stage and
-	 * then the next stage will be executed.
+	 * Sequentially execute the stages for each node, so first all nodes will go through the initialize stage and
+	 * then the next stage will be executed until the final stage is reached and the workflow is finished.
 	 *
 	 * A rollback will be done for all nodes as long as the stage switch was not completed.
 	 *
@@ -52,8 +51,14 @@ class SimpleWorkflow extends Workflow {
 		parent::run($deployment);
 		$nodes = $deployment->getNodes();
 		foreach ($this->stages as $stage) {
+			$deployment->getLogger()->log('====== Stage ' . $stage . ' ======', LOG_DEBUG);
 			foreach ($nodes as $node) {
+				$deployment->getLogger()->log('**** Node ' . $node->getName() . ' ****', LOG_DEBUG);
 				foreach ($deployment->getApplications() as $application) {
+					if (!$application->hasNode($node)) continue;
+
+					$deployment->getLogger()->log('* Application ' . $application->getName() . ' *', LOG_DEBUG);
+
 					try {
 						$this->executeStage($stage, $node, $application, $deployment);
 					} catch(\Exception $exception) {

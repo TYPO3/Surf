@@ -80,7 +80,7 @@ class Deployment {
 	public function initialize() {
 		$this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
 		foreach ($this->applications as $application) {
-			$application->registerTasks($this->workflow);
+			$application->registerTasks($this->workflow, $this);
 		}
 		foreach ($this->initCallbacks as $callback) {
 			$callback();

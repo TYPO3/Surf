@@ -6,27 +6,18 @@ namespace TYPO3\Deploy\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Deploy\Domain\Model\Workflow;
-use \TYPO3\Deploy\Domain\Model\Node;
-
 /**
  * A generic application
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-abstract class Application {
+class Application {
 
 	/**
 	 * The name
 	 * @var string
 	 */
 	protected $name;
-
-	/**
-	 * The application hierarchy
-	 * @var string
-	 */
-	protected $hierarchy = array('_');
 
 	/**
 	 * The nodes for this application
@@ -56,13 +47,16 @@ abstract class Application {
 	}
 
 	/**
+	 * Register tasks for this application
 	 *
 	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @return void
 	 */
-	public function registerTasks(Workflow $workflow) {
+	public function registerTasks(Workflow $workflow, Deployment $deployment) {
 		$workflow
 			->forApplication($this, 'initialize', 'typo3.deploy:createdirectories')
-			->forApplication($this, 'update', 'typo3.deploy:checkout')
+			->forApplication($this, 'update', 'typo3.deploy:gitcheckout')
 			->forApplication($this, 'switch', 'typo3.deploy:symlink');
 	}
 
@@ -112,6 +106,16 @@ abstract class Application {
 	 */
 	public function addNode(Node $node) {
 		$this->nodes[$node->getName()] = $node;
+	}
+
+	/**
+	 * Return TRUE if the given node is registered for this application
+	 *
+	 * @param Node $node
+	 * @return boolean
+	 */
+	public function hasNode(Node $node) {
+		return isset($this->nodes[$node->getName()]);
 	}
 
 	/**

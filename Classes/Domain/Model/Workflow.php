@@ -43,22 +43,10 @@ abstract class Workflow {
 	abstract public function getName();
 
 	/**
-	 *
-	 * @param string $stage
-	 * @param mixed $tasks
-	 */
-	public function forStage($stage, $tasks) {
-		if (!is_array($tasks)) $tasks = array($tasks);
-		if (!isset($this->tasks['stage']['_'][$stage])) $this->tasks['stage']['_'][$stage] = array();
-		$this->tasks['stage']['_'][$stage] = array_merge($this->tasks['stage']['_'][$stage], $tasks);
-		return $this;
-	}
-
-	/**
 	 * Remove the given task from all stages and applications
 	 *
 	 * @param string $task
-	 * @return void
+	 * @return \TYPO3\Deploy\Domain\Model\Workflow
 	 */
 	public function removeTask($removeTask) {
 		if (isset($this->tasks['stage'])) {
@@ -69,24 +57,57 @@ abstract class Workflow {
 			}
 		}
 		if (isset($this->tasks['after'])) {
-			foreach ($this->tasks['after'] as $taskName => $tasks) {
-				$this->tasks['after'][$taskName] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
+			foreach ($this->tasks['after'] as $applicationName => $tasksByTask) {
+				foreach ($tasksByTask as $taskName => $tasks) {
+					$this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
+				}
 			}
 		}
 		if (isset($this->tasks['before'])) {
-			foreach ($this->tasks['before'] as $taskName => $tasks) {
-				$this->tasks['before'][$taskName] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
+			foreach ($this->tasks['before'] as $applicationName => $tasksByTask) {
+				foreach ($tasksByTask as $taskName => $tasks) {
+					$this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
+				}
 			}
 		}
+		return $this;
+	}
+
+	/**
+	 *
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param string $stage
+	 * @param mixed $tasks
+	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 */
+	public function forApplication(Application $application, $stage, $tasks) {
+		return $this->addTask($tasks, $stage, $application);
 	}
 
 	/**
 	 *
 	 * @param string $stage
-	 * @param string $application
 	 * @param mixed $tasks
+	 * @return \TYPO3\Deploy\Domain\Model\Workflow
 	 */
-	public function forApplication($application, $stage, $tasks) {
+	public function forStage($stage, $tasks) {
+		return $this->addTask($tasks, $stage);
+	}
+
+	/**
+	 * Add the given tasks for a stage and optionally a specific application
+	 *
+	 * The tasks will be executed for the given stage. If an application is given,
+	 * the tasks will be executed only for the stage and application.
+	 *
+	 * @param mixed $tasks
+	 * @param string $stage The name of the stage when this task shall be executed
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application If given the task will be specific for this application
+	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 */
+	public function addTask($tasks, $stage, Application $application = NULL) {
+		$applicationName = $application !== NULL ? $application->getName() : '_';
+
 		if (!is_array($tasks)) $tasks = array($tasks);
 		if (!isset($this->tasks['stage'][$application->getName()][$stage])) $this->tasks['stage'][$application->getName()][$stage] = array();
 		$this->tasks['stage'][$application->getName()][$stage] = array_merge($this->tasks['stage'][$application->getName()][$stage], $tasks);
@@ -94,28 +115,42 @@ abstract class Workflow {
 	}
 
 	/**
+	 * Add tasks that shall be executed after the given task
+	 *
+	 * The execution will not depend on a stage but on an optional application.
 	 *
 	 * @param string $task
 	 * @param mixed $tasks
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @return \TYPO3\Deploy\Domain\Model\Workflow
 	 */
-	public function afterTask($task, $tasks) {
+	public function afterTask($task, $tasks, Application $application = NULL) {
 		if (!is_array($tasks)) $tasks = array($tasks);
-		if (!isset($this->tasks['after'][$task])) $this->tasks['after'][$task] = array();
-		$this->tasks['after'][$task] = array_merge($this->tasks['after'][$task], $tasks);
+
+		$applicationName = $application !== NULL ? $application->getName() : '_';
+
+		if (!isset($this->tasks['after'][$applicationName][$task])) $this->tasks['after'][$applicationName][$task] = array();
+		$this->tasks['after'][$applicationName][$task] = array_merge($this->tasks['after'][$applicationName][$task], $tasks);
 		return $this;
 	}
 
 	/**
+	 * Add tasks that shall be executed before the given task
+	 *
+	 * The execution will not depend on a stage but on an optional application.
 	 *
 	 * @param string $task
 	 * @param mixed $tasks
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @return \TYPO3\Deploy\Domain\Model\Workflow
 	 */
-	public function beforeTask($task, $tasks) {
+	public function beforeTask($task, $tasks, Application $application = NULL) {
 		if (!is_array($tasks)) $tasks = array($tasks);
-		if (!isset($this->tasks['before'][$task])) $this->tasks['before'][$task] = array();
-		$this->tasks['before'][$task] = array_merge($this->tasks['before'][$task], $tasks);
+
+		$applicationName = $application !== NULL ? $application->getName() : '_';
+
+		if (!isset($this->tasks['before'][$applicationName][$task])) $this->tasks['before'][$applicationName][$task] = array();
+		$this->tasks['before'][$applicationName][$task] = array_merge($this->tasks['before'][$applicationName][$task], $tasks);
 		return $this;
 	}
 
@@ -128,23 +163,20 @@ abstract class Workflow {
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
-	protected function executeStage($stage, \TYPO3\Deploy\Domain\Model\Node $node, \TYPO3\Deploy\Domain\Model\Application $application, \TYPO3\Deploy\Domain\Model\Deployment $deployment) {
-		if (isset($this->tasks['stage']['_'][$stage])) {
-			$deployment->getLogger()->log('Executing stage "' . $stage . '" on "' . $node->getName() . '" for all', LOG_DEBUG);
-			foreach ($this->tasks['stage']['_'][$stage] as $task) {
-				$this->executeTask($task, $node, $application, $deployment);
-			}
-		}
-		if (isset($this->tasks['stage'][$application->getName()][$stage])) {
-			$deployment->getLogger()->log('Executing stage "' . $stage . '" on "' . $node->getName() . '" for application "' . $application->getName() . '"', LOG_DEBUG);
-			foreach ($this->tasks['stage'][$application->getName()][$stage] as $task) {
-				$this->executeTask($task, $node, $application, $deployment);
+	protected function executeStage($stage, Node $node, Application $application, Deployment $deployment) {
+		foreach (array('_', $application->getName()) as $applicationName) {
+			$label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
+			if (isset($this->tasks['stage'][$applicationName][$stage])) {
+				$deployment->getLogger()->log('Executing stage "' . $stage . '" on "' . $node->getName() . '" ' . $label, LOG_DEBUG);
+				foreach ($this->tasks['stage'][$applicationName][$stage] as $task) {
+					$this->executeTask($task, $node, $application, $deployment);
+				}
 			}
 		}
 	}
 
 	/**
-	 * Execute a taks
+	 * Execute a task and consider configured before / after "hooks"
 	 *
 	 * Will also execute tasks that are registered to run before or after this task.
 	 *
@@ -155,23 +187,28 @@ abstract class Workflow {
 	 * @param array $callstack
 	 * @return void
 	 */
-	protected function executeTask($task, \TYPO3\Deploy\Domain\Model\Node $node, \TYPO3\Deploy\Domain\Model\Application $application, \TYPO3\Deploy\Domain\Model\Deployment $deployment, &$callstack = array()) {
-		if (isset($this->tasks['before'][$task])) {
-			foreach ($this->tasks['before'][$task] as $beforeTask) {
-				$deployment->getLogger()->log('Task "' . $beforeTask . '" before "' . $task, LOG_DEBUG);
-				$this->executeTask($beforeTask, $node, $application, $deployment, $callstack);
+	protected function executeTask($task, Node $node, Application $application, Deployment $deployment, array &$callstack = array()) {
+		foreach (array('_', $application->getName()) as $applicationName) {
+			if (isset($this->tasks['before'][$applicationName][$task])) {
+				foreach ($this->tasks['before'][$applicationName][$task] as $beforeTask) {
+					$deployment->getLogger()->log('Task "' . $beforeTask . '" before "' . $task, LOG_DEBUG);
+					$this->executeTask($beforeTask, $node, $application, $deployment, $callstack);
+				}
 			}
 		}
 		if (isset($callstack[$task])) {
 			throw new \Exception('Cycle for task "' . $task . '" detected, aborting.');
 		}
-		$deployment->getLogger()->log('Execute task "' . $task . '" on "' . $node->getName() . '" for application "' . $application->getName(), LOG_DEBUG);
+		$deployment->getLogger()->log('Execute task "' . $task . '" on "' . $node->getName() . '" for application "' . $application->getName() . '"', LOG_DEBUG);
 		$this->taskManager->execute($task, $node, $application, $deployment);
 		$callstack[$task] = TRUE;
-		if (isset($this->tasks['after'][$task])) {
-			foreach ($this->tasks['after'][$task] as $beforeTask) {
-				$deployment->getLogger()->log('Task "' . $beforeTask . '" after "' . $task, LOG_DEBUG);
-				$this->executeTask($beforeTask, $node, $application, $deployment, $callstack);
+		foreach (array('_', $application->getName()) as $applicationName) {
+			$label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
+			if (isset($this->tasks['after'][$applicationName][$task])) {
+				foreach ($this->tasks['after'][$applicationName][$task] as $beforeTask) {
+					$deployment->getLogger()->log('Task "' . $beforeTask . '" after "' . $task . '" ' . $label, LOG_DEBUG);
+					$this->executeTask($beforeTask, $node, $application, $deployment, $callstack);
+				}
 			}
 		}
 	}
