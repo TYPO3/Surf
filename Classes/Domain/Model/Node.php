@@ -37,6 +37,11 @@ class Node {
 	 */
 	protected $options;
 
+	/**
+	 * Constructor
+	 *
+	 * @param type $name
+	 */
 	public function __construct($name) {
 		$this->name = $name;
 	}
@@ -130,6 +135,7 @@ class Node {
 	 *
 	 * @param string $key
 	 * @param mixed $value
+	 * @return void
 	 */
 	public function setOption($key, $value) {
 		$this->options[$key] = $value;

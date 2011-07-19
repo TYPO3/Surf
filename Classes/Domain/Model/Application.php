@@ -47,6 +47,7 @@ abstract class Application {
 	protected $options = array();
 
 	/**
+	 * Constructor
 	 *
 	 * @param string $name
 	 */
@@ -132,6 +133,7 @@ abstract class Application {
 	/**
 	 *
 	 * @param string $deploymentPath
+	 * @return void
 	 */
 	public function setDeploymentPath($deploymentPath) {
 		$this->deploymentPath = rtrim($deploymentPath, '/');
@@ -156,7 +158,8 @@ abstract class Application {
 
 	/**
 	 *
-	 * @param array $options 
+	 * @param array $options
+	 * @return void
 	 */
 	public function setOptions($options) {
 		$this->options = $options;
@@ -166,6 +169,7 @@ abstract class Application {
 	 *
 	 * @param string $key
 	 * @param mixed $value
+	 * @return void
 	 */
 	public function setOption($key, $value) {
 		$this->options[$key] = $value;

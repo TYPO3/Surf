@@ -16,6 +16,11 @@ use \TYPO3\Deploy\Domain\Model\Node;
  */
 class SimpleWorkflow extends Workflow {
 
+	/**
+	 * Order of stages that will be executed
+	 *
+	 * @var array
+	 */
 	protected $stages = array(
 		// Initialize directories etc. (first time deploy)
 		'initialize',
@@ -34,6 +39,11 @@ class SimpleWorkflow extends Workflow {
 	);
 
 	/**
+	 * Sequentially execute the stages for each node, so
+	 * first all nodes will go through the initialize stage and
+	 * then the next stage will be executed.
+	 *
+	 * A rollback will be done for all nodes as long as the stage switch was not completed.
 	 *
 	 * @param Deployment $deployment
 	 * @return void

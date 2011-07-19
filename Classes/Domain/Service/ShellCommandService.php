@@ -38,12 +38,13 @@ class ShellCommandService {
 	}
 
 	/**
+	 * Execute a shell command locally
 	 *
 	 * @param string $command
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment 
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return array
 	 */
-	protected function executeLocalCommand($command, $deployment) {
+	protected function executeLocalCommand($command, Deployment $deployment) {
 		$deployment->getLogger()->log('    (localhost): "' . $command . '"', LOG_DEBUG);
 		$returnedOutput = '';
 
@@ -59,19 +60,20 @@ class ShellCommandService {
 
 
 	/**
+	 * Execute a shell command via SSH
 	 *
 	 * @param string $command
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return array
 	 */
-	protected function executeRemoteCommand($command, $node, $deployment) {
+	protected function executeRemoteCommand($command, Node $node, Deployment $deployment) {
 		$deployment->getLogger()->log('    $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
 		$username = $node->getOption('username');
 		$hostname = $node->getHostname();
 		$returnedOutput = '';
 
-		// TODO Create SSH options
+		// TODO Get SSH options from node or deployment
 		$fp = popen('ssh -A ' . $username . '@' . $hostname . ' ' . escapeshellarg($command) . ' 2>&1', 'r');
 		while (($line = fgets($fp)) !== FALSE) {
 			$deployment->getLogger()->log('    > ' . rtrim($line));
