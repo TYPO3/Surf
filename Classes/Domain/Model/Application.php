@@ -35,6 +35,12 @@ abstract class Application {
 	protected $nodes;
 
 	/**
+	 * The deployment path for this application on a node
+	 * @var string
+	 */
+	protected $deploymentPath;
+
+	/**
 	 * The options
 	 * @var array
 	 */
@@ -105,6 +111,30 @@ abstract class Application {
 	 */
 	public function addNode(Node $node) {
 		$this->nodes[$node->getName()] = $node;
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	public function getDeploymentPath() {
+		return $this->deploymentPath;
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	public function getSharedPath() {
+		return $this->getDeploymentPath() . '/shared';
+	}
+
+	/**
+	 *
+	 * @param string $deploymentPath
+	 */
+	public function setDeploymentPath($deploymentPath) {
+		$this->deploymentPath = rtrim($deploymentPath, '/');
 	}
 
 	/**

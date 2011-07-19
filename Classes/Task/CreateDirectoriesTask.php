@@ -32,13 +32,13 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, $options = array()) {
-		$path = $application->getOption('deploymentPath');
+		$deploymentPath = $application->getDeploymentPath();
 		$releasePath = $deployment->getApplicationReleasePath($application);
-		$result = $this->shell->execute('test -d ' . $path, $node, $deployment);
+		$result = $this->shell->execute('test -d ' . $deploymentPath, $node, $deployment);
 		if ($result === FALSE) {
-			throw new \Exception('Deployment directory ' . $path . ' does not exist on ' . $node->getName(), 1311003253);
+			throw new \Exception('Deployment directory ' . $deploymentPath . ' does not exist on ' . $node->getName(), 1311003253);
 		}
-		$this->shell->execute('mkdir -p ' . $path . '/releases;mkdir -p ' . $path . '/shared', $node, $deployment);
+		$this->shell->execute('mkdir -p ' . $deploymentPath . '/releases;mkdir -p ' . $deploymentPath . '/shared', $node, $deployment);
 	}
 
 	/**

@@ -33,7 +33,7 @@ class CheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, $options = array()) {
 		$releasePath = $deployment->getApplicationReleasePath($application);
-		$baseDeploymentPath = $application->getOption('deploymentPath');
+		$deploymentPath = $application->getDeploymentPath();
 		$repositoryUrl = $application->getOption('repositoryUrl');
 		$sha1 = $this->shell->execute("git ls-remote $repositoryUrl master | awk '{print $1 }'", $node, $deployment);
 		if ($sha1 === FALSE) {
@@ -41,17 +41,17 @@ class CheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 		}
 
 		$command = strtr("
-			if [ -d $baseDeploymentPath/cache/localgitclone ];
+			if [ -d $deploymentPath/cache/localgitclone ];
 				then
-					cd $baseDeploymentPath/cache/localgitclone
+					cd $deploymentPath/cache/localgitclone
 					&& git fetch -q origin
 					&& git reset -q --hard $sha1
 					&& git submodule -q init
 					&& for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.\${mod}.url `git config -f .gitmodules --get submodule.\${mod}.url` && echo synced \$mod; done
 					&& git submodule -q sync
 					&& git submodule -q update
-					&& git clean -q -d -x -f; else git clone -q $repositoryUrl $baseDeploymentPath/cache/localgitclone
-					&& cd $baseDeploymentPath/cache/localgitclone
+					&& git clean -q -d -x -f; else git clone -q $repositoryUrl $deploymentPath/cache/localgitclone
+					&& cd $deploymentPath/cache/localgitclone
 					&& git checkout -q -b deploy $sha1
 					&& git submodule -q init
 					&& git submodule -q sync
@@ -62,7 +62,7 @@ class CheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$this->shell->execute($command, $node, $deployment, TRUE);
 
 		$command = strtr("
-			cp -RPp $baseDeploymentPath/cache/localgitclone/ $releasePath
+			cp -RPp $deploymentPath/cache/localgitclone/ $releasePath
 				&& (echo $sha1 > $releasePath" . "REVISION)
 			", "\t\n", "  ");
 
