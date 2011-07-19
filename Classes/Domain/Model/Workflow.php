@@ -97,6 +97,7 @@ abstract class Workflow {
 	 *
 	 * @param string $task
 	 * @param mixed $tasks
+	 * @return \TYPO3\Deploy\Domain\Model\Workflow
 	 */
 	public function afterTask($task, $tasks) {
 		if (!is_array($tasks)) $tasks = array($tasks);
@@ -109,6 +110,7 @@ abstract class Workflow {
 	 *
 	 * @param string $task
 	 * @param mixed $tasks
+	 * @return \TYPO3\Deploy\Domain\Model\Workflow
 	 */
 	public function beforeTask($task, $tasks) {
 		if (!is_array($tasks)) $tasks = array($tasks);
@@ -118,12 +120,15 @@ abstract class Workflow {
 	}
 
 	/**
+	 * Execute a stage for a node and application
 	 *
 	 * @param string $stage
-	 * @param Node $node
+	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @return void
 	 */
-	protected function executeStage($stage, $node, $application, $deployment) {
+	protected function executeStage($stage, \TYPO3\Deploy\Domain\Model\Node $node, \TYPO3\Deploy\Domain\Model\Application $application, \TYPO3\Deploy\Domain\Model\Deployment $deployment) {
 		if (isset($this->tasks['stage']['_'][$stage])) {
 			$deployment->getLogger()->log('Executing stage "' . $stage . '" on "' . $node->getName() . '" for all', LOG_DEBUG);
 			foreach ($this->tasks['stage']['_'][$stage] as $task) {
@@ -139,30 +144,34 @@ abstract class Workflow {
 	}
 
 	/**
+	 * Execute a taks
+	 *
+	 * Will also execute tasks that are registered to run before or after this task.
 	 *
 	 * @param string $task
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param array $callstack
 	 * @return void
 	 */
-	protected function executeTask($task, $node, $application, $deployment) {
+	protected function executeTask($task, \TYPO3\Deploy\Domain\Model\Node $node, \TYPO3\Deploy\Domain\Model\Application $application, \TYPO3\Deploy\Domain\Model\Deployment $deployment, &$callstack = array()) {
 		if (isset($this->tasks['before'][$task])) {
 			foreach ($this->tasks['before'][$task] as $beforeTask) {
 				$deployment->getLogger()->log('Task "' . $beforeTask . '" before "' . $task, LOG_DEBUG);
-				$this->executeTask($beforeTask, $node, $application, $deployment);
+				$this->executeTask($beforeTask, $node, $application, $deployment, $callstack);
 			}
 		}
+		if (isset($callstack[$task])) {
+			throw new \Exception('Cycle for task "' . $task . '" detected, aborting.');
+		}
 		$deployment->getLogger()->log('Execute task "' . $task . '" on "' . $node->getName() . '" for application "' . $application->getName(), LOG_DEBUG);
-		$this->taskManager->execute($task, array(
-			'node' => $node,
-			'application' => $application,
-			'deployment' => $deployment
-		));
+		$this->taskManager->execute($task, $node, $application, $deployment);
+		$callstack[$task] = TRUE;
 		if (isset($this->tasks['after'][$task])) {
 			foreach ($this->tasks['after'][$task] as $beforeTask) {
 				$deployment->getLogger()->log('Task "' . $beforeTask . '" after "' . $task, LOG_DEBUG);
-				$this->executeTask($beforeTask, $node, $application, $deployment);
+				$this->executeTask($beforeTask, $node, $application, $deployment, $callstack);
 			}
 		}
 	}

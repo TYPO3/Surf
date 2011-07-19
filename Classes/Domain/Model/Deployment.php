@@ -18,46 +18,55 @@ use \TYPO3\Deploy\Domain\Model\Node;
 class Deployment {
 
 	/**
-	 * The name
+	 * The name of this deployment
 	 * @var string
 	 */
 	protected $name;
 
 	/**
-	 * The nodes
+	 * The nodes that participate in this deployment
 	 * @var array
 	 */
 	protected $nodes = array();
 
 	/**
-	 * The workflow
+	 * The workflow used for this deployment
 	 * @var \TYPO3\Deploy\Domain\Model\Workflow
 	 */
 	protected $workflow;
 
 	/**
-	 * The applications
+	 * The applications deployed with this deployment
 	 * @var array
 	 */
 	protected $applications = array();
 
 	/**
-	 *
+	 * A logger instance used to log messages during deployment
 	 * @var \TYPO3\FLOW3\Log\LoggerInterface
 	 */
 	protected $logger;
 
 	/**
+	 * The release identifier will be created on each deployment
 	 * @var string
 	 */
 	protected $releaseIdentifier;
 
 	/**
+	 * TRUE if the deployment should be simulated
+	 * @var string
+	 */
+	protected $dryRun = FALSE;
+
+	/**
+	 * Callbacks that should be executed after initialization
 	 * @var array
 	 */
 	protected $initCallbacks = array();
 
 	/**
+	 * Constructor
 	 *
 	 * @param string $name
 	 */
@@ -68,7 +77,7 @@ class Deployment {
 	/**
 	 * @return void
 	 */
-	public function init() {
+	public function initialize() {
 		$this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
 		foreach ($this->applications as $application) {
 			$application->registerTasks($this->workflow);
@@ -79,21 +88,33 @@ class Deployment {
 	}
 
 	/**
+	 * Add a callback to the initialization
 	 *
 	 * @param callback $callback
+	 * @return void
 	 */
-	public function override($callback) {
+	public function onInitialize($callback) {
 		$this->initCallbacks[] = $callback;
 	}
 
 	/**
 	 * Run this deployment
 	 *
-	 * @param \TYPO3\FLOW3\Log\LoggerInterface $logger
 	 * @return void
 	 */
 	public function deploy() {
 		$this->logger->log('Deploying ' . $this->name);
+		$this->workflow->run($this);
+	}
+
+	/**
+	 * Simulate this deployment without executing tasks
+	 *
+	 * @return void
+	 */
+	public function simulate() {
+		$this->setDryRun(TRUE);
+		$this->logger->log('Simulating ' . $this->name);
 		$this->workflow->run($this);
 	}
 
@@ -192,7 +213,8 @@ class Deployment {
 
 	/**
 	 *
-	 * @param \TYPO3\FLOW3\Log\LoggerInterface $logger 
+	 * @param \TYPO3\FLOW3\Log\LoggerInterface $logger
+	 * @return void
 	 */
 	public function setLogger($logger) {
 		$this->logger = $logger;
@@ -212,6 +234,21 @@ class Deployment {
 	 */
 	public function getReleaseIdentifier() {
 		return $this->releaseIdentifier;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isDryRun() {
+		return $this->dryRun;
+	}
+
+	/**
+	 * @param boolean $dryRun
+	 * @return void
+	 */
+	public function setDryRun($dryRun) {
+		$this->dryRun = $dryRun;
 	}
 
 }

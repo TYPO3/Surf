@@ -14,6 +14,7 @@ namespace TYPO3\Deploy\Domain\Service;
 class TaskManager {
 
 	/**
+	 * Task history for rollback
 	 * @var array
 	 */
 	protected $taskHistory = array();
@@ -25,11 +26,15 @@ class TaskManager {
 	protected $objectManager;
 
 	/**
+	 * Execute a task
 	 *
 	 * @param string $task
-	 * @param array $parameters
+	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @return void
 	 */
-	public function execute($task, $parameters) {
+	public function execute($task, \TYPO3\Deploy\Domain\Model\Node $node, \TYPO3\Deploy\Domain\Model\Application $application, \TYPO3\Deploy\Domain\Model\Deployment $deployment) {
 		list($packageKey, $taskName) = explode(':', $task, 2);
 		$taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskName, ':', '\\') . 'Task';
 		$taskObjectName = $this->objectManager->getCaseSensitiveObjectName($taskClassName);
@@ -37,25 +42,35 @@ class TaskManager {
 			throw new \Exception('Task "' . $task .  '" not registered ' . $taskClassName);
 		}
 		$task = $this->objectManager->create($taskObjectName);
-		$task->execute($parameters['node'], $parameters['application'], $parameters['deployment']);
+		if (!$deployment->isDryRun()) {
+			$task->execute($node, $application, $deployment);
+		}
 		$this->taskHistory[] = array(
 			'task' => $task,
-			'parameters' => $parameters
+			'node' => $node,
+			'application' => $application,
+			'deployment' => $deployment
 		);
 	}
 
 	/**
+	 * Rollback all tasks stored in the task history in reverse order
+	 *
 	 * @return void
 	 */
 	public function rollback() {
 		foreach (array_reverse($this->taskHistory) as $historicTask) {
-			$historicTask['parameters']['deployment']->getLogger()->log('Rolling back ' . get_class($historicTask['task']));
-			$historicTask['task']->rollback($historicTask['parameters']['node'], $historicTask['parameters']['application'], $historicTask['parameters']['deployment']);
+			$historicTask['deployment']->getLogger()->log('Rolling back ' . get_class($historicTask['task']));
+			if (!$historicTask['deployment']->isDryRun()) {
+				$historicTask['task']->rollback($historicTask['node'], $historicTask['application'], $historicTask['deployment']);
+			}
 		}
 		$this->reset();
 	}
 
 	/**
+	 * Reset the task history
+	 *
 	 * @return void
 	 */
 	public function reset() {
