@@ -17,6 +17,12 @@ use \TYPO3\Deploy\Domain\Model\Node;
 class SimpleWorkflow extends Workflow {
 
 	/**
+	 * If FALSE no rollback will be done on errors
+	 * @var boolean
+	 */
+	protected $enableRollback = TRUE;
+
+	/**
 	 * Order of stages that will be executed
 	 *
 	 * @var array
@@ -62,12 +68,16 @@ class SimpleWorkflow extends Workflow {
 					try {
 						$this->executeStage($stage, $node, $application, $deployment);
 					} catch(\Exception $exception) {
-						if (array_search($stage, $this->stages) <= array_search('switch', $this->stages)) {
-							$deployment->getLogger()->log('Got exception "' . $exception->getMessage() . '" rolling back.', LOG_ERR);
-							$this->taskManager->rollback();
+						if ($this->enableRollback) {
+							if (array_search($stage, $this->stages) <= array_search('switch', $this->stages)) {
+								$deployment->getLogger()->log('Got exception "' . $exception->getMessage() . '" rolling back.', LOG_ERR);
+								$this->taskManager->rollback();
+							} else {
+								$deployment->getLogger()->log('Got exception "' . $exception->getMessage() . '" but after switch stage, no rollback necessary.', LOG_ERR);
+								$this->taskManager->reset();
+							}
 						} else {
-							$deployment->getLogger()->log('Got exception "' . $exception->getMessage() . '" but after switch stage, no rollback necessary.', LOG_ERR);
-							$this->taskManager->reset();
+							$deployment->getLogger()->log('Got exception "' . $exception->getMessage() . '" but rollback disabled. Stopping.', LOG_ERR);
 						}
 						return;
 					}
@@ -81,6 +91,15 @@ class SimpleWorkflow extends Workflow {
 	 */
 	public function getName() {
 		return 'Simple workflow';
+	}
+
+	/**
+	 *
+	 * @param boolean $enableRollback
+	 * @return void
+	 */
+	public function setEnableRollback($enableRollback) {
+		$this->enableRollback = $enableRollback;
 	}
 
 }
