@@ -29,9 +29,10 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param array $options
 	 * @return void
 	 */
-	public function execute(Node $node, Application $application, Deployment $deployment, $options = array()) {
+	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$currentPath = $application->getDeploymentPath() . '/current';
 		$previousPath = $application->getDeploymentPath() . '/previous';
@@ -45,9 +46,10 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param array $options
 	 * @return void
 	 */
-	public function rollback(Node $node, Application $application, Deployment $deployment) {
+	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$currentPath = $application->getDeploymentPath() . '/current';
 		$previousPath = $application->getDeploymentPath() . '/previous';

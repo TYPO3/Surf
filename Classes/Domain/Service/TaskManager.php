@@ -32,9 +32,10 @@ class TaskManager {
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param array $options
 	 * @return void
 	 */
-	public function execute($task, \TYPO3\Deploy\Domain\Model\Node $node, \TYPO3\Deploy\Domain\Model\Application $application, \TYPO3\Deploy\Domain\Model\Deployment $deployment) {
+	public function execute($task, \TYPO3\Deploy\Domain\Model\Node $node, \TYPO3\Deploy\Domain\Model\Application $application, \TYPO3\Deploy\Domain\Model\Deployment $deployment, array $options = array()) {
 		list($packageKey, $taskName) = explode(':', $task, 2);
 		$taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskName, ':', '\\') . 'Task';
 		$taskObjectName = $this->objectManager->getCaseSensitiveObjectName($taskClassName);
@@ -43,13 +44,14 @@ class TaskManager {
 		}
 		$task = $this->objectManager->create($taskObjectName);
 		if (!$deployment->isDryRun()) {
-			$task->execute($node, $application, $deployment);
+			$task->execute($node, $application, $deployment, $options);
 		}
 		$this->taskHistory[] = array(
 			'task' => $task,
 			'node' => $node,
 			'application' => $application,
-			'deployment' => $deployment
+			'deployment' => $deployment,
+			'options' => $options
 		);
 	}
 
@@ -62,7 +64,7 @@ class TaskManager {
 		foreach (array_reverse($this->taskHistory) as $historicTask) {
 			$historicTask['deployment']->getLogger()->log('Rolling back ' . get_class($historicTask['task']));
 			if (!$historicTask['deployment']->isDryRun()) {
-				$historicTask['task']->rollback($historicTask['node'], $historicTask['application'], $historicTask['deployment']);
+				$historicTask['task']->rollback($historicTask['node'], $historicTask['application'], $historicTask['deployment'], $historicTask['options']);
 			}
 		}
 		$this->reset();

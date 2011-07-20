@@ -11,11 +11,11 @@ use \TYPO3\Deploy\Domain\Model\Application;
 use \TYPO3\Deploy\Domain\Model\Deployment;
 
 /**
- * A generic checkout task
+ * A generic shell task
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class GitCheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
+class ShellTask extends \TYPO3\Deploy\Domain\Model\Task {
 
 	/**
 	 * @inject
@@ -24,7 +24,11 @@ class GitCheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 	protected $shell;
 
 	/**
-	 * Execute this task
+	 * Executes this task
+	 *
+	 * Options:
+	 *   command: The command to execute
+	 *   rollbackCommand: The command to execute as a rollback (optional)
 	 *
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
@@ -33,39 +37,17 @@ class GitCheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$releasePath = $deployment->getApplicationReleasePath($application);
 		$deploymentPath = $application->getDeploymentPath();
-		$repositoryUrl = $application->getOption('repositoryUrl');
-		$sha1 = $this->shell->execute("git ls-remote $repositoryUrl master | awk '{print $1 }'", $node, $deployment);
-		if ($sha1 === FALSE) {
-			throw new \Exception('Could not retrieve sha1 of git master');
+		$sharedPath = $application->getSharedPath();
+		$releasePath = $deployment->getApplicationReleasePath($application);
+		$currentPath = $application->getDeploymentPath() . '/current';
+		$previousPath = $application->getDeploymentPath() . '/previous';
+
+		if (!isset($options['command'])) {
+			throw new \Exception('No command option provided for ShellTask', 1311168045);
 		}
-
-		$command = strtr("
-			if [ -d $deploymentPath/cache/localgitclone ];
-				then
-					cd $deploymentPath/cache/localgitclone
-					&& git fetch -q origin
-					&& git reset -q --hard $sha1
-					&& git submodule -q init
-					&& for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.\${mod}.url `git config -f .gitmodules --get submodule.\${mod}.url` && echo synced \$mod; done
-					&& git submodule -q sync
-					&& git submodule -q update
-					&& git clean -q -d -x -f; else git clone -q $repositoryUrl $deploymentPath/cache/localgitclone
-					&& cd $deploymentPath/cache/localgitclone
-					&& git checkout -q -b deploy $sha1
-					&& git submodule -q init
-					&& git submodule -q sync
-					&& git submodule -q update;
-				fi
-		", "\t\n", "  ");
-
-		$this->shell->execute($command, $node, $deployment, TRUE);
-
-		$command = strtr("
-			cp -RPp $deploymentPath/cache/localgitclone/ $releasePath
-				&& (echo $sha1 > $releasePath" . "REVISION)
-			", "\t\n", "  ");
+		$command = $options['command'];
+		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);
 
 		$this->shell->execute($command, $node, $deployment, TRUE);
 	}
@@ -80,8 +62,19 @@ class GitCheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$deploymentPath = $application->getDeploymentPath();
+		$sharedPath = $application->getSharedPath();
 		$releasePath = $deployment->getApplicationReleasePath($application);
-		$this->shell->execute('rm -f ' . $releasePath . 'REVISION', $node, $deployment);
+		$currentPath = $application->getDeploymentPath() . '/current';
+		$previousPath = $application->getDeploymentPath() . '/previous';
+
+		if (!isset($options['rollbackCommand'])) {
+			return;
+		}
+		$command = $options['rollbackCommand'];
+		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);
+
+		$this->shell->execute($command, $node, $deployment);
 	}
 
 }

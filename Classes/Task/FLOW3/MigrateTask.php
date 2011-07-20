@@ -29,9 +29,10 @@ class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param array $options
 	 * @return void
 	 */
-	public function execute(Node $node, Application $application, Deployment $deployment, $options = array()) {
+	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$this->shell->execute('cd ' . $targetPath . ' && ./flow3 typo3.flow3:doctrine:migrate', $node, $deployment, TRUE);
 	}
@@ -42,9 +43,10 @@ class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Application $application
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param array $options
 	 * @return void
 	 */
-	public function rollback(Node $node, Application $application, Deployment $deployment) {
+	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		// TODO Implement rollback of Doctrine migration
 	}
 

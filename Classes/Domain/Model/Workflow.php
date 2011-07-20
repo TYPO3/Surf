@@ -155,6 +155,22 @@ abstract class Workflow {
 	}
 
 	/**
+	 * Define a new task based on an existing task by setting options
+	 *
+	 * @param string $taskName
+	 * @param string $baseTask
+	 * @param array $options
+	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 */
+	public function defineTask($taskName, $baseTask, $options) {
+		$this->tasks['defined'][$taskName] = array(
+			'task' => $baseTask,
+			'options' => $options
+		);
+		return $this;
+	}
+
+	/**
 	 * Execute a stage for a node and application
 	 *
 	 * @param string $stage
@@ -200,7 +216,11 @@ abstract class Workflow {
 			throw new \Exception('Cycle for task "' . $task . '" detected, aborting.');
 		}
 		$deployment->getLogger()->log('Execute task "' . $task . '" on "' . $node->getName() . '" for application "' . $application->getName() . '"', LOG_DEBUG);
-		$this->taskManager->execute($task, $node, $application, $deployment);
+		if (isset($this->tasks['defined'][$task])) {
+			$this->taskManager->execute($this->tasks['defined'][$task]['task'], $node, $application, $deployment, $this->tasks['defined'][$task]['options']);
+		} else {
+			$this->taskManager->execute($task, $node, $application, $deployment);
+		}
 		$callstack[$task] = TRUE;
 		foreach (array('_', $application->getName()) as $applicationName) {
 			$label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
