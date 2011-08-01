@@ -123,6 +123,9 @@ class Application {
 	 * @return string
 	 */
 	public function getDeploymentPath() {
+		if ($this->deploymentPath === NULL) {
+			throw new \Exception(sprintf('No deployment path has been defined for application %s.', $this->name), 1312220645);
+		}
 		return $this->deploymentPath;
 	}
 
