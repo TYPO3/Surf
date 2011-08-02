@@ -57,7 +57,8 @@ class Application {
 		$workflow
 			->forApplication($this, 'initialize', 'typo3.deploy:createdirectories')
 			->forApplication($this, 'update', 'typo3.deploy:gitcheckout')
-			->forApplication($this, 'switch', 'typo3.deploy:symlink');
+			->forApplication($this, 'switch', 'typo3.deploy:symlink')
+			->forApplication($this, 'cleanup', 'typo3.deploy:cleanupreleases');
 	}
 
 	/**
@@ -161,6 +162,15 @@ class Application {
 	 */
 	public function getOption($key) {
 		return $this->options[$key];
+	}
+
+	/**
+	 *
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function hasOption($key) {
+		return isset($this->options[$key]);
 	}
 
 	/**

@@ -51,6 +51,7 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
+	 * @todo Make the removal of a failed release configurable, sometimes it's necessary to inspect a failed release
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$releasePath = $deployment->getApplicationReleasePath($application);
