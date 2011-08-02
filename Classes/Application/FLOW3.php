@@ -40,6 +40,9 @@ class FLOW3 extends \TYPO3\Deploy\Domain\Model\Application {
 			->afterTask('typo3.deploy:gitcheckout', array(
 				'typo3.deploy:flow3:symlink'
 			), $this)
+			->afterTask('typo3.deploy:gitcheckout', array(
+				'typo3.deploy:flow3:setfilepermissions'
+			), $this)
 			->forApplication($this, 'migrate', array(
 				'typo3.deploy:flow3:migrate'
 			));

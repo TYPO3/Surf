@@ -11,11 +11,9 @@ use \TYPO3\Deploy\Domain\Model\Application;
 use \TYPO3\Deploy\Domain\Model\Deployment;
 
 /**
- * A FLOW3 migration task
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Task for setting file permissions for the FLOW3 application
  */
-class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
+class SetFilePermissionsTask extends \TYPO3\Deploy\Domain\Model\Task {
 
 	/**
 	 * @inject
@@ -34,7 +32,12 @@ class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->execute('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.flow3:doctrine:migrate', $node, $deployment);
+
+		$arguments = (isset($options['shellUsername']) ? $options['shellUsername'] : 'root');
+		$arguments .= ' ' . (isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data');
+		$arguments .= ' ' . (isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data');
+
+		$this->shell->execute('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.flow3:core:setfilepermissions ' . $arguments, $node, $deployment);
 	}
 
 	/**
@@ -47,7 +50,6 @@ class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		// TODO Implement rollback of Doctrine migration
 	}
 
 }
