@@ -49,7 +49,7 @@ class ShellTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$command = $options['command'];
 		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);
 
-		$this->shell->execute($command, $node, $deployment, TRUE);
+		$this->shell->execute($command, $node, $deployment);
 	}
 
 	/**
@@ -74,7 +74,7 @@ class ShellTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$command = $options['rollbackCommand'];
 		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);
 
-		$this->shell->execute($command, $node, $deployment);
+		$this->shell->execute($command, $node, $deployment, TRUE);
 	}
 
 }

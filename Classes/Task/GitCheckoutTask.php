@@ -36,7 +36,7 @@ class GitCheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$deploymentPath = $application->getDeploymentPath();
 		$repositoryUrl = $application->getOption('repositoryUrl');
-		$sha1 = $this->shell->execute("git ls-remote $repositoryUrl master | awk '{print $1 }'", $node, $deployment);
+		$sha1 = $this->shell->execute("git ls-remote $repositoryUrl master | awk '{print $1 }'", $node, $deployment, TRUE);
 		if ($sha1 === FALSE) {
 			throw new \Exception('Could not retrieve sha1 of git master');
 		}
@@ -60,14 +60,14 @@ class GitCheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 				fi
 		", "\t\n", "  ");
 
-		$this->shell->execute($command, $node, $deployment, TRUE);
+		$this->shell->execute($command, $node, $deployment);
 
 		$command = strtr("
 			cp -RPp $deploymentPath/cache/localgitclone/ $releasePath
 				&& (echo $sha1 > $releasePath" . "REVISION)
 			", "\t\n", "  ");
 
-		$this->shell->execute($command, $node, $deployment, TRUE);
+		$this->shell->execute($command, $node, $deployment);
 	}
 
 	/**
@@ -81,7 +81,7 @@ class GitCheckoutTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$releasePath = $deployment->getApplicationReleasePath($application);
-		$this->shell->execute('rm -f ' . $releasePath . 'REVISION', $node, $deployment);
+		$this->shell->execute('rm -f ' . $releasePath . 'REVISION', $node, $deployment, TRUE);
 	}
 
 }
