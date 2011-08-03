@@ -33,10 +33,9 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$releasePath = $deployment->getApplicationReleasePath($application);
-		$currentPath = $application->getDeploymentPath() . '/current';
-		$previousPath = $application->getDeploymentPath() . '/previous';
-		$this->shell->execute('rm -f ' . $previousPath . ' && if [ -e ' . $currentPath . ' ]; then mv ' . $currentPath . ' ' . $previousPath . '; fi && ln -s ' . $releasePath . ' ' . $currentPath, $node, $deployment);
+		$releaseIdentifier = $deployment->getReleaseIdentifier();
+		$releasesPath = $application->getDeploymentPath() . '/releases';
+		$this->shell->execute('cd ' . $releasesPath . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./' . $releaseIdentifier . ' ./current', $node, $deployment);
 		$deployment->getLogger()->log('Node "' . $node->getName() . '" is live!');
 	}
 
@@ -50,9 +49,8 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$currentPath = $application->getDeploymentPath() . '/current';
-		$previousPath = $application->getDeploymentPath() . '/previous';
-		$this->shell->execute('rm -f ' . $currentPath . ' && mv ' . $previousPath . ' ' . $currentPath, $node, $deployment, TRUE);
+		$releasesPath = $application->getDeploymentPath() . '/releases';
+		$this->shell->execute('cd ' . $releasesPath . ' && rm -f ./current && mv ./previous ./current', $node, $deployment, TRUE);
 	}
 
 }

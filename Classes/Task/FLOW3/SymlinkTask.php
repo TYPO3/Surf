@@ -33,12 +33,14 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$releasePath = $deployment->getApplicationReleasePath($application);
-		$sharedPath = $application->getSharedPath();
+		$releaseIdentifier = $deployment->getReleaseIdentifier();
+		$releasesPath = $application->getDeploymentPath() . '/releases';
 		$commands = array(
-			"mkdir -p $releasePath/Data",
-			"ln -sf $sharedPath/Data/Logs $releasePath/Data/Logs",
-			"ln -sf $sharedPath/Data/Persistent $releasePath/Data/Persistent"
+			"mkdir -p $releasesPath/$releaseIdentifier/Data",
+			"cd $releasesPath/$releaseIdentifier",
+			"ln -sf ../../../shared/Data/Logs ./Data/Logs",
+			"ln -sf ../../../shared/Data/Persistent ./Data/Persistent",
+			"ln -sf ../../../shared/Configuration/Production ./Configuration/Production"
 		);
 		$this->shell->execute(implode(';', $commands), $node, $deployment);
 	}

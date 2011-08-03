@@ -40,8 +40,8 @@ class ShellTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$deploymentPath = $application->getDeploymentPath();
 		$sharedPath = $application->getSharedPath();
 		$releasePath = $deployment->getApplicationReleasePath($application);
-		$currentPath = $application->getDeploymentPath() . '/current';
-		$previousPath = $application->getDeploymentPath() . '/previous';
+		$currentPath = $application->getDeploymentPath() . '/releases/current';
+		$previousPath = $application->getDeploymentPath() . '/releases/previous';
 
 		if (!isset($options['command'])) {
 			throw new \Exception('No command option provided for ShellTask', 1311168045);
@@ -65,8 +65,8 @@ class ShellTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$deploymentPath = $application->getDeploymentPath();
 		$sharedPath = $application->getSharedPath();
 		$releasePath = $deployment->getApplicationReleasePath($application);
-		$currentPath = $application->getDeploymentPath() . '/current';
-		$previousPath = $application->getDeploymentPath() . '/previous';
+		$currentPath = $application->getDeploymentPath() . '/releases/current';
+		$previousPath = $application->getDeploymentPath() . '/releases/previous';
 
 		if (!isset($options['rollbackCommand'])) {
 			return;

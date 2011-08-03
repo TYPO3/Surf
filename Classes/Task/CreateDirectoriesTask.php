@@ -35,7 +35,6 @@ class CreateDirectoriesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$deploymentPath = $application->getDeploymentPath();
 		$sharedPath = $application->getSharedPath();
-		$releasePath = $deployment->getApplicationReleasePath($application);
 		$result = $this->shell->execute('test -d ' . $deploymentPath, $node, $deployment, TRUE);
 		if ($result === FALSE) {
 			throw new \Exception('Deployment directory "' . $deploymentPath . '" does not exist on ' . $node->getName(), 1311003253);

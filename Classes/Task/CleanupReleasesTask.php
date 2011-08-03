@@ -46,7 +46,7 @@ class CleanupReleasesTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$keepReleases = $application->getOption('keepReleases');
 		$releasesPath = $application->getDeploymentPath() . '/releases';
 		$currentReleaseIdentifier = $deployment->getReleaseIdentifier();
-		$previousReleasePath = $application->getDeploymentPath() . '/previous';
+		$previousReleasePath = $application->getDeploymentPath() . '/releases/previous';
 		$previousReleaseIdentifier = trim($this->shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment));
 
 		$allReleasesList = $this->shell->execute("find $releasesPath/. -maxdepth 1 -type d -exec basename {} \;", $node, $deployment);
@@ -54,7 +54,7 @@ class CleanupReleasesTask extends \TYPO3\Deploy\Domain\Model\Task {
 
 		$removableReleases = array();
 		foreach ($allReleases as $release) {
-			if ($release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier) {
+			if ($release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous') {
 				$removableReleases[] = trim($release);
 			}
 		}
