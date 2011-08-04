@@ -17,6 +17,11 @@ use \TYPO3\Deploy\Domain\Model\Node;
  */
 class Deployment {
 
+	const STATUS_SUCCESS = 0;
+	const STATUS_FAILED = 1;
+	const STATUS_CANCELLED = 2;
+	const STATUS_UNKNOWN = 3;
+
 	/**
 	 * The name of this deployment
 	 * @var string
@@ -64,6 +69,12 @@ class Deployment {
 	 * @var array
 	 */
 	protected $initCallbacks = array();
+
+	/**
+	 * Tells if the deployment ran successfully or failed
+	 * @var integer
+	 */
+	protected $status = self::STATUS_UNKNOWN;
 
 	/**
 	 * Constructor
@@ -251,5 +262,19 @@ class Deployment {
 		$this->dryRun = $dryRun;
 	}
 
+	/**
+	 * @param integer $status
+	 * @return void
+	 */
+	public function setStatus($status) {
+		$this->status = $status;
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getStatus() {
+		return $this->status;
+	}
 }
 ?>

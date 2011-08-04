@@ -68,6 +68,7 @@ class SimpleWorkflow extends Workflow {
 					try {
 						$this->executeStage($stage, $node, $application, $deployment);
 					} catch(\Exception $exception) {
+						$deployment->setStatus(Deployment::STATUS_FAILED);
 						if ($this->enableRollback) {
 							if (array_search($stage, $this->stages) <= array_search('switch', $this->stages)) {
 								$deployment->getLogger()->log('Got exception "' . $exception->getMessage() . '" rolling back.', LOG_ERR);
@@ -83,6 +84,9 @@ class SimpleWorkflow extends Workflow {
 					}
 				}
 			}
+		}
+		if ($deployment->getStatus() === Deployment::STATUS_UNKNOWN) {
+			$deployment->setStatus(Deployment::STATUS_SUCCESS);
 		}
 	}
 

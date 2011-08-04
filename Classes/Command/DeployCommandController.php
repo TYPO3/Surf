@@ -35,6 +35,7 @@ class DeployCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandControl
 		$deployment->initialize();
 
 		$deployment->deploy();
+		$this->response->setExitCode($deployment->getStatus());
 	}
 
 	/**
