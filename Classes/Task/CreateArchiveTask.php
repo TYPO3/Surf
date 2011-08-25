@@ -70,7 +70,7 @@ class CreateArchiveTask extends \TYPO3\Deploy\Domain\Model\Task {
 			$this->shell->execute(sprintf('mkdir -p %s', $temporaryDirectory), $node, $deployment);
 			$tarOptions .= sprintf(' -cf %s/out.tar --directory %s . ', $temporaryDirectory, $targetPath, $options['baseDirectory']);
 			$this->shell->execute(sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions), $node, $deployment);
-			$this->shell->execute(sprintf('cd %s; tar -xf out.tar; rm out.tar; zip -9 -r out %s', $temporaryDirectory, $options['baseDirectory']), $node, $deployment);
+			$this->shell->execute(sprintf('cd %s; tar -xf out.tar; rm out.tar; zip --quiet -9 -r out %s', $temporaryDirectory, $options['baseDirectory']), $node, $deployment);
 			$this->shell->execute(sprintf('mv %s/out.zip %s; rm -Rf %s', $temporaryDirectory, $options['targetFile'], $temporaryDirectory), $node, $deployment);
 
 		} else {
