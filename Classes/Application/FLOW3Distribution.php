@@ -123,7 +123,7 @@ class FLOW3Distribution extends \TYPO3\Deploy\Domain\Model\Application {
 			'Data/*',
 			'Web/_Resources/*',
 			'Build/Reports',
-			'Cache/',
+			'./Cache',
 			'Configuration/PackageStates.php'
 		);
 
