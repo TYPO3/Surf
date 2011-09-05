@@ -19,7 +19,7 @@ class ShellCommandService {
 	/**
 	 * Execute a shell command
 	 *
-	 * @param string $command The shell command to execute
+	 * @param mixed $command The shell command to execute, either string or array of commands
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node Node to execute command against, NULL means localhost
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @param boolean $ignoreErrors If this command should ignore exit codes unequeal zero
@@ -40,11 +40,12 @@ class ShellCommandService {
 	/**
 	 * Execute a shell command locally
 	 *
-	 * @param string $command
+	 * @param mixed $command
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return array
 	 */
 	protected function executeLocalCommand($command, Deployment $deployment) {
+		$command = $this->prepareCommand($command);
 		$deployment->getLogger()->log('    (localhost): "' . $command . '"', LOG_DEBUG);
 		$returnedOutput = '';
 
@@ -62,12 +63,13 @@ class ShellCommandService {
 	/**
 	 * Execute a shell command via SSH
 	 *
-	 * @param string $command
+	 * @param mixed $command
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node
 	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
 	 * @return array
 	 */
 	protected function executeRemoteCommand($command, Node $node, Deployment $deployment) {
+		$command = $this->prepareCommand($command);
 		$deployment->getLogger()->log('    $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
 		$username = $node->getOption('username');
 		$hostname = $node->getHostname();
@@ -82,6 +84,22 @@ class ShellCommandService {
 		$exitCode = pclose($fp);
 
 		return array($exitCode, $returnedOutput);
+	}
+
+	/**
+	 * Prepare a command
+	 *
+	 * @param mixed $command
+	 * @return string
+	 */
+	protected function prepareCommand($command) {
+		if (is_string($command)) {
+			return trim($command);
+		} elseif (is_array($command)) {
+			return implode(';', $command);
+		} else {
+			throw new \Exception('Command must be string or array', 1312454906);
+		}
 	}
 
 }

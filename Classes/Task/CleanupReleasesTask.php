@@ -28,6 +28,10 @@ class CleanupReleasesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * number of old releases (application option "keepReleases"). The current
 	 * and previous release (if one exists) are protected from removal.
 	 *
+	 * Example configuration:
+	 *
+	 *     $application->setOption('keepReleases', 2);
+	 *
 	 * Note: There is no rollback for this cleanup, so we have to be sure not to delete any
 	 *       live or referenced releases.
 	 *
@@ -63,7 +67,7 @@ class CleanupReleasesTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$removeReleases = array_slice($removableReleases, 0, count($removableReleases) - $keepReleases);
 		$removeCommand = '';
 		foreach ($removeReleases as $removeRelease) {
-			$removeCommand .= "rm -rf {$releasesPath}/{$removeRelease};rm -rf {$releasesPath}/{$removeRelease}REVISION;";
+			$removeCommand .= "rm -rf {$releasesPath}/{$removeRelease};rm -f {$releasesPath}/{$removeRelease}REVISION;";
 		}
 		if (count($removeReleases) > 0) {
 			$deployment->getLogger()->log('Removing releases ' . implode(', ', $removeReleases));

@@ -42,7 +42,7 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 			"ln -sf ../../../shared/Data/Persistent ./Data/Persistent",
 			"ln -sf ../../../shared/Configuration/Production ./Configuration/Production"
 		);
-		$this->shell->execute(implode(';', $commands), $node, $deployment);
+		$this->shell->execute($commands, $node, $deployment);
 	}
 
 }
