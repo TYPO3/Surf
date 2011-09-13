@@ -11,11 +11,11 @@ use \TYPO3\Deploy\Domain\Model\Application;
 use \TYPO3\Deploy\Domain\Model\Deployment;
 
 /**
- * A symlink task for linking shared directories
+ * A symlink task for linking the shared data directory
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
+class SymlinkDataTask extends \TYPO3\Deploy\Domain\Model\Task {
 
 	/**
 	 * @inject
@@ -39,10 +39,22 @@ class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
 			"mkdir -p $releasesPath/$releaseIdentifier/Data",
 			"cd $releasesPath/$releaseIdentifier",
 			"ln -sf ../../../shared/Data/Logs ./Data/Logs",
-			"ln -sf ../../../shared/Data/Persistent ./Data/Persistent",
-			"ln -sf ../../../shared/Configuration/Production ./Configuration/Production"
+			"ln -sf ../../../shared/Data/Persistent ./Data/Persistent"
 		);
-		$this->shell->execute($commands, $node, $deployment);
+		$this->shell->executeOrSimulate($commands, $node, $deployment);
+	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 }

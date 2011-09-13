@@ -16,6 +16,12 @@ use \TYPO3\Deploy\Domain\Model\Deployment;
 class DeploymentService {
 
 	/**
+	 * Get a deployment object by deployment name
+	 *
+	 * Looks up the deployment in directory FLOW_ROOT/Build/Deploy/[deploymentName].php
+	 *
+	 * The script has access to a deployment object as "$deployment". This could change
+	 * in the future.
 	 *
 	 * @param string $deploymentName
 	 * @return \TYPO3\Deploy\Domain\Model\Deployment

@@ -57,7 +57,7 @@ class Application {
 		$workflow
 			->forApplication($this, 'initialize', 'typo3.deploy:createdirectories')
 			->forApplication($this, 'update', 'typo3.deploy:gitcheckout')
-			->forApplication($this, 'switch', 'typo3.deploy:symlink')
+			->forApplication($this, 'switch', 'typo3.deploy:symlinkrelease')
 			->forApplication($this, 'cleanup', 'typo3.deploy:cleanupreleases');
 	}
 

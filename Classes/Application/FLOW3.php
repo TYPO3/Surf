@@ -38,7 +38,8 @@ class FLOW3 extends \TYPO3\Deploy\Domain\Model\Application {
 				'typo3.deploy:flow3:createdirectories'
 			))
 			->afterTask('typo3.deploy:gitcheckout', array(
-				'typo3.deploy:flow3:symlink'
+				'typo3.deploy:flow3:symlinkdata',
+				'typo3.deploy:flow3:symlinkconfiguration'
 			), $this)
 			->afterTask('typo3.deploy:gitcheckout', array(
 				'typo3.deploy:flow3:setfilepermissions'

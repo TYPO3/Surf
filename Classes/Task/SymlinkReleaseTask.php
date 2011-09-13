@@ -15,7 +15,7 @@ use \TYPO3\Deploy\Domain\Model\Deployment;
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class SymlinkTask extends \TYPO3\Deploy\Domain\Model\Task {
+class SymlinkReleaseTask extends \TYPO3\Deploy\Domain\Model\Task {
 
 	/**
 	 * @inject

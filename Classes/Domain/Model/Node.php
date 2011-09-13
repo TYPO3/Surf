@@ -141,5 +141,13 @@ class Node {
 		$this->options[$key] = $value;
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->name;
+	}
+
 }
 ?>
