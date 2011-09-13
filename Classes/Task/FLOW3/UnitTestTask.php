@@ -34,7 +34,21 @@ class UnitTestTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->execute('cd ' . $targetPath . ' && phpunit -c Build/Common/PhpUnit/UnitTests.xml', $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && phpunit -c Build/Common/PhpUnit/UnitTests.xml', $node, $deployment);
 	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
+	}
+
 }
 ?>

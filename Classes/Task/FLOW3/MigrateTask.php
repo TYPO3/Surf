@@ -34,7 +34,20 @@ class MigrateTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->execute('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.flow3:doctrine:migrate', $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.flow3:doctrine:migrate', $node, $deployment);
+	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 	/**

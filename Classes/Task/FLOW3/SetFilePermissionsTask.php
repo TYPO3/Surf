@@ -37,7 +37,20 @@ class SetFilePermissionsTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$arguments .= ' ' . (isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data');
 		$arguments .= ' ' . (isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data');
 
-		$this->shell->execute('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.flow3:core:setfilepermissions ' . $arguments, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.flow3:core:setfilepermissions ' . $arguments, $node, $deployment);
+	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 	/**

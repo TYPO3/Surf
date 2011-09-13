@@ -17,7 +17,7 @@ use \TYPO3\Deploy\Domain\Model\Deployment;
 class ShellCommandService {
 
 	/**
-	 * Execute a shell command
+	 * Execute a shell command (locally or remote depending on the node hostname)
 	 *
 	 * @param mixed $command The shell command to execute, either string or array of commands
 	 * @param \TYPO3\Deploy\Domain\Model\Node $node Node to execute command against, NULL means localhost
@@ -35,6 +35,41 @@ class ShellCommandService {
 			throw new \Exception('Command returned non-zero return code', 1311007746);
 		}
 		return ($exitCode === 0 ? $returnedOutput : FALSE);
+	}
+
+	/**
+	 * Simulate a command by just outputting what would be executed
+	 *
+	 * @param string $command
+	 * @param Node $node
+	 * @param Deployment $deployment
+	 * @param boolean $ignoreErrors
+	 */
+	public function simulate($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE) {
+		if ($node === NULL || $node->getHostname() === 'localhost') {
+			$command = $this->prepareCommand($command);
+			$deployment->getLogger()->log('... (localhost): "' . $command . '"', LOG_DEBUG);
+		} else {
+			$command = $this->prepareCommand($command);
+			$deployment->getLogger()->log('... $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
+		}
+		return TRUE;
+	}
+
+	/**
+	 * Execute or simulate a command (if the deployment is in dry run mode)
+	 *
+	 * @param string $command
+	 * @param Node $node
+	 * @param Deployment $deployment
+	 * @param boolean $ignoreErrors
+	 */
+	public function executeOrSimulate($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE) {
+		if (!$deployment->isDryRun()) {
+			return $this->execute($command, $node, $deployment, $ignoreErrors);
+		} else {
+			return $this->simulate($command, $node, $deployment, $ignoreErrors);
+		}
 	}
 
 	/**

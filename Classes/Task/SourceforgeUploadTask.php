@@ -39,7 +39,20 @@ class SourceforgeUploadTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$sourceforgeLogin = $options['sourceforgeUserName'] . ',' . $options['sourceforgeProjectName'];
 
 		$projectDirectory = sprintf('/home/frs/project/%s/%s/%s/%s/%s', substr($projectName, 0, 1), substr($projectName, 0, 2), $projectName, $options['sourceforgePackageName'], $options['version']);
-		$this->shell->execute('rsync -e ssh ' . implode(' ', $options['files']) . ' ' . $sourceforgeLogin . '@frs.sourceforge.net:' . $projectDirectory, $node, $deployment);
+		$this->shell->executeOrSimulate('rsync -e ssh ' . implode(' ', $options['files']) . ' ' . $sourceforgeLogin . '@frs.sourceforge.net:' . $projectDirectory, $node, $deployment);
+	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 	/**

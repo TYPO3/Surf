@@ -45,6 +45,8 @@ class TaskManager {
 		$task = $this->objectManager->create($taskObjectName);
 		if (!$deployment->isDryRun()) {
 			$task->execute($node, $application, $deployment, $options);
+		} else {
+			$task->simulate($node, $application, $deployment, $options);
 		}
 		$this->taskHistory[] = array(
 			'task' => $task,

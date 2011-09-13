@@ -34,18 +34,32 @@ class TagTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		
+
 		if (!isset($options['tagName'])) {
 			throw new \Exception('tagName not set', 1314186541);
 		}
-		
+
 		if (!isset($options['description'])) {
 			throw new \Exception('description not set', 1314186553);
 		}
 
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->execute(sprintf('cd ' . $targetPath . '; git tag -f -a -m "%s" %s', $options['description'], $options['tagName']), $node, $deployment);
-		$this->shell->execute(sprintf('cd ' . $targetPath . '; git submodule foreach \'git tag -f -a -m "%s" %s\'', $options['description'], $options['tagName']), $node, $deployment);
+		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git tag -f -a -m "%s" %s', $options['description'], $options['tagName']), $node, $deployment);
+		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git tag -f -a -m "%s" %s\'', $options['description'], $options['tagName']), $node, $deployment);
 	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
+	}
+
 }
 ?>

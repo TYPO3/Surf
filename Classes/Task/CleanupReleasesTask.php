@@ -43,7 +43,7 @@ class CleanupReleasesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		if (!$application->hasOption('keepReleases')) {
-			$deployment->getLogger()->log('Keeping all releases for "' . $application->getName() . '"', LOG_DEBUG);
+			$deployment->getLogger()->log(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"', LOG_DEBUG);
 			return;
 		}
 
@@ -70,11 +70,24 @@ class CleanupReleasesTask extends \TYPO3\Deploy\Domain\Model\Task {
 			$removeCommand .= "rm -rf {$releasesPath}/{$removeRelease};rm -f {$releasesPath}/{$removeRelease}REVISION;";
 		}
 		if (count($removeReleases) > 0) {
-			$deployment->getLogger()->log('Removing releases ' . implode(', ', $removeReleases));
-			$this->shell->execute($removeCommand, $node, $deployment);
+			$deployment->getLogger()->log(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
+			$this->shell->executeOrSimulate($removeCommand, $node, $deployment);
 		} else {
 			$deployment->getLogger()->log('No releases to remove', LOG_DEBUG);
 		}
+	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 }

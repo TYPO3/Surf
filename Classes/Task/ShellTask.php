@@ -49,7 +49,20 @@ class ShellTask extends \TYPO3\Deploy\Domain\Model\Task {
 		$command = $options['command'];
 		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);
 
-		$this->shell->execute($command, $node, $deployment);
+		$this->shell->executeOrSimulate($command, $node, $deployment);
+	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 	/**

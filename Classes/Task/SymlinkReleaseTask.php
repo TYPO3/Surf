@@ -35,8 +35,21 @@ class SymlinkReleaseTask extends \TYPO3\Deploy\Domain\Model\Task {
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$releaseIdentifier = $deployment->getReleaseIdentifier();
 		$releasesPath = $application->getDeploymentPath() . '/releases';
-		$this->shell->execute('cd ' . $releasesPath . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./' . $releaseIdentifier . ' ./current', $node, $deployment);
-		$deployment->getLogger()->log('Node "' . $node->getName() . '" is live!');
+		$this->shell->executeOrSimulate('cd ' . $releasesPath . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./' . $releaseIdentifier . ' ./current', $node, $deployment);
+		$deployment->getLogger()->log('Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!');
+	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 	/**

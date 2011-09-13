@@ -38,7 +38,20 @@ class ImportSiteTask extends \TYPO3\Deploy\Domain\Model\Task {
 		}
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$sitePackageKey = $application->getOption('sitePackageKey');
-		$this->shell->execute('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.typo3:site:import < Packages/Sites/' . $sitePackageKey . '/Resources/Private/Content/Sites.xml', $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.typo3:site:import < Packages/Sites/' . $sitePackageKey . '/Resources/Private/Content/Sites.xml', $node, $deployment);
+	}
+
+	/**
+	 * Simulate this task
+	 *
+	 * @param Node $node
+	 * @param Application $application
+	 * @param Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 	/**
