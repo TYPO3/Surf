@@ -47,25 +47,22 @@ class DeployCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandControl
 	public function describeCommand($deploymentName) {
 		$deployment = $this->deploymentService->getDeployment($deploymentName);
 
-		echo 'Deployment "' . $deployment->getName() . '"' . PHP_EOL;
-		echo str_repeat('_', 80) . PHP_EOL;
-		echo 'Workflow: ' . $deployment->getWorkflow()->getName() . PHP_EOL;
-		echo 'Nodes: '  . PHP_EOL;
+		$this->outputLine('<em> Deployment <b>' . $deployment->getName() . ' </b></em>');
+		$this->outputLine();
+		$this->outputLine('<u>Workflow</u>: ' . $deployment->getWorkflow()->getName() . PHP_EOL);
+		$this->outputLine('<u>Nodes</u>:' . PHP_EOL);
 		foreach ($deployment->getNodes() as $node) {
-			echo '  - ' . $node->getName() . ' (' . $node->getHostname() . ')' . PHP_EOL;
+			$this->outputLine('  <b>' . $node->getName() . '</b> (' . $node->getHostname() . ')');
 		}
-		echo 'Applications: '  . PHP_EOL;
+		$this->outputLine(PHP_EOL . '<u>Applications</u>:' . PHP_EOL);
 		foreach ($deployment->getApplications() as $application) {
-			echo '  - ' . $application->getName() . PHP_EOL;
-			echo '    Deployment path: ' . $application->getDeploymentPath() . PHP_EOL;
-			echo '    Options: ' . PHP_EOL;
+			$this->outputLine('  <b>' . $application->getName() . '</b>' . PHP_EOL);
+			$this->outputLine('    <u>Deployment path</u>: ' . $application->getDeploymentPath());
+			$this->outputLine('    <u>Options</u>: ');
 			foreach ($application->getOptions() as $key => $value) {
-				echo '      ' . $key . ' => ' . $value . PHP_EOL;
+				$this->outputLine('      ' . $key . ' => ' . $value);
 			}
-			echo '    Nodes:' . PHP_EOL;
-			foreach ($application->getNodes() as $node) {
-				echo '      - ' . $node->getName() . PHP_EOL;
-			}
+			$this->outputLine('    <u>Nodes</u>: ' . implode(', ', $application->getNodes()));
 		}
 	}
 
