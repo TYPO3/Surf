@@ -1,4 +1,4 @@
-TYPO3.Deploy -- FLOW3 deployment
+TYPO3.Deploy - FLOW3 deployment
 ====================================
 
 ## DESCRIPTION
@@ -7,7 +7,7 @@ The deploy package is a complete automatic deployment tool powered by FLOW3. It'
 
 Some of the features of the deploy package:
 
-* Remote checkout of Git repositories with submodules
+* Remote checkout of Git repositories with submodules (sorry, no SVN yet)
 * Flexible, declarative configuration of deployments
 * Multi-node, multi-application, multi-deployment deployments
 * Hook in any deployment stage
@@ -18,7 +18,7 @@ Note that the final name of the package and options / API are very likely to cha
 
 ## INSTALLATION
 
-Install the deploy package by checking out the Github repository in your `FLOW3_ROOT/Packages/Application` directory of a FLOW3 installation.
+Install the deploy package by cloning this Github repository to `FLOW3_ROOT/Packages/Application/TYPO3.Deploy` of a FLOW3 installation.
 
 ## GUIDE
 
@@ -98,4 +98,4 @@ Besides specifying the execution point via a stage, you can also give an existin
 
 ## COPYRIGHT
 
-The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - FLOW3 Agentur](http://www.networkteam.com).
+The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - FLOW3 Agentur](http://www.networkteam.com/flow3-agentur.html).
