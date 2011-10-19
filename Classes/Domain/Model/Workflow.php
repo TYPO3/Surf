@@ -6,14 +6,13 @@ namespace TYPO3\Surf\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
  * A Workflow
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 abstract class Workflow {
 
@@ -108,8 +107,6 @@ abstract class Workflow {
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function addTask($tasks, $stage, Application $application = NULL) {
-		$applicationName = $application !== NULL ? $application->getName() : '_';
-
 		if (!is_array($tasks)) $tasks = array($tasks);
 		if (!isset($this->tasks['stage'][$application->getName()][$stage])) $this->tasks['stage'][$application->getName()][$stage] = array();
 		$this->tasks['stage'][$application->getName()][$stage] = array_merge($this->tasks['stage'][$application->getName()][$stage], $tasks);

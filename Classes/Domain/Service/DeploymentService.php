@@ -6,12 +6,11 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * A deployment service
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class DeploymentService {
 

@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Domain\Model;
 /**
  * A Node
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Node {
 
@@ -40,7 +39,7 @@ class Node {
 	/**
 	 * Constructor
 	 *
-	 * @param type $name
+	 * @param string $name
 	 */
 	public function __construct($name) {
 		$this->name = $name;

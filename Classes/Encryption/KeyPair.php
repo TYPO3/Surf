@@ -14,7 +14,6 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * A key pair stores a public / private key pair with an open or encrypted
  * private key.
  *
- * @FLOW3\Scope("prototype")
  * @FLOW3\ValueObject
  */
 class KeyPair {

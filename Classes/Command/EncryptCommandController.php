@@ -27,7 +27,6 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	 *
 	 * @param string $passphrase Passphrase for the generated key (optional)
 	 * @return void
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function setupCommand($passphrase = NULL) {
 		if (file_exists($this->getDeploymentConfigurationPath() . '/Keys/Local.key')) {
@@ -51,7 +50,6 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	 * @param string $deploymentName Optional deployment name to selectively encrypt the configuration
 	 * @return void
 	 * @see typo3.surf:encrypt:open
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function sealCommand($deploymentName = '') {
 		$keyPair = $this->readKeyPair($this->getDeploymentConfigurationPath() . '/Keys/Local.key');
@@ -80,7 +78,6 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	 * @param string $deploymentName Optional deployment name to selectively decrypt the configuration
 	 * @return void
 	 * @see typo3.surf:encrypt:seal
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function openCommand($passphrase = NULL, $deploymentName = '') {
 		$keyPair = $this->readKeyPair($this->getDeploymentConfigurationPath() . '/Keys/Local.key');
@@ -107,7 +104,6 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	 * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
 	 * @param string $filename
 	 * @return void
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	protected function writeKeyPair(\TYPO3\Surf\Encryption\KeyPair $keyPair, $filename) {
 		$data = json_encode(array(

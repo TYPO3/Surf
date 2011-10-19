@@ -6,13 +6,12 @@ namespace TYPO3\Surf\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Deployment;
-use \TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
 
 /**
  * A simple workflow
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class SimpleWorkflow extends Workflow {
 

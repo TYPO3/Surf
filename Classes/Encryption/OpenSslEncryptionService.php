@@ -24,7 +24,6 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 *
 	 * @param string $passphrase
 	 * @return \TYPO3\Surf\Encryption\KeyPair
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function generateKeyPair($passphrase = NULL) {
 		$privateKey = NULL;
@@ -44,7 +43,6 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
 	 * @param string $passphrase
 	 * @return \TYPO3\Surf\Encryption\KeyPair
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function openKeyPair(\TYPO3\Surf\Encryption\KeyPair $keyPair, $passphrase) {
 		return $this->exportKeyPair($keyPair, $passphrase);
@@ -57,7 +55,6 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 * @param string $oldPassphrase
 	 * @param string $newPassphrase
 	 * @return \TYPO3\Surf\Encryption\KeyPair
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function changePassphrase($keyPair, $oldPassphrase, $newPassphrase) {
 		if (empty($newPassphrase)) {
@@ -71,7 +68,6 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 * @param string $data
 	 * @param string $publicKey
 	 * @return string
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function encryptData($data, $publicKey) {
 		$cryptedData = NULL;
@@ -87,7 +83,6 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 * @param string $data
 	 * @param string $privateKey
 	 * @return string
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function decryptData($data, $privateKey) {
 		if (!is_string($privateKey)) throw new \InvalidArgumentException('Private key should be given as string', 1300211696);
@@ -106,7 +101,6 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 * @param string $passphrase Passphrase for opening the key pair
 	 * @param string $exportPassphrase Passphrase for the exported key pair (NULL for unencrypted private key)
 	 * @return \TYPO3\Surf\Encryption\KeyPair
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	protected function exportKeyPair($keyPair, $passphrase, $exportPassphrase = NULL) {
 		$privateKey = NULL;

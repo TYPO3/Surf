@@ -6,16 +6,15 @@ namespace TYPO3\Surf\Task;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Node;
-use \TYPO3\Surf\Domain\Model\Application;
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
  * Task for managing Varnish
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class VarnishPurgeTask extends \TYPO3\Surf\Domain\Model\Task {
 
@@ -57,7 +56,6 @@ class VarnishPurgeTask extends \TYPO3\Surf\Domain\Model\Task {
 		$this->checkOptionsForValidity($options);
 
 		$secretFile = (isset($options['secretFile']) ? $options['secretFile'] : '/etc/varnish/secret');
-		$purgeUrl = (isset($options['purgeUrl']) ? $options['purgeUrl'] : '.');
 		$varnishadm = (isset($options['varnishadm']) ? $options['varnishadm'] : '/usr/bin/varnishadm');
 
 		$this->shell->executeOrSimulate($varnishadm . ' -S ' . $secretFile . ' -T 127.0.0.1:6082 status', $node, $deployment);

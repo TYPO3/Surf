@@ -11,7 +11,6 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * A task manager
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class TaskManager {
 

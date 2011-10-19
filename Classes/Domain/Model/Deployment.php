@@ -6,14 +6,13 @@ namespace TYPO3\Surf\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Workflow;
-use \TYPO3\Surf\Domain\Model\Application;
-use \TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Node;
 
 /**
  * A Deployment
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Deployment {
 

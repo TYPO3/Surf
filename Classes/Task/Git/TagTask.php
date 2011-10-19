@@ -6,16 +6,15 @@ namespace TYPO3\Surf\Task\Git;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Node;
-use \TYPO3\Surf\Domain\Model\Application;
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
  * A task which can be used to tag a git repository and its submodules
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 
@@ -35,8 +34,6 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$targetPath = $deployment->getApplicationReleasePath($application);
-
 		if (!isset($options['tagName'])) {
 			throw new \Exception('tagName not set', 1314186541);
 		}

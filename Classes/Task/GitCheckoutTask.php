@@ -6,16 +6,15 @@ namespace TYPO3\Surf\Task;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Node;
-use \TYPO3\Surf\Domain\Model\Application;
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
  * A generic checkout task
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 

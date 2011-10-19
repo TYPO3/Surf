@@ -6,13 +6,12 @@ namespace TYPO3\Surf\Application;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Workflow;
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * A FLOW3 application template
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class FLOW3 extends \TYPO3\Surf\Domain\Model\Application {
 

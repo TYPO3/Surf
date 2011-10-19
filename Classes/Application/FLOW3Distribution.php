@@ -6,16 +6,18 @@ namespace TYPO3\Surf\Application;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Workflow;
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * An "application" which does bundles FLOW3 or similar distributions.
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class FLOW3Distribution extends \TYPO3\Surf\Domain\Model\Application {
 
+	/**
+	 * @var array
+	 */
 	protected $configuration = array();
 
 	/**
@@ -77,6 +79,9 @@ class FLOW3Distribution extends \TYPO3\Surf\Domain\Model\Application {
 
 	/**
 	 * Check if all necessary options to run are set
+	 *
+	 * @return void
+	 * @throws \Exception
 	 */
 	protected function checkIfMandatoryOptionsExist() {
 		if (!$this->hasOption('version')) {
@@ -101,6 +106,8 @@ class FLOW3Distribution extends \TYPO3\Surf\Domain\Model\Application {
 
 	/**
 	 * Build configuration which we need later into $this->configuration
+	 *
+	 * @return void
 	 */
 	protected function buildConfiguration() {
 		$versionAndProjectName = sprintf('%s-%s', $this->getOption('projectName'), $this->getOption('version'));
@@ -116,6 +123,7 @@ class FLOW3Distribution extends \TYPO3\Surf\Domain\Model\Application {
 	 *
 	 * @param Workflow $workflow
 	 * @param Deployment $deployment
+	 * @return void
 	 */
 	protected function defineTasks(Workflow $workflow, Deployment $deployment) {
 		$excludePatterns = array(

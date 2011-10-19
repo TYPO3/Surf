@@ -6,13 +6,12 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Node;
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * A shell command service
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class ShellCommandService {
 
@@ -44,6 +43,7 @@ class ShellCommandService {
 	 * @param Node $node
 	 * @param Deployment $deployment
 	 * @param boolean $ignoreErrors
+	 * @return bool
 	 */
 	public function simulate($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE) {
 		if ($node === NULL || $node->getHostname() === 'localhost') {
@@ -63,6 +63,7 @@ class ShellCommandService {
 	 * @param Node $node
 	 * @param Deployment $deployment
 	 * @param boolean $ignoreErrors
+	 * @return boolean|mixed
 	 */
 	public function executeOrSimulate($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE) {
 		if (!$deployment->isDryRun()) {

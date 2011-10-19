@@ -6,9 +6,9 @@ namespace TYPO3\Surf\Task\FLOW3;
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Surf\Domain\Model\Node;
-use \TYPO3\Surf\Domain\Model\Application;
-use \TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Deployment;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
@@ -18,7 +18,6 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * Note: this might cause problems with concurrent access due to the cached configuration
  * insided this directory.
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class SymlinkConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 

@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Domain\Model;
 /**
  * A generic application
  *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Application {
 
