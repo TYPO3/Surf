@@ -10,6 +10,8 @@ use \TYPO3\Deploy\Domain\Model\Node;
 use \TYPO3\Deploy\Domain\Model\Application;
 use \TYPO3\Deploy\Domain\Model\Deployment;
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  * Task for importing content into TYPO3
  *
@@ -18,7 +20,7 @@ use \TYPO3\Deploy\Domain\Model\Deployment;
 class ImportSiteTask extends \TYPO3\Deploy\Domain\Model\Task {
 
 	/**
-	 * @inject
+	 * @FLOW3\Inject
 	 * @var \TYPO3\Deploy\Domain\Service\ShellCommandService
 	 */
 	protected $shell;

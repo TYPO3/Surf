@@ -7,14 +7,16 @@ namespace TYPO3\Deploy\Encryption;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  * Key pair
  *
  * A key pair stores a public / private key pair with an open or encrypted
  * private key.
  *
- * @scope prototype
- * @valueobject
+ * @FLOW3\Scope("prototype")
+ * @FLOW3\ValueObject
  */
 class KeyPair {
 

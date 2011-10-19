@@ -7,13 +7,15 @@ namespace TYPO3\Deploy\Command;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  * Encryption command controller
  */
 class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandController {
 
 	/**
-	 * @inject
+	 * @FLOW3\Inject
 	 * @var \TYPO3\Deploy\Encryption\EncryptionServiceInterface
 	 */
 	protected $encryptionService;

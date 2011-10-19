@@ -6,6 +6,8 @@ namespace TYPO3\Deploy\Domain\Service;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  * A task manager
  *
@@ -20,7 +22,7 @@ class TaskManager {
 	protected $taskHistory = array();
 
 	/**
-	 * @inject
+	 * @FLOW3\Inject
 	 * @var \TYPO3\FLOW3\Object\ObjectManagerInterface
 	 */
 	protected $objectManager;

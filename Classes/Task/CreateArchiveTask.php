@@ -10,6 +10,8 @@ use \TYPO3\Deploy\Domain\Model\Node;
 use \TYPO3\Deploy\Domain\Model\Application;
 use \TYPO3\Deploy\Domain\Model\Deployment;
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  * A task for creating an zip / tar.gz / tar.bz2 archive.
  * Needs the following options:
@@ -28,7 +30,7 @@ use \TYPO3\Deploy\Domain\Model\Deployment;
 class CreateArchiveTask extends \TYPO3\Deploy\Domain\Model\Task {
 
 	/**
-	 * @inject
+	 * @FLOW3\Inject
 	 * @var \TYPO3\Deploy\Domain\Service\ShellCommandService
 	 */
 	protected $shell;

@@ -7,13 +7,15 @@ namespace TYPO3\Deploy\Encryption;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  * OpenSSL encryption service
  *
  * An encryption service for key generation and encryption / decryption of data
  * using the OpenSSL library.
  *
- * @scope singleton
+ * @FLOW3\Scope("singleton")
  */
 class OpenSslEncryptionService implements EncryptionServiceInterface {
 
