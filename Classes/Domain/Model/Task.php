@@ -1,14 +1,14 @@
 <?php
-namespace TYPO3\Deploy\Domain\Model;
+namespace TYPO3\Surf\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Deploy\Domain\Model\Node;
-use \TYPO3\Deploy\Domain\Model\Application;
-use \TYPO3\Deploy\Domain\Model\Deployment;
+use \TYPO3\Surf\Domain\Model\Node;
+use \TYPO3\Surf\Domain\Model\Application;
+use \TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * A task
@@ -20,9 +20,9 @@ abstract class Task {
 	/**
 	 * Executes this action
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
 	 */
@@ -31,9 +31,9 @@ abstract class Task {
 	/**
 	 * Rollback this task
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
 	 */

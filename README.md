@@ -1,4 +1,4 @@
-TYPO3.Deploy - FLOW3 deployment
+TYPO3.Surf - FLOW3 deployment
 ====================================
 
 ## DESCRIPTION
@@ -18,7 +18,7 @@ Note that the final name of the package and options / API are very likely to cha
 
 ## INSTALLATION
 
-Install the deploy package by cloning this Github repository to `FLOW3_ROOT/Packages/Application/TYPO3.Deploy` of a FLOW3 installation.
+Install the deploy package by cloning this Github repository to `FLOW3_ROOT/Packages/Application/TYPO3.Surf` of a FLOW3 installation.
 
 ## GUIDE
 
@@ -28,15 +28,15 @@ We start by creating a simple deployment configuration in `FLOW3_ROOT/Build/Depl
 
 ```php
 <?php
-  $workflow = new \TYPO3\Deploy\Domain\Model\SimpleWorkflow();
+  $workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
   $deployment->setWorkflow($workflow);
 
-  $node = new \TYPO3\Deploy\Domain\Model\Node('example');
+  $node = new \TYPO3\Surf\Domain\Model\Node('example');
   $node->setHostname('example.com');
   $node->setOption('username', 'myuser');
   $deployment->addNode($node);
 
-  $application = new \TYPO3\Deploy\Application\FLOW3();
+  $application = new \TYPO3\Surf\Application\FLOW3();
   $application->setDeploymentPath('/home/my-flow3-app/app');
   $application->setOption('repositoryUrl', 'git@github.com:myuser/my-flow3-app.git');
   $application->addNode($node);
@@ -44,7 +44,7 @@ We start by creating a simple deployment configuration in `FLOW3_ROOT/Build/Depl
 ?>
 ```
 
-That's a very basic deployment based on the FLOW3 application template `TYPO3\Deploy\Application\FLOW3`. The deployment object is available to the script as the variable `$deployment`. A node is basically a deployment target representing a host. The Node is assigned to the application for the deployment. Finally the application is added to the deployment.
+That's a very basic deployment based on the FLOW3 application template `TYPO3\Surf\Application\FLOW3`. The deployment object is available to the script as the variable `$deployment`. A node is basically a deployment target representing a host. The Node is assigned to the application for the deployment. Finally the application is added to the deployment.
 
 You can get a description of the deployment by running:
 

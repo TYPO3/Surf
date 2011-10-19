@@ -1,13 +1,13 @@
 <?php
-namespace TYPO3\Deploy\Domain\Model;
+namespace TYPO3\Surf\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Deploy\Domain\Model\Deployment;
-use \TYPO3\Deploy\Domain\Model\Node;
+use \TYPO3\Surf\Domain\Model\Deployment;
+use \TYPO3\Surf\Domain\Model\Node;
 
 /**
  * A simple workflow

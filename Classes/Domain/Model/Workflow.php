@@ -1,12 +1,12 @@
 <?php
-namespace TYPO3\Deploy\Domain\Model;
+namespace TYPO3\Surf\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Deploy\Domain\Model\Deployment;
+use \TYPO3\Surf\Domain\Model\Deployment;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
@@ -19,7 +19,7 @@ abstract class Workflow {
 
 	/**
 	 * @FLOW3\Inject
-	 * @var \TYPO3\Deploy\Domain\Service\TaskManager
+	 * @var \TYPO3\Surf\Domain\Service\TaskManager
 	 */
 	protected $taskManager;
 
@@ -48,7 +48,7 @@ abstract class Workflow {
 	 * Remove the given task from all stages and applications
 	 *
 	 * @param string $task
-	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function removeTask($removeTask) {
 		if (isset($this->tasks['stage'])) {
@@ -77,10 +77,10 @@ abstract class Workflow {
 
 	/**
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @param string $stage
 	 * @param mixed $tasks
-	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function forApplication(Application $application, $stage, $tasks) {
 		return $this->addTask($tasks, $stage, $application);
@@ -90,7 +90,7 @@ abstract class Workflow {
 	 *
 	 * @param string $stage
 	 * @param mixed $tasks
-	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function forStage($stage, $tasks) {
 		return $this->addTask($tasks, $stage);
@@ -104,8 +104,8 @@ abstract class Workflow {
 	 *
 	 * @param mixed $tasks
 	 * @param string $stage The name of the stage when this task shall be executed
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application If given the task will be specific for this application
-	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
+	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function addTask($tasks, $stage, Application $application = NULL) {
 		$applicationName = $application !== NULL ? $application->getName() : '_';
@@ -123,8 +123,8 @@ abstract class Workflow {
 	 *
 	 * @param string $task
 	 * @param mixed $tasks
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
-	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function afterTask($task, $tasks, Application $application = NULL) {
 		if (!is_array($tasks)) $tasks = array($tasks);
@@ -143,8 +143,8 @@ abstract class Workflow {
 	 *
 	 * @param string $task
 	 * @param mixed $tasks
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
-	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function beforeTask($task, $tasks, Application $application = NULL) {
 		if (!is_array($tasks)) $tasks = array($tasks);
@@ -162,7 +162,7 @@ abstract class Workflow {
 	 * @param string $taskName
 	 * @param string $baseTask
 	 * @param array $options
-	 * @return \TYPO3\Deploy\Domain\Model\Workflow
+	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function defineTask($taskName, $baseTask, $options) {
 		$this->tasks['defined'][$taskName] = array(
@@ -176,9 +176,9 @@ abstract class Workflow {
 	 * Execute a stage for a node and application
 	 *
 	 * @param string $stage
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
 	protected function executeStage($stage, Node $node, Application $application, Deployment $deployment) {
@@ -199,9 +199,9 @@ abstract class Workflow {
 	 * Will also execute tasks that are registered to run before or after this task.
 	 *
 	 * @param string $task
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $callstack
 	 * @return void
 	 */

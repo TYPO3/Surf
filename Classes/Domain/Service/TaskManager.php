@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Deploy\Domain\Service;
+namespace TYPO3\Surf\Domain\Service;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
@@ -31,13 +31,13 @@ class TaskManager {
 	 * Execute a task
 	 *
 	 * @param string $task
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
 	 */
-	public function execute($task, \TYPO3\Deploy\Domain\Model\Node $node, \TYPO3\Deploy\Domain\Model\Application $application, \TYPO3\Deploy\Domain\Model\Deployment $deployment, array $options = array()) {
+	public function execute($task, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, array $options = array()) {
 		list($packageKey, $taskName) = explode(':', $task, 2);
 		$taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskName, ':', '\\') . 'Task';
 		$taskObjectName = $this->objectManager->getCaseSensitiveObjectName($taskClassName);

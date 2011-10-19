@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Deploy\Domain\Model;
+namespace TYPO3\Surf\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
@@ -49,16 +49,16 @@ class Application {
 	/**
 	 * Register tasks for this application
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
 	public function registerTasks(Workflow $workflow, Deployment $deployment) {
 		$workflow
-			->forApplication($this, 'initialize', 'typo3.deploy:createdirectories')
-			->forApplication($this, 'update', 'typo3.deploy:gitcheckout')
-			->forApplication($this, 'switch', 'typo3.deploy:symlinkrelease')
-			->forApplication($this, 'cleanup', 'typo3.deploy:cleanupreleases');
+			->forApplication($this, 'initialize', 'typo3.surf:createdirectories')
+			->forApplication($this, 'update', 'typo3.surf:gitcheckout')
+			->forApplication($this, 'switch', 'typo3.surf:symlinkrelease')
+			->forApplication($this, 'cleanup', 'typo3.surf:cleanupreleases');
 	}
 
 	/**
@@ -102,7 +102,7 @@ class Application {
 	/**
 	 * Add a node
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @return void
 	 */
 	public function addNode(Node $node) {

@@ -1,9 +1,8 @@
 <?php
-declare(ENCODING = 'utf-8');
-namespace TYPO3\Deploy\Encryption;
+namespace TYPO3\Surf\Encryption;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 

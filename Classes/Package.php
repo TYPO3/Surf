@@ -1,12 +1,12 @@
 <?php
-namespace TYPO3\Deploy;
+namespace TYPO3\Surf;
 
 use \TYPO3\FLOW3\Package\Package as BasePackage;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * Package base class of the TYPO3.Deploy package.
+ * Package base class of the TYPO3.Surf package.
  *
  * @FLOW3\Scope("singleton")
  */

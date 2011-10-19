@@ -1,9 +1,8 @@
 <?php
-declare(ENCODING = 'utf-8');
-namespace TYPO3\Deploy\Encryption;
+namespace TYPO3\Surf\Encryption;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
@@ -16,27 +15,26 @@ interface EncryptionServiceInterface {
 	 * Generate a key pair with optional passphrase
 	 *
 	 * @param string $passphrase A passphrase to encrypt the private key
-	 * @return \TYPO3\Deploy\Encryption\KeyPair
+	 * @return \TYPO3\Surf\Encryption\KeyPair
 	 */
 	public function generateKeyPair($passphrase = NULL);
 
 	/**
 	 * Open (decrypt) a protected key pair
 	 *
-	 * @param \TYPO3\Deploy\Encryption\KeyPair $keyPair
+	 * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
 	 * @param string $passphrase
-	 * @return \TYPO3\Deploy\Encryption\KeyPair
+	 * @return \TYPO3\Surf\Encryption\KeyPair
 	 */
-	public function openKeyPair(\TYPO3\Deploy\Encryption\KeyPair $keyPair, $passphrase);
+	public function openKeyPair(\TYPO3\Surf\Encryption\KeyPair $keyPair, $passphrase);
 
 	/**
 	 * Change the passphrase of a protected key pair
 	 *
-	 * @param \TYPO3\Deploy\Encryption\KeyPair $keyPair
+	 * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
 	 * @param string $oldPassphrase
 	 * @param string $newPassphrase
-	 * @return \TYPO3\Deploy\Encryption\KeyPair
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
+	 * @return \TYPO3\Surf\Encryption\KeyPair
 	 */
 	public function changePassphrase($keyPair, $oldPassphrase, $newPassphrase);
 

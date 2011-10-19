@@ -1,13 +1,13 @@
 <?php
-namespace TYPO3\Deploy\Domain\Service;
+namespace TYPO3\Surf\Domain\Service;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Deploy\Domain\Model\Node;
-use \TYPO3\Deploy\Domain\Model\Deployment;
+use \TYPO3\Surf\Domain\Model\Node;
+use \TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * A shell command service
@@ -20,8 +20,8 @@ class ShellCommandService {
 	 * Execute a shell command (locally or remote depending on the node hostname)
 	 *
 	 * @param mixed $command The shell command to execute, either string or array of commands
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node Node to execute command against, NULL means localhost
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node Node to execute command against, NULL means localhost
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param boolean $ignoreErrors If this command should ignore exit codes unequeal zero
 	 * @return mixed The output of the shell command or FALSE if the command returned a non-zero exit code and $ignoreErrors was enabled.
 	 */
@@ -76,7 +76,7 @@ class ShellCommandService {
 	 * Execute a shell command locally
 	 *
 	 * @param mixed $command
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @return array
 	 */
 	protected function executeLocalCommand($command, Deployment $deployment) {
@@ -99,8 +99,8 @@ class ShellCommandService {
 	 * Execute a shell command via SSH
 	 *
 	 * @param mixed $command
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @return array
 	 */
 	protected function executeRemoteCommand($command, Node $node, Deployment $deployment) {

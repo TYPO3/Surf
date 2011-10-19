@@ -1,22 +1,21 @@
 <?php
-declare(ENCODING = 'utf-8');
-namespace TYPO3\Deploy\Command;
+namespace TYPO3\Surf\Command;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * Deploy command controller
+ * Surf command controller
  */
-class DeployCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandController {
+class SurfCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandController {
 
 	/**
 	 * @FLOW3\Inject
-	 * @var \TYPO3\Deploy\Domain\Service\DeploymentService
+	 * @var \TYPO3\Surf\Domain\Service\DeploymentService
 	 */
 	protected $deploymentService;
 

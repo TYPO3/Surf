@@ -1,20 +1,20 @@
 <?php
-namespace TYPO3\Deploy\Application;
+namespace TYPO3\Surf\Application;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Deploy\Domain\Model\Workflow;
-use \TYPO3\Deploy\Domain\Model\Deployment;
+use \TYPO3\Surf\Domain\Model\Workflow;
+use \TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * An "application" which does bundles FLOW3 or similar distributions.
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class FLOW3Distribution extends \TYPO3\Deploy\Domain\Model\Application {
+class FLOW3Distribution extends \TYPO3\Surf\Domain\Model\Application {
 
 	protected $configuration = array();
 
@@ -28,8 +28,8 @@ class FLOW3Distribution extends \TYPO3\Deploy\Domain\Model\Application {
 	/**
 	 * Register tasks for this application
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
 	public function registerTasks(Workflow $workflow, Deployment $deployment) {
@@ -41,16 +41,16 @@ class FLOW3Distribution extends \TYPO3\Deploy\Domain\Model\Application {
 
 		$workflow
 			->forApplication($this, 'initialize', array(
-				'typo3.deploy:flow3:createdirectories'
+				'typo3.surf:flow3:createdirectories'
 			));
 
 		if ($this->getOption('enableTests') !== FALSE) {
 			$workflow
 				->forApplication($this, 'test', array(
-					'typo3.deploy:flow3:unittest'
+					'typo3.surf:flow3:unittest'
 				))
 				->forApplication($this, 'test', array(
-					'typo3.deploy:flow3:functionaltest'
+					'typo3.surf:flow3:functionaltest'
 				));
 		}
 
@@ -64,13 +64,13 @@ class FLOW3Distribution extends \TYPO3\Deploy\Domain\Model\Application {
 		if ($this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === TRUE) {
 			$workflow
 				->forApplication($this, 'cleanup', array(
-					'typo3.deploy:sourceforgeupload'
+					'typo3.surf:sourceforgeupload'
 				));
 		}
 		if ($this->hasOption('createTags') && $this->getOption('createTags') === TRUE) {
 			$workflow
 				->forApplication($this, 'cleanup', array(
-					'typo3.deploy:git:tag'
+					'typo3.surf:git:tag'
 				));
 		}
 	}
@@ -133,20 +133,20 @@ class FLOW3Distribution extends \TYPO3\Deploy\Domain\Model\Application {
 			'exclude' => $excludePatterns
 		);
 
-		$workflow->defineTask('createZipDistribution', 'typo3.deploy:createArchive', array_merge($baseArchiveConfiguration, array(
+		$workflow->defineTask('createZipDistribution', 'typo3.surf:createArchive', array_merge($baseArchiveConfiguration, array(
 			'targetFile' => $this->configuration['zipFile']
 		)));
 
-		$workflow->defineTask('createTarGzDistribution', 'typo3.deploy:createArchive', array_merge($baseArchiveConfiguration, array(
+		$workflow->defineTask('createTarGzDistribution', 'typo3.surf:createArchive', array_merge($baseArchiveConfiguration, array(
 			'targetFile' => $this->configuration['tarGzFile'],
 		)));
 
-		$workflow->defineTask('createTarBz2Distribution', 'typo3.deploy:createArchive', array_merge($baseArchiveConfiguration, array(
+		$workflow->defineTask('createTarBz2Distribution', 'typo3.surf:createArchive', array_merge($baseArchiveConfiguration, array(
 			'targetFile' => $this->configuration['tarBz2File'],
 		)));
 
 		if ($this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === TRUE) {
-			$workflow->defineTask('typo3.deploy:sourceforgeupload', 'typo3.deploy:sourceforgeupload', array(
+			$workflow->defineTask('typo3.surf:sourceforgeupload', 'typo3.surf:sourceforgeupload', array(
 				'sourceforgeProjectName' => $this->getOption('sourceforgeProjectName'),
 				'sourceforgePackageName' => $this->getOption('sourceforgePackageName'),
 				'sourceforgeUserName' => $this->getOption('sourceforgeUserName'),
@@ -159,7 +159,7 @@ class FLOW3Distribution extends \TYPO3\Deploy\Domain\Model\Application {
 			));
 		}
 
-		$workflow->defineTask('typo3.deploy:git:tag', 'typo3.deploy:git:tag', array(
+		$workflow->defineTask('typo3.surf:git:tag', 'typo3.surf:git:tag', array(
 			'tagName' => $this->getOption('version'),
 			'description' => 'Tag distribution with tag ' . $this->getOption('version')
 		));

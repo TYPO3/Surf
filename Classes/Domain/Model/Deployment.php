@@ -1,14 +1,14 @@
 <?php
-namespace TYPO3\Deploy\Domain\Model;
+namespace TYPO3\Surf\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Deploy\Domain\Model\Workflow;
-use \TYPO3\Deploy\Domain\Model\Application;
-use \TYPO3\Deploy\Domain\Model\Node;
+use \TYPO3\Surf\Domain\Model\Workflow;
+use \TYPO3\Surf\Domain\Model\Application;
+use \TYPO3\Surf\Domain\Model\Node;
 
 /**
  * A Deployment
@@ -36,7 +36,7 @@ class Deployment {
 
 	/**
 	 * The workflow used for this deployment
-	 * @var \TYPO3\Deploy\Domain\Model\Workflow
+	 * @var \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	protected $workflow;
 
@@ -131,7 +131,7 @@ class Deployment {
 
 	/**
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @return string
 	 */
 	public function getApplicationReleasePath(Application $application) {
@@ -179,7 +179,7 @@ class Deployment {
 	/**
 	 * Add a node
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @return void
 	 */
 	public function addNode(Node $node) {
@@ -196,7 +196,7 @@ class Deployment {
 	/**
 	 * Add an application
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @return void
 	 */
 	public function addApplication(Application $application) {
@@ -206,7 +206,7 @@ class Deployment {
 	/**
 	 * Get the Deployment's workflow
 	 *
-	 * @return \TYPO3\Deploy\Domain\Model\Workflow The Deployment's workflow
+	 * @return \TYPO3\Surf\Domain\Model\Workflow The Deployment's workflow
 	 */
 	public function getWorkflow() {
 		return $this->workflow;
@@ -215,7 +215,7 @@ class Deployment {
 	/**
 	 * Sets this Deployment's workflow
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Workflow $workflow The Deployment's workflow
+	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow The Deployment's workflow
 	 * @return void
 	 */
 	public function setWorkflow($workflow) {

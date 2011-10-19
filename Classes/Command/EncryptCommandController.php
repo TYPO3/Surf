@@ -1,9 +1,8 @@
 <?php
-declare(ENCODING = 'utf-8');
-namespace TYPO3\Deploy\Command;
+namespace TYPO3\Surf\Command;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
@@ -16,7 +15,7 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 
 	/**
 	 * @FLOW3\Inject
-	 * @var \TYPO3\Deploy\Encryption\EncryptionServiceInterface
+	 * @var \TYPO3\Surf\Encryption\EncryptionServiceInterface
 	 */
 	protected $encryptionService;
 
@@ -51,7 +50,7 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	 *
 	 * @param string $deploymentName Optional deployment name to selectively encrypt the configuration
 	 * @return void
-	 * @see typo3.deploy:encrypt:open
+	 * @see typo3.surf:encrypt:open
 	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function sealCommand($deploymentName = '') {
@@ -80,14 +79,14 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	 * @param string $passphrase Passphrase to decrypt the local key (if encrypted)
 	 * @param string $deploymentName Optional deployment name to selectively decrypt the configuration
 	 * @return void
-	 * @see typo3.deploy:encrypt:seal
+	 * @see typo3.surf:encrypt:seal
 	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function openCommand($passphrase = NULL, $deploymentName = '') {
 		$keyPair = $this->readKeyPair($this->getDeploymentConfigurationPath() . '/Keys/Local.key');
 		try {
 			$keyPair = $this->encryptionService->openKeyPair($keyPair, $passphrase);
-		} catch(\TYPO3\Deploy\Encryption\InvalidPassphraseException $exception) {
+		} catch(\TYPO3\Surf\Encryption\InvalidPassphraseException $exception) {
 			$this->outputLine('Local key is encrypted with passphrase. Wrong or no passphrase given.');
 			$this->quit(1);
 		}
@@ -105,12 +104,12 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	/**
 	 * Writes a key pair to a file
 	 *
-	 * @param \TYPO3\Deploy\Encryption\KeyPair $keyPair
+	 * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
 	 * @param string $filename
 	 * @return void
 	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
-	protected function writeKeyPair(\TYPO3\Deploy\Encryption\KeyPair $keyPair, $filename) {
+	protected function writeKeyPair(\TYPO3\Surf\Encryption\KeyPair $keyPair, $filename) {
 		$data = json_encode(array(
 			'encrypted' => $keyPair->isEncrypted(),
 			'privateKey' => $keyPair->getPrivateKey(),
@@ -124,12 +123,11 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	 *
 	 * @param string $filename
 	 * @return \TYPO3\Deploy\Encryption\KeyPair
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	protected function readKeyPair($filename) {
 		$data = file_get_contents($filename);
 		$data = json_decode($data, TRUE);
-		$keyPair = new \TYPO3\Deploy\Encryption\KeyPair($data['privateKey'], $data['publicKey'], $data['encrypted']);
+		$keyPair = new \TYPO3\Surf\Encryption\KeyPair($data['privateKey'], $data['publicKey'], $data['encrypted']);
 		return $keyPair;
 	}
 

@@ -1,14 +1,14 @@
 <?php
-namespace TYPO3\Deploy\Task;
+namespace TYPO3\Surf\Task;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Deploy\Domain\Model\Node;
-use \TYPO3\Deploy\Domain\Model\Application;
-use \TYPO3\Deploy\Domain\Model\Deployment;
+use \TYPO3\Surf\Domain\Model\Node;
+use \TYPO3\Surf\Domain\Model\Application;
+use \TYPO3\Surf\Domain\Model\Deployment;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
@@ -17,11 +17,11 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class CleanupReleasesTask extends \TYPO3\Deploy\Domain\Model\Task {
+class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
 	 * @FLOW3\Inject
-	 * @var \TYPO3\Deploy\Domain\Service\ShellCommandService
+	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;
 
@@ -37,9 +37,9 @@ class CleanupReleasesTask extends \TYPO3\Deploy\Domain\Model\Task {
 	 * Note: There is no rollback for this cleanup, so we have to be sure not to delete any
 	 *       live or referenced releases.
 	 *
-	 * @param \TYPO3\Deploy\Domain\Model\Node $node
-	 * @param \TYPO3\Deploy\Domain\Model\Application $application
-	 * @param \TYPO3\Deploy\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
 	 */

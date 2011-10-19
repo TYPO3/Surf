@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Deploy\Domain\Service;
+namespace TYPO3\Surf\Domain\Service;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Deploy".               *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
  *                                                                        *
  *                                                                        */
 
