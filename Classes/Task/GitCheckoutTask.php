@@ -34,12 +34,16 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		if (!isset($options['branch'])) {
+			$options['branch'] = 'master';
+		}
+
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$deploymentPath = $application->getDeploymentPath();
 		$repositoryUrl = $application->getOption('repositoryUrl');
-		$sha1 = $this->shell->execute("git ls-remote $repositoryUrl master | awk '{print $1 }'", $node, $deployment, TRUE);
-		if ($sha1 === FALSE) {
-			throw new \Exception('Could not retrieve sha1 of git master');
+		$sha1 = $this->shell->execute("git ls-remote $repositoryUrl {$options['branch']} | awk '{print $1 }'", $node, $deployment, TRUE);
+		if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
+			throw new \Exception('Could not retrieve sha1 of git branch ' . $options['branch']);
 		}
 
 		$command = strtr("
