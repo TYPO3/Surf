@@ -42,9 +42,13 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 			throw new \Exception('description not set', 1314186553);
 		}
 
+		if (!isset($options['submoduleTagNamePrefix'])) {
+			$options['submoduleTagNamePrefix'] = '';
+		}
+
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git tag -f -a -m "%s" %s', $options['description'], $options['tagName']), $node, $deployment);
-		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git tag -f -a -m "%s" %s\'', $options['description'], $options['tagName']), $node, $deployment);
+		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git tag -f -a -m "%s" %s\'', $options['description'], $options['submoduleTagNamePrefix'] . $options['tagName']), $node, $deployment);
 	}
 
 	/**
