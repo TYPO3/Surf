@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Surf\Task\TYPO3;
+namespace TYPO3\Surf\Task\FLOW3;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
