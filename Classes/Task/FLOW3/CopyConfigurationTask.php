@@ -79,7 +79,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return string
 	 */
 	protected function getDeploymentConfigurationPath() {
-		return FLOW3_PATH_ROOT . 'Build/Deploy';
+		return FLOW3_PATH_ROOT . 'Build/Surf';
 	}
 
 }

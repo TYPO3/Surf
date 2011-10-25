@@ -133,7 +133,7 @@ class EncryptCommandController extends \TYPO3\FLOW3\MVC\Controller\CommandContro
 	 * @return string
 	 */
 	protected function getDeploymentConfigurationPath() {
-		return FLOW3_PATH_ROOT . 'Build/Deploy';
+		return FLOW3_PATH_ROOT . 'Build/Surf';
 	}
 
 }
