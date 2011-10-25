@@ -22,13 +22,14 @@ class ShellCommandService {
 	 * @param \TYPO3\Surf\Domain\Model\Node $node Node to execute command against, NULL means localhost
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param boolean $ignoreErrors If this command should ignore exit codes unequeal zero
+	 * @param boolean $logOutput TRUE if the output of the command should be logged
 	 * @return mixed The output of the shell command or FALSE if the command returned a non-zero exit code and $ignoreErrors was enabled.
 	 */
-	public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE) {
+	public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE, $logOutput = TRUE) {
 		if ($node === NULL || $node->getHostname() === 'localhost') {
-			list($exitCode, $returnedOutput) = $this->executeLocalCommand($command, $deployment);
+			list($exitCode, $returnedOutput) = $this->executeLocalCommand($command, $deployment, $logOutput);
 		} else {
-			list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment);
+			list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment, $logOutput);
 		}
 		if ($ignoreErrors !== TRUE && $exitCode !== 0) {
 			throw new \Exception('Command returned non-zero return code', 1311007746);
@@ -42,10 +43,9 @@ class ShellCommandService {
 	 * @param string $command
 	 * @param Node $node
 	 * @param Deployment $deployment
-	 * @param boolean $ignoreErrors
 	 * @return bool
 	 */
-	public function simulate($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE) {
+	public function simulate($command, Node $node, Deployment $deployment) {
 		if ($node === NULL || $node->getHostname() === 'localhost') {
 			$command = $this->prepareCommand($command);
 			$deployment->getLogger()->log('... (localhost): "' . $command . '"', LOG_DEBUG);
@@ -63,13 +63,14 @@ class ShellCommandService {
 	 * @param Node $node
 	 * @param Deployment $deployment
 	 * @param boolean $ignoreErrors
+	 * @param boolean $logOutput TRUE if the output of the command should be logged
 	 * @return boolean|mixed
 	 */
-	public function executeOrSimulate($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE) {
+	public function executeOrSimulate($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE, $logOutput = TRUE) {
 		if (!$deployment->isDryRun()) {
-			return $this->execute($command, $node, $deployment, $ignoreErrors);
+			return $this->execute($command, $node, $deployment, $ignoreErrors, $logOutput);
 		} else {
-			return $this->simulate($command, $node, $deployment, $ignoreErrors);
+			return $this->simulate($command, $node, $deployment);
 		}
 	}
 
@@ -78,16 +79,19 @@ class ShellCommandService {
 	 *
 	 * @param mixed $command
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param boolean $logOutput TRUE if the output of the command should be logged
 	 * @return array
 	 */
-	protected function executeLocalCommand($command, Deployment $deployment) {
+	protected function executeLocalCommand($command, Deployment $deployment, $logOutput = TRUE) {
 		$command = $this->prepareCommand($command);
 		$deployment->getLogger()->log('    (localhost): "' . $command . '"', LOG_DEBUG);
 		$returnedOutput = '';
 
 		$fp = popen($command, 'r');
 		while (($line = fgets($fp)) !== FALSE) {
-			$deployment->getLogger()->log('> ' . $line);
+			if ($logOutput) {
+				$deployment->getLogger()->log('> ' . $line);
+			}
 			$returnedOutput .= $line;
 		}
 		$exitCode = pclose($fp);
@@ -102,9 +106,10 @@ class ShellCommandService {
 	 * @param mixed $command
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param boolean $logOutput TRUE if the output of the command should be logged
 	 * @return array
 	 */
-	protected function executeRemoteCommand($command, Node $node, Deployment $deployment) {
+	protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = TRUE) {
 		$command = $this->prepareCommand($command);
 		$deployment->getLogger()->log('    $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
 		$username = $node->getOption('username');
@@ -114,7 +119,9 @@ class ShellCommandService {
 		// TODO Get SSH options from node or deployment
 		$fp = popen('ssh -A ' . $username . '@' . $hostname . ' ' . escapeshellarg($command) . ' 2>&1', 'r');
 		while (($line = fgets($fp)) !== FALSE) {
-			$deployment->getLogger()->log('    > ' . rtrim($line));
+			if ($logOutput) {
+				$deployment->getLogger()->log('    > ' . rtrim($line));
+			}
 			$returnedOutput .= $line;
 		}
 		$exitCode = pclose($fp);

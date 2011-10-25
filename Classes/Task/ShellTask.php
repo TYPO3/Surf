@@ -50,7 +50,10 @@ class ShellTask extends \TYPO3\Surf\Domain\Model\Task {
 		$command = $options['command'];
 		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);
 
-		$this->shell->executeOrSimulate($command, $node, $deployment);
+		$ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === TRUE;
+		$logOutput = !(isset($options['logOutput']) && $options['logOutput'] === FALSE);
+
+		$this->shell->executeOrSimulate($command, $node, $deployment, $ignoreErrors, $logOutput);
 	}
 
 	/**
