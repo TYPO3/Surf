@@ -83,7 +83,7 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 		$this->shell->executeOrSimulate($command, $node, $deployment);
 
 		$command = strtr("
-			cp -RPp $deploymentPath/cache/localgitclone/ $releasePath
+			cp -RPp $deploymentPath/cache/localgitclone/. $releasePath
 				&& (echo $sha1 > $releasePath" . "REVISION)
 			", "\t\n", "  ");
 

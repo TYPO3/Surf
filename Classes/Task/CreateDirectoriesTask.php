@@ -15,6 +15,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * A task to create initial directories and the release directory for the current release
  *
+ * This task will automatically create needed directories and create a symlink to the upcoming
+ * release, called "next".
  */
 class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
 
@@ -36,11 +38,20 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$deploymentPath = $application->getDeploymentPath();
 		$sharedPath = $application->getSharedPath();
+		$releasesPath = $deploymentPath . '/releases';
+		$releaseIdentifier = $deployment->getReleaseIdentifier();
+		$releasePath = $deployment->getApplicationReleasePath($application);
 		$result = $this->shell->execute('test -d ' . $deploymentPath, $node, $deployment, TRUE);
 		if ($result === FALSE) {
 			throw new \Exception('Deployment directory "' . $deploymentPath . '" does not exist on ' . $node->getName(), 1311003253);
 		}
-		$this->shell->executeOrSimulate('mkdir -p ' . $deploymentPath . '/releases;mkdir -p ' . $sharedPath, $node, $deployment);
+		$commands = array(
+			'mkdir -p ' . $releasesPath,
+			'mkdir -p ' . $sharedPath,
+			'mkdir -p ' . $releasePath,
+			'cd ' .  $releasesPath . ';ln -snf ./' . $releaseIdentifier . ' next'
+		);
+		$this->shell->executeOrSimulate($commands, $node, $deployment);
 	}
 
 	/**
@@ -67,8 +78,14 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @todo Make the removal of a failed release configurable, sometimes it's necessary to inspect a failed release
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$deploymentPath = $application->getDeploymentPath();
+		$releasesPath = $deploymentPath . '/releases';
 		$releasePath = $deployment->getApplicationReleasePath($application);
-		$this->shell->execute('rm -rf ' . $releasePath, $node, $deployment, TRUE);
+		$commands = array(
+			'rm ' . $releasesPath . '/next',
+			'rm -rf ' . $releasePath
+		);
+		$this->shell->execute($commands, $node, $deployment, TRUE);
 	}
 
 }
