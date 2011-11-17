@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Domain\Model\Deployment;
 
 /**
- * An "application" which does bundles FLOW3 or similar distributions.
+ * An "application" which does bundle FLOW3 or similar distributions.
  *
  */
 class FLOW3Distribution extends \TYPO3\Surf\Domain\Model\Application {
@@ -172,9 +172,8 @@ class FLOW3Distribution extends \TYPO3\Surf\Domain\Model\Application {
 		));
 
 		$workflow->defineTask('typo3.surf:git:tag', 'typo3.surf:git:tag', array(
-			'tagName' => $this->getOption('version'),
-			'submoduleTagNamePrefix' => $this->getOption('projectName') . '-',
-			'description' => 'Tag distribution with tag ' . $this->getOption('version')
+			'tagName' => $this->configuration['versionAndProjectName'],
+			'description' => 'Tag distribution with tag ' . $this->configuration['versionAndProjectName']
 		));
 	}
 }

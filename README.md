@@ -14,7 +14,7 @@ Some of the features of the deploy package:
 * Create custom tasks with a few lines
 * Simulate deployments with a dry run
 
-Note that the final name of the package and options / API are very likely to change.
+Note that the final options / API are very likely to change.
 
 ## INSTALLATION
 
@@ -22,7 +22,7 @@ Install the deploy package by cloning this Github repository to `FLOW3_ROOT/Pack
 
 ## GUIDE
 
-Eeach deployment is a distinct configuration (e.g for development, staging, live environments). Eeach deployment configuration specifies a workflow for the deployment (for now it's just _SimpleWorkflow_, but feel free to create your own), at least one application and assigns nodes to the application(s).
+Each deployment is a distinct configuration (e.g for development, staging, live environments). Each deployment configuration specifies a workflow for the deployment (for now it's just _SimpleWorkflow_, but feel free to create your own), at least one application and assigns nodes to the application(s).
 
 We start by creating a simple deployment configuration in `FLOW3_ROOT/Build/Deploy/MyDeployment.php` for a deployment with name _MyDeployment_:
 
