@@ -142,6 +142,17 @@ Further options:
 * proxy (only if remote=FALSE): HTTP Proxy to use
 * proxyPort  (only if remote=FALSE): HTTP Proxy port to use
 
+## Applying Cherry-Picks to Git Repositories: Post-Checkout commands
+
+When you want to execute some commands directly after checkout, such as cherry-picking not-yet-committed bugfixes, you can set the  `gitPostCheckoutCommands` option on the application, being a two-dimensional array.
+The key contains the path where the command shall execute, and the value is another array containing the commands themselves (as taken f.e. from Gerrit / review.typo3.org). Example:
+
+```php
+$application->setOption('gitPostCheckoutCommands', array(
+	'Packages/Framework/TYPO3.FLOW3/' => array('git fetch git://git.typo3.org/FLOW3/Packages/TYPO3.FLOW3 refs/changes/59/6859/1 && git cherry-pick FETCH_HEAD')
+));
+```
+
 ## COPYRIGHT
 
 The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - FLOW3 Agentur](http://www.networkteam.com/flow3-agentur.html).

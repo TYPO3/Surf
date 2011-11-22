@@ -88,6 +88,21 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 			", "\t\n", "  ");
 
 		$this->shell->executeOrSimulate($command, $node, $deployment);
+
+		$gitPostCheckoutCommands = $application->getOption('gitPostCheckoutCommands');
+		if (is_array($gitPostCheckoutCommands)) {
+			foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
+				foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {
+					$command = strtr("
+						cd $releasePath
+						&& cd $localPath
+						&& git checkout -b mybranch_$sha1
+						&& $postCheckoutCommand
+					", "\t\n", "  ");
+					$this->shell->executeOrSimulate($command, $node, $deployment);
+				}
+			}
+		}
 	}
 
 	/**
