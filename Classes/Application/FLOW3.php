@@ -11,7 +11,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * A FLOW3 application template
- *
+* @TYPO3\FLOW3\Annotations\Proxy(false)
  */
 class FLOW3 extends \TYPO3\Surf\Domain\Model\Application {
 
