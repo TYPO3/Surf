@@ -54,10 +54,17 @@ class Application {
 	 */
 	public function registerTasks(Workflow $workflow, Deployment $deployment) {
 		$workflow
-			->forApplication($this, 'initialize', 'typo3.surf:createdirectories')
-			->forApplication($this, 'update', 'typo3.surf:gitcheckout')
-			->forApplication($this, 'switch', 'typo3.surf:symlinkrelease')
-			->forApplication($this, 'cleanup', 'typo3.surf:cleanupreleases');
+			->defineTask('typo3.surf:gitcheckout', 'typo3.surf:gitcheckout', array(
+				'sha1' => $this->hasOption('git-checkout-sha1') ? $this->getOption('git-checkout-sha1') : NULL,
+				'tag' => $this->hasOption('git-checkout-tag') ? $this->getOption('git-checkout-tag') : NULL,
+				'branch' => $this->hasOption('git-checkout-branch') ? $this->getOption('git-checkout-branch') : NULL
+			));
+
+		$workflow
+			->addTask('typo3.surf:createdirectories', 'initialize', $this)
+			->addTask('typo3.surf:gitcheckout', 'update', $this)
+			->addTask('typo3.surf:symlinkrelease', 'switch', $this)
+			->addTask('typo3.surf:cleanupreleases', 'cleanup', $this);
 	}
 
 	/**
