@@ -43,7 +43,7 @@ class TaskManager {
 		if (!$this->objectManager->isRegistered($taskObjectName)) {
 			throw new \Exception('Task "' . $task .  '" not registered ' . $taskClassName);
 		}
-		$task = $this->objectManager->create($taskObjectName);
+		$task = new $taskObjectName();
 		if (!$deployment->isDryRun()) {
 			$task->execute($node, $application, $deployment, $options);
 		} else {

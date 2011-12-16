@@ -46,7 +46,7 @@ abstract class Workflow {
 	/**
 	 * Remove the given task from all stages and applications
 	 *
-	 * @param string $task
+	 * @param string $removeTask
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function removeTask($removeTask) {
