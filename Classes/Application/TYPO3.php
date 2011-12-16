@@ -13,13 +13,13 @@ use TYPO3\Surf\Domain\Model\Deployment;
  * A TYPO3 application template
  *
  */
-class TYPO3 extends \TYPO3\Surf\Domain\Model\Application {
+class TYPO3 extends \TYPO3\Surf\Application\FLOW3 {
 
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
-		parent::__construct('TYPO3');
+	public function __construct($name = 'TYPO3') {
+		parent::__construct($name);
 	}
 
 	/**
@@ -32,22 +32,7 @@ class TYPO3 extends \TYPO3\Surf\Domain\Model\Application {
 	public function registerTasks(Workflow $workflow, Deployment $deployment) {
 		parent::registerTasks($workflow, $deployment);
 
-		$workflow
-			->forApplication($this, 'initialize', array(
-				'typo3.surf:flow3:createdirectories'
-			))
-			->afterTask('typo3.surf:gitcheckout', array(
-				'typo3.surf:flow3:symlinkdata',
-				'typo3.surf:flow3:symlinkconfiguration'
-			), $this)
-			->afterTask('typo3.surf:gitcheckout', array(
-				'typo3.surf:flow3:setfilepermissions'
-			), $this)
-			->forApplication($this, 'migrate', array(
-				'typo3.surf:flow3:migrate',
-				'typo3.surf:typo3:importsite',
-			)
-		);
+		$workflow->addTask('typo3.surf:typo3:importsite', 'migrate', $this);
 	}
 
 }

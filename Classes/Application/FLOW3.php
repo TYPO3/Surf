@@ -18,8 +18,8 @@ class FLOW3 extends \TYPO3\Surf\Domain\Model\Application {
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
-		parent::__construct('FLOW3');
+	public function __construct($name = 'FLOW3') {
+		parent::__construct($name);
 	}
 
 	/**
@@ -33,19 +33,13 @@ class FLOW3 extends \TYPO3\Surf\Domain\Model\Application {
 		parent::registerTasks($workflow, $deployment);
 
 		$workflow
-			->forApplication($this, 'initialize', array(
-				'typo3.surf:flow3:createdirectories'
-			))
+			->addTask('typo3.surf:flow3:createdirectories', 'initialize', $this)
 			->afterTask('typo3.surf:gitcheckout', array(
 				'typo3.surf:flow3:symlinkdata',
-				'typo3.surf:flow3:symlinkconfiguration'
-			), $this)
-			->afterTask('typo3.surf:gitcheckout', array(
+				'typo3.surf:flow3:symlinkconfiguration',
 				'typo3.surf:flow3:setfilepermissions'
 			), $this)
-			->forApplication($this, 'migrate', array(
-				'typo3.surf:flow3:migrate'
-			));
+			->addTask('typo3.surf:flow3:migrate', 'migrate', $this);
 	}
 
 }
