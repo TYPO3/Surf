@@ -34,16 +34,30 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		if (!isset($options['branch'])) {
-			$options['branch'] = 'master';
-		}
-
+		$repositoryUrl = $application->getOption('repositoryUrl');
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$deploymentPath = $application->getDeploymentPath();
-		$repositoryUrl = $application->getOption('repositoryUrl');
-		$sha1 = $this->shell->execute("git ls-remote $repositoryUrl {$options['branch']} | awk '{print $1 }'", $node, $deployment, TRUE);
-		if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
-			throw new \Exception('Could not retrieve sha1 of git branch ' . $options['branch']);
+
+		if (isset($options['sha1'])) {
+			$sha1 = $options['sha1'];
+			if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
+				throw new \Exception('The given sha1  "' . $options['sha1'] . '" is invalid');
+			}
+		} else {
+			if (isset($options['tag'])) {
+				$sha1 = $this->shell->execute("git ls-remote $repositoryUrl refs/tags/{$options['tag']} | awk '{print $1 }'", $node, $deployment, TRUE);
+				if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
+					throw new \Exception('Could not retrieve sha1 of git tag "' . $options['tag'] . '"');
+				}
+			} else {
+				if (!isset($options['branch'])) {
+					$options['branch'] = 'master';
+				}
+				$sha1 = $this->shell->execute("git ls-remote $repositoryUrl refs/heads/{$options['branch']} | awk '{print $1 }'", $node, $deployment, TRUE);
+				if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
+					throw new \Exception('Could not retrieve sha1 of git branch "' . $options['branch'] . '"');
+				}
+			}
 		}
 
 		$command = strtr("
