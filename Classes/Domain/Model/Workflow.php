@@ -76,17 +76,6 @@ abstract class Workflow {
 
 	/**
 	 *
-	 * @param \TYPO3\Surf\Domain\Model\Application $application
-	 * @param string $stage
-	 * @param mixed $tasks
-	 * @return \TYPO3\Surf\Domain\Model\Workflow
-	 */
-	public function forApplication(Application $application, $stage, $tasks) {
-		return $this->addTask($tasks, $stage, $application);
-	}
-
-	/**
-	 *
 	 * @param string $stage
 	 * @param mixed $tasks
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
