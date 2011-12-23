@@ -141,6 +141,9 @@ Further options:
 * data (only if remote=FALSE): HTTP payload
 * proxy (only if remote=FALSE): HTTP Proxy to use
 * proxyPort  (only if remote=FALSE): HTTP Proxy port to use
+* additionalCurlParameters (only if remote=TRUE): list of parameters which
+  is directly passed to CURL. Especially useful to e.g. disable SSL certificate
+  check (with --insecure)
 
 ## Applying Cherry-Picks to Git Repositories: Post-Checkout commands
 
