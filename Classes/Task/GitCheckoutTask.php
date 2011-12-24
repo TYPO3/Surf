@@ -93,10 +93,11 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 		if (is_array($gitPostCheckoutCommands)) {
 			foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
 				foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {
+					$branchName = 'mybranch_' . trim($sha1) . '_' . uniqid();
 					$command = strtr("
 						cd $releasePath
 						&& cd $localPath
-						&& git checkout -b mybranch_$sha1
+						&& git checkout -b $branchName
 						&& $postCheckoutCommand
 					", "\t\n", "  ");
 					$this->shell->executeOrSimulate($command, $node, $deployment);
