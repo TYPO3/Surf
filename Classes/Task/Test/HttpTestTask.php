@@ -43,7 +43,12 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 		// $this->logRequest($node, $application, $deployment, $options);
 
 		if (isset($options['remote']) && $options['remote'] === TRUE) {
-			$result = $this->executeRemoteCurlRequest($options['url'], $node, $deployment);
+			$result = $this->executeRemoteCurlRequest(
+				$options['url'],
+				$node,
+				$deployment,
+				isset($options['additionalCurlParameters']) ? $options['additionalCurlParameters'] : ''
+			);
 		} else {
 			$deployment->getLogger()->log('Requesting URL "' . $options['url'] . '"', LOG_DEBUG);
 			$result = $this->executeLocalCurlRequest(
@@ -258,13 +263,14 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param string $url Request URL
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param string $additionalCurlParameters
 	 * @return array time in seconds and status information im associative arrays
 	 */
-	protected function executeRemoteCurlRequest($url, Node $node, Deployment $deployment) {
-		$command = 'curl -s -I ' . escapeshellarg($url);
+	protected function executeRemoteCurlRequest($url, Node $node, Deployment $deployment, $additionalCurlParameters = '') {
+		$command = 'curl -s -I  ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
 		$head = $this->shell->execute($command, $node, $deployment, FALSE, FALSE);
 
-		$command = 'curl -s ' . escapeshellarg($url);
+		$command = 'curl -s ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
 		$body = $this->shell->execute($command, $node, $deployment, FALSE, FALSE);
 
 
