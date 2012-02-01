@@ -89,18 +89,20 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 
 		$this->shell->executeOrSimulate($command, $node, $deployment);
 
-		$gitPostCheckoutCommands = $application->getOption('gitPostCheckoutCommands');
-		if (is_array($gitPostCheckoutCommands)) {
-			foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
-				foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {
-					$branchName = 'mybranch_' . trim($sha1) . '_' . uniqid();
-					$command = strtr("
-						cd $releasePath
-						&& cd $localPath
-						&& git checkout -b $branchName
-						&& $postCheckoutCommand
-					", "\t\n", "  ");
-					$this->shell->executeOrSimulate($command, $node, $deployment);
+		if ($application->hasOption('gitPostCheckoutCommands')) {
+			$gitPostCheckoutCommands = $application->getOption('gitPostCheckoutCommands');
+			if (is_array($gitPostCheckoutCommands)) {
+				foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
+					foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {
+						$branchName = 'mybranch_' . trim($sha1) . '_' . uniqid();
+						$command = strtr("
+							cd $releasePath
+							&& cd $localPath
+							&& git checkout -b $branchName
+							&& $postCheckoutCommand
+						", "\t\n", "  ");
+						$this->shell->executeOrSimulate($command, $node, $deployment);
+					}
 				}
 			}
 		}
