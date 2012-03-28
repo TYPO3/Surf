@@ -11,10 +11,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * Key pair
  *
- * A key pair stores a public / private key pair with an open or encrypted
- * private key.
- *
- * @FLOW3\ValueObject
+ * A key pair consists of a public key and an open or encrypted private key.
  */
 class KeyPair {
 
@@ -36,9 +33,9 @@ class KeyPair {
 	/**
 	 * Constructor
 	 *
-	 * @param string $privateKey
-	 * @param string $publicKey
-	 * @param boolean $encrypted
+	 * @param string $privateKey A PEM encoded private key
+	 * @param string $publicKey A PEM encoded public key
+	 * @param boolean $encrypted Pass TRUE if the private key is encrypted
 	 */
 	public function __construct($privateKey, $publicKey, $encrypted = FALSE) {
 		$this->privateKey = $privateKey;
