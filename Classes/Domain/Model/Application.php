@@ -7,7 +7,7 @@ namespace TYPO3\Surf\Domain\Model;
  *                                                                        */
 
 /**
- * A generic application
+ * A generic application without any tasks
  *
  */
 class Application {
@@ -22,7 +22,7 @@ class Application {
 	 * The nodes for this application
 	 * @var array
 	 */
-	protected $nodes;
+	protected $nodes = array();
 
 	/**
 	 * The deployment path for this application on a node
@@ -48,24 +48,13 @@ class Application {
 	/**
 	 * Register tasks for this application
 	 *
+	 * This is a template method that should be overriden by specific applications.
+	 *
 	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @return void
 	 */
-	public function registerTasks(Workflow $workflow, Deployment $deployment) {
-		$workflow
-			->defineTask('typo3.surf:gitcheckout', 'typo3.surf:gitcheckout', array(
-				'sha1' => $this->hasOption('git-checkout-sha1') ? $this->getOption('git-checkout-sha1') : NULL,
-				'tag' => $this->hasOption('git-checkout-tag') ? $this->getOption('git-checkout-tag') : NULL,
-				'branch' => $this->hasOption('git-checkout-branch') ? $this->getOption('git-checkout-branch') : NULL
-			));
-
-		$workflow
-			->addTask('typo3.surf:createdirectories', 'initialize', $this)
-			->addTask('typo3.surf:gitcheckout', 'update', $this)
-			->addTask('typo3.surf:symlinkrelease', 'switch', $this)
-			->addTask('typo3.surf:cleanupreleases', 'cleanup', $this);
-	}
+	public function registerTasks(Workflow $workflow, Deployment $deployment) {}
 
 	/**
 	 * Get the name
