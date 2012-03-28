@@ -33,6 +33,9 @@ abstract class Workflow {
 	 * @return void
 	 */
 	public function run(Deployment $deployment) {
+		if (!$deployment->isInitialized()) {
+			throw new \TYPO3\FLOW3\Exception('Deployment must be initialized before running it');
+		}
 		$deployment->getLogger()->log('Using workflow "' . $this->getName() . '"');
 	}
 
@@ -96,9 +99,16 @@ abstract class Workflow {
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function addTask($tasks, $stage, Application $application = NULL) {
-		if (!is_array($tasks)) $tasks = array($tasks);
-		if (!isset($this->tasks['stage'][$application->getName()][$stage])) $this->tasks['stage'][$application->getName()][$stage] = array();
-		$this->tasks['stage'][$application->getName()][$stage] = array_merge($this->tasks['stage'][$application->getName()][$stage], $tasks);
+		if (!is_array($tasks)) {
+			$tasks = array($tasks);
+		}
+
+		$applicationName = $application !== NULL ? $application->getName() : '_';
+
+		if (!isset($this->tasks['stage'][$applicationName][$stage])) {
+			$this->tasks['stage'][$applicationName][$stage] = array();
+		}
+		$this->tasks['stage'][$applicationName][$stage] = array_merge($this->tasks['stage'][$applicationName][$stage], $tasks);
 		return $this;
 	}
 
@@ -113,11 +123,15 @@ abstract class Workflow {
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function afterTask($task, $tasks, Application $application = NULL) {
-		if (!is_array($tasks)) $tasks = array($tasks);
+		if (!is_array($tasks)) {
+			$tasks = array($tasks);
+		}
 
 		$applicationName = $application !== NULL ? $application->getName() : '_';
 
-		if (!isset($this->tasks['after'][$applicationName][$task])) $this->tasks['after'][$applicationName][$task] = array();
+		if (!isset($this->tasks['after'][$applicationName][$task])) {
+			$this->tasks['after'][$applicationName][$task] = array();
+		}
 		$this->tasks['after'][$applicationName][$task] = array_merge($this->tasks['after'][$applicationName][$task], $tasks);
 		return $this;
 	}
@@ -133,11 +147,15 @@ abstract class Workflow {
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function beforeTask($task, $tasks, Application $application = NULL) {
-		if (!is_array($tasks)) $tasks = array($tasks);
+		if (!is_array($tasks)) {
+			$tasks = array($tasks);
+		}
 
 		$applicationName = $application !== NULL ? $application->getName() : '_';
 
-		if (!isset($this->tasks['before'][$applicationName][$task])) $this->tasks['before'][$applicationName][$task] = array();
+		if (!isset($this->tasks['before'][$applicationName][$task])) {
+			$this->tasks['before'][$applicationName][$task] = array();
+		}
 		$this->tasks['before'][$applicationName][$task] = array_merge($this->tasks['before'][$applicationName][$task], $tasks);
 		return $this;
 	}
@@ -173,7 +191,7 @@ abstract class Workflow {
 			if (isset($this->tasks['stage'][$applicationName][$stage])) {
 				$deployment->getLogger()->log('Executing stage "' . $stage . '" on "' . $node->getName() . '" ' . $label, LOG_DEBUG);
 				foreach ($this->tasks['stage'][$applicationName][$stage] as $task) {
-					$this->executeTask($task, $node, $application, $deployment);
+					$this->executeTask($task, $node, $application, $deployment, $stage);
 				}
 			}
 		}
@@ -188,15 +206,16 @@ abstract class Workflow {
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param string $stage
 	 * @param array $callstack
 	 * @return void
 	 */
-	protected function executeTask($task, Node $node, Application $application, Deployment $deployment, array &$callstack = array()) {
+	protected function executeTask($task, Node $node, Application $application, Deployment $deployment, $stage, array &$callstack = array()) {
 		foreach (array('_', $application->getName()) as $applicationName) {
 			if (isset($this->tasks['before'][$applicationName][$task])) {
 				foreach ($this->tasks['before'][$applicationName][$task] as $beforeTask) {
 					$deployment->getLogger()->log('Task "' . $beforeTask . '" before "' . $task, LOG_DEBUG);
-					$this->executeTask($beforeTask, $node, $application, $deployment, $callstack);
+					$this->executeTask($beforeTask, $node, $application, $deployment, $stage, $callstack);
 				}
 			}
 		}
@@ -205,9 +224,9 @@ abstract class Workflow {
 		}
 		$deployment->getLogger()->log('Execute task "' . $task . '" on "' . $node->getName() . '" for application "' . $application->getName() . '"', LOG_DEBUG);
 		if (isset($this->tasks['defined'][$task])) {
-			$this->taskManager->execute($this->tasks['defined'][$task]['task'], $node, $application, $deployment, $this->tasks['defined'][$task]['options']);
+			$this->taskManager->execute($this->tasks['defined'][$task]['task'], $node, $application, $deployment, $stage, $this->tasks['defined'][$task]['options']);
 		} else {
-			$this->taskManager->execute($task, $node, $application, $deployment);
+			$this->taskManager->execute($task, $node, $application, $deployment, $stage);
 		}
 		$callstack[$task] = TRUE;
 		foreach (array('_', $application->getName()) as $applicationName) {
@@ -215,7 +234,7 @@ abstract class Workflow {
 			if (isset($this->tasks['after'][$applicationName][$task])) {
 				foreach ($this->tasks['after'][$applicationName][$task] as $beforeTask) {
 					$deployment->getLogger()->log('Task "' . $beforeTask . '" after "' . $task . '" ' . $label, LOG_DEBUG);
-					$this->executeTask($beforeTask, $node, $application, $deployment, $callstack);
+					$this->executeTask($beforeTask, $node, $application, $deployment, $stage, $callstack);
 				}
 			}
 		}

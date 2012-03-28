@@ -54,7 +54,9 @@ class SimpleWorkflow extends Workflow {
 	 */
 	public function run(Deployment $deployment) {
 		parent::run($deployment);
+
 		$nodes = $deployment->getNodes();
+
 		foreach ($this->stages as $stage) {
 			$deployment->getLogger()->log('====== Stage ' . $stage . ' ======', LOG_DEBUG);
 			foreach ($nodes as $node) {

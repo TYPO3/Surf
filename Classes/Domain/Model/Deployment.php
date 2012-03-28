@@ -13,6 +13,8 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * A Deployment
  *
+ * This is the base object exposed to a deployment configuration script and serves as a configuration builder and
+ * model for an actual deployment.
  */
 class Deployment {
 
@@ -26,12 +28,6 @@ class Deployment {
 	 * @var string
 	 */
 	protected $name;
-
-	/**
-	 * The nodes that participate in this deployment
-	 * @var array
-	 */
-	protected $nodes = array();
 
 	/**
 	 * The workflow used for this deployment
@@ -76,6 +72,11 @@ class Deployment {
 	protected $status = self::STATUS_UNKNOWN;
 
 	/**
+	 * @var boolean
+	 */
+	protected $initialized = FALSE;
+
+	/**
 	 * Constructor
 	 *
 	 * @param string $name
@@ -85,9 +86,23 @@ class Deployment {
 	}
 
 	/**
+	 * Initialize the deployment
+	 *
+	 * Must be called before calling deploy() on a deployment.
+	 *
+	 * A time-based release identifier will be created on initialization. It also executes
+	 * callbacks given to the deployment with onInitialize(...).
+	 *
 	 * @return void
 	 */
 	public function initialize() {
+		if ($this->initialized) {
+			throw new \TYPO3\FLOW3\Exception('Already initialized');
+		}
+		if ($this->workflow === NULL) {
+			throw new \TYPO3\FLOW3\Exception('Workflow must be set before initializing');
+		}
+
 		$this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
 		foreach ($this->applications as $application) {
 			$application->registerTasks($this->workflow, $this);
@@ -95,6 +110,8 @@ class Deployment {
 		foreach ($this->initCallbacks as $callback) {
 			$callback();
 		}
+
+		$this->initialized = TRUE;
 	}
 
 	/**
@@ -119,6 +136,8 @@ class Deployment {
 
 	/**
 	 * Simulate this deployment without executing tasks
+	 *
+	 * It will set dryRun = TRUE which can be inspected by any task.
 	 *
 	 * @return void
 	 */
@@ -157,32 +176,18 @@ class Deployment {
 	}
 
 	/**
-	 * Get the Deployment's nodes
+	 * Get all nodes of this deployment
 	 *
-	 * @return array The Deployment's nodes
+	 * @return array The deployment nodes with all application nodes
 	 */
 	public function getNodes() {
-		return $this->nodes;
-	}
-
-	/**
-	 * Sets this Deployment's nodes
-	 *
-	 * @param array $nodes The Deployment's nodes
-	 * @return void
-	 */
-	public function setNodes(array $nodes) {
-		$this->nodes = $nodes;
-	}
-
-	/**
-	 * Add a node
-	 *
-	 * @param \TYPO3\Surf\Domain\Model\Node $node
-	 * @return void
-	 */
-	public function addNode(Node $node) {
-		$this->nodes[$node->getName()] = $node;
+		$nodes = array();
+		foreach ($this->applications as $application) {
+			foreach ($application->getNodes() as $node) {
+				$nodes[$node->getName()] = $node;
+			}
+		}
+		return $nodes;
 	}
 
 	/**
@@ -275,5 +280,13 @@ class Deployment {
 	public function getStatus() {
 		return $this->status;
 	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isInitialized() {
+		return $this->initialized;
+	}
+
 }
 ?>
