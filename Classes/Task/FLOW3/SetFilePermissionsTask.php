@@ -35,7 +35,7 @@ class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task {
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$targetPath = $deployment->getApplicationReleasePath($application);
 
-		$arguments = (isset($options['shellUsername']) ? $options['shellUsername'] : 'root');
+		$arguments = isset($options['shellUsername']) ? $options['shellUsername'] : ($node->hasOption('username') ? $node->getOption('username') : 'root');
 		$arguments .= ' ' . (isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data');
 		$arguments .= ' ' . (isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data');
 
