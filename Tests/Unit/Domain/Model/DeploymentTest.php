@@ -43,7 +43,9 @@ class DeploymentTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function initializeCreatesReleaseIdentifier() {
+		$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
+		$deployment->setWorkflow($workflow);
 		$deployment->initialize();
 
 		$releaseIdentifier = $deployment->getReleaseIdentifier();
@@ -55,7 +57,9 @@ class DeploymentTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @expectedException \TYPO3\FLOW3\Exception
 	 */
 	public function initializeIsAllowedOnlyOnce() {
+		$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
+		$deployment->setWorkflow($workflow);
 		$deployment->initialize();
 
 		$deployment->initialize();

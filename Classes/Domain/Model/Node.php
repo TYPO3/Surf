@@ -25,7 +25,11 @@ class Node {
 	protected $hostname;
 
 	/**
-	 * The options
+	 * Options for this node
+	 *
+	 * username: SSH username for connecting to this node (optional)
+	 * port: SSH port for connecting to the node (optional)
+	 *
 	 * @var array
 	 */
 	protected $options;
@@ -113,6 +117,14 @@ class Node {
 	 */
 	public function setOption($key, $value) {
 		$this->options[$key] = $value;
+	}
+
+	/**
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function hasOption($key) {
+		return isset($this->options[$key]);
 	}
 
 	/**

@@ -113,19 +113,39 @@ class ShellCommandService {
 		$command = $this->prepareCommand($command);
 		$deployment->getLogger()->log('    $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
 		$username = $node->getOption('username');
+		if (!empty($username)) {
+			$username = $username . '@';
+		}
 		$hostname = $node->getHostname();
-		$returnedOutput = '';
 
-		// TODO Get SSH options from node or deployment
-		$fp = popen('ssh -A ' . $username . '@' . $hostname . ' ' . escapeshellarg($command) . ' 2>&1', 'r');
+			// TODO Get SSH options from node or deployment
+		$sshOptions = array('-A');
+		if ($node->hasOption('port')) {
+			$sshOptions[] = '-p ' . escapeshellarg($node->getOption('port'));
+		}
+		return $this->executeProcess($deployment, 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command) . ' 2>&1', $logOutput, '    > ');
+	}
+
+	/**
+	 * Open a process with popen and process each line by logging and
+	 * collecting its output.
+	 *
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param string $command
+	 * @param boolean $logOutput
+	 * @param string $logPrefix
+	 * @return array The exit code of the command and the returned output
+	 */
+	protected function executeProcess($deployment, $command, $logOutput, $logPrefix) {
+		$returnedOutput = '';
+		$fp = popen($command, 'r');
 		while (($line = fgets($fp)) !== FALSE) {
 			if ($logOutput) {
-				$deployment->getLogger()->log('    > ' . rtrim($line));
+				$deployment->getLogger()->log($logPrefix . rtrim($line));
 			}
 			$returnedOutput .= $line;
 		}
 		$exitCode = pclose($fp);
-
 		return array($exitCode, $returnedOutput);
 	}
 
