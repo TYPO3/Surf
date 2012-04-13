@@ -37,6 +37,7 @@ class FLOW3 extends \TYPO3\Surf\Application\BaseApplication {
 			->afterTask('typo3.surf:gitcheckout', array(
 				'typo3.surf:flow3:symlinkdata',
 				'typo3.surf:flow3:symlinkconfiguration',
+				'typo3.surf:flow3:copyconfiguration',
 				'typo3.surf:flow3:setfilepermissions'
 			), $this)
 			->addTask('typo3.surf:flow3:migrate', 'migrate', $this);

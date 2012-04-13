@@ -17,7 +17,6 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * The configuration directory has to exist on the target release path before
  * executing this task!
- *
  */
 class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 
@@ -42,7 +41,11 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 		$username = $node->getOption('username');
 		$hostname = $node->getHostname();
 
-		$configurationPath = $this->getDeploymentConfigurationPath() . '/Configuration/' . $deployment->getName() . '/';
+		$configurationPath = $this->getDeploymentConfigurationPath() . '/' . $deployment->getName() . '/Configuration/';
+		if (!is_dir($configurationPath)) {
+			return;
+		}
+
 		$encryptedConfiguration = \TYPO3\FLOW3\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml.encrypted');
 		if (count($encryptedConfiguration) > 0) {
 			throw new \Exception('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);

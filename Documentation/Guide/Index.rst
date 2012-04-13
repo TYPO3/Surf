@@ -86,6 +86,16 @@ The simulation gives a hint which tasks will be executed on which node. During s
 executed for real. If a remote SSH command would be executed it will be printed in the log messages starting with
 ``... $nodeName: "command"``.
 
+FLOW3 Configuration overrides
+-----------------------
+
+If the configuration of a FLOW3 application should be different depending on the deployment configuration
+(e.g. database settings or external services) the typo3.surf:flow3:copyconfiguration task can be used to override
+configuration after the code update (Git checkout).
+
+If a ``Configuration`` folder exists inside a folder named after your deployment ``%FLOW3_ROOT%/Build/Surf/MyDeployment``
+every file in there will be copied to the release ``Configuration`` folder recursively.
+
 Run a deployment
 ----------------
 
