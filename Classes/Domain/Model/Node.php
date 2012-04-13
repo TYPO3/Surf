@@ -19,12 +19,6 @@ class Node {
 	protected $name;
 
 	/**
-	 * The roles
-	 * @var array
-	 */
-	protected $roles;
-
-	/**
 	 * The hostname
 	 * @var string
 	 */
@@ -62,25 +56,6 @@ class Node {
 	 */
 	public function setName($name) {
 		$this->name = $name;
-	}
-
-	/**
-	 * Get the Node's roles
-	 *
-	 * @return array The Node's roles
-	 */
-	public function getRoles() {
-		return $this->roles;
-	}
-
-	/**
-	 * Sets this Node's roles
-	 *
-	 * @param array $roles The Node's roles
-	 * @return void
-	 */
-	public function setRoles(array $roles) {
-		$this->roles = $roles;
 	}
 
 	/**
