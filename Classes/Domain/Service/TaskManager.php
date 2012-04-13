@@ -33,10 +33,11 @@ class TaskManager {
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param string $stage
 	 * @param array $options
 	 * @return void
 	 */
-	public function execute($task, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, array $options = array()) {
+	public function execute($task, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, $stage, array $options = array()) {
 		list($packageKey, $taskName) = explode(':', $task, 2);
 		$taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskName, ':', '\\') . 'Task';
 		$taskObjectName = $this->objectManager->getCaseSensitiveObjectName($taskClassName);
@@ -54,6 +55,7 @@ class TaskManager {
 			'node' => $node,
 			'application' => $application,
 			'deployment' => $deployment,
+			'stage' => $stage,
 			'options' => $options
 		);
 	}
