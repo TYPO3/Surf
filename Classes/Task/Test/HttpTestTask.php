@@ -248,6 +248,10 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 		$info = curl_getinfo($curl);
 		curl_close($curl);
 
+		if ($response === FALSE) {
+			throw new \Exception('HTTP request did not return a response', 1334347427);
+		}
+
 		list($headerText, $body) = preg_split('/\n[\s]*\n/', $response, 2);
 		$headers = $this->extractResponseHeaders($headerText);
 
