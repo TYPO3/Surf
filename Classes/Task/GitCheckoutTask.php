@@ -69,14 +69,14 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 					&& git submodule -q init
 					&& for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.\${mod}.url `git config -f .gitmodules --get submodule.\${mod}.url` && echo synced \$mod; done
 					&& git submodule -q sync
-					&& git submodule -q update
+					&& git submodule -q update --recursive
 					&& git clean -q -d -x -ff;
 				else git clone -q $repositoryUrl $deploymentPath/cache/localgitclone
 					&& cd $deploymentPath/cache/localgitclone
 					&& git checkout -q -b deploy $sha1
 					&& git submodule -q init
 					&& git submodule -q sync
-					&& git submodule -q update;
+					&& git submodule -q update --recursive;
 				fi
 		", "\t\n", "  ");
 
