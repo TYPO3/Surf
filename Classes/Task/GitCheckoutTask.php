@@ -60,23 +60,24 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 			}
 		}
 
+		$quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : ' -q';
 		$command = strtr("
 			if [ -d $deploymentPath/cache/localgitclone ];
 				then
 					cd $deploymentPath/cache/localgitclone
-					&& git fetch -q origin
-					&& git reset -q --hard $sha1
-					&& git submodule -q init
+					&& git fetch $quietFlag origin
+					&& git reset $quietFlag --hard $sha1
+					&& git submodule $quietFlag init
 					&& for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.\${mod}.url `git config -f .gitmodules --get submodule.\${mod}.url` && echo synced \$mod; done
-					&& git submodule -q sync
-					&& git submodule -q update --recursive
-					&& git clean -q -d -x -ff;
-				else git clone -q $repositoryUrl $deploymentPath/cache/localgitclone
+					&& git submodule $quietFlag sync
+					&& git submodule $quietFlag update --recursive
+					&& git clean $quietFlag -d -x -ff;
+				else git clone $quietFlag $repositoryUrl $deploymentPath/cache/localgitclone
 					&& cd $deploymentPath/cache/localgitclone
-					&& git checkout -q -b deploy $sha1
-					&& git submodule -q init
-					&& git submodule -q sync
-					&& git submodule -q update --recursive;
+					&& git checkout $quietFlag -b deploy $sha1
+					&& git submodule $quietFlag init
+					&& git submodule $quietFlag sync
+					&& git submodule $quietFlag update --recursive;
 				fi
 		", "\t\n", "  ");
 
