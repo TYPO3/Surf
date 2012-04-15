@@ -55,13 +55,21 @@ class SimpleWorkflow extends Workflow {
 	public function run(Deployment $deployment) {
 		parent::run($deployment);
 
+		$applications = $deployment->getApplications();
+		if (count($applications) === 0) {
+			throw new \TYPO3\FLOW3\Exception('No application configured for deployment', 1334652420);
+		}
+
 		$nodes = $deployment->getNodes();
+		if (count($nodes) === 0) {
+			throw new \TYPO3\FLOW3\Exception('No nodes configured for application', 1334652427);
+		}
 
 		foreach ($this->stages as $stage) {
 			$deployment->getLogger()->log('====== Stage ' . $stage . ' ======', LOG_DEBUG);
 			foreach ($nodes as $node) {
 				$deployment->getLogger()->log('**** Node ' . $node->getName() . ' ****', LOG_DEBUG);
-				foreach ($deployment->getApplications() as $application) {
+				foreach ($applications as $application) {
 					if (!$application->hasNode($node)) continue;
 
 					$deployment->getLogger()->log('* Application ' . $application->getName() . ' *', LOG_DEBUG);

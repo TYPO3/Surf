@@ -21,10 +21,48 @@ class SimpleWorkflowTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @expectedException \TYPO3\FLOW3\Exception
 	 */
 	public function deploymentMustBeInitializedBeforeRunning() {
-		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
+		$deployment = $this->buildDeployment();
+		$workflow = $deployment->getWorkflow();
 
 		$workflow->run($deployment);
+	}
+
+	/**
+	 * @test
+	 * @expectedException \TYPO3\FLOW3\Exception
+	 */
+	public function runFailsIfNoApplicationIsConfigured() {
+		$deployment = $this->buildDeployment();
+		$workflow = $deployment->getWorkflow();
+
+		$deployment->initialize();
+
+		try {
+			$workflow->run($deployment);
+		} catch(\TYPO3\FLOW3\Exception $exception) {
+			$this->assertEquals(1334652420, $exception->getCode());
+			throw $exception;
+		}
+	}
+
+	/**
+	 * @test
+	 * @expectedException \TYPO3\FLOW3\Exception
+	 */
+	public function runFailsIfNoNodesAreConfigured() {
+		$deployment = $this->buildDeployment();
+		$workflow = $deployment->getWorkflow();
+
+		$deployment->addApplication(new \TYPO3\Surf\Domain\Model\Application('Test application'));
+
+		$deployment->initialize();
+
+		try {
+			$workflow->run($deployment);
+		} catch(\TYPO3\FLOW3\Exception $exception) {
+			$this->assertEquals(1334652427, $exception->getCode());
+			throw $exception;
+		}
 	}
 
 	/**
@@ -284,7 +322,7 @@ class SimpleWorkflowTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @param array $executedTasks Register for executed tasks
 	 * @return \TYPO3\Surf\Domain\Model\Deployment A configured Deployment for testing
 	 */
-	protected function buildDeployment(array &$executedTasks) {
+	protected function buildDeployment(array &$executedTasks = array()) {
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
 		$mockLogger = $this->getMock('TYPO3\FLOW3\Log\LoggerInterface');
 		$mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
