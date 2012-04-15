@@ -21,16 +21,18 @@ class DeploymentTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 */
 	public function getNodesReturnsNodesFromApplicationsAsSet() {
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-
 		$application1 = new \TYPO3\Surf\Domain\Model\Application('Test application 1');
-		$application1->addNode(new \TYPO3\Surf\Domain\Model\Node('test1.example.com'));
-		$deployment->addApplication($application1);
-
 		$application2 = new \TYPO3\Surf\Domain\Model\Application('Test application 2');
-		$deployment->addApplication($application2);
 
-		$application2->addNode(new \TYPO3\Surf\Domain\Model\Node('test1.example.com'));
-		$application2->addNode(new \TYPO3\Surf\Domain\Model\Node('test2.example.com'));
+		$application1
+			->addNode(new \TYPO3\Surf\Domain\Model\Node('test1.example.com'));
+		$application2
+			->addNode(new \TYPO3\Surf\Domain\Model\Node('test1.example.com'))
+			->addNode(new \TYPO3\Surf\Domain\Model\Node('test2.example.com'));
+
+		$deployment
+			->addApplication($application1)
+			->addApplication($application2);
 
 		$nodes = $deployment->getNodes();
 		$nodeNames = array_map(function($node) { return $node->getName(); }, $nodes);

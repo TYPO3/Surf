@@ -56,10 +56,11 @@ class Node {
 	 * Sets this Node's name
 	 *
 	 * @param string $name The Node's name
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Node
 	 */
 	public function setName($name) {
 		$this->name = $name;
+		return $this;
 	}
 
 	/**
@@ -75,10 +76,11 @@ class Node {
 	 * Sets this Node's hostname
 	 *
 	 * @param string $hostname The Node's hostname
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Node
 	 */
 	public function setHostname($hostname) {
 		$this->hostname = $hostname;
+		return $this;
 	}
 
 	/**
@@ -94,10 +96,11 @@ class Node {
 	 * Sets this Node's options
 	 *
 	 * @param array $options The Node's options
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Node
 	 */
 	public function setOptions(array $options) {
 		$this->options = $options;
+		return $this;
 	}
 
 	/**
@@ -113,10 +116,11 @@ class Node {
 	 *
 	 * @param string $key
 	 * @param mixed $value
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Node
 	 */
 	public function setOption($key, $value) {
 		$this->options[$key] = $value;
+		return $this;
 	}
 
 	/**

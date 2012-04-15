@@ -69,10 +69,11 @@ class Application {
 	 * Sets the name
 	 *
 	 * @param string $name
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Application
 	 */
 	public function setName($name) {
 		$this->name = $name;
+		return $this;
 	}
 
 	/**
@@ -88,20 +89,22 @@ class Application {
 	 * Sets this Deployment's nodes
 	 *
 	 * @param array $nodes The Deployment's nodes
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Application
 	 */
 	public function setNodes(array $nodes) {
 		$this->nodes = $nodes;
+		return $this;
 	}
 
 	/**
 	 * Add a node
 	 *
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Application
 	 */
 	public function addNode(Node $node) {
 		$this->nodes[$node->getName()] = $node;
+		return $this;
 	}
 
 	/**
@@ -136,10 +139,11 @@ class Application {
 	/**
 	 *
 	 * @param string $deploymentPath
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Application
 	 */
 	public function setDeploymentPath($deploymentPath) {
 		$this->deploymentPath = rtrim($deploymentPath, '/');
+		return $this;
 	}
 
 	/**
@@ -171,20 +175,22 @@ class Application {
 	/**
 	 *
 	 * @param array $options
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Application
 	 */
 	public function setOptions($options) {
 		$this->options = $options;
+		return $this;
 	}
 
 	/**
 	 *
 	 * @param string $key
 	 * @param mixed $value
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Application
 	 */
 	public function setOption($key, $value) {
 		$this->options[$key] = $value;
+		return $this;
 	}
 
 }

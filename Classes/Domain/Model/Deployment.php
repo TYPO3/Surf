@@ -118,10 +118,11 @@ class Deployment {
 	 * Add a callback to the initialization
 	 *
 	 * @param callback $callback
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function onInitialize($callback) {
 		$this->initCallbacks[] = $callback;
+		return $this;
 	}
 
 	/**
@@ -169,10 +170,11 @@ class Deployment {
 	 * Sets this Deployment's name
 	 *
 	 * @param string $name The Deployment's name
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function setName($name) {
 		$this->name = $name;
+		return $this;
 	}
 
 	/**
@@ -201,10 +203,11 @@ class Deployment {
 	 * Add an application
 	 *
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function addApplication(Application $application) {
 		$this->applications[$application->getName()] = $application;
+		return $this;
 	}
 
 	/**
@@ -220,19 +223,21 @@ class Deployment {
 	 * Sets this Deployment's workflow
 	 *
 	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow The Deployment's workflow
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function setWorkflow($workflow) {
 		$this->workflow = $workflow;
+		return $this;
 	}
 
 	/**
 	 *
 	 * @param \TYPO3\FLOW3\Log\LoggerInterface $logger
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function setLogger($logger) {
 		$this->logger = $logger;
+		return $this;
 	}
 
 	/**
@@ -260,18 +265,20 @@ class Deployment {
 
 	/**
 	 * @param boolean $dryRun
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function setDryRun($dryRun) {
 		$this->dryRun = $dryRun;
+		return $this;
 	}
 
 	/**
 	 * @param integer $status
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function setStatus($status) {
 		$this->status = $status;
+		return $this;
 	}
 
 	/**

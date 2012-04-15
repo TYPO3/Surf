@@ -101,10 +101,11 @@ class SimpleWorkflow extends Workflow {
 	/**
 	 *
 	 * @param boolean $enableRollback
-	 * @return void
+	 * @return \TYPO3\Surf\Domain\Model\SimpleWorkflow
 	 */
 	public function setEnableRollback($enableRollback) {
 		$this->enableRollback = $enableRollback;
+		return $this;
 	}
 
 }
