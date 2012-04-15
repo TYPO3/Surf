@@ -29,7 +29,7 @@ abstract class Workflow {
 
 	/**
 	 *
-	 * @param Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @return void
 	 * @throws \TYPO3\Surf\Exception
 	 */
@@ -174,6 +174,26 @@ abstract class Workflow {
 			'task' => $baseTask,
 			'options' => $options
 		);
+		return $this;
+	}
+
+	/**
+	 * Override options for given task
+	 *
+	 * @param string $taskName
+	 * @param array $options
+	 * @return \TYPO3\Surf\Domain\Model\Workflow
+	 */
+	public function setTaskOptions($taskName, $options) {
+		$baseTask = $taskName;
+		if (isset($this->tasks['defined'][$taskName]) && is_array($this->tasks['defined'][$taskName])) {
+			$definedTask = $this->tasks['defined'][$taskName];
+			$baseTask = $definedTask['task'];
+			if (is_array($definedTask['options'])) {
+				$options = array_merge_recursive($definedTask['options'], $options);
+			}
+		}
+		$this->defineTask($taskName, $baseTask, $options);
 		return $this;
 	}
 
