@@ -16,13 +16,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * A task to create FLOW3 specific directories
  *
  */
-class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
-
-	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-	 */
-	protected $shell;
+class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTask {
 
 	/**
 	 * Execute this task
@@ -34,26 +28,14 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$deploymentPath = $application->getDeploymentPath();
-		$this->shell->executeOrSimulate(array(
-			'mkdir -p ' . $deploymentPath . '/shared/Data/Logs',
-			'mkdir -p ' . $deploymentPath . '/shared/Data/Persistent',
-			'mkdir -p ' . $deploymentPath . '/shared/Configuration'
-		), $node, $deployment);
+		$options = array(
+			'directories' => array(
+				'shared/Data/Logs',
+				'shared/Data/Persistent',
+				'shared/Configuration'
+			)
+		);
+		parent::execute($node, $application, $deployment, $options);
 	}
-
-	/**
-	 * Simulate this task
-	 *
-	 * @param Node $node
-	 * @param Application $application
-	 * @param Deployment $deployment
-	 * @param array $options
-	 * @return void
-	 */
-	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$this->execute($node, $application, $deployment, $options);
-	}
-
 }
 ?>
