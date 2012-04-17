@@ -325,9 +325,10 @@ class SimpleWorkflowTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	protected function buildDeployment(array &$executedTasks = array()) {
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
 		$mockLogger = $this->getMock('TYPO3\FLOW3\Log\LoggerInterface');
-		$mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
-			echo $message . chr(10);
-		}));
+			// Enable log to console to debug tests
+		// $mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
+		// 	echo $message . chr(10);
+		// }));
 		$deployment->setLogger($mockLogger);
 
 		$mockTaskManager = $this->getMock('TYPO3\Surf\Domain\Service\TaskManager');
