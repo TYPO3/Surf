@@ -32,7 +32,7 @@ class ShellCommandService {
 			list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment, $logOutput);
 		}
 		if ($ignoreErrors !== TRUE && $exitCode !== 0) {
-			throw new \Exception('Command returned non-zero return code', 1311007746);
+			throw new \TYPO3\Surf\Exception\TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
 		}
 		return ($exitCode === 0 ? $returnedOutput : FALSE);
 	}
@@ -161,7 +161,7 @@ class ShellCommandService {
 		} elseif (is_array($command)) {
 			return implode(';', $command);
 		} else {
-			throw new \Exception('Command must be string or array', 1312454906);
+			throw new \TYPO3\Surf\Exception\TaskExecutionException('Command must be string or array, ' . gettype($command) . ' given.', 1312454906);
 		}
 	}
 

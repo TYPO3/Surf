@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task\Git;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
@@ -35,11 +36,11 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		if (!isset($options['tagName'])) {
-			throw new \Exception('tagName not set', 1314186541);
+			throw new InvalidConfigurationException('Missing "tagName" option for TagTask', 1314186541);
 		}
 
 		if (!isset($options['description'])) {
-			throw new \Exception('description not set', 1314186553);
+			throw new InvalidConfigurationException('Missing "description" option for TagTask', 1314186553);
 		}
 
 		if (!isset($options['submoduleTagNamePrefix'])) {

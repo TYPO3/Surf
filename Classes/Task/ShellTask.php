@@ -45,7 +45,7 @@ class ShellTask extends \TYPO3\Surf\Domain\Model\Task {
 		$previousPath = $application->getDeploymentPath() . '/releases/previous';
 
 		if (!isset($options['command'])) {
-			throw new \Exception('No command option provided for ShellTask', 1311168045);
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing "command" option for ShellTask', 1311168045);
 		}
 		$command = $options['command'];
 		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);

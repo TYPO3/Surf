@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
@@ -45,13 +46,13 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 		if (isset($options['sha1'])) {
 			$sha1 = $options['sha1'];
 			if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
-				throw new \TYPO3\Surf\Exception\TaskExecutionException('The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
+				throw new TaskExecutionException('The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
 			}
 		} else {
 			if (isset($options['tag'])) {
 				$sha1 = $this->shell->execute("git ls-remote $repositoryUrl refs/tags/{$options['tag']} | awk '{print $1 }'", $node, $deployment, TRUE);
 				if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
-					throw new \TYPO3\Surf\Exception\TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
+					throw new TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
 				}
 			} else {
 				if (!isset($options['branch'])) {
@@ -59,7 +60,7 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 				}
 				$sha1 = $this->shell->execute("git ls-remote $repositoryUrl refs/heads/{$options['branch']} | awk '{print $1 }'", $node, $deployment, TRUE);
 				if (preg_match('/^[a-z0-9]{40}$/', $sha1) === 0) {
-					throw new \TYPO3\Surf\Exception\TaskExecutionException('Could not retrieve sha1 of git branch "' . $options['branch'] . '"', 1335974926);
+					throw new TaskExecutionException('Could not retrieve sha1 of git branch "' . $options['branch'] . '"', 1335974926);
 				}
 			}
 		}

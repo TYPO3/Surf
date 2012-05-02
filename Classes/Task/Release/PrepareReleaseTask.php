@@ -65,7 +65,7 @@ class PrepareReleaseTask extends \TYPO3\Surf\Domain\Model\Task {
 	protected function checkOptionsForValidity($options) {
 		foreach (array('releaseHost', 'releaseHostSitePath', 'version', 'productName') as $optionName) {
 			if (!isset($options[$optionName])) {
-				throw new \Exception($optionName . ' not set', 1321549659);
+				throw new \TYPO3\Surf\Exception\InvalidConfigurationException('"' . $optionName . '" option not set', 1321549659);
 			}
 		}
 	}

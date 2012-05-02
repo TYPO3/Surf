@@ -34,7 +34,7 @@ abstract class Workflow {
 	 */
 	public function run(Deployment $deployment) {
 		if (!$deployment->isInitialized()) {
-			throw new \TYPO3\FLOW3\Exception('Deployment must be initialized before running it');
+			throw new \TYPO3\Surf\Exception('Deployment must be initialized before running it', 1335976529);
 		}
 		$deployment->getLogger()->log('Using workflow "' . $this->getName() . '"');
 	}
@@ -220,7 +220,7 @@ abstract class Workflow {
 			}
 		}
 		if (isset($callstack[$task])) {
-			throw new \Exception('Cycle for task "' . $task . '" detected, aborting.');
+			throw new \TYPO3\Surf\Exception\TaskExecutionException('Cycle for task "' . $task . '" detected, aborting.', 1335976544);
 		}
 		$deployment->getLogger()->log('Execute task "' . $task . '" on "' . $node->getName() . '" for application "' . $application->getName() . '"', LOG_DEBUG);
 		if (isset($this->tasks['defined'][$task])) {

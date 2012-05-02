@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task\Test;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
@@ -37,7 +38,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		if (!isset($options['url'])) {
-			throw new \Exception('No url option provided for HttpTestTask', 1319534939);
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No url option provided for HttpTestTask', 1319534939);
 		}
 
 		// $this->logRequest($node, $application, $deployment, $options);
@@ -78,7 +79,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 		if (!isset($options['expectedStatus'])) return;
 
 		if ((int)$result['info']['http_code'] !== (int)$options['expectedStatus']) {
-			throw new \Exception('Expected status code ' . $options['expectedStatus'] . ' but got ' . $result['info']['http_code'], 1319536619);
+			throw new TaskExecutionException('Expected status code ' . $options['expectedStatus'] . ' but got ' . $result['info']['http_code'], 1319536619);
 		}
 	}
 
@@ -107,12 +108,12 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 		if (count($expectedHeaders) > 0) {
 			foreach ($expectedHeaders as $headerName => $expectedValue) {
 				if (!isset($result['headers'][$headerName])) {
-					throw new \Exception('Expected header "' . $headerName . '" not present', 1319535441);
+					throw new TaskExecutionException('Expected header "' . $headerName . '" not present', 1319535441);
 				} else {
 					$headerValue = $result['headers'][$headerName];
 					$partialSuccess = $this->testSingleHeader($headerValue, $expectedValue);
 					if (!$partialSuccess) {
-						throw new \Exception('Expected header value for "' . $headerName . '" did not match "' . $expectedValue . '": "' . $headerValue . '"', 1319535733);
+						throw new TaskExecutionException('Expected header value for "' . $headerName . '" did not match "' . $expectedValue . '": "' . $headerValue . '"', 1319535733);
 					}
 				}
 			}
@@ -137,7 +138,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 			foreach ($expectedRegexp as $regexp) {
 				$regexp = trim($regexp);
 				if ($regexp !== '' && !preg_match($regexp, $result['body'])) {
-					throw new \Exception('Body did not match expected regular expression "' . $regexp . '": ' . substr($result['body'], 0, 200) . (strlen($result['body']) > 200 ? '...' : ''), 1319536046);
+					throw new TaskExecutionException('Body did not match expected regular expression "' . $regexp . '": ' . substr($result['body'], 0, 200) . (strlen($result['body']) > 200 ? '...' : ''), 1319536046);
 				}
 			}
 		}
@@ -249,7 +250,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 		curl_close($curl);
 
 		if ($response === FALSE) {
-			throw new \Exception('HTTP request did not return a response', 1334347427);
+			throw new TaskExecutionException('HTTP request did not return a response', 1334347427);
 		}
 
 		list($headerText, $body) = preg_split('/\n[\s]*\n/', $response, 2);

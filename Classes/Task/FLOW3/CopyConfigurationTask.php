@@ -48,7 +48,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 
 		$encryptedConfiguration = \TYPO3\FLOW3\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml.encrypted');
 		if (count($encryptedConfiguration) > 0) {
-			throw new \Exception('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);
+			throw new \TYPO3\Surf\Exception\TaskExecutionException('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);
 		}
 		$configurations = \TYPO3\FLOW3\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml');
 		$commands = array();

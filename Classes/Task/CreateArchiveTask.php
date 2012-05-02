@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
@@ -75,24 +76,24 @@ class CreateArchiveTask extends \TYPO3\Surf\Domain\Model\Task {
 			$this->shell->execute(sprintf('mv %s/out.zip %s; rm -Rf %s', $temporaryDirectory, $options['targetFile'], $temporaryDirectory), $node, $deployment);
 
 		} else {
-			throw new \Exception('Unknown target file format', 1314248387);
+			throw new \TYPO3\Surf\Exception\TaskExecutionException('Unknown target file format', 1314248387);
 		}
 	}
 
 	protected function checkOptionsForValidity($options) {
 		if (!isset($options['sourceDirectory']) || !is_dir($options['sourceDirectory'])) {
-			throw new \Exception('sourceDirectory not configured', 1314187354);
+			throw new InvalidConfigurationException('sourceDirectory not configured', 1314187354);
 		}
 
 		if (!isset($options['targetFile'])) {
-			throw new \Exception('targetFile not configured', 1314187356);
+			throw new InvalidConfigurationException('targetFile not configured', 1314187356);
 		}
 		if (!preg_match('/\.(tar\.gz|tar\.bz2|zip)$/', $options['targetFile'])) {
-			throw new \Exception('targetFile only with file ending tar.gz, tar.bz2 or zip supported, given: "' . $options['targetFile'] . '"!', 1314187359);
+			throw new InvalidConfigurationException('targetFile only with file ending tar.gz, tar.bz2 or zip supported, given: "' . $options['targetFile'] . '"!', 1314187359);
 		}
 
 		if (!isset($options['baseDirectory'])) {
-			throw new \Exception('baseDirectory not configured', 1314187361);
+			throw new InvalidConfigurationException('baseDirectory not configured', 1314187361);
 		}
 	}
 

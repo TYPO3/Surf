@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 use TYPO3\FLOW3\Annotations as FLOW3;
 
@@ -63,27 +64,27 @@ class SourceforgeUploadTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	protected function checkOptionsForValidity($options) {
 		if (!isset($options['sourceforgeProjectName'])) {
-			throw new \Exception('Sourceforge Project Name not set', 1314170122);
+			throw new InvalidConfigurationException('"sourceforgeProjectName" option not set', 1314170122);
 		}
 
 		if (!isset($options['sourceforgePackageName'])) {
-			throw new \Exception('Sourceforge Package Name not set', 1314170132);
+			throw new InvalidConfigurationException('"sourceforgePackageName" option not set', 1314170132);
 		}
 
 		if (!isset($options['sourceforgeUserName'])) {
-			throw new \Exception('Sourceforge User Name not set', 1314170145);
+			throw new InvalidConfigurationException('"sourceforgeUserName" option not set', 1314170145);
 		}
 
 		if (!isset($options['version'])) {
-			throw new \Exception('version not set', 1314170151);
+			throw new InvalidConfigurationException('"version" option not set', 1314170151);
 		}
 
 		if (!isset($options['files'])) {
-			throw new \Exception('files to upload not set', 1314170162);
+			throw new InvalidConfigurationException('"files" option for upload not set', 1314170162);
 		}
 
 		if (!is_array($options['files'])) {
-			throw new \Exception('files to upload is no array', 1314170175);
+			throw new InvalidConfigurationException('"files" option for upload is not an array', 1314170175);
 		}
 	}
 }

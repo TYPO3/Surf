@@ -72,7 +72,7 @@ class AddDownloadTask extends \TYPO3\Surf\Domain\Model\Task {
 	protected function checkOptionsForValidity($options) {
 		foreach (array('releaseHost', 'releaseHostSitePath', 'version', 'label', 'downloadUriPattern', 'productName', 'files') as $optionName) {
 			if (!isset($options[$optionName])) {
-				throw new \Exception($optionName . ' not set', 1321549657);
+				throw new \TYPO3\Surf\Exception\InvalidConfigurationException('"' . $optionName . '" option not set', 1321549657);
 			}
 		}
 	}

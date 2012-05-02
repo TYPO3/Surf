@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Domain\Model;
 
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A simple workflow
@@ -57,12 +58,12 @@ class SimpleWorkflow extends Workflow {
 
 		$applications = $deployment->getApplications();
 		if (count($applications) === 0) {
-			throw new \TYPO3\FLOW3\Exception('No application configured for deployment', 1334652420);
+			throw new InvalidConfigurationException('No application configured for deployment', 1334652420);
 		}
 
 		$nodes = $deployment->getNodes();
 		if (count($nodes) === 0) {
-			throw new \TYPO3\FLOW3\Exception('No nodes configured for application', 1334652427);
+			throw new InvalidConfigurationException('No nodes configured for application', 1334652427);
 		}
 
 		foreach ($this->stages as $stage) {

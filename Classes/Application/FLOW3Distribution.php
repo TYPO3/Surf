@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Application;
 
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * An "application" which does bundle FLOW3 or similar distributions.
@@ -80,35 +81,35 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 	 */
 	protected function checkIfMandatoryOptionsExist() {
 		if (!$this->hasOption('version')) {
-			throw new \Exception('Version needs to be defined. Example: 1.0.0-beta2', 1314187396);
+			throw new InvalidConfigurationException('"version" option needs to be defined. Example: 1.0.0-beta2', 1314187396);
 		}
 		if (!$this->hasOption('projectName')) {
-			throw new \Exception('Project Name needs to be defined. Example: FLOW3', 1314187397);
+			throw new InvalidConfigurationException('"projectName" option needs to be defined. Example: FLOW3', 1314187397);
 		}
 
 		if ($this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === TRUE) {
 			if (!$this->hasOption('sourceforgeProjectName')) {
-				throw new \Exception('sourceforgeProjectName option needs to be specified', 1314187402);
+				throw new InvalidConfigurationException('"sourceforgeProjectName" option needs to be specified', 1314187402);
 			}
 			if (!$this->hasOption('sourceforgePackageName')) {
-				throw new \Exception('sourceforgePackageName option needs to be specified', 1314187406);
+				throw new InvalidConfigurationException('"sourceforgePackageName" option needs to be specified', 1314187406);
 			}
 			if (!$this->hasOption('sourceforgeUserName')) {
-				throw new \Exception('sourceforgeUserName option needs to be specified', 1314187407);
+				throw new InvalidConfigurationException('"sourceforgeUserName" option needs to be specified', 1314187407);
 			}
 		}
 
 		if ($this->hasOption('releaseHost')) {
 			if (!$this->hasOption('releaseHostSitePath')) {
-				throw new \Exception('releaseHostSitePath option needs to be specified', 1321545975);
+				throw new InvalidConfigurationException('"releaseHostSitePath" option needs to be specified', 1321545975);
 			}
 		}
 		if ($this->hasOption('releaseHost') && $this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === TRUE) {
 			if (!$this->hasOption('releaseDownloadLabel')) {
-				throw new \Exception('releaseDownloadLabel option needs to be specified', 1321545965);
+				throw new InvalidConfigurationException('"releaseDownloadLabel" option needs to be specified', 1321545965);
 			}
 			if (!$this->hasOption('releaseDownloadUriPattern')) {
-				throw new \Exception('releaseDownloadUriPattern option needs to be specified', 1321545985);
+				throw new InvalidConfigurationException('"releaseDownloadUriPattern" option needs to be specified', 1321545985);
 			}
 		}
 	}

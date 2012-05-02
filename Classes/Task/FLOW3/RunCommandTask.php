@@ -35,7 +35,7 @@ class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		if (!isset($options['command'])) {
-			throw new \Exception('Missing option "command".', 1319201396);
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
 		}
 
 		$arguments = escapeshellarg(isset($options['arguments']) ? $options['arguments'] : '');

@@ -35,7 +35,7 @@ class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		if (!$application->hasOption('sitePackageKey')) {
-			throw new \Exception('Missing site package key.', 1312312646);
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('"sitePackageKey" option not set', 1312312646);
 		}
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$sitePackageKey = $application->getOption('sitePackageKey');

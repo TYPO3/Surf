@@ -6,6 +6,8 @@ namespace TYPO3\Surf\Domain\Model;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Exception\InvalidConfigurationException;
+
 /**
  * A generic application without any tasks
  *
@@ -123,7 +125,7 @@ class Application {
 	 */
 	public function getDeploymentPath() {
 		if ($this->deploymentPath === NULL) {
-			throw new \Exception(sprintf('No deployment path has been defined for application %s.', $this->name), 1312220645);
+			throw new InvalidConfigurationException(sprintf('No deployment path has been defined for application %s.', $this->name), 1312220645);
 		}
 		return $this->deploymentPath;
 	}

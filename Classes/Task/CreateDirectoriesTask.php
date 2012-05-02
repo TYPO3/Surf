@@ -43,7 +43,7 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$result = $this->shell->execute('test -d ' . $deploymentPath, $node, $deployment, TRUE);
 		if ($result === FALSE) {
-			throw new \Exception('Deployment directory "' . $deploymentPath . '" does not exist on ' . $node->getName(), 1311003253);
+			throw new \TYPO3\Surf\Exception\TaskExecutionException('Deployment directory "' . $deploymentPath . '" does not exist on node ' . $node->getName(), 1311003253);
 		}
 		$commands = array(
 			'mkdir -p ' . $releasesPath,
