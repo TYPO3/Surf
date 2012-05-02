@@ -1,0 +1,63 @@
+<?php
+namespace TYPO3\Surf\Tests\Unit\Task;
+
+/*                                                                        *
+ * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ *                                                                        *
+ * It is free software; you can redistribute it and/or modify it under    *
+ * the terms of the GNU General Public License, either version 3 of the   *
+ * License, or (at your option) any later version.                        *
+ *                                                                        *
+ * The TYPO3 project - inspiring people to share!                         *
+ *                                                                        */
+
+/**
+ * Unit test for the GitCheckoutTask
+ */
+class GitCheckoutTaskTest extends BaseTaskTest {
+
+	/**
+	 * Set up test dependencies
+	 */
+	public function setUp() {
+		parent::setUp();
+
+		$this->application->setOption('repositoryUrl', 'ssh://git.example.com/project/path.git');
+		$this->application->setDeploymentPath('/home/jdoe/app');
+	}
+
+	/**
+	 * @test
+	 */
+	public function executeWithEmptyOptionsAndValidSha1FetchesResetsAndCopiesRepository() {
+		$options = array();
+		$this->responses = array(
+			'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+		);
+		$this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+		$this->assertCommandExecuted('git fetch -q origin');
+		$this->assertCommandExecuted('git reset -q --hard d5b7769852a5faa69574fcd3db0799f4ffbd9eec');
+		$this->assertCommandExecuted('cp -RPp /home/jdoe/app/cache/localgitclone/. /home/jdoe/app/releases/');
+	}
+
+	/**
+	 * @test
+	 * @expectedException \TYPO3\Surf\Exception\TaskExecutionException
+	 */
+	public function executeWithEmptyOptionsAndInvalidSha1ThrowsException() {
+		$options = array();
+		$this->responses = array(
+			'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'foo-bar d5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+		);
+
+		try {
+			$this->task->execute($this->node, $this->application, $this->deployment, $options);
+		} catch(\TYPO3\Surf\Exception\TaskExecutionException $exception) {
+			$this->assertEquals(1335974926, $exception->getCode());
+			throw $exception;
+		}
+	}
+
+}
+?>

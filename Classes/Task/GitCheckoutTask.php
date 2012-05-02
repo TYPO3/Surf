@@ -34,6 +34,10 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		if (!$application->hasOption('repositoryUrl')) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', array($application->getName())), 1335974764);
+		}
+
 		$repositoryUrl = $application->getOption('repositoryUrl');
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$deploymentPath = $application->getDeploymentPath();
@@ -41,26 +45,26 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 		if (isset($options['sha1'])) {
 			$sha1 = $options['sha1'];
 			if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
-				throw new \Exception('The given sha1  "' . $options['sha1'] . '" is invalid');
+				throw new \TYPO3\Surf\Exception\TaskExecutionException('The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
 			}
 		} else {
 			if (isset($options['tag'])) {
 				$sha1 = $this->shell->execute("git ls-remote $repositoryUrl refs/tags/{$options['tag']} | awk '{print $1 }'", $node, $deployment, TRUE);
 				if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
-					throw new \Exception('Could not retrieve sha1 of git tag "' . $options['tag'] . '"');
+					throw new \TYPO3\Surf\Exception\TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
 				}
 			} else {
 				if (!isset($options['branch'])) {
 					$options['branch'] = 'master';
 				}
 				$sha1 = $this->shell->execute("git ls-remote $repositoryUrl refs/heads/{$options['branch']} | awk '{print $1 }'", $node, $deployment, TRUE);
-				if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
-					throw new \Exception('Could not retrieve sha1 of git branch "' . $options['branch'] . '"');
+				if (preg_match('/^[a-z0-9]{40}$/', $sha1) === 0) {
+					throw new \TYPO3\Surf\Exception\TaskExecutionException('Could not retrieve sha1 of git branch "' . $options['branch'] . '"', 1335974926);
 				}
 			}
 		}
 
-		$quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : ' -q';
+		$quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
 		$command = strtr("
 			if [ -d $deploymentPath/cache/localgitclone ];
 				then
@@ -72,13 +76,14 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 					&& git submodule $quietFlag sync
 					&& git submodule $quietFlag update --recursive
 					&& git clean $quietFlag -d -x -ff;
-				else git clone $quietFlag $repositoryUrl $deploymentPath/cache/localgitclone
+				else
+					git clone $quietFlag $repositoryUrl $deploymentPath/cache/localgitclone
 					&& cd $deploymentPath/cache/localgitclone
 					&& git checkout $quietFlag -b deploy $sha1
 					&& git submodule $quietFlag init
 					&& git submodule $quietFlag sync
 					&& git submodule $quietFlag update --recursive;
-				fi
+			fi
 		", "\t\n", "  ");
 
 		$this->shell->executeOrSimulate($command, $node, $deployment);

@@ -146,7 +146,7 @@ class ShellCommandService {
 			$returnedOutput .= $line;
 		}
 		$exitCode = pclose($fp);
-		return array($exitCode, $returnedOutput);
+		return array($exitCode, trim($returnedOutput));
 	}
 
 	/**
