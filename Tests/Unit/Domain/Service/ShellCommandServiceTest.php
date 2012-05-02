@@ -23,14 +23,28 @@ class ShellCommandServiceTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @dataProvider commandOptionDataProvider
 	 * @param string $expectedCommandArguments
 	 * @param string $username
-	 * @param int $port
+	 * @param string $password
+	 * @param integer $port
 	 */
-	public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = NULL, $port = NULL) {
+	public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = NULL, $password = NULL, $port = NULL) {
+		$service = $this->getAccessibleMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
+
 		$node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
 		$node->setHostname('remote-host.example.com');
 		if ($username !== NULL) {
 			$node->setOption('username', $username);
 		}
+
+		if ($password !== NULL) {
+			$node->setOption('password', $password);
+
+			$mockSurfPackage = $this->getMock('TYPO3\FLOW3\Package\PackageInterface');
+			$mockSurfPackage->expects($this->once())->method('getResourcesPath')->will($this->returnValue('/your/path/to /TYPO3.Surf'));
+			$mockPackageManager = $this->getMock('TYPO3\FLOW3\Package\PackageManagerInterface');
+			$mockPackageManager->expects($this->once())->method('getPackage')->with('TYPO3.Surf')->will($this->returnValue($mockSurfPackage));
+			$service->_set('packageManager', $mockPackageManager);
+		}
+
 		if ($port !== NULL) {
 			$node->setOption('port', $port);
 		}
@@ -38,8 +52,7 @@ class ShellCommandServiceTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$mockLogger = $this->getMock('TYPO3\FLOW3\Log\LoggerInterface');
 		$deployment->setLogger($mockLogger);
 
-		$service = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
-		$expectedCommand = 'ssh -A ' . $expectedCommandArguments .  ' \'echo "Hello World"\' 2>&1';
+		$expectedCommand = $expectedCommandArguments .  ' \'echo "Hello World"\' 2>&1';
 		$service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue(array(0, 'Hello World')));
 
 		$service->executeOrSimulate('echo "Hello World"', $node, $deployment);
@@ -53,19 +66,29 @@ class ShellCommandServiceTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function commandOptionDataProvider() {
 		return array(
 			array(
-				'\'remote-host.example.com\'',
+				'ssh -A \'remote-host.example.com\'',
+				NULL,
 				NULL,
 				NULL
 			),
 			array(
-				'\'jdoe@remote-host.example.com\'',
+				'ssh -A \'jdoe@remote-host.example.com\'',
 				'jdoe',
+				NULL,
 				NULL
 			),
 			array(
-				'-p \'12345\' \'jdoe@remote-host.example.com\'',
+				'ssh -A -p \'12345\' \'jdoe@remote-host.example.com\'',
 				'jdoe',
+				NULL,
 				12345
+			),
+
+			array(
+				'expect \'/your/path/to /TYPO3.Surf/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',
+				'jdoe',
+				'myPassword',
+				NULL
 			),
 		);
 	}

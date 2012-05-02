@@ -67,6 +67,22 @@ Each application resembles a repository with code. So a more complex deployment 
 and release an extension for a TYPO3 website. Also different roles can be expressed using applications, since every task
 can be registered to run for all or a specific application instance.
 
+SSH Authentication Types
+------------------------
+
+The preferred way of connecting to the remote host is via SSH Public-Key authentication.
+That's why in the example above, only the username and hostname are set.
+
+However, due to constraints in the infrastructure setup, sometimes, deployment
+scenarios do not work with public key authentication. Surf also supports
+password-based SSH authentication. For that, you need to specify the password
+as follows::
+
+	$node->setOption('password', 'yourSshPasswordHere');
+
+Authentication with passwords needs the ``expect`` unix tool which is installed
+by default in most Linux distributions.
+
 Test a deployment
 -----------------
 

@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Deployment;
 
@@ -14,6 +15,12 @@ use TYPO3\Surf\Domain\Model\Deployment;
  *
  */
 class ShellCommandService {
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\Package\PackageManagerInterface
+	 */
+	protected $packageManager;
 
 	/**
 	 * Execute a shell command (locally or remote depending on the node hostname)
@@ -123,7 +130,19 @@ class ShellCommandService {
 		if ($node->hasOption('port')) {
 			$sshOptions[] = '-p ' . escapeshellarg($node->getOption('port'));
 		}
-		return $this->executeProcess($deployment, 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command) . ' 2>&1', $logOutput, '    > ');
+		if ($node->hasOption('password')) {
+			$sshOptions[] = '-o PubkeyAuthentication=no';
+		}
+
+		$sshCommand = 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command) . ' 2>&1';
+
+		if ($node->hasOption('password')) {
+			$surfPackage = $this->packageManager->getPackage('TYPO3.Surf');
+			$passwordSshLoginScriptPathAndFilename = \TYPO3\FLOW3\Utility\Files::concatenatePaths(array($surfPackage->getResourcesPath(), 'Private/Scripts/PasswordSshLogin.expect'));
+			$sshCommand = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $sshCommand);
+		}
+
+		return $this->executeProcess($deployment, $sshCommand, $logOutput, '    > ');
 	}
 
 	/**
