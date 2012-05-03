@@ -14,7 +14,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
 /**
  * Base unit test for tasks
  */
-class BaseTaskTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+abstract class BaseTaskTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	/**
 	 * Executed commands
