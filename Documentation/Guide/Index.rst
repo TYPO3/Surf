@@ -80,6 +80,24 @@ as follows::
 Authentication with passwords needs the ``expect`` unix tool which is installed
 by default in most Linux distributions.
 
+Custom Connection
+-----------------
+
+In case you need to connect to the remote host via more esoteric protocols, you can
+also implement your own remote host connection: In this case, set the option
+``remoteCommandExutionHandler`` on the node::
+
+	<?php
+	$node->setOption('remoteCommandExutionHandler', function(\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput = TRUE) {
+		// Now, do what you need to do in order to connect to $node and execute $command.
+		// You can call $shellCommandService->executeProcess() here.
+
+		// This function should return a two-element array where the first array element
+		// is an integer containing the Exit Code, and the second array element is a
+		// string with the full, trimmed, output.
+	});
+	?>
+
 Test a deployment
 -----------------
 

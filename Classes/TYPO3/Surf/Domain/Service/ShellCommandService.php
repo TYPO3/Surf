@@ -121,6 +121,12 @@ class ShellCommandService {
 	protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = TRUE) {
 		$command = $this->prepareCommand($command);
 		$deployment->getLogger()->log('$' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
+
+		if ($node->hasOption('remoteCommandExecutionHandler')) {
+			$remoteCommandExecutionHandler = $node->getOption('remoteCommandExecutionHandler');
+			return $remoteCommandExecutionHandler($this, $command, $node, $deployment, $logOutput);
+		}
+
 		$username = $node->hasOption('username') ? $node->getOption('username') : NULL;
 		if (!empty($username)) {
 			$username = $username . '@';
@@ -157,7 +163,7 @@ class ShellCommandService {
 	 * @param string $logPrefix
 	 * @return array The exit code of the command and the returned output
 	 */
-	protected function executeProcess($deployment, $command, $logOutput, $logPrefix) {
+	public function executeProcess($deployment, $command, $logOutput, $logPrefix) {
 		$returnedOutput = '';
 		$fp = popen($command, 'r');
 		while (($line = fgets($fp)) !== FALSE) {

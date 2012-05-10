@@ -93,5 +93,34 @@ class ShellCommandServiceTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		);
 	}
 
+	/**
+	 * @test
+	 */
+	public function executeRemoteCommandRespectsRemoteCommandExecutionHandler() {
+		$shellCommandService = new \TYPO3\Surf\Domain\Service\ShellCommandService();
+
+		$node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+		$node->setHostname('asdf');
+		$arguments = array();
+
+		$node->setOption('remoteCommandExecutionHandler', function(\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService, $command, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Deployment $deployment, $logOutput) use(&$arguments) {
+			$arguments = func_get_args();
+			return array(0, 'Hello World');
+		});
+
+		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
+		$deployment->setLogger($mockLogger);
+
+		$response = $shellCommandService->execute('foo command', $node, $deployment);
+		$this->assertEquals('Hello World', $response);
+		$this->assertSame(array(
+			$shellCommandService,
+			'foo command',
+			$node,
+			$deployment,
+			TRUE
+		), $arguments);
+	}
 }
 ?>
