@@ -49,9 +49,9 @@ class CreateArchiveTask extends \TYPO3\Surf\Domain\Model\Task {
 		$this->checkOptionsForValidity($options);
 
 		$this->shell->execute('rm -f ' . $options['targetFile'] . '; mkdir -p ' . dirname($options['targetFile']), $node, $deployment);
-		$targetPath = $deployment->getApplicationReleasePath($application);
+		$sourcePath = $deployment->getApplicationReleasePath($application);
 
-		$tarOptions = sprintf(' --transform="s,^./,%s/," ', $options['baseDirectory']);
+		$tarOptions = sprintf(' --transform="s,^%s,%s," ', ltrim($sourcePath, '/'), $options['baseDirectory']);
 		if (isset($options['exclude']) && is_array($options['exclude'])) {
 			foreach ($options['exclude'] as $excludePattern) {
 				$tarOptions .= sprintf(' --exclude="%s" ', $excludePattern);
@@ -59,19 +59,19 @@ class CreateArchiveTask extends \TYPO3\Surf\Domain\Model\Task {
 		}
 
 		if (substr($options['targetFile'], -7) === '.tar.gz') {
-			$tarOptions .= sprintf(' -czf %s --directory %s .', $options['targetFile'], $targetPath);
+			$tarOptions .= sprintf(' -czf %s %s', $options['targetFile'], $sourcePath);
 			$this->shell->execute(sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions), $node, $deployment);
 
 		} elseif (substr($options['targetFile'], -8) === '.tar.bz2') {
 
-			$tarOptions .= sprintf(' -cjf %s --directory %s .', $options['targetFile'], $targetPath);
+			$tarOptions .= sprintf(' -cjf %s %s', $options['targetFile'], $sourcePath);
 			$this->shell->execute(sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions), $node, $deployment);
 
 		} elseif (substr($options['targetFile'], -4) === '.zip') {
 
 			$temporaryDirectory = sys_get_temp_dir() . '/' . uniqid('f3_deploy');
 			$this->shell->execute(sprintf('mkdir -p %s', $temporaryDirectory), $node, $deployment);
-			$tarOptions .= sprintf(' -cf %s/out.tar --directory %s . ', $temporaryDirectory, $targetPath, $options['baseDirectory']);
+			$tarOptions .= sprintf(' -cf %s/out.tar %s', $temporaryDirectory, $sourcePath);
 			$this->shell->execute(sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions), $node, $deployment);
 			$this->shell->execute(sprintf('cd %s; tar -xf out.tar; rm out.tar; zip --quiet -9 -r out %s', $temporaryDirectory, $options['baseDirectory']), $node, $deployment);
 			$this->shell->execute(sprintf('mv %s/out.zip %s; rm -Rf %s', $temporaryDirectory, $options['targetFile'], $temporaryDirectory), $node, $deployment);
