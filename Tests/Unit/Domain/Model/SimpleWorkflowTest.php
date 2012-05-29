@@ -205,7 +205,7 @@ class SimpleWorkflowTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 		$workflow->run($deployment);
 
-		$this->assertEquals($expectedExecutions, $executedTasks);
+		$this->assertEquals($expectedExecutions, $executedTasks, $message);
 	}
 
 	/**
@@ -313,7 +313,7 @@ class SimpleWorkflowTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 		$workflow->run($deployment);
 
-		$this->assertEquals($expectedExecutions, $executedTasks);
+		$this->assertEquals($expectedExecutions, $executedTasks, $message);
 	}
 
 	/**

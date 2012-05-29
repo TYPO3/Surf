@@ -36,6 +36,7 @@ class ShellTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$deploymentPath = $application->getDeploymentPath();

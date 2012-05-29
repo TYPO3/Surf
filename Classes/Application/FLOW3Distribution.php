@@ -77,7 +77,7 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 	 * Check if all necessary options to run are set
 	 *
 	 * @return void
-	 * @throws \Exception
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	protected function checkIfMandatoryOptionsExist() {
 		if (!$this->hasOption('version')) {

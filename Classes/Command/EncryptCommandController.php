@@ -118,7 +118,7 @@ class EncryptCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 * Reads a key pair from a file
 	 *
 	 * @param string $filename
-	 * @return \TYPO3\Deploy\Encryption\KeyPair
+	 * @return \TYPO3\Surf\Encryption\KeyPair
 	 */
 	protected function readKeyPair($filename) {
 		$data = file_get_contents($filename);

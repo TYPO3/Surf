@@ -36,6 +36,7 @@ class TaskManager {
 	 * @param string $stage
 	 * @param array $options
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute($task, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, $stage, array $options = array()) {
 		list($packageKey, $taskName) = explode(':', $task, 2);

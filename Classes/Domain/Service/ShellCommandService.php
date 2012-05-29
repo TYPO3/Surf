@@ -31,6 +31,7 @@ class ShellCommandService {
 	 * @param boolean $ignoreErrors If this command should ignore exit codes unequeal zero
 	 * @param boolean $logOutput TRUE if the output of the command should be logged
 	 * @return mixed The output of the shell command or FALSE if the command returned a non-zero exit code and $ignoreErrors was enabled.
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE, $logOutput = TRUE) {
 		if ($node === NULL || $node->getHostname() === 'localhost') {
@@ -173,6 +174,7 @@ class ShellCommandService {
 	 *
 	 * @param mixed $command
 	 * @return string
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	protected function prepareCommand($command) {
 		if (is_string($command)) {

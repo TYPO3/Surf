@@ -95,6 +95,8 @@ class Deployment {
 	 * callbacks given to the deployment with onInitialize(...).
 	 *
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function initialize() {
 		if ($this->initialized) {

@@ -61,8 +61,10 @@ class SourceforgeUploadTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * Check if all required options are given
 	 *
 	 * @param array $options
+	 * @return void
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
-	protected function checkOptionsForValidity($options) {
+	protected function checkOptionsForValidity(array $options) {
 		if (!isset($options['sourceforgeProjectName'])) {
 			throw new InvalidConfigurationException('"sourceforgeProjectName" option not set', 1314170122);
 		}

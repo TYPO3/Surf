@@ -43,6 +43,7 @@ class CreateArchiveTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$this->checkOptionsForValidity($options);
@@ -80,7 +81,12 @@ class CreateArchiveTask extends \TYPO3\Surf\Domain\Model\Task {
 		}
 	}
 
-	protected function checkOptionsForValidity($options) {
+	/**
+	 * @param array $options
+	 * @return void
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+	 */
+	protected function checkOptionsForValidity(array $options) {
 		if (!isset($options['sourceDirectory']) || !is_dir($options['sourceDirectory'])) {
 			throw new InvalidConfigurationException('sourceDirectory not configured', 1314187354);
 		}

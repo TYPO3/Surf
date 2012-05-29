@@ -120,8 +120,8 @@ class Application {
 	}
 
 	/**
-	 *
 	 * @return string
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function getDeploymentPath() {
 		if ($this->deploymentPath === NULL) {

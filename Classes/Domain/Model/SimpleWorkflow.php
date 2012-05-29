@@ -52,6 +52,7 @@ class SimpleWorkflow extends Workflow {
 	 *
 	 * @param Deployment $deployment
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function run(Deployment $deployment) {
 		parent::run($deployment);

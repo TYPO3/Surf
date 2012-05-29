@@ -96,7 +96,7 @@ abstract class BaseTaskTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * The substring will be matched against all executed commands
 	 * (called with execute or executeOrSimulate).
 	 *
-	 * @param $commandSubstring A command substring that was expected to be executed
+	 * @param string $commandSubstring A command substring that was expected to be executed
 	 * @return void
 	 */
 	protected function assertCommandExecuted($commandSubstring) {

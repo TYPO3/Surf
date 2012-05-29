@@ -31,6 +31,7 @@ abstract class Workflow {
 	 *
 	 * @param Deployment $deployment
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception
 	 */
 	public function run(Deployment $deployment) {
 		if (!$deployment->isInitialized()) {
@@ -209,6 +210,7 @@ abstract class Workflow {
 	 * @param string $stage
 	 * @param array $callstack
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	protected function executeTask($task, Node $node, Application $application, Deployment $deployment, $stage, array &$callstack = array()) {
 		foreach (array('_', $application->getName()) as $applicationName) {

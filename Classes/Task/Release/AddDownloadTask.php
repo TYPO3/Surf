@@ -68,8 +68,10 @@ class AddDownloadTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * Check if all required options are given
 	 *
 	 * @param array $options
+	 * @return void
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
-	protected function checkOptionsForValidity($options) {
+	protected function checkOptionsForValidity(array $options) {
 		foreach (array('releaseHost', 'releaseHostSitePath', 'version', 'label', 'downloadUriPattern', 'productName', 'files') as $optionName) {
 			if (!isset($options[$optionName])) {
 				throw new \TYPO3\Surf\Exception\InvalidConfigurationException('"' . $optionName . '" option not set', 1321549657);

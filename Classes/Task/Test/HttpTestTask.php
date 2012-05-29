@@ -35,6 +35,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		if (!isset($options['url'])) {
@@ -74,6 +75,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param array $options
 	 * @param array $result
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	protected function assertExpectedStatus(array $options, array $result) {
 		if (!isset($options['expectedStatus'])) return;
@@ -87,6 +89,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param array $options
 	 * @param array $result
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	protected function assertExpectedHeaders(array $options, array $result) {
 		if (!isset($options['expectedHeaders'])) return;
@@ -124,6 +127,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param array $options
 	 * @param array $result
 	 * @return void
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	protected function assertExpectedRegexp(array $options, array $result) {
 		if (!isset($options['expectedRegexp']))	return;
@@ -155,8 +159,6 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 		if (!$headerValue || strlen(trim($headerValue)) === 0) {
 			return FALSE;
 		}
-
-		$result = TRUE;
 
 			// = Value equals
 		if (strpos($expectedValue, '=') === 0) {
@@ -192,7 +194,6 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	}
 
 	/**
-	 *
 	 * @param string $url Request URL
 	 * @param integer $timeout Request HTTP timeout, defaults to 0 (no timeout)
 	 * @param integer $port Request HTTP port
@@ -203,6 +204,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param string $proxy
 	 * @param integer $proxyPort
 	 * @return array time in seconds and status information im associative arrays
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	protected function executeLocalCurlRequest($url, $timeout = NULL, $port = NULL, $method = 'GET', $username = NULL, $password = NULL, $data = '', $proxy = NULL, $proxyPort = NULL) {
 		$curl = curl_init();
