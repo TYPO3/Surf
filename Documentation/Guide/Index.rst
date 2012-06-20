@@ -5,11 +5,11 @@ Surf - FLOW3 deployment
 Description
 ===========
 
-The deploy package is a complete automated deployment tool powered by FLOW3. It's best used bot not limited to deploy
+The Surf package is a complete automated deployment tool powered by FLOW3. It's best used but not limited to deploy
 FLOW3 applications. It might be included in your FLOW3 application but can also be run standalone. It's inspired by some
 features of Capistrano (thanks) concerning the Git workflow.
 
-Some of the features of the deploy package:
+Some of the features of the Surf package:
 
 * Remote checkout of Git repositories with submodules (sorry, no SVN yet)
 * Flexible, declarative configuration of deployments
