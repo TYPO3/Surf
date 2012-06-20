@@ -68,6 +68,9 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 		}
 		if ($this->hasOption('createTags') && $this->getOption('createTags') === TRUE) {
 			$workflow->addTask('typo3.surf:git:tag', 'cleanup', $this);
+			if ($this->hasOption('pushTags') && $this->getOption('pushTags') === TRUE) {
+				$workflow->afterTask('typo3.surf:git:tag', 'pushTags', $this);
+			}
 		}
 
 		$workflow->removeTask('typo3.surf:flow3:migrate');
@@ -217,6 +220,11 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 			'description' => 'Tag distribution with tag ' . $this->configuration['versionAndProjectName'],
 			'recurseIntoSubmodules' => TRUE
 		));
+
+		$workflow->defineTask('pushTags', 'typo3.surf:git:push', array(
+			'remote' => 'origin',
+			'refspec' => $this->configuration['versionAndProjectName'] . ':refs/tags/' . $this->configuration['versionAndProjectName'],
+			'recurseIntoSubmodules' => TRUE
 		));
 	}
 }
