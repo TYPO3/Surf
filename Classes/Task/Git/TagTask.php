@@ -31,6 +31,7 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * Options:
 	 *   tagName: The tag name to use
 	 *   description: The description for the tag
+	 *   recurseIntoSubmodules: If true, tag submodules as well (optional)
 	 *   submoduleTagNamePrefix: Prefix for the submodule tags (optional)
 	 *
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
@@ -55,7 +56,9 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git tag -f -a -m "%s" %s', $options['description'], $options['tagName']), $node, $deployment);
-		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git tag -f -a -m "%s" %s\'', $options['description'], $options['submoduleTagNamePrefix'] . $options['tagName']), $node, $deployment);
+		if (isset($options['recurseIntoSubmodules']) && isset($options['recurseIntoSubmodules']) === TRUE) {
+			$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git tag -f -a -m "%s" %s\'', $options['description'], $options['submoduleTagNamePrefix'] . $options['tagName']), $node, $deployment);
+		}
 	}
 
 	/**

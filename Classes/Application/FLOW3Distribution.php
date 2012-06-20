@@ -214,7 +214,9 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 
 		$workflow->defineTask('typo3.surf:git:tag', 'typo3.surf:git:tag', array(
 			'tagName' => $this->configuration['versionAndProjectName'],
-			'description' => 'Tag distribution with tag ' . $this->configuration['versionAndProjectName']
+			'description' => 'Tag distribution with tag ' . $this->configuration['versionAndProjectName'],
+			'recurseIntoSubmodules' => TRUE
+		));
 		));
 	}
 }
