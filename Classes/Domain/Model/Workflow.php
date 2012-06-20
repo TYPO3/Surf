@@ -81,7 +81,7 @@ abstract class Workflow {
 	/**
 	 *
 	 * @param string $stage
-	 * @param mixed $tasks
+	 * @param string|array $tasks
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	public function forStage($stage, $tasks) {
@@ -94,7 +94,7 @@ abstract class Workflow {
 	 * The tasks will be executed for the given stage. If an application is given,
 	 * the tasks will be executed only for the stage and application.
 	 *
-	 * @param mixed $tasks
+	 * @param string|array $tasks
 	 * @param string $stage The name of the stage when this task shall be executed
 	 * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
@@ -119,7 +119,7 @@ abstract class Workflow {
 	 * The execution will not depend on a stage but on an optional application.
 	 *
 	 * @param string $task
-	 * @param mixed $tasks
+	 * @param string|array $tasks
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
@@ -143,7 +143,7 @@ abstract class Workflow {
 	 * The execution will not depend on a stage but on an optional application.
 	 *
 	 * @param string $task
-	 * @param mixed $tasks
+	 * @param string|array $tasks
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */

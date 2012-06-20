@@ -28,6 +28,11 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 	/**
 	 * Execute this task
 	 *
+	 * Options:
+	 *   tagName: The tag name to use
+	 *   description: The description for the tag
+	 *   submoduleTagNamePrefix: Prefix for the submodule tags (optional)
+	 *
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment

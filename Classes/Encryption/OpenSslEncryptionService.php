@@ -55,6 +55,7 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 * @param string $oldPassphrase
 	 * @param string $newPassphrase
 	 * @return \TYPO3\Surf\Encryption\KeyPair
+	 * @throws \InvalidArgumentException
 	 */
 	public function changePassphrase($keyPair, $oldPassphrase, $newPassphrase) {
 		if (empty($newPassphrase)) {
@@ -83,6 +84,7 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 * @param string $data
 	 * @param string $privateKey
 	 * @return string
+	 * @throws \InvalidArgumentException
 	 */
 	public function decryptData($data, $privateKey) {
 		if (!is_string($privateKey)) throw new \InvalidArgumentException('Private key should be given as string', 1300211696);
@@ -101,6 +103,7 @@ class OpenSslEncryptionService implements EncryptionServiceInterface {
 	 * @param string $passphrase Passphrase for opening the key pair
 	 * @param string $exportPassphrase Passphrase for the exported key pair (NULL for unencrypted private key)
 	 * @return \TYPO3\Surf\Encryption\KeyPair
+	 * @throws \InvalidArgumentException
 	 */
 	protected function exportKeyPair($keyPair, $passphrase, $exportPassphrase = NULL) {
 		$privateKey = NULL;
