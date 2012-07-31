@@ -46,7 +46,7 @@ class AddDownloadTask extends \TYPO3\Surf\Domain\Model\Task {
 
 		$downloads = array();
 		foreach ($files as $file) {
-			$downloads[] = sprintf('%s,%s,%s', basename($file), sha1($file), sprintf($uriPattern, basename($file)));
+			$downloads[] = sprintf('"%s,%s,%s"', basename($file), sha1($file), sprintf($uriPattern, basename($file)));
 		}
 		$this->shell->executeOrSimulate(sprintf('ssh %s%s "cd \"%s\" ; ./flow3 release:adddownload --product-name \"%s\" --version \"%s\" --label \"%s\" %s"', ($login ? $login . '@' : ''), $host, $sitePath, $productName, $version, $label, implode(' ', $downloads)), $node, $deployment);
 	}
