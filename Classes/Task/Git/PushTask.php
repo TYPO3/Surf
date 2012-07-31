@@ -52,7 +52,7 @@ class PushTask extends \TYPO3\Surf\Domain\Model\Task {
 		$targetPath = $deployment->getApplicationReleasePath($application);
 
 		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git push -f %s %s', $options['remote'], $options['refspec']), $node, $deployment);
-		if (isset($options['recurseIntoSubmodules']) && isset($options['recurseIntoSubmodules']) === TRUE) {
+		if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === TRUE) {
 			$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git push -f %s %s\'', $options['remote'], $options['refspec']), $node, $deployment);
 		}
 	}

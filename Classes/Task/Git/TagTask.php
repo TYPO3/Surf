@@ -56,7 +56,7 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git tag -f -a -m "%s" %s', $options['description'], $options['tagName']), $node, $deployment);
-		if (isset($options['recurseIntoSubmodules']) && isset($options['recurseIntoSubmodules']) === TRUE) {
+		if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === TRUE) {
 			$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git tag -f -a -m "%s" %s\'', $options['description'], $options['submoduleTagNamePrefix'] . $options['tagName']), $node, $deployment);
 		}
 	}
