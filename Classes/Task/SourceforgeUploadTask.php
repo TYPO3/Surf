@@ -40,8 +40,10 @@ class SourceforgeUploadTask extends \TYPO3\Surf\Domain\Model\Task {
 
 		$sourceforgeLogin = $options['sourceforgeUserName'] . ',' . $options['sourceforgeProjectName'];
 
-		$projectDirectory = sprintf('/home/frs/project/%s/%s/%s/%s/%s', substr($projectName, 0, 1), substr($projectName, 0, 2), $projectName, $options['sourceforgePackageName'], $options['version']);
-		$this->shell->executeOrSimulate('rsync -e ssh ' . implode(' ', $options['files']) . ' ' . $sourceforgeLogin . '@frs.sourceforge.net:' . $projectDirectory, $node, $deployment);
+		$projectDirectory = str_replace(' ', '\ ', sprintf('/home/frs/project/%s/%s/%s/%s/%s', substr($projectName, 0, 1), substr($projectName, 0, 2), $projectName, $options['sourceforgePackageName'], $options['version']));
+		$targetHostAndDirectory = escapeshellarg($sourceforgeLogin . '@frs.sourceforge.net:' . $projectDirectory);
+
+		$this->shell->executeOrSimulate('rsync -e ssh ' . implode(' ', $options['files']) . ' ' . $targetHostAndDirectory, $node, $deployment);
 	}
 
 	/**
