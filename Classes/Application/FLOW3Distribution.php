@@ -26,6 +26,7 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 	 */
 	public function __construct() {
 		parent::__construct('FLOW3 Distribution');
+		$this->setOption('tagRecurseIntoSubmodules', TRUE);
 	}
 
 	/**
@@ -218,13 +219,13 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 		$workflow->defineTask('typo3.surf:git:tag', 'typo3.surf:git:tag', array(
 			'tagName' => $this->configuration['versionAndProjectName'],
 			'description' => 'Tag distribution with tag ' . $this->configuration['versionAndProjectName'],
-			'recurseIntoSubmodules' => TRUE
+			'recurseIntoSubmodules' => $this->getOption('tagRecurseIntoSubmodules')
 		));
 
 		$workflow->defineTask('pushTags', 'typo3.surf:git:push', array(
 			'remote' => 'origin',
 			'refspec' => $this->configuration['versionAndProjectName'] . ':refs/tags/' . $this->configuration['versionAndProjectName'],
-			'recurseIntoSubmodules' => TRUE
+			'recurseIntoSubmodules' => $this->getOption('tagRecurseIntoSubmodules')
 		));
 	}
 }
