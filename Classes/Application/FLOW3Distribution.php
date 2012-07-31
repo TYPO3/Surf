@@ -124,7 +124,7 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 	 * @return void
 	 */
 	protected function buildConfiguration() {
-		$versionAndProjectName = sprintf('%s-%s', $this->getOption('projectName'), $this->getOption('version'));
+		$versionAndProjectName = sprintf('%s-%s', str_replace(' ', '_', $this->getOption('projectName')), $this->getOption('version'));
 		$this->configuration['versionAndProjectName'] = $versionAndProjectName;
 
 		$this->configuration['zipFile'] = $this->getDeploymentPath() . '/buildArtifacts/' . $versionAndProjectName . '.zip';
