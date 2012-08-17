@@ -13,15 +13,15 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * Task for purging in Varnish, should be used for Varnish 2.x
+ * Task for banning in Varnish, should be used for Varnish 3.x
  *
  * It takes the following options:
  *
  * * secretFile - path to the secret file, defaults to "/etc/varnish/secret"
- * * purgeUrl - URL (pattern) to purge, defaults to "."
+ * * banUrl - URL (pattern) to ban, defaults to ".*"
  * * varnishadm - path to the varnishadm utility, defaults to "/usr/bin/varnishadm"
  */
-class VarnishPurgeTask extends \TYPO3\Surf\Domain\Model\Task {
+class VarnishBanTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
 	 * @FLOW3\Inject
@@ -40,10 +40,10 @@ class VarnishPurgeTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$secretFile = (isset($options['secretFile']) ? $options['secretFile'] : '/etc/varnish/secret');
-		$purgeUrl = (isset($options['purgeUrl']) ? $options['purgeUrl'] : '.');
+		$banUrl = (isset($options['banUrl']) ? $options['banUrl'] : '.*');
 		$varnishadm = (isset($options['varnishadm']) ? $options['varnishadm'] : '/usr/bin/varnishadm');
 
-		$this->shell->executeOrSimulate($varnishadm . ' -S ' . $secretFile . ' -T 127.0.0.1:6082 url.purge ' . $purgeUrl, $node, $deployment);
+		$this->shell->executeOrSimulate($varnishadm . ' -S ' . $secretFile . ' -T 127.0.0.1:6082 ban.url ' . escapeshellarg($banUrl), $node, $deployment);
 	}
 
 	/**
