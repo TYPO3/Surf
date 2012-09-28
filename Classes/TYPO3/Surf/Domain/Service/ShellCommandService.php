@@ -120,7 +120,7 @@ class ShellCommandService {
 	protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = TRUE) {
 		$command = $this->prepareCommand($command);
 		$deployment->getLogger()->log('    $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
-		$username = $node->getOption('username');
+		$username = $node->hasOption('username') ? $node->getOption('username') : NULL;
 		if (!empty($username)) {
 			$username = $username . '@';
 		}

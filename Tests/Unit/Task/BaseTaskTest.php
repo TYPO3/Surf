@@ -80,7 +80,7 @@ abstract class BaseTaskTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			}
 		}));
 
-		$this->task = new \TYPO3\Surf\Task\GitCheckoutTask();
+		$this->task = $this->createTask();
 		$this->inject($this->task, 'shell', $shellComandService);
 
 		$this->node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
@@ -107,6 +107,11 @@ abstract class BaseTaskTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		}
 		$this->fail('Failed asserting that command "' . $commandSubstring . '" was executed.');
 	}
+
+	/**
+	 * @return \TYPO3\Surf\Domain\Model\Task
+	 */
+	protected abstract function createTask();
 
 }
 ?>

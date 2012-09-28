@@ -37,9 +37,13 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		if (!isset($options['username'])) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "username" option for node "%s"', array($node->getName())), 1348844231);
+		}
+
 		$targetReleasePath = $deployment->getApplicationReleasePath($application);
 
-		$username = $node->getOption('username');
+		$username = $options['username'];
 		$hostname = $node->getHostname();
 
 		$configurationPath = $this->getDeploymentConfigurationPath() . '/' . $deployment->getName() . '/Configuration/';

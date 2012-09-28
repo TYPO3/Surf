@@ -38,12 +38,16 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application {
 	 * @return void
 	 */
 	public function registerTasks(Workflow $workflow, Deployment $deployment) {
-		$workflow
-			->defineTask('typo3.surf:gitcheckout', 'typo3.surf:gitcheckout', array(
-				'sha1' => $this->hasOption('git-checkout-sha1') ? $this->getOption('git-checkout-sha1') : NULL,
-				'tag' => $this->hasOption('git-checkout-tag') ? $this->getOption('git-checkout-tag') : NULL,
-				'branch' => $this->hasOption('git-checkout-branch') ? $this->getOption('git-checkout-branch') : NULL
-			));
+			// Forward deprecated options for backwards compatibility
+		if ($this->hasOption('git-checkout-sha1')) {
+			$this->setOption('typo3.surf:gitcheckout[sha1]', $this->getOption('git-checkout-sha1'));
+		}
+		if ($this->hasOption('git-checkout-tag')) {
+			$this->setOption('typo3.surf:gitcheckout[tag]', $this->getOption('git-checkout-tag'));
+		}
+		if ($this->hasOption('git-checkout-branch')) {
+			$this->setOption('typo3.surf:gitcheckout[branch]', $this->getOption('git-checkout-branch'));
+		}
 
 		$workflow
 			->addTask('typo3.surf:createdirectories', 'initialize', $this)

@@ -78,6 +78,12 @@ class Deployment {
 	protected $initialized = FALSE;
 
 	/**
+	 * The options
+	 * @var array
+	 */
+	protected $options = array();
+
+	/**
 	 * Constructor
 	 *
 	 * @param string $name
@@ -170,10 +176,10 @@ class Deployment {
 	}
 
 	/**
-	 * Sets this Deployment's name
+	 * Sets the deployment name
 	 *
-	 * @param string $name The Deployment's name
-	 * @return \TYPO3\Surf\Domain\Model\Deployment
+	 * @param string $name The deployment name
+	 * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
 	 */
 	public function setName($name) {
 		$this->name = $name;
@@ -196,6 +202,8 @@ class Deployment {
 	}
 
 	/**
+	 * Get all applications for this deployment
+	 *
 	 * @return array
 	 */
 	public function getApplications() {
@@ -203,10 +211,10 @@ class Deployment {
 	}
 
 	/**
-	 * Add an application
+	 * Add an application to this deployment
 	 *
-	 * @param \TYPO3\Surf\Domain\Model\Application $application
-	 * @return \TYPO3\Surf\Domain\Model\Deployment
+	 * @param \TYPO3\Surf\Domain\Model\Application $application The application to add
+	 * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
 	 */
 	public function addApplication(Application $application) {
 		$this->applications[$application->getName()] = $application;
@@ -214,19 +222,19 @@ class Deployment {
 	}
 
 	/**
-	 * Get the Deployment's workflow
+	 * Get the deployment workflow
 	 *
-	 * @return \TYPO3\Surf\Domain\Model\Workflow The Deployment's workflow
+	 * @return \TYPO3\Surf\Domain\Model\Workflow The deployment workflow
 	 */
 	public function getWorkflow() {
 		return $this->workflow;
 	}
 
 	/**
-	 * Sets this Deployment's workflow
+	 * Sets the deployment workflow
 	 *
-	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow The Deployment's workflow
-	 * @return \TYPO3\Surf\Domain\Model\Deployment
+	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow The workflow to set
+	 * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
 	 */
 	public function setWorkflow($workflow) {
 		$this->workflow = $workflow;
@@ -252,23 +260,28 @@ class Deployment {
 	}
 
 	/**
+	 * Get the deployment release identifier
 	 *
-	 * @return string
+	 * This gets the current release identifier when running a deployment.
+	 *
+	 * @return string The release identifier
 	 */
 	public function getReleaseIdentifier() {
 		return $this->releaseIdentifier;
 	}
 
 	/**
-	 * @return boolean
+	 * @return boolean TRUE If the deployment is run in "dry run" mode
 	 */
 	public function isDryRun() {
 		return $this->dryRun;
 	}
 
 	/**
+	 * Set the dry run mode for this deployment
+	 *
 	 * @param boolean $dryRun
-	 * @return \TYPO3\Surf\Domain\Model\Deployment
+	 * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
 	 */
 	public function setDryRun($dryRun) {
 		$this->dryRun = $dryRun;
@@ -285,17 +298,74 @@ class Deployment {
 	}
 
 	/**
-	 * @return integer
+	 * Get the current deployment status
+	 *
+	 * @return integer One of the Deployment::STATUS_* constants
 	 */
 	public function getStatus() {
 		return $this->status;
 	}
 
 	/**
-	 * @return boolean
+	 * @return boolean TRUE If the deployment is initialized
 	 */
 	public function isInitialized() {
 		return $this->initialized;
+	}
+
+	/**
+	 * Get all options defined on this application instance
+	 *
+	 * The options will include the deploymentPath and sharedPath for
+	 * unified option handling.
+	 *
+	 * @return array An array of options indexed by option key
+	 */
+	public function getOptions() {
+		return $this->options;
+	}
+
+	/**
+	 * Get an option defined on the deployment
+	 *
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function getOption($key) {
+		return $this->options[$key];
+	}
+
+	/**
+	 * Test if an option was set for this deployment
+	 *
+	 * @param string $key The option key
+	 * @return boolean TRUE If the option was set
+	 */
+	public function hasOption($key) {
+		return array_key_exists($key, $this->options);
+	}
+
+	/**
+	 * Sets all options for the deployment
+	 *
+	 * @param array $options The options to set indexed by option key
+	 * @return \TYPO3\Surf\Domain\Model\Deployment The current instance for chaining
+	 */
+	public function setOptions($options) {
+		$this->options = $options;
+		return $this;
+	}
+
+	/**
+	 * Set an option for the deployment
+	 *
+	 * @param string $key The option key
+	 * @param mixed $value The option value
+	 * @return \TYPO3\Surf\Domain\Model\Deployment The current instance for chaining
+	 */
+	public function setOption($key, $value) {
+		$this->options[$key] = $value;
+		return $this;
 	}
 
 }

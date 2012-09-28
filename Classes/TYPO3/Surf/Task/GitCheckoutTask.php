@@ -37,11 +37,11 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		if (!$application->hasOption('repositoryUrl')) {
+		if (!isset($options['repositoryUrl'])) {
 			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', array($application->getName())), 1335974764);
 		}
 
-		$repositoryUrl = $application->getOption('repositoryUrl');
+		$repositoryUrl = $options['repositoryUrl'];
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$deploymentPath = $application->getDeploymentPath();
 
@@ -98,8 +98,8 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 
 		$this->shell->executeOrSimulate($command, $node, $deployment);
 
-		if ($application->hasOption('gitPostCheckoutCommands')) {
-			$gitPostCheckoutCommands = $application->getOption('gitPostCheckoutCommands');
+		if (isset($options['gitPostCheckoutCommands'])) {
+			$gitPostCheckoutCommands = $options['gitPostCheckoutCommands'];
 			if (is_array($gitPostCheckoutCommands)) {
 				foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
 					foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {

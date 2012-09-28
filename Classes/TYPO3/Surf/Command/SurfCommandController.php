@@ -46,7 +46,7 @@ class SurfCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	/**
 	 * Run a deployment
 	 *
-	 * @param string $deploymentName
+	 * @param string $deploymentName The deployment name
 	 * @return void
 	 */
 	public function deployCommand($deploymentName) {
@@ -94,7 +94,7 @@ class SurfCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	/**
 	 * Simulate a deployment
 	 *
-	 * @param string $deploymentName
+	 * @param string $deploymentName The deployment name
 	 * @return void
 	 */
 	public function simulateCommand($deploymentName) {

@@ -7,6 +7,9 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        */
 
 use TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Surf\Domain\Model\Node;
+use \TYPO3\Surf\Domain\Model\Application;
+use \TYPO3\Surf\Domain\Model\Deployment;
 
 /**
  * A task manager
@@ -29,27 +32,24 @@ class TaskManager {
 	/**
 	 * Execute a task
 	 *
-	 * @param string $task
+	 * @param string $taskName
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param string $stage
-	 * @param array $options
+	 * @param array $options Local task options
 	 * @return void
 	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
-	public function execute($task, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, $stage, array $options = array()) {
-		list($packageKey, $taskName) = explode(':', $task, 2);
-		$taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskName, ':', '\\') . 'Task';
-		$taskObjectName = $this->objectManager->getCaseSensitiveObjectName($taskClassName);
-		if (!$this->objectManager->isRegistered($taskObjectName)) {
-			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Task "' . $task .  '" was not registered ' . $taskClassName, 1335976651);
-		}
-		$task = new $taskObjectName();
+	public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = array()) {
+		$task = $this->createTaskInstance($taskName);
+
+		$globalOptions = $this->overrideOptions($taskName, $deployment, $node, $application, $options);
+
 		if (!$deployment->isDryRun()) {
-			$task->execute($node, $application, $deployment, $options);
+			$task->execute($node, $application, $deployment, $globalOptions);
 		} else {
-			$task->simulate($node, $application, $deployment, $options);
+			$task->simulate($node, $application, $deployment, $globalOptions);
 		}
 		$this->taskHistory[] = array(
 			'task' => $task,
@@ -57,7 +57,7 @@ class TaskManager {
 			'application' => $application,
 			'deployment' => $deployment,
 			'stage' => $stage,
-			'options' => $options
+			'options' => $globalOptions
 		);
 	}
 
@@ -83,6 +83,65 @@ class TaskManager {
 	 */
 	public function reset() {
 		$this->taskHistory = array();
+	}
+
+	/**
+	 * Override options for a task
+	 *
+	 * The order of the options is:
+	 *
+	 *   Deployment, Node, Application, Task
+	 *
+	 * A task option will always override more global options from the
+	 * Deployment, Node or Application.
+	 *
+	 * Global options for a task should be prefixed with the task name to prevent naming
+	 * issues between different tasks. For example passing a special option to the
+	 * GitCheckoutTask could be expressed like 'typo3.surf:gitcheckout[sha1]' => '1234...'.
+	 *
+	 * @param string $taskName
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param array $taskOptions
+	 * @return array
+	 */
+	protected function overrideOptions($taskName, Deployment $deployment, Node $node, Application $application, array $taskOptions) {
+		$globalOptions = array_merge(
+			$deployment->getOptions(),
+			$node->getOptions(),
+			$application->getOptions()
+		);
+		$globalTaskOptions = array();
+		foreach ($globalOptions as $optionKey => $optionValue) {
+			if (strlen($optionKey) > strlen($taskName) && strpos($optionKey, $taskName) === 0 && $optionKey[strlen($taskName)] === '[') {
+				$globalTaskOptions[substr($optionKey, strlen($taskName) + 1, -1)] = $optionValue;
+			}
+		}
+
+		return array_merge(
+			$globalOptions,
+			$globalTaskOptions,
+			$taskOptions
+		);
+	}
+
+	/**
+	 * Create a task instance from the given task name
+	 *
+	 * @param string $taskName
+	 * @return \TYPO3\Surf\Domain\Model\Task
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+	 */
+	protected function createTaskInstance($taskName) {
+		list($packageKey, $taskName) = explode(':', $taskName, 2);
+		$taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskName, ':', '\\') . 'Task';
+		$taskObjectName = $this->objectManager->getCaseSensitiveObjectName($taskClassName);
+		if (!$this->objectManager->isRegistered($taskObjectName)) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Task "' . $taskName . '" was not registered ' . $taskClassName, 1335976651);
+		}
+		$task = new $taskObjectName();
+		return $task;
 	}
 
 }

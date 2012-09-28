@@ -35,11 +35,11 @@ class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		if (!$application->hasOption('sitePackageKey')) {
-			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('"sitePackageKey" option not set', 1312312646);
+		if (!isset($options['sitePackageKey'])) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('"sitePackageKey" option not set for application "%s"', array($application->getName())), 1312312646);
 		}
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$sitePackageKey = $application->getOption('sitePackageKey');
+		$sitePackageKey = $options['sitePackageKey'];
 		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.typo3:site:import --package-key ' . $sitePackageKey, $node, $deployment);
 	}
 

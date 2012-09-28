@@ -32,7 +32,7 @@ class Node {
 	 *
 	 * @var array
 	 */
-	protected $options;
+	protected $options = array();
 
 	/**
 	 * Constructor

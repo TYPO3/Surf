@@ -22,7 +22,6 @@ class GitCheckoutTaskTest extends BaseTaskTest {
 	public function setUp() {
 		parent::setUp();
 
-		$this->application->setOption('repositoryUrl', 'ssh://git.example.com/project/path.git');
 		$this->application->setDeploymentPath('/home/jdoe/app');
 	}
 
@@ -30,7 +29,9 @@ class GitCheckoutTaskTest extends BaseTaskTest {
 	 * @test
 	 */
 	public function executeWithEmptyOptionsAndValidSha1FetchesResetsAndCopiesRepository() {
-		$options = array();
+		$options = array(
+			'repositoryUrl' => 'ssh://git.example.com/project/path.git'
+		);
 		$this->responses = array(
 			'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
 		);
@@ -46,7 +47,9 @@ class GitCheckoutTaskTest extends BaseTaskTest {
 	 * @expectedException \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function executeWithEmptyOptionsAndInvalidSha1ThrowsException() {
-		$options = array();
+		$options = array(
+			'repositoryUrl' => 'ssh://git.example.com/project/path.git'
+		);
 		$this->responses = array(
 			'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'foo-bar d5b7769852a5faa69574fcd3db0799f4ffbd9eec'
 		);
@@ -57,6 +60,13 @@ class GitCheckoutTaskTest extends BaseTaskTest {
 			$this->assertEquals(1335974926, $exception->getCode());
 			throw $exception;
 		}
+	}
+
+	/**
+	 * @return \TYPO3\Surf\Domain\Model\Task
+	 */
+	protected function createTask() {
+		return new \TYPO3\Surf\Task\GitCheckoutTask();
 	}
 
 }

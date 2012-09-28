@@ -43,12 +43,12 @@ class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		if (!$application->hasOption('keepReleases')) {
+		if (!isset($options['keepReleases'])) {
 			$deployment->getLogger()->log(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"', LOG_DEBUG);
 			return;
 		}
 
-		$keepReleases = $application->getOption('keepReleases');
+		$keepReleases = $options['keepReleases'];
 		$releasesPath = $application->getDeploymentPath() . '/releases';
 		$currentReleaseIdentifier = $deployment->getReleaseIdentifier();
 		$previousReleasePath = $application->getDeploymentPath() . '/releases/previous';
