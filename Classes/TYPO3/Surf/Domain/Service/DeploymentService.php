@@ -15,6 +15,20 @@ use TYPO3\Surf\Domain\Model\Deployment;
 class DeploymentService {
 
 	/**
+	 * Get available deployment names
+	 *
+	 * For now it looks up all .php files in the directory FLOW_ROOT/Build/Surf/.
+	 *
+	 * @return array
+	 */
+	public function getDeploymentNames() {
+		$files = glob(FLOW3_PATH_ROOT . 'Build/Surf/*.php');
+		return array_map(function($file) {
+			return substr($file, strlen(FLOW3_PATH_ROOT . 'Build/Surf/'), -4);
+		}, $files);
+	}
+
+	/**
 	 * Get a deployment object by deployment name
 	 *
 	 * Looks up the deployment in directory FLOW_ROOT/Build/Surf/[deploymentName].php

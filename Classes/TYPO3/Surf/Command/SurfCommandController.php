@@ -20,6 +20,30 @@ class SurfCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	protected $deploymentService;
 
 	/**
+	 * List deployments
+	 *
+	 * List available deployments that can be deployed with the surf:deploy command.
+	 *
+	 * @param boolean $quiet If set, only the deployment names will be output, one per line
+	 * @return void
+	 */
+	public function listCommand($quiet = FALSE) {
+		$deploymentNames = $this->deploymentService->getDeploymentNames();
+
+		if (!$quiet) {
+			$this->outputLine('<u>Deployments</u>:' . PHP_EOL);
+		}
+
+		foreach ($deploymentNames as $deploymentName) {
+			$line = $deploymentName;
+			if (!$quiet) {
+				$line = '  ' . $line;
+			}
+			$this->outputLine($line);
+		}
+	}
+
+	/**
 	 * Run a deployment
 	 *
 	 * @param string $deploymentName
