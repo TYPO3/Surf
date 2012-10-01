@@ -40,6 +40,7 @@ class ShellCommandService {
 			list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment, $logOutput);
 		}
 		if ($ignoreErrors !== TRUE && $exitCode !== 0) {
+			$deployment->getLogger()->log(rtrim($returnedOutput), LOG_WARNING);
 			throw new \TYPO3\Surf\Exception\TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
 		}
 		return ($exitCode === 0 ? $returnedOutput : FALSE);
@@ -92,13 +93,13 @@ class ShellCommandService {
 	 */
 	protected function executeLocalCommand($command, Deployment $deployment, $logOutput = TRUE) {
 		$command = $this->prepareCommand($command);
-		$deployment->getLogger()->log('    (localhost): "' . $command . '"', LOG_DEBUG);
+		$deployment->getLogger()->log('(localhost): "' . $command . '"', LOG_DEBUG);
 		$returnedOutput = '';
 
 		$fp = popen($command, 'r');
 		while (($line = fgets($fp)) !== FALSE) {
 			if ($logOutput) {
-				$deployment->getLogger()->log('> ' . $line);
+				$deployment->getLogger()->log('> ' . rtrim($line), LOG_DEBUG);
 			}
 			$returnedOutput .= $line;
 		}
@@ -119,7 +120,7 @@ class ShellCommandService {
 	 */
 	protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = TRUE) {
 		$command = $this->prepareCommand($command);
-		$deployment->getLogger()->log('    $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
+		$deployment->getLogger()->log('$' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
 		$username = $node->hasOption('username') ? $node->getOption('username') : NULL;
 		if (!empty($username)) {
 			$username = $username . '@';
@@ -161,7 +162,7 @@ class ShellCommandService {
 		$fp = popen($command, 'r');
 		while (($line = fgets($fp)) !== FALSE) {
 			if ($logOutput) {
-				$deployment->getLogger()->log($logPrefix . rtrim($line));
+				$deployment->getLogger()->log($logPrefix . rtrim($line), LOG_DEBUG);
 			}
 			$returnedOutput .= $line;
 		}

@@ -47,20 +47,48 @@ class SurfCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 * Run a deployment
 	 *
 	 * @param string $deploymentName The deployment name
+	 * @param boolean $verbose In verbose mode, the log output of the default logger will contain debug messages
+	 * @param boolean $disableAnsi Disable ANSI formatting of output
 	 * @return void
 	 */
-	public function deployCommand($deploymentName) {
-		$logger = new \TYPO3\FLOW3\Log\Logger();
-		$console = new \TYPO3\FLOW3\Log\Backend\ConsoleBackend(array('severityThreshold' => LOG_DEBUG));
-		$console->open();
-		$logger->setBackend($console);
-
+	public function deployCommand($deploymentName, $verbose = FALSE, $disableAnsi = FALSE) {
 		$deployment = $this->deploymentService->getDeployment($deploymentName);
-		$deployment->setLogger($logger);
+		if ($deployment->getLogger() === NULL) {
+			$logger = $this->createDefaultLogger($deploymentName, $verbose ? LOG_DEBUG : LOG_INFO, $disableAnsi);
+			$deployment->setLogger($logger);
+		}
 		$deployment->initialize();
 
 		$deployment->deploy();
 		$this->response->setExitCode($deployment->getStatus());
+	}
+
+	/**
+	 * Create a default logger with console and file backend
+	 *
+	 * @param string $deploymentName
+	 * @param integer $severityThreshold
+	 * @param boolean $disableAnsi
+	 * @param boolean $addFileBackend
+	 * @return \TYPO3\FLOW3\Log\Logger
+	 */
+	public function createDefaultLogger($deploymentName, $severityThreshold, $disableAnsi = FALSE, $addFileBackend = TRUE) {
+		$logger = new \TYPO3\FLOW3\Log\Logger();
+		$console = new \TYPO3\Surf\Log\Backend\AnsiConsoleBackend(array(
+			'severityThreshold' => $severityThreshold,
+			'disableAnsi' => $disableAnsi
+		));
+		$logger->addBackend($console);
+		if ($addFileBackend) {
+			$file = new \TYPO3\FLOW3\Log\Backend\FileBackend(array(
+				'logFileURL' => FLOW3_PATH_DATA . 'Logs/Surf-' . $deploymentName . '.log',
+				'createParentDirectories' => TRUE,
+				'severityThreshold' => LOG_DEBUG,
+				'logMessageOrigin' => FALSE
+			));
+			$logger->addBackend($file);
+		}
+		return $logger;
 	}
 
 	/**
@@ -95,16 +123,16 @@ class SurfCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 * Simulate a deployment
 	 *
 	 * @param string $deploymentName The deployment name
+	 * @param boolean $verbose In verbose mode, the log output of the default logger will contain debug messages
+	 * @param boolean $disableAnsi Disable ANSI formatting of output
 	 * @return void
 	 */
-	public function simulateCommand($deploymentName) {
-		$logger = new \TYPO3\FLOW3\Log\Logger();
-		$console = new \TYPO3\FLOW3\Log\Backend\ConsoleBackend(array('severityThreshold' => LOG_DEBUG));
-		$console->open();
-		$logger->setBackend($console);
-
+	public function simulateCommand($deploymentName, $verbose = FALSE, $disableAnsi = FALSE) {
 		$deployment = $this->deploymentService->getDeployment($deploymentName);
-		$deployment->setLogger($logger);
+		if ($deployment->getLogger() === NULL) {
+			$logger = $this->createDefaultLogger($deploymentName, $verbose ? LOG_DEBUG : LOG_INFO, $disableAnsi, FALSE);
+			$deployment->setLogger($logger);
+		}
 		$deployment->initialize();
 
 		$deployment->simulate();

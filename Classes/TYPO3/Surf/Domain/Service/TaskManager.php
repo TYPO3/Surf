@@ -42,6 +42,8 @@ class TaskManager {
 	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = array()) {
+		$deployment->getLogger()->log($node->getName() . ' (' . $application->getName() . ') ' . $taskName, LOG_INFO);
+
 		$task = $this->createTaskInstance($taskName);
 
 		$globalOptions = $this->overrideOptions($taskName, $deployment, $node, $application, $options);

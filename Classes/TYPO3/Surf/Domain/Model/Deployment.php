@@ -140,7 +140,7 @@ class Deployment {
 	 * @return void
 	 */
 	public function deploy() {
-		$this->logger->log('Deploying ' . $this->name);
+		$this->logger->log('Deploying ' . $this->name . ' (' . $this->releaseIdentifier . ')', LOG_NOTICE);
 		$this->workflow->run($this);
 	}
 
@@ -153,7 +153,7 @@ class Deployment {
 	 */
 	public function simulate() {
 		$this->setDryRun(TRUE);
-		$this->logger->log('Simulating ' . $this->name);
+		$this->logger->log('Simulating ' . $this->name . ' (' . $this->releaseIdentifier . ')', LOG_NOTICE);
 		$this->workflow->run($this);
 	}
 

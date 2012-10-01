@@ -68,13 +68,13 @@ class SimpleWorkflow extends Workflow {
 		}
 
 		foreach ($this->stages as $stage) {
-			$deployment->getLogger()->log('====== Stage ' . $stage . ' ======', LOG_DEBUG);
+			$deployment->getLogger()->log('Stage ' . $stage, LOG_NOTICE);
 			foreach ($nodes as $node) {
-				$deployment->getLogger()->log('**** Node ' . $node->getName() . ' ****', LOG_DEBUG);
+				$deployment->getLogger()->log('Node ' . $node->getName(), LOG_DEBUG);
 				foreach ($applications as $application) {
 					if (!$application->hasNode($node)) continue;
 
-					$deployment->getLogger()->log('* Application ' . $application->getName() . ' *', LOG_DEBUG);
+					$deployment->getLogger()->log('Application ' . $application->getName(), LOG_DEBUG);
 
 					try {
 						$this->executeStage($stage, $node, $application, $deployment);
