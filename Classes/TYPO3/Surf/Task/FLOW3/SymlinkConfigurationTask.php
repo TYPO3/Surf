@@ -41,7 +41,7 @@ class SymlinkConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 		$commands = array(
 			"cd {$targetReleasePath}/Configuration",
 			"rm -f Production/*",
-			"rmdir Production",
+			"if [ -d Production ]; then rmdir Production; fi",
 			"mkdir -p ../../../shared/Configuration/Production",
 			"ln -snf ../../../shared/Configuration/Production Production"
 		);
