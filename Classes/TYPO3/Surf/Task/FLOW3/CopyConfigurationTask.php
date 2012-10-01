@@ -37,15 +37,11 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		if (!isset($options['username'])) {
-			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "username" option for node "%s"', array($node->getName())), 1348844231);
+		if (!isset($options['username']) && !$node->isLocalhost()) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "username" option for node "%s"', $node->getName()), 1348844231);
 		}
 
 		$targetReleasePath = $deployment->getApplicationReleasePath($application);
-
-		$username = $options['username'];
-		$hostname = $node->getHostname();
-
 		$configurationPath = $this->getDeploymentConfigurationPath() . '/' . $deployment->getName() . '/Configuration/';
 		if (!is_dir($configurationPath)) {
 			return;
@@ -59,7 +55,13 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 		$commands = array();
 		foreach ($configurations as $configuration) {
 			$targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
-			$commands[] = "scp {$configuration} {$username}@{$hostname}:{$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
+			if ($node->isLocalhost()) {
+				$commands[] = "cp {$configuration} {$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
+			} else {
+				$username = $options['username'];
+				$hostname = $node->getHostname();
+				$commands[] = "scp {$configuration} {$username}@{$hostname}:{$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
+			}
 		}
 
 		$localhost = new Node('localhost');

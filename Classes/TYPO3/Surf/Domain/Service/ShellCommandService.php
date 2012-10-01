@@ -34,7 +34,7 @@ class ShellCommandService {
 	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE, $logOutput = TRUE) {
-		if ($node === NULL || $node->getHostname() === 'localhost') {
+		if ($node === NULL || $node->isLocalhost()) {
 			list($exitCode, $returnedOutput) = $this->executeLocalCommand($command, $deployment, $logOutput);
 		} else {
 			list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment, $logOutput);
@@ -55,7 +55,7 @@ class ShellCommandService {
 	 * @return bool
 	 */
 	public function simulate($command, Node $node, Deployment $deployment) {
-		if ($node === NULL || $node->getHostname() === 'localhost') {
+		if ($node === NULL || $node->isLocalhost()) {
 			$command = $this->prepareCommand($command);
 			$deployment->getLogger()->log('... (localhost): "' . $command . '"', LOG_DEBUG);
 		} else {

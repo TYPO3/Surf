@@ -132,6 +132,13 @@ class Node {
 	}
 
 	/**
+	 * @return boolean TRUE if this node is the localhost
+	 */
+	public function isLocalhost() {
+		return $this->hostname === 'localhost';
+	}
+
+	/**
 	 *
 	 * @return string
 	 */
