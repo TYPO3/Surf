@@ -35,12 +35,14 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task {
 		$applicationReleasePath = $deployment->getApplicationReleasePath($application);
 
 			// Skip if no composer.json file found
-		if (!is_file(\TYPO3\FLOW3\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')))) {
+		$composerJsonExists = $this->shell->executeOrSimulate('ls ' . \TYPO3\FLOW3\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), $node, $deployment, TRUE, TRUE);
+		if ($composerJsonExists === FALSE) {
+			$deployment->getLogger()->log('No composer.json found in path ' . \TYPO3\FLOW3\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), LOG_NOTICE);
 			return;
 		}
 
 		if (!isset($options['composerCommandPath'])) {
-			throw new TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
+			throw new \TYPO3\Surf\Exception\TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
 		}
 
 		$command = sprintf('cd %s && %s install --no-ansi --no-interaction', $applicationReleasePath, $options['composerCommandPath']);
