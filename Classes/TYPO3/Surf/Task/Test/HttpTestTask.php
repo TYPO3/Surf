@@ -11,7 +11,7 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A task for testing HTTP request
@@ -22,7 +22,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;

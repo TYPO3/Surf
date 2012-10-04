@@ -11,7 +11,7 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A task which can be used to tag a git repository and its submodules
@@ -20,7 +20,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;

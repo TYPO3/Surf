@@ -14,7 +14,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 /**
  * Unit test for the TaskManager
  */
-class TaskManagerTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class TaskManagerTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
@@ -23,7 +23,7 @@ class TaskManagerTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$node = new \TYPO3\Surf\Domain\Model\Node('Test node');
 		$application = new \TYPO3\Surf\Domain\Model\Application('Test application');
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$logger = $this->getMock('TYPO3\FLOW3\Log\LoggerInterface');
+		$logger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
 		$deployment->setLogger($logger);
 
 		$task = $this->getMock('TYPO3\Surf\Domain\Model\Task');
@@ -54,7 +54,7 @@ class TaskManagerTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$node = new \TYPO3\Surf\Domain\Model\Node('Test node');
 		$application = new \TYPO3\Surf\Domain\Model\Application('Test application');
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$logger = $this->getMock('TYPO3\FLOW3\Log\LoggerInterface');
+		$logger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
 		$deployment->setLogger($logger);
 
 		$task = $this->getMock('TYPO3\Surf\Domain\Model\Task');
@@ -84,7 +84,7 @@ class TaskManagerTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$node = new \TYPO3\Surf\Domain\Model\Node('Test node');
 		$application = new \TYPO3\Surf\Domain\Model\Application('Test application');
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$logger = $this->getMock('TYPO3\FLOW3\Log\LoggerInterface');
+		$logger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
 		$deployment->setLogger($logger);
 
 		$task = $this->getMock('TYPO3\Surf\Domain\Model\Task');

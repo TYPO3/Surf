@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Task for importing content into TYPO3
@@ -19,7 +19,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;
@@ -40,7 +40,7 @@ class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
 		}
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$sitePackageKey = $options['sitePackageKey'];
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.typo3:site:import --package-key ' . $sitePackageKey, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow3 typo3.typo3:site:import --package-key ' . $sitePackageKey, $node, $deployment);
 	}
 
 	/**

@@ -6,12 +6,12 @@ namespace TYPO3\Surf;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Base Surf exception
  */
-class Exception extends \TYPO3\FLOW3\Exception {
+class Exception extends \TYPO3\Flow\Exception {
 
 }
 ?>

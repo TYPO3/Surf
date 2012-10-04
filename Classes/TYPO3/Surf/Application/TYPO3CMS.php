@@ -8,7 +8,7 @@ namespace TYPO3\Surf\Application;
 
 /**
  * A TYPO3CMS application template
- * @TYPO3\FLOW3\Annotations\Proxy(false)
+ * @TYPO3\Flow\Annotations\Proxy(false)
  */
 class TYPO3CMS extends BaseApplication {
 

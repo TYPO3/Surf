@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A symlink task for linking the shared data directory
@@ -19,7 +19,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;

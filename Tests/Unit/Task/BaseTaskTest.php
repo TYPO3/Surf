@@ -14,7 +14,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
 /**
  * Base unit test for tasks
  */
-abstract class BaseTaskTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+abstract class BaseTaskTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * Executed commands
@@ -85,7 +85,7 @@ abstract class BaseTaskTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 		$this->node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
 		$this->deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-		$mockLogger = $this->getMock('TYPO3\FLOW3\Log\LoggerInterface');
+		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
 		$this->deployment->setLogger($mockLogger);
 		$this->application = new \TYPO3\Surf\Domain\Model\Application('TestApplication');
 	}

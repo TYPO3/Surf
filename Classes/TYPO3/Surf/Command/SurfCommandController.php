@@ -6,15 +6,15 @@ namespace TYPO3\Surf\Command;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Surf command controller
  */
-class SurfCommandController extends \TYPO3\FLOW3\Cli\CommandController {
+class SurfCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\DeploymentService
 	 */
 	protected $deploymentService;
@@ -70,18 +70,18 @@ class SurfCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 * @param integer $severityThreshold
 	 * @param boolean $disableAnsi
 	 * @param boolean $addFileBackend
-	 * @return \TYPO3\FLOW3\Log\Logger
+	 * @return \TYPO3\Flow\Log\Logger
 	 */
 	public function createDefaultLogger($deploymentName, $severityThreshold, $disableAnsi = FALSE, $addFileBackend = TRUE) {
-		$logger = new \TYPO3\FLOW3\Log\Logger();
+		$logger = new \TYPO3\Flow\Log\Logger();
 		$console = new \TYPO3\Surf\Log\Backend\AnsiConsoleBackend(array(
 			'severityThreshold' => $severityThreshold,
 			'disableAnsi' => $disableAnsi
 		));
 		$logger->addBackend($console);
 		if ($addFileBackend) {
-			$file = new \TYPO3\FLOW3\Log\Backend\FileBackend(array(
-				'logFileURL' => FLOW3_PATH_DATA . 'Logs/Surf-' . $deploymentName . '.log',
+			$file = new \TYPO3\Flow\Log\Backend\FileBackend(array(
+				'logFileURL' => FLOW_PATH_DATA . 'Logs/Surf-' . $deploymentName . '.log',
 				'createParentDirectories' => TRUE,
 				'severityThreshold' => LOG_DEBUG,
 				'logMessageOrigin' => FALSE

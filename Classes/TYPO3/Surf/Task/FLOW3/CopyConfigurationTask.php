@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A task for copying local configuration to the application
@@ -21,7 +21,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;
@@ -47,11 +47,11 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 			return;
 		}
 
-		$encryptedConfiguration = \TYPO3\FLOW3\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml.encrypted');
+		$encryptedConfiguration = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml.encrypted');
 		if (count($encryptedConfiguration) > 0) {
 			throw new \TYPO3\Surf\Exception\TaskExecutionException('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);
 		}
-		$configurations = \TYPO3\FLOW3\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml');
+		$configurations = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml');
 		$commands = array();
 		foreach ($configurations as $configuration) {
 			$targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
@@ -89,7 +89,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return string
 	 */
 	protected function getDeploymentConfigurationPath() {
-		return FLOW3_PATH_ROOT . 'Build/Surf';
+		return FLOW_PATH_ROOT . 'Build/Surf';
 	}
 
 }

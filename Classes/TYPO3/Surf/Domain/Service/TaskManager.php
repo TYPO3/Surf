@@ -6,7 +6,7 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 use \TYPO3\Surf\Domain\Model\Node;
 use \TYPO3\Surf\Domain\Model\Application;
 use \TYPO3\Surf\Domain\Model\Deployment;
@@ -24,8 +24,8 @@ class TaskManager {
 	protected $taskHistory = array();
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Object\ObjectManagerInterface
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Object\ObjectManagerInterface
 	 */
 	protected $objectManager;
 

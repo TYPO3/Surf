@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Installs the composer packages based on a composer.json file in the projects root folder
@@ -18,7 +18,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class InstallTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;
@@ -35,9 +35,9 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task {
 		$applicationReleasePath = $deployment->getApplicationReleasePath($application);
 
 			// Skip if no composer.json file found
-		$composerJsonExists = $this->shell->executeOrSimulate('ls ' . \TYPO3\FLOW3\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), $node, $deployment, TRUE, TRUE);
+		$composerJsonExists = $this->shell->executeOrSimulate('ls ' . \TYPO3\Flow\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), $node, $deployment, TRUE, TRUE);
 		if ($composerJsonExists === FALSE) {
-			$deployment->getLogger()->log('No composer.json found in path ' . \TYPO3\FLOW3\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), LOG_NOTICE);
+			$deployment->getLogger()->log('No composer.json found in path ' . \TYPO3\Flow\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), LOG_NOTICE);
 			return;
 		}
 

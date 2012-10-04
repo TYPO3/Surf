@@ -6,7 +6,7 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Deployment;
 
@@ -17,8 +17,8 @@ use TYPO3\Surf\Domain\Model\Deployment;
 class ShellCommandService {
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Package\PackageManagerInterface
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Package\PackageManagerInterface
 	 */
 	protected $packageManager;
 
@@ -140,7 +140,7 @@ class ShellCommandService {
 
 		if ($node->hasOption('password')) {
 			$surfPackage = $this->packageManager->getPackage('TYPO3.Surf');
-			$passwordSshLoginScriptPathAndFilename = \TYPO3\FLOW3\Utility\Files::concatenatePaths(array($surfPackage->getResourcesPath(), 'Private/Scripts/PasswordSshLogin.expect'));
+			$passwordSshLoginScriptPathAndFilename = \TYPO3\Flow\Utility\Files::concatenatePaths(array($surfPackage->getResourcesPath(), 'Private/Scripts/PasswordSshLogin.expect'));
 			$sshCommand = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $sshCommand);
 		}
 

@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Task for setting file permissions for the FLOW3 application
@@ -18,7 +18,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;
@@ -39,7 +39,7 @@ class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task {
 		$arguments .= ' ' . (isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data');
 		$arguments .= ' ' . (isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data');
 
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.flow3:core:setfilepermissions ' . $arguments, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow typo3.flow:core:setfilepermissions ' . $arguments, $node, $deployment);
 	}
 
 	/**

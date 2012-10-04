@@ -14,7 +14,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 /**
  * Unit test for Deployment
  */
-class DeploymentTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class DeploymentTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
@@ -56,7 +56,7 @@ class DeploymentTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	/**
 	 * @test
-	 * @expectedException \TYPO3\FLOW3\Exception
+	 * @expectedException \TYPO3\Flow\Exception
 	 */
 	public function initializeIsAllowedOnlyOnce() {
 		$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();

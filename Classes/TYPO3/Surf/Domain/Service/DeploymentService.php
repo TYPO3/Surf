@@ -22,9 +22,9 @@ class DeploymentService {
 	 * @return array
 	 */
 	public function getDeploymentNames() {
-		$files = glob(FLOW3_PATH_ROOT . 'Build/Surf/*.php');
+		$files = glob(FLOW_PATH_ROOT . 'Build/Surf/*.php');
 		return array_map(function($file) {
-			return substr($file, strlen(FLOW3_PATH_ROOT . 'Build/Surf/'), -4);
+			return substr($file, strlen(FLOW_PATH_ROOT . 'Build/Surf/'), -4);
 		}, $files);
 	}
 
@@ -40,7 +40,7 @@ class DeploymentService {
 	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function getDeployment($deploymentName) {
-		$deploymentPathAndFilename = FLOW3_PATH_ROOT . 'Build/Surf/' . $deploymentName . '.php';
+		$deploymentPathAndFilename = FLOW_PATH_ROOT . 'Build/Surf/' . $deploymentName . '.php';
 		if (!file_exists($deploymentPathAndFilename)) {
 			exit(sprintf ("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
 		}

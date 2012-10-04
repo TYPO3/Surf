@@ -6,15 +6,15 @@ namespace TYPO3\Surf\Command;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Encryption command controller
  */
-class EncryptCommandController extends \TYPO3\FLOW3\Cli\CommandController {
+class EncryptCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Encryption\EncryptionServiceInterface
 	 */
 	protected $encryptionService;
@@ -53,7 +53,7 @@ class EncryptCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 */
 	public function sealCommand($deploymentName = '') {
 		$keyPair = $this->readKeyPair($this->getDeploymentConfigurationPath() . '/Keys/Local.key');
-		$configurations = \TYPO3\FLOW3\Utility\Files::readDirectoryRecursively($this->getDeploymentConfigurationPath() . '/Configuration/' . $deploymentName, 'yaml');
+		$configurations = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($this->getDeploymentConfigurationPath() . '/Configuration/' . $deploymentName, 'yaml');
 		foreach ($configurations as $configuration) {
 			$data = file_get_contents($configuration);
 			if (strpos($data, '#!ENCRYPT') !== 0) {
@@ -87,7 +87,7 @@ class EncryptCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 			$this->outputLine('Local key is encrypted with passphrase. Wrong or no passphrase given.');
 			$this->quit(1);
 		}
-		$configurations = \TYPO3\FLOW3\Utility\Files::readDirectoryRecursively($this->getDeploymentConfigurationPath() . '/Configuration/' . $deploymentName, 'yaml.encrypted');
+		$configurations = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($this->getDeploymentConfigurationPath() . '/Configuration/' . $deploymentName, 'yaml.encrypted');
 		foreach ($configurations as $configuration) {
 			$crypted = file_get_contents($configuration);
 			$data = $this->encryptionService->decryptData($crypted, $keyPair->getPrivateKey());
@@ -133,7 +133,7 @@ class EncryptCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	 * @return string
 	 */
 	protected function getDeploymentConfigurationPath() {
-		return FLOW3_PATH_ROOT . 'Build/Surf';
+		return FLOW_PATH_ROOT . 'Build/Surf';
 	}
 
 }

@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A FLOW3 migration task
@@ -19,7 +19,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class MigrateTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
 	 */
 	protected $shell;
@@ -35,7 +35,7 @@ class MigrateTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW3_CONTEXT=Production ./flow3 typo3.flow3:doctrine:migrate', $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow typo3.flow:doctrine:migrate', $node, $deployment);
 	}
 
 	/**

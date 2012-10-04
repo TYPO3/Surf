@@ -12,7 +12,7 @@ use org\bovigo\vfs\vfsStream;
 /**
  * Unit tests for AnsiConsoleBackend
  */
-class AnsiConsoleBackendTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class AnsiConsoleBackendTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @return array

@@ -44,7 +44,7 @@ class Deployment {
 
 	/**
 	 * A logger instance used to log messages during deployment
-	 * @var \TYPO3\FLOW3\Log\LoggerInterface
+	 * @var \TYPO3\Flow\Log\LoggerInterface
 	 */
 	protected $logger;
 
@@ -243,7 +243,7 @@ class Deployment {
 
 	/**
 	 *
-	 * @param \TYPO3\FLOW3\Log\LoggerInterface $logger
+	 * @param \TYPO3\Flow\Log\LoggerInterface $logger
 	 * @return \TYPO3\Surf\Domain\Model\Deployment
 	 */
 	public function setLogger($logger) {
@@ -253,7 +253,7 @@ class Deployment {
 
 	/**
 	 *
-	 * @return \TYPO3\FLOW3\Log\LoggerInterface
+	 * @return \TYPO3\Flow\Log\LoggerInterface
 	 */
 	public function getLogger() {
 		return $this->logger;

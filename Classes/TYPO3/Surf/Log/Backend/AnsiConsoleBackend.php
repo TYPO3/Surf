@@ -6,13 +6,13 @@ namespace TYPO3\Surf\Log\Backend;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 use \TYPO3\Surf\Helper\Ansi;
 
 /**
  * Extended ANSI console backend with human friendly formatting
  */
-class AnsiConsoleBackend extends \TYPO3\FLOW3\Log\Backend\ConsoleBackend {
+class AnsiConsoleBackend extends \TYPO3\Flow\Log\Backend\ConsoleBackend {
 
 	/**
 	 * @var array

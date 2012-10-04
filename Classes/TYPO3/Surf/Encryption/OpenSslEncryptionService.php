@@ -6,7 +6,7 @@ namespace TYPO3\Surf\Encryption;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * OpenSSL encryption service
@@ -14,7 +14,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * An encryption service for key generation and encryption / decryption of data
  * using the OpenSSL library.
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class OpenSslEncryptionService implements EncryptionServiceInterface {
 

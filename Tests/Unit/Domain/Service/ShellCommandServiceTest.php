@@ -14,7 +14,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 /**
  * Unit test for the ShellCommandService
  */
-class ShellCommandServiceTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class ShellCommandServiceTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * Test, if the given options are respected in executed SSH command
@@ -38,9 +38,9 @@ class ShellCommandServiceTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		if ($password !== NULL) {
 			$node->setOption('password', $password);
 
-			$mockSurfPackage = $this->getMock('TYPO3\FLOW3\Package\PackageInterface');
+			$mockSurfPackage = $this->getMock('TYPO3\Flow\Package\PackageInterface');
 			$mockSurfPackage->expects($this->once())->method('getResourcesPath')->will($this->returnValue('/your/path/to /TYPO3.Surf'));
-			$mockPackageManager = $this->getMock('TYPO3\FLOW3\Package\PackageManagerInterface');
+			$mockPackageManager = $this->getMock('TYPO3\Flow\Package\PackageManagerInterface');
 			$mockPackageManager->expects($this->once())->method('getPackage')->with('TYPO3.Surf')->will($this->returnValue($mockSurfPackage));
 			$service->_set('packageManager', $mockPackageManager);
 		}
@@ -49,7 +49,7 @@ class ShellCommandServiceTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			$node->setOption('port', $port);
 		}
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-		$mockLogger = $this->getMock('TYPO3\FLOW3\Log\LoggerInterface');
+		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
 		$deployment->setLogger($mockLogger);
 
 		$expectedCommand = $expectedCommandArguments .  ' \'echo "Hello World"\' 2>&1';
