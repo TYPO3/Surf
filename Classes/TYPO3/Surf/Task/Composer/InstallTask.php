@@ -35,9 +35,9 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task {
 		$applicationReleasePath = $deployment->getApplicationReleasePath($application);
 
 			// Skip if no composer.json file found
-		$composerJsonExists = $this->shell->executeOrSimulate('ls ' . \TYPO3\Flow\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), $node, $deployment, TRUE, TRUE);
+		$composerJsonExists = $this->shell->executeOrSimulate('test -f ' . \TYPO3\Flow\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), $node, $deployment, TRUE);
 		if ($composerJsonExists === FALSE) {
-			$deployment->getLogger()->log('No composer.json found in path ' . \TYPO3\Flow\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), LOG_NOTICE);
+			$deployment->getLogger()->log('No composer.json found in path ' . \TYPO3\Flow\Utility\Files::concatenatePaths(array($applicationReleasePath, 'composer.json')), LOG_DEBUG);
 			return;
 		}
 
