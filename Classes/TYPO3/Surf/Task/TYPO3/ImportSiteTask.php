@@ -40,7 +40,7 @@ class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
 		}
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$sitePackageKey = $options['sitePackageKey'];
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow3 typo3.typo3:site:import --package-key ' . $sitePackageKey, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow typo3.typo3:site:import --package-key ' . $sitePackageKey, $node, $deployment);
 	}
 
 	/**
