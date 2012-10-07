@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Surf\Task\FLOW3;
+namespace TYPO3\Surf\Task\TYPO3\Flow;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -13,10 +13,10 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * A symlink task for linking the shared data directory
+ * A TYPO3 Flow migration task
  *
  */
-class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task {
+class MigrateTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
 	 * @Flow\Inject
@@ -25,7 +25,7 @@ class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task {
 	protected $shell;
 
 	/**
-	 * Executes this task
+	 * Execute this task
 	 *
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
@@ -34,28 +34,34 @@ class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$releaseIdentifier = $deployment->getReleaseIdentifier();
-		$releasesPath = $application->getDeploymentPath() . '/releases';
-		$commands = array(
-			"mkdir -p $releasesPath/$releaseIdentifier/Data",
-			"cd $releasesPath/$releaseIdentifier",
-			"ln -sf ../../../shared/Data/Logs ./Data/Logs",
-			"ln -sf ../../../shared/Data/Persistent ./Data/Persistent"
-		);
-		$this->shell->executeOrSimulate($commands, $node, $deployment);
+		$targetPath = $deployment->getApplicationReleasePath($application);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow typo3.flow:doctrine:migrate', $node, $deployment);
 	}
 
 	/**
 	 * Simulate this task
 	 *
-	 * @param Node $node
-	 * @param Application $application
-	 * @param Deployment $deployment
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
 	 * @return void
 	 */
 	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$this->execute($node, $application, $deployment, $options);
+	}
+
+	/**
+	 * Rollback the task
+	 *
+	 * @param \TYPO3\Surf\Domain\Model\Node $node
+	 * @param \TYPO3\Surf\Domain\Model\Application $application
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param array $options
+	 * @return void
+	 */
+	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		// TODO Implement rollback of Doctrine migration
 	}
 
 }

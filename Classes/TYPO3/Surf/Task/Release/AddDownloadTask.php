@@ -2,7 +2,7 @@
 namespace TYPO3\Surf\Task\Release;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -48,7 +48,7 @@ class AddDownloadTask extends \TYPO3\Surf\Domain\Model\Task {
 		foreach ($files as $file) {
 			$downloads[] = sprintf('"%s,%s,%s"', basename($file), sha1($file), sprintf($uriPattern, basename($file)));
 		}
-		$this->shell->executeOrSimulate(sprintf('ssh %s%s "cd \"%s\" ; ./flow3 release:adddownload --product-name \"%s\" --version \"%s\" --label \"%s\" %s"', ($login ? $login . '@' : ''), $host, $sitePath, $productName, $version, $label, implode(' ', $downloads)), $node, $deployment);
+		$this->shell->executeOrSimulate(sprintf('ssh %s%s "cd \"%s\" ; ./flow release:adddownload --product-name \"%s\" --version \"%s\" --label \"%s\" %s"', ($login ? $login . '@' : ''), $host, $sitePath, $productName, $version, $label, implode(' ', $downloads)), $node, $deployment);
 	}
 
 	/**

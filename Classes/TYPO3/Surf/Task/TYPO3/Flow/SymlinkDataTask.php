@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Surf\Task\FLOW3;
+namespace TYPO3\Surf\Task\TYPO3\Flow;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -13,10 +13,10 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * A FLOW3 task to run functional tests
+ * A symlink task for linking the shared data directory
  *
  */
-class FunctionalTestTask extends \TYPO3\Surf\Domain\Model\Task {
+class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
 	 * @Flow\Inject
@@ -25,7 +25,7 @@ class FunctionalTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	protected $shell;
 
 	/**
-	 * Execute this task
+	 * Executes this task
 	 *
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
@@ -34,8 +34,15 @@ class FunctionalTestTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && phpunit -c Build/Common/PhpUnit/FunctionalTests.xml', $node, $deployment);
+		$releaseIdentifier = $deployment->getReleaseIdentifier();
+		$releasesPath = $application->getDeploymentPath() . '/releases';
+		$commands = array(
+			"mkdir -p $releasesPath/$releaseIdentifier/Data",
+			"cd $releasesPath/$releaseIdentifier",
+			"ln -sf ../../../shared/Data/Logs ./Data/Logs",
+			"ln -sf ../../../shared/Data/Persistent ./Data/Persistent"
+		);
+		$this->shell->executeOrSimulate($commands, $node, $deployment);
 	}
 
 	/**

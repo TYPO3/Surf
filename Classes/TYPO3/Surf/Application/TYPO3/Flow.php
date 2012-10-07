@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Surf\Application;
+namespace TYPO3\Surf\Application\TYPO3;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -10,15 +10,15 @@ use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Domain\Model\Deployment;
 
 /**
- * A FLOW3 application template
+ * A TYPO3 Flow application template
 * @TYPO3\Flow\Annotations\Proxy(false)
  */
-class FLOW3 extends \TYPO3\Surf\Application\BaseApplication {
+class Flow extends \TYPO3\Surf\Application\BaseApplication {
 
 	/**
 	 * Constructor
 	 */
-	public function __construct($name = 'FLOW3') {
+	public function __construct($name = 'TYPO3 Flow') {
 		parent::__construct($name);
 	}
 
@@ -33,15 +33,15 @@ class FLOW3 extends \TYPO3\Surf\Application\BaseApplication {
 		parent::registerTasks($workflow, $deployment);
 
 		$workflow
-			->addTask('typo3.surf:flow3:createdirectories', 'initialize', $this)
+			->addTask('typo3.surf:typo3:flow:createdirectories', 'initialize', $this)
 			->afterTask('typo3.surf:gitcheckout', array(
 				'typo3.surf:composer:install',
-				'typo3.surf:flow3:symlinkdata',
-				'typo3.surf:flow3:symlinkconfiguration',
-				'typo3.surf:flow3:copyconfiguration',
-				'typo3.surf:flow3:setfilepermissions'
+				'typo3.surf:typo3:flow:symlinkdata',
+				'typo3.surf:typo3:flow:symlinkconfiguration',
+				'typo3.surf:typo3:flow:copyconfiguration',
+				'typo3.surf:typo3:flow:setfilepermissions'
 			), $this)
-			->addTask('typo3.surf:flow3:migrate', 'migrate', $this);
+			->addTask('typo3.surf:typo3:flow:migrate', 'migrate', $this);
 	}
 
 }

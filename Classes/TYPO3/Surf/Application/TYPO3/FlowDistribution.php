@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Surf\Application;
+namespace TYPO3\Surf\Application\TYPO3;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -11,10 +11,10 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * An "application" which does bundle FLOW3 or similar distributions.
+ * An "application" which does bundle Flow or similar distributions.
  *
  */
-class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
+class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow {
 
 	/**
 	 * @var array
@@ -25,7 +25,7 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 	 * Constructor
 	 */
 	public function __construct() {
-		parent::__construct('FLOW3 Distribution');
+		parent::__construct('TYPO3 Flow Distribution');
 		$this->setOption('tagRecurseIntoSubmodules', TRUE);
 	}
 
@@ -46,8 +46,8 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 		if ($this->getOption('enableTests') !== FALSE) {
 			$workflow
 				->addTask(array(
-					'typo3.surf:flow3:unittest',
-					'typo3.surf:flow3:functionaltest'
+					'typo3.surf:typo3:flow:unittest',
+					'typo3.surf:typo3:flow:functionaltest'
 				), 'test', $this);
 		}
 
@@ -74,7 +74,7 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 			}
 		}
 
-		$workflow->removeTask('typo3.surf:flow3:migrate');
+		$workflow->removeTask('typo3.surf:typo3:flow:migrate');
 	}
 
 	/**
@@ -88,7 +88,7 @@ class FLOW3Distribution extends \TYPO3\Surf\Application\FLOW3 {
 			throw new InvalidConfigurationException('"version" option needs to be defined. Example: 1.0.0-beta2', 1314187396);
 		}
 		if (!$this->hasOption('projectName')) {
-			throw new InvalidConfigurationException('"projectName" option needs to be defined. Example: FLOW3', 1314187397);
+			throw new InvalidConfigurationException('"projectName" option needs to be defined. Example: TYPO3 Flow', 1314187397);
 		}
 
 		if ($this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === TRUE) {

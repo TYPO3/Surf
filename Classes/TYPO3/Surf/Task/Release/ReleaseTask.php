@@ -2,7 +2,7 @@
 namespace TYPO3\Surf\Task\Release;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -42,7 +42,7 @@ class ReleaseTask extends PrepareReleaseTask {
 		$version = $options['version'];
 		$productName = $options['productName'];
 
-		$this->shell->executeOrSimulate(sprintf('ssh %s%s "cd \"%s\" ; ./flow3 release:release --product-name \"%s\" --version \"%s\" --change-log-uri \"%s\""', ($login ? $login . '@' : ''), $host, $sitePath, $productName, $version, ($changeLogUri ? $changeLogUri : '')), $node, $deployment);
+		$this->shell->executeOrSimulate(sprintf('ssh %s%s "cd \"%s\" ; ./flow release:release --product-name \"%s\" --version \"%s\" --change-log-uri \"%s\""', ($login ? $login . '@' : ''), $host, $sitePath, $productName, $version, ($changeLogUri ? $changeLogUri : '')), $node, $deployment);
 	}
 }
 ?>

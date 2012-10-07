@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Surf\Task\FLOW3;
+namespace TYPO3\Surf\Task\TYPO3\Flow;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -35,6 +35,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param array $options
 	 * @return void
 	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		if (!isset($options['username']) && !$node->isLocalhost()) {

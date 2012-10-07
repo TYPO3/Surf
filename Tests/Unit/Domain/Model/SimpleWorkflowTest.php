@@ -2,7 +2,7 @@
 namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU General Public License, either version 3 of the   *
@@ -221,59 +221,59 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 			array(
 				'Specific tasks for applications',
 				function($workflow, $applications) {
-					list($flow3Application, $typo3Application) = $applications;
-					return function() use ($workflow, $flow3Application, $typo3Application) {
+					list($flowApplication, $typo3Application) = $applications;
+					return function() use ($workflow, $flowApplication, $typo3Application) {
 						$workflow
 							->addTask('typo3.surf:test:setup', 'initialize')
-							->addTask('typo3.surf:test:doctrine:migrate', 'migrate', $flow3Application)
+							->addTask('typo3.surf:test:doctrine:migrate', 'migrate', $flowApplication)
 							->addTask('typo3.surf:test:em:updatedatabase', 'migrate', $typo3Application);
 					};
 				},
 				array(
 					array(
 						'task' => 'typo3.surf:test:setup',
-						'node' => 'flow3-1.example.com',
-						'application' => 'FLOW3 Application',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
 						'deployment' => 'Test deployment',
 						'stage' => 'initialize',
 						'options' => array()
 					),
 					array(
 						'task' => 'typo3.surf:test:setup',
-						'node' => 'flow3-2.example.com',
-						'application' => 'FLOW3 Application',
+						'node' => 'flow-2.example.com',
+						'application' => 'TYPO3 Flow Application',
 						'deployment' => 'Test deployment',
 						'stage' => 'initialize',
 						'options' => array()
 					),
 					array(
 						'task' => 'typo3.surf:test:setup',
-						'node' => 'typo3.example.com',
-						'application' => 'TYPO3 Application',
+						'node' => 'neos.example.com',
+						'application' => 'TYPO3 Neos Application',
 						'deployment' => 'Test deployment',
 						'stage' => 'initialize',
 						'options' => array()
 					),
 					array(
 						'task' => 'typo3.surf:test:doctrine:migrate',
-						'node' => 'flow3-1.example.com',
-						'application' => 'FLOW3 Application',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
 						'deployment' => 'Test deployment',
 						'stage' => 'migrate',
 						'options' => array()
 					),
 					array(
 						'task' => 'typo3.surf:test:doctrine:migrate',
-						'node' => 'flow3-2.example.com',
-						'application' => 'FLOW3 Application',
+						'node' => 'flow-2.example.com',
+						'application' => 'TYPO3 Flow Application',
 						'deployment' => 'Test deployment',
 						'stage' => 'migrate',
 						'options' => array()
 					),
 					array(
 						'task' => 'typo3.surf:test:em:updatedatabase',
-						'node' => 'typo3.example.com',
-						'application' => 'TYPO3 Application',
+						'node' => 'neos.example.com',
+						'application' => 'TYPO3 Neos Application',
 						'deployment' => 'Test deployment',
 						'stage' => 'migrate',
 						'options' => array()
@@ -296,18 +296,18 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$deployment = $this->buildDeployment($executedTasks);
 		$workflow = $deployment->getWorkflow();
 
-		$flow3Application = new \TYPO3\Surf\Domain\Model\Application('FLOW3 Application');
-		$flow3Application
-			->addNode(new \TYPO3\Surf\Domain\Model\Node('flow3-1.example.com'))
-			->addNode(new \TYPO3\Surf\Domain\Model\Node('flow3-2.example.com'));
-		$typo3Application = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Application');
-		$typo3Application
-			->addNode(new \TYPO3\Surf\Domain\Model\Node('typo3.example.com'));
+		$flowApplication = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Flow Application');
+		$flowApplication
+			->addNode(new \TYPO3\Surf\Domain\Model\Node('flow-1.example.com'))
+			->addNode(new \TYPO3\Surf\Domain\Model\Node('flow-2.example.com'));
+		$neosApplication = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Neos Application');
+		$neosApplication
+			->addNode(new \TYPO3\Surf\Domain\Model\Node('neos.example.com'));
 
 		$deployment
-			->addApplication($flow3Application)
-			->addApplication($typo3Application)
-			->onInitialize($initializeCallback($workflow, array($flow3Application, $typo3Application)));
+			->addApplication($flowApplication)
+			->addApplication($neosApplication)
+			->onInitialize($initializeCallback($workflow, array($flowApplication, $neosApplication)));
 
 		$deployment->initialize();
 

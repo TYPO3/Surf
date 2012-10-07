@@ -1,12 +1,12 @@
 ====================================
-Surf - FLOW3 deployment
+Surf - TYPO3 Flow deployment
 ====================================
 
 Description
 ===========
 
-The Surf package is a complete automated deployment tool powered by FLOW3. It's best used but not limited to deploy
-FLOW3 applications. It might be included in your FLOW3 application but can also be run standalone. It's inspired by some
+The Surf package is a complete automated deployment tool powered by TYPO3 Flow. It's best used but not limited to deploy
+Flow applications. It might be included in your Flow application but can also be run standalone. It's inspired by some
 features of Capistrano (thanks) concerning the Git workflow.
 
 Some of the features of the Surf package:
@@ -23,11 +23,11 @@ Some of the features of the Surf package:
 Installation
 ============
 
-Install the Surf package by importing the package to a FLOW3 application:
+Install the Surf package by importing the package to a TYPO3 Flow application:
 
 .. code-block:: none
 
-	./flow3 package:import TYPO3.Surf
+	./flow package:import TYPO3.Surf
 
 Guide
 =====
@@ -39,7 +39,7 @@ Each deployment is defined in a configuration (e.g for development, staging, liv
 specifies a workflow for the deployment (for now there is just ``SimpleWorkflow``, but feel free to create
 your own). The deployment configuration has at least one application and one or more nodes for the application(s).
 
-We start by creating a simple deployment configuration in ``%FLOW3_ROOT%/Build/Surf/MyDeployment.php`` for a deployment
+We start by creating a simple deployment configuration in ``%FLOW_ROOT%/Build/Surf/MyDeployment.php`` for a deployment
 with name **MyDeployment**::
 
 	<?php
@@ -50,22 +50,22 @@ with name **MyDeployment**::
 	$node->setHostname('example.com');
 	$node->setOption('username', 'myuser');
 
-	$application = new \TYPO3\Surf\Application\FLOW3();
-	$application->setDeploymentPath('/home/my-flow3-app/app');
-	$application->setOption('repositoryUrl', 'git@github.com:myuser/my-flow3-app.git');
+	$application = new \TYPO3\Surf\Application\TYPO3\Flow();
+	$application->setDeploymentPath('/home/my-flow-app/app');
+	$application->setOption('repositoryUrl', 'git@github.com:myuser/my-flow-app.git');
 	$application->addNode($node);
 
 	$deployment->addApplication($application);
 	?>
 
-That's a very basic deployment based on the default FLOW3 application template ``TYPO3\Surf\Application\FLOW3``.
+That's a very basic deployment based on the default Flow application template ``TYPO3\Surf\Application\TYPO3\Flow``.
 The deployment object is available to the script as the variable ``$deployment``. A *node* is basically a deployment
 target representing a server for an application. The node is assigned to the applications for the deployment. Finally
 the application is added to the deployment.
 
-Each application resembles a repository with code. So a more complex deployment could both deploy a FLOW3 application
-and release an extension for a TYPO3 website. Also different roles can be expressed using applications, since every task
-can be registered to run for all or a specific application instance.
+Each application resembles a repository with code. So a more complex deployment could both deploy a Flow application
+and release an extension for a TYPO3 CMS website. Also different roles can be expressed using applications, since every
+task can be registered to run for all or a specific application instance.
 
 SSH Authentication Types
 ------------------------
@@ -90,26 +90,26 @@ You can get a description of the deployment by running:
 
 .. code-block:: none
 
-    $ ./flow3 surf:describe MyDeployment
+    $ ./flow surf:describe MyDeployment
 
 Simulate the deployment by running:
 
 .. code-block:: none
 
-    $ ./flow3 surf:simulate MyDeployment
+    $ ./flow surf:simulate MyDeployment
 
 The simulation gives a hint which tasks will be executed on which node. During simulation no harmful tasks will be
 executed for real. If a remote SSH command would be executed it will be printed in the log messages starting with
 ``... $nodeName: "command"``.
 
-FLOW3 Configuration overrides
+Flow Configuration overrides
 -----------------------
 
-If the configuration of a FLOW3 application should be different depending on the deployment configuration
-(e.g. database settings or external services) the typo3.surf:flow3:copyconfiguration task can be used to override
+If the configuration of a Flow application should be different depending on the deployment configuration
+(e.g. database settings or external services) the typo3.surf:typo3:flow:copyconfiguration task can be used to override
 configuration after the code update (Git checkout).
 
-If a ``Configuration`` folder exists inside a folder named after your deployment ``%FLOW3_ROOT%/Build/Surf/MyDeployment``
+If a ``Configuration`` folder exists inside a folder named after your deployment ``%FLOW_ROOT%/Build/Surf/MyDeployment``
 every file in there will be copied to the release ``Configuration`` folder recursively.
 
 Run a deployment
@@ -119,7 +119,7 @@ If everything looks right, you can run the deployment:
 
 .. code-block:: none
 
-    $ ./flow3 surf:deploy MyDeployment
+    $ ./flow surf:deploy MyDeployment
 
 Customization
 =============
@@ -127,7 +127,7 @@ Customization
 Custom tasks in deployment configurations
 -----------------------------------------
 
-Since a deployment configuration is just a plain PHP file with access to any FLOW3 class it's easy to extend it or program
+Since a deployment configuration is just a plain PHP file with access to any Flow class it's easy to extend it or program
 a more complex behavior. But it's even easier to remove tasks or add some simple shell tasks to an existing application
 template::
 
@@ -137,29 +137,29 @@ template::
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
 		'typo3.surf:shell',
-		array('command' => 'cd {releasePath} && ./flow3 mycompany.mypackage:setup:initialize')
+		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
 	?>
 
 
-This adds a new task based on the `typo3.surf:shell` task with a custom shell command which would run a FLOW3 command.
+This adds a new task based on the `typo3.surf:shell` task with a custom shell command which would run a Flow command.
 After defining the new task we have to tell the deployment configuration when to execute it::
 
 	<?php
 
 	...
 
-	$application = new \TYPO3\Surf\Application\FLOW3('MyProject');
+	$application = new \TYPO3\Surf\Application\TYPO3\Flow('MyProject');
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
 		'typo3.surf:shell',
-		array('command' => 'cd {releasePath} && ./flow3 mycompany.mypackage:setup:initialize')
+		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
 	$deployment->onInitialize(function() use ($workflow, $application) {
 		$workflow->addTask('mycompany.mypackage:initialize', 'migrate', $application);
-		$workflow->removeTask('typo3.surf:flow3:setfilepermissions');
+		$workflow->removeTask('typo3.surf:typo3:flow:setfilepermissions');
 	});
 
 	?>
@@ -196,7 +196,7 @@ To access the release path or other release specific options, some placeholders 
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
 		'typo3.surf:shell',
-		array('command' => 'cd {releasePath} && ./flow3 mycompany.mypackage:setup:initialize')
+		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
 	?>
@@ -266,10 +266,10 @@ The key contains the path where the command shall execute, and the value is anot
 Example::
 
 	$application->setOption('gitPostCheckoutCommands', array(
-		'Packages/Framework/TYPO3.FLOW3/' => array('git fetch git://git.typo3.org/FLOW3/Packages/TYPO3.FLOW3 refs/changes/59/6859/1 && git cherry-pick FETCH_HEAD')
+		'Packages/Framework/TYPO3.Flow/' => array('git fetch git://git.typo3.org/Flow/Packages/TYPO3.Flow refs/changes/59/6859/1 && git cherry-pick FETCH_HEAD')
 	));
 
 Copyright
 =========
 
-The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - FLOW3 Agentur](http://www.networkteam.com/flow3-agentur.html).
+The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - TYPO3 Flow Agentur](http://www.networkteam.com/typo3-flow-agentur.html).

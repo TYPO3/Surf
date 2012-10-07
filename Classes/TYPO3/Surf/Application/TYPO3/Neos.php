@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Surf\Application;
+namespace TYPO3\Surf\Application\TYPO3;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -10,15 +10,15 @@ use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Domain\Model\Deployment;
 
 /**
- * A TYPO3 application template
+ * A TYPO3 Neos application template
  *
  */
-class TYPO3 extends \TYPO3\Surf\Application\FLOW3 {
+class Neos extends \TYPO3\Surf\Application\TYPO3\Flow {
 
 	/**
 	 * Constructor
 	 */
-	public function __construct($name = 'TYPO3') {
+	public function __construct($name = 'TYPO3 Neos') {
 		parent::__construct($name);
 	}
 
@@ -32,7 +32,7 @@ class TYPO3 extends \TYPO3\Surf\Application\FLOW3 {
 	public function registerTasks(Workflow $workflow, Deployment $deployment) {
 		parent::registerTasks($workflow, $deployment);
 
-		$workflow->addTask('typo3.surf:typo3:importsite', 'migrate', $this);
+		$workflow->addTask('typo3.surf:typo3:neos:importsite', 'migrate', $this);
 	}
 
 }

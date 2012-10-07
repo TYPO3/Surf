@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Surf\Task\FLOW3;
+namespace TYPO3\Surf\Task\TYPO3\Flow;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -13,7 +13,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * Task for setting file permissions for the FLOW3 application
+ * Task for setting file permissions for the TYPO3 Flow application
  */
 class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task {
 

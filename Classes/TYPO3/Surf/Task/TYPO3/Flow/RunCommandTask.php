@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Surf\Task\TYPO3;
+namespace TYPO3\Surf\Task\TYPO3\Flow;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Surf".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Surf".            *
  *                                                                        *
  *                                                                        */
 
@@ -13,10 +13,10 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * Task for importing content into TYPO3
+ * Task for running arbitrary TYPO3 Flow commands
  *
  */
-class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
+class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 
 	/**
 	 * @Flow\Inject
@@ -35,12 +35,14 @@ class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		if (!isset($options['sitePackageKey'])) {
-			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('"sitePackageKey" option not set for application "%s"', array($application->getName())), 1312312646);
+		if (!isset($options['command'])) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
 		}
+
+		$arguments = escapeshellarg(isset($options['arguments']) ? $options['arguments'] : '');
+
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$sitePackageKey = $options['sitePackageKey'];
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow typo3.typo3:site:import --package-key ' . $sitePackageKey, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow ' . $options['command'] . $arguments, $node, $deployment);
 	}
 
 	/**
@@ -53,7 +55,6 @@ class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$this->execute($node, $application, $deployment, $options);
 	}
 
 	/**
