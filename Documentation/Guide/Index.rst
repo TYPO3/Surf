@@ -43,9 +43,6 @@ We start by creating a simple deployment configuration in ``%FLOW_ROOT%/Build/Su
 with name **MyDeployment**::
 
 	<?php
-	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
-	$deployment->setWorkflow($workflow);
-
 	$node = new \TYPO3\Surf\Domain\Model\Node('example');
 	$node->setHostname('example.com');
 	$node->setOption('username', 'myuser');
@@ -134,6 +131,7 @@ template::
 	<?php
 
 	...
+	$workflow = $deployment->getWorkflow();
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
 		'typo3.surf:shell',
@@ -149,6 +147,7 @@ After defining the new task we have to tell the deployment configuration when to
 	<?php
 
 	...
+	$workflow = $deployment->getWorkflow();
 
 	$application = new \TYPO3\Surf\Application\TYPO3\Flow('MyProject');
 
@@ -193,6 +192,7 @@ To access the release path or other release specific options, some placeholders 
 	<?php
 
 	...
+	$workflow = $deployment->getWorkflow();
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
 		'typo3.surf:shell',
@@ -221,6 +221,9 @@ While a deployment is running, the new website will be available under this URL 
 be used for testing.
 
 Then, add a test as follows to the deployment configuration::
+
+
+	$workflow = $deployment->getWorkflow();
 
 	$smokeTestOptions = array(
 		'url' => 'http://your/website/which/you/want/to/test',

@@ -109,7 +109,7 @@ class Deployment {
 			throw new \TYPO3\Surf\Exception('Already initialized', 1335976472);
 		}
 		if ($this->workflow === NULL) {
-			throw new InvalidConfigurationException('Workflow must be set before calling initialize()', 1335976479);
+			$this->workflow = new SimpleWorkflow();
 		}
 
 		$this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());

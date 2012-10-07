@@ -19,6 +19,16 @@ class DeploymentTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
+	public function initializeUsesSimpleWorkflowAsDefault() {
+		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
+		$deployment->initialize();
+
+		$this->assertInstanceOf('TYPO3\Surf\Domain\Model\SimpleWorkflow', $deployment->getWorkflow());
+	}
+
+	/**
+	 * @test
+	 */
 	public function getNodesReturnsNodesFromApplicationsAsSet() {
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
 		$application1 = new \TYPO3\Surf\Domain\Model\Application('Test application 1');
