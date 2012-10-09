@@ -20,21 +20,29 @@ class EncryptCommandController extends \TYPO3\Flow\Cli\CommandController {
 	protected $encryptionService;
 
 	/**
+	 * @Flow\Inject
+	 * @var \TYPO3\Surf\Domain\Service\DeploymentService
+	 */
+	protected $deploymentService;
+
+	/**
 	 * Setup encryption with a local key for the deployment system
 	 *
 	 * The local key should be kept secretly and could be encrypted with
 	 * an optional passphrase. The name defaults to "Local.key".
 	 *
 	 * @param string $passphrase Passphrase for the generated key (optional)
+	 * @param string $configurationPath Path for deployment configuration files
 	 * @return void
 	 */
-	public function setupCommand($passphrase = NULL) {
-		if (file_exists($this->getDeploymentConfigurationPath() . '/Keys/Local.key')) {
+	public function setupCommand($passphrase = NULL, $configurationPath = NULL) {
+		$deploymentPath = $this->deploymentService->getDeploymentsBasePath($configurationPath);
+		if (file_exists($deploymentPath . '/Keys/Local.key')) {
 			$this->outputLine('Local key already exists');
 			$this->quit(1);
 		}
 		$keyPair = $this->encryptionService->generateKeyPair($passphrase);
-		$this->writeKeyPair($keyPair, $this->getDeploymentConfigurationPath() . '/Keys/Local.key');
+		$this->writeKeyPair($keyPair, $deploymentPath . 'Keys/Local.key');
 		$this->outputLine('Local key generated');
 	}
 
@@ -48,12 +56,22 @@ class EncryptCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * Only .yaml files with a header of "#!ENCRYPT" are encrypted.
 	 *
 	 * @param string $deploymentName Optional deployment name to selectively encrypt the configuration
+	 * @param string $configurationPath Path for deployment configuration files
 	 * @return void
 	 * @see typo3.surf:encrypt:open
 	 */
-	public function sealCommand($deploymentName = '') {
-		$keyPair = $this->readKeyPair($this->getDeploymentConfigurationPath() . '/Keys/Local.key');
-		$configurations = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($this->getDeploymentConfigurationPath() . '/Configuration/' . $deploymentName, 'yaml');
+	public function sealCommand($deploymentName = '', $configurationPath = NULL) {
+		if ($deploymentName !== '') {
+			$deployment = $this->deploymentService->getDeployment($deploymentName, $configurationPath);
+			$deploymentConfigurationPath = $deployment->getDeploymentConfigurationPath() . '/';
+			$deploymentBasePath = $deployment->getDeploymentBasePath();
+		} else {
+			$deploymentBasePath = $this->deploymentService->getDeploymentsBasePath($configurationPath);
+			$deploymentConfigurationPath = $deploymentBasePath;
+		}
+
+		$keyPair = $this->readKeyPair($deploymentBasePath . '/Keys/Local.key');
+		$configurations = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($deploymentConfigurationPath, 'yaml');
 		foreach ($configurations as $configuration) {
 			$data = file_get_contents($configuration);
 			if (strpos($data, '#!ENCRYPT') !== 0) {
@@ -76,18 +94,28 @@ class EncryptCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 *
 	 * @param string $passphrase Passphrase to decrypt the local key (if encrypted)
 	 * @param string $deploymentName Optional deployment name to selectively decrypt the configuration
+	 * @param string $configurationPath Path for deployment configuration files
 	 * @return void
 	 * @see typo3.surf:encrypt:seal
 	 */
-	public function openCommand($passphrase = NULL, $deploymentName = '') {
-		$keyPair = $this->readKeyPair($this->getDeploymentConfigurationPath() . '/Keys/Local.key');
+	public function openCommand($passphrase = NULL, $deploymentName = '', $configurationPath = NULL) {
+		if ($deploymentName !== '') {
+			$deployment = $this->deploymentService->getDeployment($deploymentName, $configurationPath);
+			$deploymentConfigurationPath = $deployment->getDeploymentConfigurationPath() . '/';
+			$deploymentBasePath = $deployment->getDeploymentBasePath();
+		} else {
+			$deploymentBasePath = $this->deploymentService->getDeploymentsBasePath($configurationPath);
+			$deploymentConfigurationPath = $deploymentBasePath;
+		}
+
+		$keyPair = $this->readKeyPair($deploymentBasePath . '/Keys/Local.key');
 		try {
 			$keyPair = $this->encryptionService->openKeyPair($keyPair, $passphrase);
 		} catch(\TYPO3\Surf\Encryption\InvalidPassphraseException $exception) {
 			$this->outputLine('Local key is encrypted with passphrase. Wrong or no passphrase given.');
 			$this->quit(1);
 		}
-		$configurations = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($this->getDeploymentConfigurationPath() . '/Configuration/' . $deploymentName, 'yaml.encrypted');
+		$configurations = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($deploymentConfigurationPath, 'yaml.encrypted');
 		foreach ($configurations as $configuration) {
 			$crypted = file_get_contents($configuration);
 			$data = $this->encryptionService->decryptData($crypted, $keyPair->getPrivateKey());
@@ -125,15 +153,6 @@ class EncryptCommandController extends \TYPO3\Flow\Cli\CommandController {
 		$data = json_decode($data, TRUE);
 		$keyPair = new \TYPO3\Surf\Encryption\KeyPair($data['privateKey'], $data['publicKey'], $data['encrypted']);
 		return $keyPair;
-	}
-
-	/**
-	 * Get the deployment configuration base path
-	 *
-	 * @return string
-	 */
-	protected function getDeploymentConfigurationPath() {
-		return FLOW_PATH_ROOT . 'Build/Surf';
 	}
 
 }

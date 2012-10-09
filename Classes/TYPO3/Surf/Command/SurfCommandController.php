@@ -25,10 +25,11 @@ class SurfCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * List available deployments that can be deployed with the surf:deploy command.
 	 *
 	 * @param boolean $quiet If set, only the deployment names will be output, one per line
+	 * @param string $configurationPath Path for deployment configuration files
 	 * @return void
 	 */
-	public function listCommand($quiet = FALSE) {
-		$deploymentNames = $this->deploymentService->getDeploymentNames();
+	public function listCommand($quiet = FALSE, $configurationPath = NULL) {
+		$deploymentNames = $this->deploymentService->getDeploymentNames($configurationPath);
 
 		if (!$quiet) {
 			$this->outputLine('<u>Deployments</u>:' . PHP_EOL);
@@ -49,10 +50,11 @@ class SurfCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * @param string $deploymentName The deployment name
 	 * @param boolean $verbose In verbose mode, the log output of the default logger will contain debug messages
 	 * @param boolean $disableAnsi Disable ANSI formatting of output
+	 * @param string $configurationPath Path for deployment configuration files
 	 * @return void
 	 */
-	public function deployCommand($deploymentName, $verbose = FALSE, $disableAnsi = FALSE) {
-		$deployment = $this->deploymentService->getDeployment($deploymentName);
+	public function deployCommand($deploymentName, $verbose = FALSE, $disableAnsi = FALSE, $configurationPath = NULL) {
+		$deployment = $this->deploymentService->getDeployment($deploymentName, $configurationPath);
 		if ($deployment->getLogger() === NULL) {
 			$logger = $this->createDefaultLogger($deploymentName, $verbose ? LOG_DEBUG : LOG_INFO, $disableAnsi);
 			$deployment->setLogger($logger);
@@ -95,10 +97,11 @@ class SurfCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * Describe a deployment
 	 *
 	 * @param string $deploymentName
+	 * @param string $configurationPath Path for deployment configuration files
 	 * @return void
 	 */
-	public function describeCommand($deploymentName) {
-		$deployment = $this->deploymentService->getDeployment($deploymentName);
+	public function describeCommand($deploymentName, $configurationPath = NULL) {
+		$deployment = $this->deploymentService->getDeployment($deploymentName, $configurationPath);
 
 		$this->outputLine('<em> Deployment <b>' . $deployment->getName() . ' </b></em>');
 		$this->outputLine();
@@ -125,10 +128,11 @@ class SurfCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * @param string $deploymentName The deployment name
 	 * @param boolean $verbose In verbose mode, the log output of the default logger will contain debug messages
 	 * @param boolean $disableAnsi Disable ANSI formatting of output
+	 * @param string $configurationPath Path for deployment configuration files
 	 * @return void
 	 */
-	public function simulateCommand($deploymentName, $verbose = FALSE, $disableAnsi = FALSE) {
-		$deployment = $this->deploymentService->getDeployment($deploymentName);
+	public function simulateCommand($deploymentName, $verbose = FALSE, $disableAnsi = FALSE, $configurationPath = NULL) {
+		$deployment = $this->deploymentService->getDeployment($deploymentName, $configurationPath);
 		if ($deployment->getLogger() === NULL) {
 			$logger = $this->createDefaultLogger($deploymentName, $verbose ? LOG_DEBUG : LOG_INFO, $disableAnsi, FALSE);
 			$deployment->setLogger($logger);

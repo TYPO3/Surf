@@ -84,6 +84,12 @@ class Deployment {
 	protected $options = array();
 
 	/**
+	 * The deployment declaration base path for this deployment
+	 * @var string
+	 */
+	protected $deploymentBasePath;
+
+	/**
 	 * Constructor
 	 *
 	 * @param string $name
@@ -366,6 +372,33 @@ class Deployment {
 	public function setOption($key, $value) {
 		$this->options[$key] = $value;
 		return $this;
+	}
+
+	/**
+	 * Set the deployment base path
+	 *
+	 * @param string $deploymentConfigurationPath
+	 */
+	public function setDeploymentBasePath($deploymentConfigurationPath) {
+		$this->deploymentBasePath = $deploymentConfigurationPath;
+	}
+
+	/**
+	 * Get the deployment base path (defaults to FLOW_PATH_ROOT/Build/Surf)
+	 *
+	 * @return string
+	 */
+	public function getDeploymentBasePath() {
+		return $this->deploymentBasePath;
+	}
+
+	/**
+	 * Get the deployment configuration path (defaults to Build/Surf/DeploymentName/Configuration)
+	 *
+	 * @return string The path without a trailing slash
+	 */
+	public function getDeploymentConfigurationPath() {
+		return $this->getDeploymentBasePath() . '/' . $this->getName() . '/Configuration';
 	}
 
 }
