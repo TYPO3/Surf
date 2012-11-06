@@ -22,6 +22,12 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 	protected $context = 'Production';
 
 	/**
+	 * The TYPO3 Flow major and minor version of this application
+	 * @var string
+	 */
+	protected $version = '2.0';
+
+	/**
 	 * Constructor
 	 */
 	public function __construct($name = 'TYPO3 Flow') {
@@ -67,6 +73,35 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 	 */
 	public function getContext() {
 		return $this->context;
+	}
+
+	/**
+	 * @param string $version
+	 */
+	public function setVersion($version) {
+		$this->version = $version;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVersion() {
+		return $this->version;
+	}
+
+	/**
+	 * Get the directory name for build essentials (e.g. to run unit tests)
+	 *
+	 * The value depends on the Flow version of the application.
+	 *
+	 * @return string
+	 */
+	public function getBuildEssentialsDirectoryName() {
+		if ($this->getVersion() <= '1.1') {
+			return 'Common';
+		} else {
+			return 'BuildEssentials';
+		}
 	}
 
 }
