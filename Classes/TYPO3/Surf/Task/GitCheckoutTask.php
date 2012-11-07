@@ -77,7 +77,7 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 					&& git submodule $quietFlag init
 					&& for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.\${mod}.url `git config -f .gitmodules --get submodule.\${mod}.url` && echo synced \$mod; done
 					&& git submodule $quietFlag sync
-					&& git submodule $quietFlag update --recursive
+					&& git submodule $quietFlag update --init --recursive
 					&& git clean $quietFlag -d -x -ff;
 				else
 					git clone $quietFlag $repositoryUrl $deploymentPath/cache/localgitclone
@@ -85,7 +85,7 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 					&& git checkout $quietFlag -b deploy $sha1
 					&& git submodule $quietFlag init
 					&& git submodule $quietFlag sync
-					&& git submodule $quietFlag update --recursive;
+					&& git submodule $quietFlag update --init --recursive;
 			fi
 		", "\t\n", "  ");
 
