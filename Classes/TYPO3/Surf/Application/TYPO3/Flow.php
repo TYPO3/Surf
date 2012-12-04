@@ -16,6 +16,12 @@ use TYPO3\Surf\Domain\Model\Deployment;
 class Flow extends \TYPO3\Surf\Application\BaseApplication {
 
 	/**
+	 * The production context
+	 * @var string
+	 */
+	protected $context = 'Production';
+
+	/**
 	 * Constructor
 	 */
 	public function __construct($name = 'TYPO3 Flow') {
@@ -42,6 +48,25 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 				'typo3.surf:typo3:flow:setfilepermissions'
 			), $this)
 			->addTask('typo3.surf:typo3:flow:migrate', 'migrate', $this);
+	}
+
+	/**
+	 * Set the application production context
+	 *
+	 * @param string $context
+	 */
+	public function setContext($context) {
+		$this->context = trim($context);
+		return $this;
+	}
+
+	/**
+	 * Get the application production context
+	 *
+	 * @return string
+	 */
+	public function getContext() {
+		return $this->context;
 	}
 
 }

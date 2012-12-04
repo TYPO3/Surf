@@ -35,12 +35,16 @@ class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		if (!$application instanceof \TYPO3\Surf\Application\TYPO3\Flow) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Flow application needed for ImportSiteTask, got "%s"', get_class($application)), 1358863473);
+		}
 		if (!isset($options['sitePackageKey'])) {
 			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('"sitePackageKey" option not set for application "%s"', $application->getName()), 1312312646);
 		}
+
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$sitePackageKey = $options['sitePackageKey'];
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow typo3.neos:site:import --package-key ' . $sitePackageKey, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./flow typo3.neos:site:import --package-key ' . $sitePackageKey, $node, $deployment);
 	}
 
 	/**

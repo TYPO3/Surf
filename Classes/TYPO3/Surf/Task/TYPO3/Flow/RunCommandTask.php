@@ -35,6 +35,9 @@ class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		if (!$application instanceof \TYPO3\Surf\Application\TYPO3\Flow) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Flow application needed for RunCommandTask, got "%s"', get_class($application)), 1358863336);
+		}
 		if (!isset($options['command'])) {
 			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
 		}
@@ -42,7 +45,7 @@ class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 		$arguments = escapeshellarg(isset($options['arguments']) ? $options['arguments'] : '');
 
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow ' . $options['command'] . $arguments, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./flow ' . $options['command'] . $arguments, $node, $deployment);
 	}
 
 	/**
@@ -55,6 +58,7 @@ class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		$this->execute($node, $application, $deployment, $options);
 	}
 
 	/**
