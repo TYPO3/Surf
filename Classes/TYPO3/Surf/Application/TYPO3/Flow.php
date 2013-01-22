@@ -104,5 +104,20 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 		}
 	}
 
+	/**
+	 * Get the name of the Flow script (flow or flow3)
+	 *
+	 * The value depends on the Flow version of the application.
+	 *
+	 * @return string
+	 */
+	public function getFlowScriptName() {
+		if ($this->getVersion() <= '1.1') {
+			return 'flow3';
+		} else {
+			return 'flow';
+		}
+	}
+
 }
 ?>

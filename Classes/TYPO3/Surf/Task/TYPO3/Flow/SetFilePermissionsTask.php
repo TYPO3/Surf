@@ -43,7 +43,12 @@ class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task {
 		$arguments .= ' ' . (isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data');
 		$arguments .= ' ' . (isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data');
 
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./flow typo3.flow:core:setfilepermissions ' . $arguments, $node, $deployment);
+		$commandPackageKey = 'typo3.flow';
+		if ($application->getVersion() < '2.0') {
+			$commandPackageKey = 'typo3.flow3';
+		}
+
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . ':core:setfilepermissions ' . $arguments, $node, $deployment);
 	}
 
 	/**

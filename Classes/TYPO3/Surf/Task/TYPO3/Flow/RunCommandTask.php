@@ -45,7 +45,7 @@ class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 		$arguments = escapeshellarg(isset($options['arguments']) ? $options['arguments'] : '');
 
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./flow ' . $options['command'] . $arguments, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $options['command'] . $arguments, $node, $deployment);
 	}
 
 	/**
