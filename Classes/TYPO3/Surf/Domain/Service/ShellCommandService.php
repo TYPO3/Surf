@@ -124,6 +124,7 @@ class ShellCommandService {
 
 		if ($node->hasOption('remoteCommandExecutionHandler')) {
 			$remoteCommandExecutionHandler = $node->getOption('remoteCommandExecutionHandler');
+			/** @var $remoteCommandExecutionHandler callable */
 			return $remoteCommandExecutionHandler($this, $command, $node, $deployment, $logOutput);
 		}
 
