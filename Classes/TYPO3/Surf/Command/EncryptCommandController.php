@@ -41,8 +41,9 @@ class EncryptCommandController extends \TYPO3\Flow\Cli\CommandController {
 			$this->outputLine('Local key already exists');
 			$this->quit(1);
 		}
+		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($deploymentPath . '/Keys');
 		$keyPair = $this->encryptionService->generateKeyPair($passphrase);
-		$this->writeKeyPair($keyPair, $deploymentPath . 'Keys/Local.key');
+		$this->writeKeyPair($keyPair, $deploymentPath . '/Keys/Local.key');
 		$this->outputLine('Local key generated');
 	}
 
