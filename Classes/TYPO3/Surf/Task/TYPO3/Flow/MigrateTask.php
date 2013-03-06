@@ -34,8 +34,12 @@ class MigrateTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		if (!$application instanceof \TYPO3\Surf\Application\TYPO3\Flow) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)), 1358863288);
+		}
+
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow typo3.flow:doctrine:migrate', $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./flow typo3.flow:doctrine:migrate', $node, $deployment);
 	}
 
 	/**

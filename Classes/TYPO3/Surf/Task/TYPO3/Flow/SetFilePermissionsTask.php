@@ -33,13 +33,17 @@ class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
+		if (!$application instanceof \TYPO3\Surf\Application\TYPO3\Flow) {
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Flow application needed for SetFilePermissionsTask, got "%s"', get_class($application)), 1358863436);
+		}
+
 		$targetPath = $deployment->getApplicationReleasePath($application);
 
 		$arguments = isset($options['shellUsername']) ? $options['shellUsername'] : (isset($options['username']) ? $options['username'] : 'root');
 		$arguments .= ' ' . (isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data');
 		$arguments .= ' ' . (isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data');
 
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=Production ./flow typo3.flow:core:setfilepermissions ' . $arguments, $node, $deployment);
+		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./flow typo3.flow:core:setfilepermissions ' . $arguments, $node, $deployment);
 	}
 
 	/**
