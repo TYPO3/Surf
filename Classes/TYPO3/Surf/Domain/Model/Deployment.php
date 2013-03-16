@@ -208,6 +208,23 @@ class Deployment {
 	}
 
 	/**
+	 * Get a node by name
+	 *
+	 * In the special case "localhost" an ad-hoc Node with hostname "localhost" is returned.
+	 *
+	 * @return \TYPO3\Surf\Domain\Model\Node The Node or NULL if no Node with the given name was found
+	 */
+	public function getNode($name) {
+		if ($name === 'localhost') {
+			$node = new Node('localhost');
+			$node->setHostname('localhost');
+			return $node;
+		}
+		$nodes = $this->getNodes();
+		return isset($nodes[$name]) ? $nodes[$name] : NULL;
+	}
+
+	/**
 	 * Get all applications for this deployment
 	 *
 	 * @return array
@@ -401,5 +418,11 @@ class Deployment {
 		return $this->getDeploymentBasePath() . '/' . $this->getName() . '/Configuration';
 	}
 
+	/**
+	 * Get a local workspace directory for the application
+	 */
+	public function getWorkspacePath(Application $application) {
+		return FLOW_PATH_DATA . 'Surf/' . $this->getName() . '/' . $application->getName();
+	}
 }
 ?>

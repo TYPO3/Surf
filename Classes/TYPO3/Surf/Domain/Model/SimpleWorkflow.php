@@ -30,8 +30,13 @@ class SimpleWorkflow extends Workflow {
 	protected $stages = array(
 		// Initialize directories etc. (first time deploy)
 		'initialize',
-		// Updates code
+		// Local preparation of and packaging of application assets (code and files)
+		'package',
+		// Transfer of application assets to the node
+		'transfer',
+		// Update the application assets on the node
 		'update',
+
 		// Migrate (Doctrine, custom)
 		'migrate',
 		// Prepare final release (e.g. warmup)

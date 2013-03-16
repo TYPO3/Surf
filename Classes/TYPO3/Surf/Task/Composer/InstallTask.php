@@ -31,10 +31,21 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$applicationReleasePath = $deployment->getApplicationReleasePath($application);
+		if (isset($options['useApplicationWorkspace']) && $options['useApplicationWorkspace'] === TRUE) {
+			$composerRootPath = $deployment->getWorkspacePath($application);
+		} else {
+			$composerRootPath = $deployment->getApplicationReleasePath($application);
+		}
 
-		if ($this->composerManifestExists($applicationReleasePath, $node, $deployment)) {
-			$command = $this->buildComposerInstallCommand($applicationReleasePath, $options);
+		if (isset($options['nodeName'])) {
+			$node = $deployment->getNode($options['nodeName']);
+			if ($node === NULL) {
+				throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Node "%s" not found', $options['nodeName']), 1369759412);
+			}
+		}
+
+		if ($this->composerManifestExists($composerRootPath, $node, $deployment)) {
+			$command = $this->buildComposerInstallCommand($composerRootPath, $options);
 			$this->shell->executeOrSimulate($command, $node, $deployment);
 		}
 	}
@@ -78,9 +89,10 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return boolean
 	 */
 	protected function composerManifestExists($path, Node $node, Deployment $deployment) {
-		$composerJsonExists = $this->shell->executeOrSimulate('test -f ' . \TYPO3\Flow\Utility\Files::concatenatePaths(array($path, 'composer.json')), $node, $deployment, TRUE);
+		$composerJsonPath = \TYPO3\Flow\Utility\Files::concatenatePaths(array($path, 'composer.json'));
+		$composerJsonExists = $this->shell->executeOrSimulate('test -f ' . escapeshellarg($composerJsonPath), $node, $deployment, TRUE);
 		if ($composerJsonExists === FALSE) {
-			$deployment->getLogger()->log('No composer.json found in path ' . \TYPO3\Flow\Utility\Files::concatenatePaths(array($path, 'composer.json')), LOG_DEBUG);
+			$deployment->getLogger()->log('No composer.json found in path "' . $composerJsonPath . '"', LOG_DEBUG);
 			return FALSE;
 		}
 

@@ -54,7 +54,7 @@ class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task {
 		$previousReleasePath = $application->getDeploymentPath() . '/releases/previous';
 		$previousReleaseIdentifier = trim($this->shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment));
 
-		$allReleasesList = $this->shell->execute("find $releasesPath/. -maxdepth 1 -type d -exec basename {} \;", $node, $deployment);
+		$allReleasesList = $this->shell->execute("if [ -d $releasesPath/. ]; then find $releasesPath/. -maxdepth 1 -type d -exec basename {} \; ; fi", $node, $deployment);
 		$allReleases = preg_split('/\s+/', $allReleasesList, -1, PREG_SPLIT_NO_EMPTY);
 
 		$removableReleases = array();

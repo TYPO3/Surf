@@ -28,7 +28,7 @@ class GitCheckoutTaskTest extends BaseTaskTest {
 	/**
 	 * @test
 	 */
-	public function executeWithEmptyOptionsAndValidSha1FetchesResetsAndCopiesRepository() {
+	public function executeWithEmptyOptionsAndValidSha1FetchesResetsCopiesAndCleansRepository() {
 		$options = array(
 			'repositoryUrl' => 'ssh://git.example.com/project/path.git'
 		);
@@ -39,7 +39,26 @@ class GitCheckoutTaskTest extends BaseTaskTest {
 
 		$this->assertCommandExecuted('git fetch -q origin');
 		$this->assertCommandExecuted('git reset -q --hard d5b7769852a5faa69574fcd3db0799f4ffbd9eec');
-		$this->assertCommandExecuted('cp -RPp /home/jdoe/app/cache/localgitclone/. /home/jdoe/app/releases/');
+		$this->assertCommandExecuted('cp -RPp /home/jdoe/app/cache/transfer/. /home/jdoe/app/releases/');
+		$this->assertCommandExecuted('git clean -q -d -x -ff');
+	}
+
+	/**
+	 * @test
+	 */
+	public function executeWithBranchOptionAndValidSha1FetchesResetsAndCopiesRepository() {
+		$options = array(
+			'repositoryUrl' => 'ssh://git.example.com/project/path.git',
+			'branch' => 'release/production'
+		);
+		$this->responses = array(
+			'git ls-remote ssh://git.example.com/project/path.git refs/heads/release/production | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+		);
+		$this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+		$this->assertCommandExecuted('git fetch -q origin');
+		$this->assertCommandExecuted('git reset -q --hard d5b7769852a5faa69574fcd3db0799f4ffbd9eec');
+		$this->assertCommandExecuted('cp -RPp /home/jdoe/app/cache/transfer/. /home/jdoe/app/releases/');
 	}
 
 	/**

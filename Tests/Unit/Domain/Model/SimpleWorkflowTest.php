@@ -447,6 +447,14 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 				'deployment' => 'Test deployment',
 				'stage' => 'initialize',
 				'options' => array()
+			),
+			array (
+				'task' => 'task1:package',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'package',
+				'options' => array()
 			)
 		);
 

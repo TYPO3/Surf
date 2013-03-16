@@ -32,6 +32,9 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 	 */
 	public function __construct($name = 'TYPO3 Flow') {
 		parent::__construct($name);
+		$this->options = array_merge($this->options, array(
+			'updateMethod' => 'composer'
+		));
 	}
 
 	/**
@@ -46,13 +49,50 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 
 		$workflow
 			->addTask('typo3.surf:typo3:flow:createdirectories', 'initialize', $this)
-			->afterTask('typo3.surf:gitcheckout', array(
-				'typo3.surf:composer:install',
+			->afterStage('update', array(
 				'typo3.surf:typo3:flow:symlinkdata',
 				'typo3.surf:typo3:flow:symlinkconfiguration',
-				'typo3.surf:typo3:flow:copyconfiguration',
+				'typo3.surf:typo3:flow:copyconfiguration'
 			), $this)
 			->addTask('typo3.surf:typo3:flow:migrate', 'migrate', $this);
+	}
+
+	/**
+	 * Register local composer install task for packageMethod "git" after stage "package"
+	 *
+	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
+	 * @param string $packageMethod
+	 * @return void
+	 */
+	protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod) {
+		parent::registerTasksForPackageMethod($workflow, $packageMethod);
+
+		$workflow->defineTask('typo3.surf:composer:localinstall', 'typo3.surf:composer:install', array(
+			'nodeName' => 'localhost',
+			'useApplicationWorkspace' => TRUE
+		));
+
+		if ($packageMethod === 'git') {
+			$workflow->afterStage('package', 'typo3.surf:composer:localinstall', $this);
+		}
+	}
+
+	/**
+	 * Add support for updateMethod "composer"
+	 *
+	 * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
+	 * @param string $updateMethod
+	 * @return void
+	 */
+	protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod) {
+		switch ($updateMethod) {
+			case 'composer':
+				$workflow->addTask('typo3.surf:composer:install', 'update', $this);
+				break;
+			default:
+				parent::registerTasksForUpdateMethod($workflow, $updateMethod);
+				break;
+		}
 	}
 
 	/**

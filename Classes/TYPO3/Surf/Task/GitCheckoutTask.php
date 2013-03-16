@@ -12,18 +12,13 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
 
 /**
- * A generic checkout task
+ * A Git checkout task
  *
  */
-class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-	 */
-	protected $shell;
+class GitCheckoutTask extends AbstractCheckoutTask {
 
 	/**
 	 * Execute this task
@@ -41,97 +36,28 @@ class GitCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 			throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', $application->getName()), 1335974764);
 		}
 
-		$repositoryUrl = $options['repositoryUrl'];
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$deploymentPath = $application->getDeploymentPath();
+		$checkoutPath = \TYPO3\Flow\Utility\Files::concatenatePaths(array($deploymentPath, 'cache', 'transfer'));
 
-		if (isset($options['sha1'])) {
-			$sha1 = $options['sha1'];
-			if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
-				throw new TaskExecutionException('The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
-			}
-		} else {
-			if (isset($options['tag'])) {
-				$sha1 = $this->shell->execute("git ls-remote $repositoryUrl refs/tags/{$options['tag']} | awk '{print $1 }'", $node, $deployment, TRUE);
-				if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
-					throw new TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
-				}
-			} else {
-				if (!isset($options['branch'])) {
-					$options['branch'] = 'master';
-				}
-				$sha1 = $this->shell->execute("git ls-remote $repositoryUrl refs/heads/{$options['branch']} | awk '{print $1 }'", $node, $deployment, TRUE);
-				if (preg_match('/^[a-z0-9]{40}$/', $sha1) === 0) {
-					throw new TaskExecutionException('Could not retrieve sha1 of git branch "' . $options['branch'] . '"', 1335974926);
-				}
-			}
+		if (!isset($options['hardClean'])) {
+			$options['hardClean'] = TRUE;
 		}
 
-		$quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
-		$command = strtr("
-			if [ -d $deploymentPath/cache/localgitclone ];
-				then
-					cd $deploymentPath/cache/localgitclone
-					&& git fetch $quietFlag origin
-					&& git reset $quietFlag --hard $sha1
-					&& git submodule $quietFlag init
-					&& for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.\${mod}.url `git config -f .gitmodules --get submodule.\${mod}.url` && echo synced \$mod; done
-					&& git submodule $quietFlag sync
-					&& git submodule $quietFlag update --init --recursive
-					&& git clean $quietFlag -d -x -ff;
-				else
-					git clone $quietFlag $repositoryUrl $deploymentPath/cache/localgitclone
-					&& cd $deploymentPath/cache/localgitclone
-					&& git checkout $quietFlag -b deploy $sha1
-					&& git submodule $quietFlag init
-					&& git submodule $quietFlag sync
-					&& git submodule $quietFlag update --init --recursive;
-			fi
-		", "\t\n", "  ");
-
-		$this->shell->executeOrSimulate($command, $node, $deployment);
+		$sha1 = $this->executeOrSimulateGitCloneOrUpdate($checkoutPath, $node, $deployment, $options);
 
 		$command = strtr("
-			cp -RPp $deploymentPath/cache/localgitclone/. $releasePath
+			cp -RPp $checkoutPath/. $releasePath
 				&& (echo $sha1 > $releasePath" . "REVISION)
 			", "\t\n", "  ");
 
 		$this->shell->executeOrSimulate($command, $node, $deployment);
 
-		if (isset($options['gitPostCheckoutCommands'])) {
-			$gitPostCheckoutCommands = $options['gitPostCheckoutCommands'];
-			if (is_array($gitPostCheckoutCommands)) {
-				foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
-					foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {
-						$branchName = 'mybranch_' . trim($sha1) . '_' . uniqid();
-						$command = strtr("
-							cd $releasePath
-							&& cd $localPath
-							&& git checkout -b $branchName
-							&& $postCheckoutCommand
-						", "\t\n", "  ");
-						$this->shell->executeOrSimulate($command, $node, $deployment);
-					}
-				}
-			}
-		}
+		$this->executeOrSimulatePostGitCheckoutCommands($releasePath, $sha1, $node, $deployment, $options);
 	}
 
 	/**
-	 * Simulate this task
-	 *
-	 * @param Node $node
-	 * @param Application $application
-	 * @param Deployment $deployment
-	 * @param array $options
-	 * @return void
-	 */
-	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$this->execute($node, $application, $deployment, $options);
-	}
-
-	/**
-	 * Rollback this task
+	 * Rollback this task by removing the revision file
 	 *
 	 * @param \TYPO3\Surf\Domain\Model\Node $node
 	 * @param \TYPO3\Surf\Domain\Model\Application $application

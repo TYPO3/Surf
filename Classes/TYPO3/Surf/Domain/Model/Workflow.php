@@ -99,7 +99,7 @@ abstract class Workflow {
 	 * @param string|array $tasks
 	 * @param string $stage The name of the stage when this task shall be executed
 	 * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
-	 * @param string $step
+	 * @param string $step A stage has three steps "before", "tasks" and "after"
 	 * @return \TYPO3\Surf\Domain\Model\Workflow
 	 */
 	protected function addTaskToStage($tasks, $stage, Application $application = NULL, $step = 'tasks') {
