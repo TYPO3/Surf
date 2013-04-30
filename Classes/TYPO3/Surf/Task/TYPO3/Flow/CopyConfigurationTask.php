@@ -43,7 +43,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 		}
 
 		$targetReleasePath = $deployment->getApplicationReleasePath($application);
-		$configurationPath = $this->getDeploymentConfigurationPath() . '/' . $deployment->getName() . '/Configuration/';
+		$configurationPath = $deployment->getDeploymentConfigurationPath() . '/';
 		if (!is_dir($configurationPath)) {
 			return;
 		}
@@ -83,15 +83,6 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$this->execute($node, $application, $deployment, $options);
-	}
-
-	/**
-	 * Get the deployment configuration base path
-	 *
-	 * @return string
-	 */
-	protected function getDeploymentConfigurationPath() {
-		return FLOW_PATH_ROOT . 'Build/Surf';
 	}
 
 }
