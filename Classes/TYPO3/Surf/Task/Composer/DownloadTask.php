@@ -28,7 +28,7 @@ class DownloadTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
-	 * @throws TaskExecutionException
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {

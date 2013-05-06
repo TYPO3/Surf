@@ -28,7 +28,7 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @param \TYPO3\Surf\Domain\Model\Application $application
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
 	 * @param array $options
-	 * @throws TaskExecutionException
+	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 * @return void
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
@@ -45,7 +45,7 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task {
 			throw new \TYPO3\Surf\Exception\TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
 		}
 
-		$command = sprintf('cd %s && %s install --no-ansi --no-interaction', $applicationReleasePath, $options['composerCommandPath']);
+		$command = sprintf('cd %s && %s install --no-ansi --no-interaction --no-dev', $applicationReleasePath, $options['composerCommandPath']);
 		$this->shell->executeOrSimulate($command, $node, $deployment);
 	}
 }
