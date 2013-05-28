@@ -40,7 +40,7 @@ class DownloadTask extends \TYPO3\Surf\Domain\Model\Task {
 			$composerDownloadCommand = 'curl -s https://getcomposer.org/installer | php';
 		}
 
-		$command = sprintf('cd %s && %s', $applicationReleasePath, $composerDownloadCommand);
+		$command = sprintf('cd %s && %s', escapeshellarg($applicationReleasePath), $composerDownloadCommand);
 		$this->shell->executeOrSimulate($command, $node, $deployment);
 	}
 }
