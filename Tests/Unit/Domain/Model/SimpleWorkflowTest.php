@@ -344,5 +344,114 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		return $deployment;
 	}
 
+	/**
+	 * @test
+	 */
+	public function tasksAreExecutedInTheRightOrder() {
+		$executedTasks = array();
+		$deployment = $this->buildDeployment($executedTasks);
+		$workflow = $deployment->getWorkflow();
+
+		$flowApplication = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Flow Application');
+		$flowApplication->addNode(new \TYPO3\Surf\Domain\Model\Node('flow-1.example.com'));
+
+		$deployment->addApplication($flowApplication);
+
+		$deployment->initialize();
+
+		$workflow->addTask('task1:package', 'package');
+
+		$workflow->addTask('task1:initialize', 'initialize');
+		$workflow->addTask('task3:initialize', 'initialize');
+		$workflow->afterTask('task1:initialize', 'task2:initialize');
+
+		$workflow->beforeStage('initialize', 'before1:initialize');
+		$workflow->beforeStage('initialize', 'before3:initialize');
+		$workflow->afterTask('before1:initialize', 'before2:initialize');
+
+		$workflow->afterStage('initialize', 'after1:initialize');
+		$workflow->afterStage('initialize', 'after3:initialize');
+		$workflow->afterTask('after1:initialize', 'after2:initialize');
+
+		$workflow->run($deployment);
+
+		$expected = array(
+			array (
+				'task' => 'before1:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			),
+			array (
+				'task' => 'before2:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			),
+			array (
+				'task' => 'before3:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			),
+			array (
+				'task' => 'task1:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			),
+			array (
+				'task' => 'task2:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			),
+			array (
+				'task' => 'task3:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			),
+			array (
+				'task' => 'after1:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			),
+			array (
+				'task' => 'after2:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			),
+			array (
+				'task' => 'after3:initialize',
+				'node' => 'flow-1.example.com',
+				'application' => 'TYPO3 Flow Application',
+				'deployment' => 'Test deployment',
+				'stage' => 'initialize',
+				'options' => array()
+			)
+		);
+
+		$this->assertEquals($expected, $executedTasks);
+	}
+
 }
 ?>

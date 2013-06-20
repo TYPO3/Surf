@@ -60,6 +60,7 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 	 * Set the application production context
 	 *
 	 * @param string $context
+	 * @return \TYPO3\Surf\Application\TYPO3\Flow
 	 */
 	public function setContext($context) {
 		$this->context = trim($context);

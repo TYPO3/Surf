@@ -12,8 +12,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * A task to create given directories
- *
+ * A task to create given directories for a release
  */
 class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
 

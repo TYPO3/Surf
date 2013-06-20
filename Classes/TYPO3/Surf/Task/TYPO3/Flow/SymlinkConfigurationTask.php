@@ -18,6 +18,8 @@ use TYPO3\Flow\Annotations as Flow;
  * Note: this might cause problems with concurrent access due to the cached configuration
  * insided this directory.
  *
+ *
+ * TODO Fix problem with include cached configuration
  */
 class SymlinkConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 
