@@ -39,17 +39,20 @@ class ShellTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$deploymentPath = $application->getDeploymentPath();
-		$sharedPath = $application->getSharedPath();
-		$releasePath = $deployment->getApplicationReleasePath($application);
-		$currentPath = $application->getDeploymentPath() . '/releases/current';
-		$previousPath = $application->getDeploymentPath() . '/releases/previous';
-
 		if (!isset($options['command'])) {
 			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing "command" option for ShellTask', 1311168045);
 		}
+
+		$replacePaths = array(
+			'{deploymentPath}' => $application->getDeploymentPath(),
+			'{sharedPath}' => $application->getSharedPath(),
+			'{releasePath}' => $deployment->getApplicationReleasePath($application),
+			'{currentPath}' => $application->getDeploymentPath() . '/releases/current',
+			'{previousPath}' => $application->getDeploymentPath() . '/releases/previous'
+		);
+
 		$command = $options['command'];
-		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);
+		$command = str_replace(array_keys($replacePaths), $replacePaths, $command);
 
 		$ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === TRUE;
 		$logOutput = !(isset($options['logOutput']) && $options['logOutput'] === FALSE);
@@ -80,17 +83,20 @@ class ShellTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @return void
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$deploymentPath = $application->getDeploymentPath();
-		$sharedPath = $application->getSharedPath();
-		$releasePath = $deployment->getApplicationReleasePath($application);
-		$currentPath = $application->getDeploymentPath() . '/releases/current';
-		$previousPath = $application->getDeploymentPath() . '/releases/previous';
-
 		if (!isset($options['rollbackCommand'])) {
 			return;
 		}
+
+		$replacePaths = array(
+			'{deploymentPath}' => $application->getDeploymentPath(),
+			'{sharedPath}' => $application->getSharedPath(),
+			'{releasePath}' => $deployment->getApplicationReleasePath($application),
+			'{currentPath}' => $application->getDeploymentPath() . '/releases/current',
+			'{previousPath}' => $application->getDeploymentPath() . '/releases/previous'
+		);
+
 		$command = $options['rollbackCommand'];
-		$command = str_replace(array('{deploymentPath}', '{sharedPath}', '{releasePath}', '{currentPath}', '{previousPath}'), array($deploymentPath, $sharedPath, $releasePath, $currentPath, $previousPath), $command);
+		$command = str_replace(array_keys($replacePaths), $replacePaths, $command);
 
 		$this->shell->execute($command, $node, $deployment, TRUE);
 	}
