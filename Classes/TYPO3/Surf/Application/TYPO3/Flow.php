@@ -51,7 +51,6 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 				'typo3.surf:typo3:flow:symlinkdata',
 				'typo3.surf:typo3:flow:symlinkconfiguration',
 				'typo3.surf:typo3:flow:copyconfiguration',
-				'typo3.surf:typo3:flow:setfilepermissions'
 			), $this)
 			->addTask('typo3.surf:typo3:flow:migrate', 'migrate', $this);
 	}
