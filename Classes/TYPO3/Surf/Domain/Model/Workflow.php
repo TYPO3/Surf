@@ -58,7 +58,7 @@ abstract class Workflow {
 			foreach ($this->tasks['stage'] as $applicationName => $steps) {
 				foreach ($steps as $step => $tasksByStageStep) {
 					foreach ($tasksByStageStep as $stageName => $tasks) {
-						$this->tasks['stage'][$applicationName][$stageName][$step] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
+						$this->tasks['stage'][$applicationName][$step][$stageName] = array_filter($tasks, function($task) use ($removeTask) { return $task !== $removeTask; });
 					}
 				}
 			}

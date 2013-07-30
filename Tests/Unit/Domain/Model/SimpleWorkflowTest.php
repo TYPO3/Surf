@@ -11,6 +11,8 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\Surf\Domain\Model\SimpleWorkflow;
+
 /**
  * Unit test for SimpleWorkflow
  */
@@ -336,7 +338,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 			$executedTasks[] = array('task' => $task, 'node' => $node->getName(), 'application' => $application->getName(), 'deployment' => $deployment->getName(), 'stage' => $stage, 'options' => $options);
 		}));
 
-		$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
+		$workflow = new SimpleWorkflow();
 		\TYPO3\Flow\Reflection\ObjectAccess::setProperty($workflow, 'taskManager', $mockTaskManager, TRUE);
 
 		$deployment->setWorkflow($workflow);
@@ -460,6 +462,108 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 		$this->assertEquals($expected, $executedTasks);
 	}
+
+	/**
+	 * @return array
+	 */
+	public function taskRegistrationExamples() {
+		return array(
+			'remove task in stage' => array(
+				function($workflow, $application) {
+					$workflow->addTask('task1:initialize', 'initialize');
+					$workflow->addTask('task2:package', 'package');
+
+					$workflow->removeTask('task1:initialize');
+				},
+				array(
+					array(
+						'task' => 'task2:package',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
+						'deployment' => 'Test deployment',
+						'stage' => 'package',
+						'options' => array()
+					)
+				)
+			),
+			'remove task in before hook' => array(
+				function($workflow, $application) {
+					$workflow->addTask('task1:initialize', 'initialize');
+					$workflow->beforeTask('task1:initialize', 'task2:before');
+					$workflow->beforeTask('task1:initialize', 'task3:before');
+
+					$workflow->removeTask('task2:before');
+				},
+				array(
+					array(
+						'task' => 'task3:before',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
+						'deployment' => 'Test deployment',
+						'stage' => 'initialize',
+						'options' => array()
+					),
+					array(
+						'task' => 'task1:initialize',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
+						'deployment' => 'Test deployment',
+						'stage' => 'initialize',
+						'options' => array()
+					)
+				)
+			),
+			'remove task in after hook' => array(
+				function($workflow, $application) {
+					$workflow->addTask('task1:initialize', 'initialize');
+					$workflow->afterTask('task1:initialize', 'task2:after');
+					$workflow->afterTask('task1:initialize', 'task3:after');
+
+					$workflow->removeTask('task2:after');
+				},
+				array(
+					array(
+						'task' => 'task1:initialize',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
+						'deployment' => 'Test deployment',
+						'stage' => 'initialize',
+						'options' => array()
+					),
+					array(
+						'task' => 'task3:after',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
+						'deployment' => 'Test deployment',
+						'stage' => 'initialize',
+						'options' => array()
+					)
+				)
+			)
+		);
+	}
+
+	/**
+	 * @test
+	 * @dataProvider taskRegistrationExamples
+	 */
+	public function removeTaskRemovesTaskFromStages($callback, $expectedTasks) {
+		$executedTasks = array();
+		$deployment = $this->buildDeployment($executedTasks);
+		$workflow = $deployment->getWorkflow();
+
+		$flowApplication = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Flow Application');
+		$flowApplication->addNode(new \TYPO3\Surf\Domain\Model\Node('flow-1.example.com'));
+		$deployment->addApplication($flowApplication);
+		$deployment->initialize();
+
+		$callback($workflow, $flowApplication);
+
+		$workflow->run($deployment);
+
+		$this->assertEquals($expectedTasks, $executedTasks);
+	}
+
 
 }
 ?>
