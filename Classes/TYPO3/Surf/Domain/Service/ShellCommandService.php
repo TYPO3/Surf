@@ -94,18 +94,8 @@ class ShellCommandService {
 	protected function executeLocalCommand($command, Deployment $deployment, $logOutput = TRUE) {
 		$command = $this->prepareCommand($command);
 		$deployment->getLogger()->log('(localhost): "' . $command . '"', LOG_DEBUG);
-		$returnedOutput = '';
 
-		$fp = popen($command, 'r');
-		while (($line = fgets($fp)) !== FALSE) {
-			if ($logOutput) {
-				$deployment->getLogger()->log('> ' . rtrim($line), LOG_DEBUG);
-			}
-			$returnedOutput .= $line;
-		}
-		$exitCode = pclose($fp);
-
-		return array($exitCode, $returnedOutput);
+		return $this->executeProcess($deployment, $command, $logOutput, '> ');
 	}
 
 
@@ -188,7 +178,7 @@ class ShellCommandService {
 		if (is_string($command)) {
 			return trim($command);
 		} elseif (is_array($command)) {
-			return implode(';', $command);
+			return implode(' && ', $command);
 		} else {
 			throw new \TYPO3\Surf\Exception\TaskExecutionException('Command must be string or array, ' . gettype($command) . ' given.', 1312454906);
 		}

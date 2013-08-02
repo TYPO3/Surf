@@ -122,5 +122,50 @@ class ShellCommandServiceTest extends \TYPO3\Flow\Tests\UnitTestCase {
 			TRUE
 		), $arguments);
 	}
+
+	/**
+	 * @test
+	 */
+	public function executeOnRemoteNodeJoinsCommandsWithAndOperator() {
+		$shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
+
+		$node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+		$node->setHostname('asdf');
+
+		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
+		$deployment->setLogger($mockLogger);
+
+		$shellCommandService->expects($this->any())->method('executeProcess')->with(
+			$deployment, $this->stringContains('bin/false && ls -al')
+		)->will($this->returnValue(array(0, 'Foo')));
+
+		$response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
+
+		$this->assertEquals('Foo', $response);
+	}
+
+	/**
+	 * @test
+	 */
+	public function executeOnLocalNodeJoinsCommandsWithAndOperator() {
+		$shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
+
+		$node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+		$node->setHostname('localhost');
+
+		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
+		$deployment->setLogger($mockLogger);
+
+		$shellCommandService->expects($this->any())->method('executeProcess')->with(
+			$deployment, $this->stringContains('bin/false && ls -al')
+		)->will($this->returnValue(array(0, 'Foo')));
+
+		$response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
+
+		$this->assertEquals('Foo', $response);
+	}
+
 }
 ?>
