@@ -96,16 +96,22 @@ abstract class BaseTaskTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 * The substring will be matched against all executed commands
 	 * (called with execute or executeOrSimulate).
 	 *
-	 * @param string $commandSubstring A command substring that was expected to be executed
+	 * @param string $commandSubstring A command substring that was expected to be executed or a PREG pattern (e.g. "/git init .* -q/")
 	 * @return void
 	 */
 	protected function assertCommandExecuted($commandSubstring) {
 		foreach ($this->commands['executed'] as $command) {
-			if (strpos($command, $commandSubstring) !== FALSE) {
-				return;
+			if (strpos($commandSubstring, '/') === 0) {
+				if (preg_match($commandSubstring, $command)) {
+					return;
+				}
+			} else {
+				if (strpos($command, $commandSubstring) !== FALSE) {
+					return;
+				}
 			}
 		}
-		$this->fail('Failed asserting that command "' . $commandSubstring . '" was executed.');
+		$this->fail('Failed asserting that command "' . $commandSubstring . '" was executed in one of the following commands:' . chr(10) . implode(chr(10), $this->commands['executed']));
 	}
 
 	/**
