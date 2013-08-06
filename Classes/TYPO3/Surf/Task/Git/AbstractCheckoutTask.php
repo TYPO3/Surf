@@ -89,6 +89,7 @@ abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 				then
 					cd $checkoutPath
 					&& git fetch $quietFlag origin
+					" . (isset($options['fetchAllTags']) && $options['fetchAllTags'] === TRUE ? '&& git fetch --tags' : '') . "
 					&& git reset $quietFlag --hard $sha1
 					&& git submodule $quietFlag init
 					&& for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.\${mod}.url `git config -f .gitmodules --get submodule.\${mod}.url` && echo synced \$mod; done
@@ -98,6 +99,7 @@ abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 				else
 					git clone $quietFlag $repositoryUrl $checkoutPath
 					&& cd $checkoutPath
+					" . (isset($options['fetchAllTags']) && $options['fetchAllTags'] === TRUE ? '&& git fetch --tags' : '') . "
 					&& git checkout $quietFlag -b deploy $sha1
 					&& git submodule $quietFlag init
 					&& git submodule $quietFlag sync
