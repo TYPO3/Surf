@@ -19,12 +19,6 @@ class Node {
 	protected $name;
 
 	/**
-	 * The hostname
-	 * @var string
-	 */
-	protected $hostname;
-
-	/**
 	 * Options for this node
 	 *
 	 * username: SSH username for connecting to this node (optional)
@@ -69,7 +63,7 @@ class Node {
 	 * @return string The Node's hostname
 	 */
 	public function getHostname() {
-		return $this->hostname;
+		return $this->getOption('hostname');
 	}
 
 	/**
@@ -79,8 +73,7 @@ class Node {
 	 * @return \TYPO3\Surf\Domain\Model\Node
 	 */
 	public function setHostname($hostname) {
-		$this->hostname = $hostname;
-		return $this;
+		return $this->setOption('hostname', $hostname);
 	}
 
 	/**
@@ -135,7 +128,7 @@ class Node {
 	 * @return boolean TRUE if this node is the localhost
 	 */
 	public function isLocalhost() {
-		return $this->hostname === 'localhost';
+		return $this->getOption('hostname') === 'localhost';
 	}
 
 	/**
