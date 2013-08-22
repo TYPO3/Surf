@@ -82,6 +82,7 @@ abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 		$sha1 = $this->resolveSha1($node, $deployment, $options);
 		$repositoryUrl = escapeshellarg($options['repositoryUrl']);
 		$quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
+		$recursiveFlag = (isset($options['recursiveSubmodules']) && ! $options['recursiveSubmodules']) ? '' : '--recursive';
 		$checkoutPath = escapeshellarg($checkoutPath);
 		$command = strtr("
 			if [ -d $checkoutPath ];
@@ -92,7 +93,7 @@ abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 					&& git submodule $quietFlag init
 					&& for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.\${mod}.url `git config -f .gitmodules --get submodule.\${mod}.url` && echo synced \$mod; done
 					&& git submodule $quietFlag sync
-					&& git submodule $quietFlag update --init --recursive
+					&& git submodule $quietFlag update --init $recursiveFlag
 					" . (isset($options['hardClean']) && $options['hardClean'] === TRUE ? "&& git clean $quietFlag -d -x -ff" : '') . ";
 				else
 					git clone $quietFlag $repositoryUrl $checkoutPath
@@ -100,7 +101,7 @@ abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 					&& git checkout $quietFlag -b deploy $sha1
 					&& git submodule $quietFlag init
 					&& git submodule $quietFlag sync
-					&& git submodule $quietFlag update --init --recursive;
+					&& git submodule $quietFlag update --init $recursiveFlag;
 			fi
 		", "\t\n", "  ");
 

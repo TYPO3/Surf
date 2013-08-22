@@ -63,6 +63,37 @@ class GitCheckoutTaskTest extends BaseTaskTest {
 
 	/**
 	 * @test
+	 */
+	public function executeWithDisabledRecursiveSubmodulesOptionDoesNotUpdateSubmodulesRecursively() {
+		$options = array(
+			'repositoryUrl' => 'ssh://git.example.com/project/path.git',
+			'recursiveSubmodules' => FALSE
+		);
+		$this->responses = array(
+			'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+		);
+		$this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+		$this->assertCommandExecuted('/git submodule -q update --init (?!--recursive)/');
+	}
+
+	/**
+	 * @test
+	 */
+	public function executeWithoutRecursiveSubmodulesOptionUpdatesSubmodulesRecursively() {
+		$options = array(
+			'repositoryUrl' => 'ssh://git.example.com/project/path.git'
+		);
+		$this->responses = array(
+			'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+		);
+		$this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+		$this->assertCommandExecuted('/git submodule -q update --init --recursive/');
+	}
+
+	/**
+	 * @test
 	 * @expectedException \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function executeWithEmptyOptionsAndInvalidSha1ThrowsException() {
