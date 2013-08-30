@@ -103,6 +103,8 @@ class SurfCommandController extends \TYPO3\Flow\Cli\CommandController {
 	public function describeCommand($deploymentName, $configurationPath = NULL) {
 		$deployment = $this->deploymentService->getDeployment($deploymentName, $configurationPath);
 
+		$deployment->initialize();
+
 		$this->outputLine('<em> Deployment <b>' . $deployment->getName() . ' </b></em>');
 		$this->outputLine();
 		$this->outputLine('<u>Workflow</u>: ' . $deployment->getWorkflow()->getName() . PHP_EOL);
