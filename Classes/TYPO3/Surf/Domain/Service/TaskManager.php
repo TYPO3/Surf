@@ -140,7 +140,7 @@ class TaskManager {
 		$taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskName, ':', '\\') . 'Task';
 		$taskObjectName = $this->objectManager->getCaseSensitiveObjectName($taskClassName);
 		if (!$this->objectManager->isRegistered($taskObjectName)) {
-			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Task "' . $taskName . '" was not registered ' . $taskClassName, 1335976651);
+			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Task "' . $taskName . '" was not registered (class "' . $taskClassName . '" not found)', 1335976651);
 		}
 		$task = new $taskObjectName();
 		return $task;
