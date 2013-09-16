@@ -77,13 +77,15 @@ class SimpleWorkflow extends Workflow {
 			foreach ($nodes as $node) {
 				$deployment->getLogger()->log('Node ' . $node->getName(), LOG_DEBUG);
 				foreach ($applications as $application) {
-					if (!$application->hasNode($node)) continue;
+					if (!$application->hasNode($node)) {
+						continue;
+					}
 
 					$deployment->getLogger()->log('Application ' . $application->getName(), LOG_DEBUG);
 
 					try {
 						$this->executeStage($stage, $node, $application, $deployment);
-					} catch(\Exception $exception) {
+					} catch (\Exception $exception) {
 						$deployment->setStatus(Deployment::STATUS_FAILED);
 						if ($this->enableRollback) {
 							if (array_search($stage, $this->stages) <= array_search('switch', $this->stages)) {

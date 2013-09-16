@@ -11,7 +11,10 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
+use TYPO3\Surf\Domain\Model\Workflow;
 
 /**
  * Unit test for SimpleWorkflow
@@ -55,7 +58,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$deployment = $this->buildDeployment();
 		$workflow = $deployment->getWorkflow();
 
-		$deployment->addApplication(new \TYPO3\Surf\Domain\Model\Application('Test application'));
+		$deployment->addApplication(new Application('Test application'));
 
 		$deployment->initialize();
 
@@ -197,8 +200,8 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$deployment = $this->buildDeployment($executedTasks);
 		$workflow = $deployment->getWorkflow();
 
-		$application = new \TYPO3\Surf\Domain\Model\Application('Test application');
-		$application->addNode(new \TYPO3\Surf\Domain\Model\Node('test1.example.com'));
+		$application = new Application('Test application');
+		$application->addNode(new Node('test1.example.com'));
 		$deployment
 			->addApplication($application)
 			->onInitialize($initializeCallback($workflow, $application));
@@ -298,13 +301,13 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$deployment = $this->buildDeployment($executedTasks);
 		$workflow = $deployment->getWorkflow();
 
-		$flowApplication = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Flow Application');
+		$flowApplication = new Application('TYPO3 Flow Application');
 		$flowApplication
-			->addNode(new \TYPO3\Surf\Domain\Model\Node('flow-1.example.com'))
-			->addNode(new \TYPO3\Surf\Domain\Model\Node('flow-2.example.com'));
-		$neosApplication = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Neos Application');
+			->addNode(new Node('flow-1.example.com'))
+			->addNode(new Node('flow-2.example.com'));
+		$neosApplication = new Application('TYPO3 Neos Application');
 		$neosApplication
-			->addNode(new \TYPO3\Surf\Domain\Model\Node('neos.example.com'));
+			->addNode(new Node('neos.example.com'));
 
 		$deployment
 			->addApplication($flowApplication)
@@ -334,7 +337,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$deployment->setLogger($mockLogger);
 
 		$mockTaskManager = $this->getMock('TYPO3\Surf\Domain\Service\TaskManager');
-		$mockTaskManager->expects($this->any())->method('execute')->will($this->returnCallback(function($task, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, $stage, array $options = array()) use (&$executedTasks) {
+		$mockTaskManager->expects($this->any())->method('execute')->will($this->returnCallback(function($task, Node $node, Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, $stage, array $options = array()) use (&$executedTasks) {
 			$executedTasks[] = array('task' => $task, 'node' => $node->getName(), 'application' => $application->getName(), 'deployment' => $deployment->getName(), 'stage' => $stage, 'options' => $options);
 		}));
 
@@ -354,8 +357,8 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$deployment = $this->buildDeployment($executedTasks);
 		$workflow = $deployment->getWorkflow();
 
-		$flowApplication = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Flow Application');
-		$flowApplication->addNode(new \TYPO3\Surf\Domain\Model\Node('flow-1.example.com'));
+		$flowApplication = new Application('TYPO3 Flow Application');
+		$flowApplication->addNode(new Node('flow-1.example.com'));
 
 		$deployment->addApplication($flowApplication);
 
@@ -552,8 +555,8 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$deployment = $this->buildDeployment($executedTasks);
 		$workflow = $deployment->getWorkflow();
 
-		$flowApplication = new \TYPO3\Surf\Domain\Model\Application('TYPO3 Flow Application');
-		$flowApplication->addNode(new \TYPO3\Surf\Domain\Model\Node('flow-1.example.com'));
+		$flowApplication = new Application('TYPO3 Flow Application');
+		$flowApplication->addNode(new Node('flow-1.example.com'));
 		$deployment->addApplication($flowApplication);
 		$deployment->initialize();
 
@@ -564,6 +567,59 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$this->assertEquals($expectedTasks, $executedTasks);
 	}
 
+
+	/**
+	 * @return array
+	 */
+	public function stageStepExamples() {
+		return array(
+			'task in stage for specific application, task after stage for any application' => array(
+				function(Workflow $workflow, Application $application) {
+					$workflow->addTask('task1:switch', 'switch', $application);
+					$workflow->afterStage('switch', 'task2:afterSwitch');
+				},
+				array(
+					array(
+						'task' => 'task1:switch',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
+						'deployment' => 'Test deployment',
+						'stage' => 'switch',
+						'options' => array()
+					),
+					array(
+						'task' => 'task2:afterSwitch',
+						'node' => 'flow-1.example.com',
+						'application' => 'TYPO3 Flow Application',
+						'deployment' => 'Test deployment',
+						'stage' => 'switch',
+						'options' => array()
+					)
+				)
+			)
+		);
+	}
+
+	/**
+	 * @test
+	 * @dataProvider stageStepExamples
+	 */
+	public function beforeAndAfterStageStepsAreIndependentOfApplications($callback, $expectedTasks) {
+		$executedTasks = array();
+		$deployment = $this->buildDeployment($executedTasks);
+		$workflow = $deployment->getWorkflow();
+
+		$flowApplication = new Application('TYPO3 Flow Application');
+		$flowApplication->addNode(new Node('flow-1.example.com'));
+		$deployment->addApplication($flowApplication);
+		$deployment->initialize();
+
+		$callback($workflow, $flowApplication);
+
+		$workflow->run($deployment);
+
+		$this->assertEquals($expectedTasks, $executedTasks);
+	}
 
 }
 ?>

@@ -252,10 +252,10 @@ abstract class Workflow {
 	 * @return void
 	 */
 	protected function executeStage($stage, Node $node, Application $application, Deployment $deployment) {
-		foreach (array('_', $application->getName()) as $applicationName) {
-			$label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
+		foreach (array('before', 'tasks', 'after') as $stageStep) {
+			foreach (array('_', $application->getName()) as $applicationName) {
+				$label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
 
-			foreach (array('before', 'tasks', 'after') as $stageStep) {
 				if (isset($this->tasks['stage'][$applicationName][$stage][$stageStep])) {
 					$deployment->getLogger()->log('Executing stage "' . $stage . '" (step "' . $stageStep . '") on "' . $node->getName() . '" ' . $label, LOG_DEBUG);
 					foreach ($this->tasks['stage'][$applicationName][$stage][$stageStep] as $task) {
