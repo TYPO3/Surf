@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task\Git;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 use TYPO3\Flow\Annotations as Flow;
@@ -17,7 +18,7 @@ use TYPO3\Flow\Annotations as Flow;
  * A task which can be used to tag a git repository and its submodules
  *
  */
-class TagTask extends \TYPO3\Surf\Domain\Model\Task {
+class TagTask extends Task {
 
 	/**
 	 * @Flow\Inject
@@ -42,22 +43,22 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		if (!isset($options['tagName'])) {
-			throw new InvalidConfigurationException('Missing "tagName" option for TagTask', 1314186541);
-		}
-
-		if (!isset($options['description'])) {
-			throw new InvalidConfigurationException('Missing "description" option for TagTask', 1314186553);
-		}
-
-		if (!isset($options['submoduleTagNamePrefix'])) {
-			$options['submoduleTagNamePrefix'] = '';
-		}
+		$this->validateOptions($options);
+		$options = $this->processOptions($options, $deployment);
 
 		$targetPath = $deployment->getApplicationReleasePath($application);
-		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git tag -f -a -m "%s" %s', $options['description'], $options['tagName']), $node, $deployment);
+		$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git tag -f -a -m %s %s', escapeshellarg($options['description']), escapeshellarg($options['tagName'])), $node, $deployment);
 		if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === TRUE) {
-			$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git tag -f -a -m "%s" %s\'', $options['description'], $options['submoduleTagNamePrefix'] . $options['tagName']), $node, $deployment);
+			$submoduleCommand = escapeshellarg(sprintf('git tag -f -a -m %s %s', escapeshellarg($options['description']), escapeshellarg($options['submoduleTagNamePrefix'] . $options['tagName'])));
+			$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach %s', $submoduleCommand), $node, $deployment);
+		}
+
+		if (isset($options['pushTag']) && $options['pushTag'] === TRUE) {
+			$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git push %s %s', escapeshellarg($options['remote']), escapeshellarg($options['tagName'])), $node, $deployment);
+			if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === TRUE) {
+				$submoduleCommand = escapeshellarg(sprintf('git push %s %s', escapeshellarg($options['remote']), escapeshellarg($options['submoduleTagNamePrefix'] . $options['tagName'])));
+				$this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach %s', $submoduleCommand), $node, $deployment);
+			}
 		}
 	}
 
@@ -74,5 +75,52 @@ class TagTask extends \TYPO3\Surf\Domain\Model\Task {
 		$this->execute($node, $application, $deployment, $options);
 	}
 
+	/**
+	 * @param array $options
+	 * @return void
+	 * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+	 */
+	protected function validateOptions(array $options) {
+		if (!isset($options['tagName'])) {
+			throw new InvalidConfigurationException('Missing "tagName" option for TagTask', 1314186541);
+		}
+
+		if (!isset($options['description'])) {
+			throw new InvalidConfigurationException('Missing "description" option for TagTask', 1314186553);
+		}
+	}
+
+	/**
+	 * Replace placeholders in option values and set default values
+	 *
+	 * @param array $options
+	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @return array
+	 */
+	protected function processOptions(array $options, Deployment $deployment) {
+		foreach (array('tagName', 'description') as $optionName) {
+			$options[$optionName] = str_replace(
+				array(
+					'{releaseIdentifier}',
+					'{deploymentName}'
+				),
+				array(
+					$deployment->getReleaseIdentifier(),
+					$deployment->getName()
+				),
+				$options[$optionName]
+			);
+		}
+
+		if (!isset($options['submoduleTagNamePrefix'])) {
+			$options['submoduleTagNamePrefix'] = '';
+		}
+
+		if (!isset($options['remote'])) {
+			$options['remote'] = 'origin';
+			return $options;
+		}
+		return $options;
+	}
 }
 ?>

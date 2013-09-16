@@ -88,6 +88,8 @@ abstract class BaseTaskTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
 		$this->deployment->setLogger($mockLogger);
 		$this->application = new \TYPO3\Surf\Domain\Model\Application('TestApplication');
+
+		$this->deployment->initialize();
 	}
 
 	/**
