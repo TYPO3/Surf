@@ -33,6 +33,12 @@ class Application {
 	protected $deploymentPath;
 
 	/**
+	 * The relative releases directory for this application on a node
+	 * @var string
+	 */
+	protected $releasesDirectory = 'releases';
+
+	/**
 	 * The options
 	 * @var array
 	 */
@@ -130,7 +136,7 @@ class Application {
 	 * This is the path for an application pointing to the root of the Surf deployment:
 	 *
 	 * [deploymentPath]
-	 * |-- releases
+	 * |-- $this->getReleasesDirectory()
 	 * |-- cache
 	 * |-- shared
 	 *
@@ -171,6 +177,41 @@ class Application {
 	}
 
 	/**
+	 * Returns the releases directory
+	 *
+	 * @return string $releasesDirectory
+	 */
+	public function getReleasesDirectory() {
+		return $this->releasesDirectory;
+	}
+
+	/**
+	 * Sets the releases directory
+	 *
+	 * @param string $releasesDirectory
+	 * @return \TYPO3\Surf\Domain\Model\Application The current instance for chaining
+	 */
+	public function setReleasesDirectory($releasesDirectory) {
+		if (preg_match('/(^|\/)\.\.(\/|$)/', $releasesDirectory)) {
+			throw new InvalidConfigurationException(
+				sprintf('"../" is not allowed in the releases directory "%s"', $releasesDirectory),
+				1380870750
+			);
+		}
+		$this->releasesDirectory = trim($releasesDirectory, '/');
+		return $this;
+	}
+
+	/**
+	 * Returns path to the directory with releases
+	 *
+	 * @return string Path to the releases directory
+	 */
+	public function getReleasesPath() {
+		return rtrim($this->getDeploymentPath() . '/' . $this->getReleasesDirectory(), '/');
+	}
+
+	/**
 	 * Get all options defined on this application instance
 	 *
 	 * The options will include the deploymentPath and sharedPath for
@@ -181,6 +222,7 @@ class Application {
 	public function getOptions() {
 		return array_merge($this->options, array(
 			'deploymentPath' => $this->getDeploymentPath(),
+			'releasesPath' => $this->getReleasesPath(),
 			'sharedPath' => $this->getSharedPath()
 		));
 	}
@@ -194,7 +236,9 @@ class Application {
 	public function getOption($key) {
 		switch ($key) {
 			case 'deploymentPath':
-				return $this->deploymentPath;
+				return $this->getDeploymentPath();
+			case 'releasesPath':
+				return $this->getReleasesPath();
 			case 'sharedPath':
 				return $this->getSharedPath();
 			default:

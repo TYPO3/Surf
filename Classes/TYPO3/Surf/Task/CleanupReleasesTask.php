@@ -49,9 +49,9 @@ class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task {
 		}
 
 		$keepReleases = $options['keepReleases'];
-		$releasesPath = $application->getDeploymentPath() . '/releases';
+		$releasesPath = $application->getReleasesPath();
 		$currentReleaseIdentifier = $deployment->getReleaseIdentifier();
-		$previousReleasePath = $application->getDeploymentPath() . '/releases/previous';
+		$previousReleasePath = $application->getReleasesPath() . '/previous';
 		$previousReleaseIdentifier = trim($this->shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment));
 
 		$allReleasesList = $this->shell->execute("if [ -d $releasesPath/. ]; then find $releasesPath/. -maxdepth 1 -type d -exec basename {} \; ; fi", $node, $deployment);
