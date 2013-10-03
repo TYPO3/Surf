@@ -26,15 +26,15 @@ class ShellCommandService {
 	 * Execute a shell command (locally or remote depending on the node hostname)
 	 *
 	 * @param mixed $command The shell command to execute, either string or array of commands
-	 * @param \TYPO3\Surf\Domain\Model\Node $node Node to execute command against, NULL means localhost
-	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+	 * @param Node $node Node to execute command against
+	 * @param Deployment $deployment
 	 * @param boolean $ignoreErrors If this command should ignore exit codes unequeal zero
 	 * @param boolean $logOutput TRUE if the output of the command should be logged
 	 * @return mixed The output of the shell command or FALSE if the command returned a non-zero exit code and $ignoreErrors was enabled.
 	 * @throws \TYPO3\Surf\Exception\TaskExecutionException
 	 */
 	public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = FALSE, $logOutput = TRUE) {
-		if ($node === NULL || $node->isLocalhost()) {
+		if ($node->isLocalhost()) {
 			list($exitCode, $returnedOutput) = $this->executeLocalCommand($command, $deployment, $logOutput);
 		} else {
 			list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment, $logOutput);
@@ -50,12 +50,12 @@ class ShellCommandService {
 	 * Simulate a command by just outputting what would be executed
 	 *
 	 * @param string $command
-	 * @param Node $node
+	 * @param Node|NULL $node
 	 * @param Deployment $deployment
 	 * @return bool
 	 */
 	public function simulate($command, Node $node, Deployment $deployment) {
-		if ($node === NULL || $node->isLocalhost()) {
+		if ($node->isLocalhost()) {
 			$command = $this->prepareCommand($command);
 			$deployment->getLogger()->log('... (localhost): "' . $command . '"', LOG_DEBUG);
 		} else {
