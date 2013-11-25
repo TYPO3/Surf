@@ -139,6 +139,18 @@ If everything looks right, you can run the deployment:
 Customization
 =============
 
+Using rsync for deployment
+--------------------------
+
+By default Surf use git and composer for deployment. But you can also use rsync, by adding the following configuration
+to your Application::
+
+	$application->setOption('transferMethod', 'rsync');
+	$application->setOption('packageMethod', 'git');
+	$application->setOption('updateMethod', NULL);
+
+Using rsync can speed up your deployment and doesn't require composer and git on the production server.
+
 Custom tasks in deployment configurations
 -----------------------------------------
 
