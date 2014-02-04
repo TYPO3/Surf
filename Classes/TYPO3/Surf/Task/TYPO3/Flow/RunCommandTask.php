@@ -42,9 +42,8 @@ class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
 		}
 
-		$arguments = escapeshellarg(isset($options['arguments']) ? $options['arguments'] : '');
-
 		$targetPath = $deployment->getApplicationReleasePath($application);
+		$arguments = $this->buildCommandArguments($options);
 		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $options['command'] . $arguments, $node, $deployment);
 	}
 
@@ -72,6 +71,26 @@ class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		// TODO Implement rollback
+	}
+
+	/**
+	 * @param array $options The command options
+	 * @return string The escaped arguments string
+	 */
+	protected function buildCommandArguments(array $options) {
+		$arguments = '';
+		if (isset($options['arguments'])) {
+			if (!is_array($options['arguments'])) {
+				$options['arguments'] = array($options['arguments']);
+			}
+
+			$options['arguments'] = array_map(function ($value) {
+				return escapeshellarg($value);
+			}, $options['arguments']);
+
+			$arguments = ' ' . implode(' ', $options['arguments']);
+		}
+		return $arguments;
 	}
 
 }
