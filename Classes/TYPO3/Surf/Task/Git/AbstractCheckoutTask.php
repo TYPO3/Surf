@@ -48,13 +48,13 @@ abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 	protected function resolveSha1(Node $node, Deployment $deployment, array $options) {
 		if (isset($options['sha1'])) {
 			$sha1 = $options['sha1'];
-			if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
+			if (preg_match('/[a-f0-9]{40}/', $sha1) === 0) {
 				throw new TaskExecutionException('The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
 			}
 		} else {
 			if (isset($options['tag'])) {
 				$sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/tags/{$options['tag']} | awk '{print $1 }'", $node, $deployment, TRUE);
-				if (preg_match('/[a-z0-9]{40}/', $sha1) === 0) {
+				if (preg_match('/[a-f0-9]{40}/', $sha1) === 0) {
 					throw new TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
 				}
 			} else {
@@ -63,7 +63,7 @@ abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 					$branch = $options['branch'];
 				}
 				$sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/heads/$branch | awk '{print $1 }'", $node, $deployment, TRUE);
-				if (preg_match('/^[a-z0-9]{40}$/', $sha1) === 0) {
+				if (preg_match('/^[a-f0-9]{40}$/', $sha1) === 0) {
 					throw new TaskExecutionException('Could not retrieve sha1 of git branch "' . $branch . '"', 1335974926);
 				}
 			}
