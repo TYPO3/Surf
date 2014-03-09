@@ -62,6 +62,8 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 				$username = $options['username'];
 				$hostname = $node->getHostname();
 				$port = $node->hasOption('port') ? '-P ' . escapeshellarg($node->getOption('port')) : '';
+
+				$commands[] = "ssh {$port} {$username}@{$hostname} -C \"mkdir -p {$targetReleasePath}/Configuration/{$targetConfigurationPath}\"";
 				$commands[] = "scp {$port} {$configuration} {$username}@{$hostname}:{$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
 			}
 		}
