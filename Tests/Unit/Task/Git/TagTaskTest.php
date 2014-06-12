@@ -11,7 +11,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 /**
  * Unit test for the TagTask
  */
-class GitCheckoutTaskTest extends BaseTaskTest {
+class TagTaskTest extends BaseTaskTest {
 
 	/**
 	 * Set up test dependencies
