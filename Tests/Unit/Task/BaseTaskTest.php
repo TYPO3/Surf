@@ -102,18 +102,7 @@ abstract class BaseTaskTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 * @return void
 	 */
 	protected function assertCommandExecuted($commandSubstring) {
-		foreach ($this->commands['executed'] as $command) {
-			if (strpos($commandSubstring, '/') === 0) {
-				if (preg_match($commandSubstring, $command)) {
-					return;
-				}
-			} else {
-				if (strpos($command, $commandSubstring) !== FALSE) {
-					return;
-				}
-			}
-		}
-		$this->fail('Failed asserting that command "' . $commandSubstring . '" was executed in one of the following commands:' . chr(10) . implode(chr(10), $this->commands['executed']));
+		$this->assertThat($this->commands['executed'], new \TYPO3\Surf\Tests\Unit\AssertCommandExecuted($commandSubstring));
 	}
 
 	/**
