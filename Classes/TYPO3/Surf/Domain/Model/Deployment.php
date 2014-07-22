@@ -96,6 +96,7 @@ class Deployment {
 	 */
 	public function __construct($name) {
 		$this->name = $name;
+		$this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
 	}
 
 	/**
@@ -118,7 +119,6 @@ class Deployment {
 			$this->workflow = new SimpleWorkflow();
 		}
 
-		$this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
 		foreach ($this->applications as $application) {
 			$application->registerTasks($this->workflow, $this);
 		}
