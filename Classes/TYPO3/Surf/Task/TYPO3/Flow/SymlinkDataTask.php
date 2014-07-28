@@ -35,7 +35,7 @@ class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$releaseIdentifier = $deployment->getReleaseIdentifier();
-		$releasesPath = $application->getDeploymentPath() . '/releases';
+		$releasesPath = $application->getReleasesPath();
 		$commands = array(
 			"mkdir -p $releasesPath/$releaseIdentifier/Data",
 			"cd $releasesPath/$releaseIdentifier",

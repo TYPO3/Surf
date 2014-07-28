@@ -169,7 +169,7 @@ class Deployment {
 	 * @return string
 	 */
 	public function getApplicationReleasePath(Application $application) {
-		return $application->getDeploymentPath() . '/releases/' . $this->getReleaseIdentifier();
+		return $application->getReleasesPath() . '/' . $this->getReleaseIdentifier();
 	}
 
 	/**

@@ -39,7 +39,7 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$deploymentPath = $application->getDeploymentPath();
 		$sharedPath = $application->getSharedPath();
-		$releasesPath = $deploymentPath . '/releases';
+		$releasesPath = $application->getReleasesPath();
 		$releaseIdentifier = $deployment->getReleaseIdentifier();
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$result = $this->shell->execute('test -d ' . $deploymentPath, $node, $deployment, TRUE);
@@ -79,8 +79,7 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task {
 	 * @todo Make the removal of a failed release configurable, sometimes it's necessary to inspect a failed release
 	 */
 	public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-		$deploymentPath = $application->getDeploymentPath();
-		$releasesPath = $deploymentPath . '/releases';
+		$releasesPath = $application->getReleasesPath();
 		$releasePath = $deployment->getApplicationReleasePath($application);
 		$commands = array(
 			'rm ' . $releasesPath . '/next',
