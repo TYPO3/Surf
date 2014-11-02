@@ -160,7 +160,7 @@ template::
 	<?php
 
 	...
-	$workflow = $deployment->getWorkflow();
+	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
 		'typo3.surf:shell',
@@ -173,7 +173,7 @@ After defining the new task we have to tell the deployment configuration when to
 	<?php
 
 	...
-	$workflow = $deployment->getWorkflow();
+	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 	$application = new \TYPO3\Surf\Application\TYPO3\Flow('MyProject');
 
@@ -215,7 +215,7 @@ To access the release path or other release specific options, some placeholders 
 	<?php
 
 	...
-	$workflow = $deployment->getWorkflow();
+	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
 		'typo3.surf:shell',
@@ -243,7 +243,7 @@ be used for testing.
 
 Then, add a test as follows to the deployment configuration::
 
-	$workflow = $deployment->getWorkflow();
+	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 	$smokeTestOptions = array(
 		'url' => 'http://your/website/which/you/want/to/test',
