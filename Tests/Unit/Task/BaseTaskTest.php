@@ -81,7 +81,9 @@ abstract class BaseTaskTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		}));
 
 		$this->task = $this->createTask();
-		$this->inject($this->task, 'shell', $shellComandService);
+		try {
+			$this->inject($this->task, 'shell', $shellComandService);
+		} catch (\RuntimeException $e) {}
 
 		$this->node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
 		$this->deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
