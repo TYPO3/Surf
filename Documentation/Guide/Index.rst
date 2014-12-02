@@ -27,7 +27,7 @@ Install the Surf package by importing the package to a TYPO3 Flow application:
 
 .. code-block:: none
 
-	./flow package:import TYPO3.Surf
+	composer require typo3/surf:dev-master
 
 Guide
 =====
