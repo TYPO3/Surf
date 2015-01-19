@@ -54,11 +54,8 @@ class DeploymentTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
-	public function initializeCreatesReleaseIdentifier() {
-		$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
+	public function constructorCreatesReleaseIdentifier() {
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$deployment->setWorkflow($workflow);
-		$deployment->initialize();
 
 		$releaseIdentifier = $deployment->getReleaseIdentifier();
 		$this->assertNotEmpty($releaseIdentifier);
