@@ -4,7 +4,8 @@
     "description": "TYPO3 Surf is a deployment tool based on Flow and suited for a wide variety of applications",
     "license": "GPL-3.0+",
     "require": {
-        "typo3/flow": "*"
+        "typo3/flow": "*",
+        "symfony/process": "~2.1"
     },
     "autoload": {
         "psr-0": {

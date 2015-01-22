@@ -52,7 +52,7 @@ class ShellCommandServiceTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
 		$deployment->setLogger($mockLogger);
 
-		$expectedCommand = $expectedCommandArguments .  ' \'echo "Hello World"\' 2>&1';
+		$expectedCommand = $expectedCommandArguments .  ' \'echo "Hello World"\'';
 		$service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue(array(0, 'Hello World')));
 
 		$service->executeOrSimulate('echo "Hello World"', $node, $deployment);
@@ -165,6 +165,23 @@ class ShellCommandServiceTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
 
 		$this->assertEquals('Foo', $response);
+	}
+
+	/**
+	 * @test
+	 */
+	public function executeProcessProperlyLogsStandardAndErrorOutput() {
+		$shellCommandService = new \TYPO3\Surf\Domain\Service\ShellCommandService();
+		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
+		$deployment->setLogger($mockLogger);
+
+		$mockLogger->expects($this->at(0))->method('log')
+			->with('$ out', LOG_DEBUG);
+		$mockLogger->expects($this->at(1))->method('log')
+			->with('$ err', LOG_ERR);
+
+		$shellCommandService->executeProcess($deployment, 'echo "out" ; echo "err" >&2 ', TRUE, '$ ');
 	}
 
 }

@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        *
  *                                                                        */
 
+use Symfony\Component\Process\Process;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -133,7 +134,7 @@ class ShellCommandService {
 			$sshOptions[] = '-o PubkeyAuthentication=no';
 		}
 
-		$sshCommand = 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command) . ' 2>&1';
+		$sshCommand = 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command);
 
 		if ($node->hasOption('password')) {
 			$surfPackage = $this->packageManager->getPackage('TYPO3.Surf');
@@ -145,7 +146,7 @@ class ShellCommandService {
 	}
 
 	/**
-	 * Open a process with popen and process each line by logging and
+	 * Open a process with symfony/process and process each line by logging and
 	 * collecting its output.
 	 *
 	 * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
@@ -155,16 +156,20 @@ class ShellCommandService {
 	 * @return array The exit code of the command and the returned output
 	 */
 	public function executeProcess($deployment, $command, $logOutput, $logPrefix) {
-		$returnedOutput = '';
-		$fp = popen($command, 'r');
-		while (($line = fgets($fp)) !== FALSE) {
-			if ($logOutput) {
-				$deployment->getLogger()->log($logPrefix . rtrim($line), LOG_DEBUG);
-			}
-			$returnedOutput .= $line;
+		$process = new Process($command);
+		$process->setTimeout(NULL);
+		$callback = NULL;
+		if ($logOutput) {
+			$callback = function($type, $data) use ($deployment, $logPrefix) {
+				if ($type === Process::OUT) {
+					$deployment->getLogger()->log($logPrefix . trim($data), LOG_DEBUG);
+				} elseif ($type === Process::ERR) {
+					$deployment->getLogger()->log($logPrefix . trim($data), LOG_ERR);
+				}
+			};
 		}
-		$exitCode = pclose($fp);
-		return array($exitCode, trim($returnedOutput));
+		$exitCode = $process->run($callback);
+		return array($exitCode, trim($process->getOutput()));
 	}
 
 	/**
