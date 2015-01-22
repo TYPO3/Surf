@@ -57,27 +57,33 @@ abstract class BaseTaskTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->commands = array();
+		$this->commands = array('executed' => array());
 		$commands = &$this->commands;
 		$this->responses = array();
 		$responses = &$this->responses;
 
 		$shellComandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService');
 		$shellComandService->expects($this->any())->method('execute')->will($this->returnCallback(function($command) use (&$commands, &$responses) {
-			$commands['executed'][] = $command;
-			if (isset($responses[$command])) {
-				return $responses[$command];
+			if (is_array($command)) {
+				$commands['executed'] = array_merge($commands['executed'], $command);
 			} else {
-				return '';
+				$commands['executed'][] = $command;
+				if (isset($responses[$command])) {
+					return $responses[$command];
+				}
 			}
+			return '';
 		}));
 		$shellComandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback(function($command) use (&$commands, $responses) {
-			$commands['executed'][] = $command;
-			if (isset($responses[$command])) {
-				return $responses[$command];
+			if (is_array($command)) {
+				$commands['executed'] = array_merge($commands['executed'], $command);
 			} else {
-				return '';
+				$commands['executed'][] = $command;
+				if (isset($responses[$command])) {
+					return $responses[$command];
+				}
 			}
+			return '';
 		}));
 
 		$this->task = $this->createTask();

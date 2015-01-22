@@ -16,7 +16,7 @@ use TYPO3\Flow\Annotations as Flow;
  * A symlink task for linking a shared Production configuration
  *
  * Note: this might cause problems with concurrent access due to the cached configuration
- * insided this directory.
+ * inside this directory.
  *
  *
  * TODO Fix problem with include cached configuration
@@ -40,13 +40,28 @@ class SymlinkConfigurationTask extends \TYPO3\Surf\Domain\Model\Task {
 	 */
 	public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
 		$targetReleasePath = $deployment->getApplicationReleasePath($application);
+
+		if ($application instanceof \TYPO3\Surf\Application\TYPO3\Flow) {
+			$context = $application->getContext();
+		} else {
+			$context = 'Production';
+		}
+
 		$commands = array(
 			"cd {$targetReleasePath}/Configuration",
-			"rm -Rf Production/*",
-			"if [ -d Production ]; then rmdir Production; fi",
-			"mkdir -p ../../../shared/Configuration/Production",
-			"ln -snf ../../../shared/Configuration/Production Production"
+			"if [ -d {$context} ]; then rm -Rf {$context}; fi",
+			"mkdir -p ../../../shared/Configuration/{$context}"
 		);
+
+		if (strpos($context, '/') !== FALSE) {
+			$baseContext = dirname($context);
+			$commands[] = "mkdir -p {$baseContext}";
+			$commands[] = "ln -snf ../../../../shared/Configuration/{$context} {$context}";
+		} else {
+			$commands[] = "ln -snf ../../../shared/Configuration/{$context} {$context}";
+		}
+
+
 		$this->shell->executeOrSimulate($commands, $node, $deployment);
 	}
 
