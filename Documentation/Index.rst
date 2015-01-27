@@ -1,6 +1,8 @@
-====================================
+============================
 Surf - TYPO3 Flow deployment
-====================================
+============================
+
+*This version of the documentation has been rendered at:* |today|
 
 Description
 ===========
@@ -53,7 +55,6 @@ with name **MyDeployment**::
 	$application->addNode($node);
 
 	$deployment->addApplication($application);
-	?>
 
 That's a very basic deployment based on the default Flow application template ``TYPO3\Surf\Application\TYPO3\Flow``.
 The deployment object is available to the script as the variable ``$deployment``. A *node* is basically a deployment
@@ -87,7 +88,6 @@ In case you need to connect to the remote host via more esoteric protocols, you 
 also implement your own remote host connection: In this case, set the option
 ``remoteCommandExutionHandler`` on the node::
 
-	<?php
 	$node->setOption('remoteCommandExutionHandler', function(\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput = TRUE) {
 		// Now, do what you need to do in order to connect to $node and execute $command.
 		// You can call $shellCommandService->executeProcess() here.
@@ -96,7 +96,6 @@ also implement your own remote host connection: In this case, set the option
 		// is an integer containing the Exit Code, and the second array element is a
 		// string with the full, trimmed, output.
 	});
-	?>
 
 Test a deployment
 -----------------
@@ -168,9 +167,6 @@ template::
 		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
-	?>
-
-
 This adds a new task based on the `typo3.surf:shell` task with a custom shell command which would run a Flow command.
 After defining the new task we have to tell the deployment configuration when to execute it::
 
@@ -191,10 +187,7 @@ After defining the new task we have to tell the deployment configuration when to
 		$workflow->removeTask('typo3.surf:typo3:flow:setfilepermissions');
 	});
 
-	?>
-
-
-This will execute the new task in the *migrate* stage only for the application referenced by ``$application`. As you can
+This will execute the new task in the *migrate* stage only for the application referenced by ``$application``. As you can
 see, it's also possible to remove a task from a workflow. Most of the methods are available for global or application
 specific task configuration.
 
@@ -229,8 +222,6 @@ To access the release path or other release specific options, some placeholders 
 		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
-	?>
-
 The following placeholders are available:
 
 * deploymentPath: The path to the deployment base directory
@@ -251,7 +242,6 @@ While a deployment is running, the new website will be available under this URL 
 be used for testing.
 
 Then, add a test as follows to the deployment configuration::
-
 
 	$workflow = $deployment->getWorkflow();
 
@@ -296,6 +286,7 @@ Applying Cherry-Picks to Git Repositories: Post-Checkout commands
 
 When you want to execute some commands directly after checkout, such as cherry-picking not-yet-committed bugfixes, you can set the  `gitPostCheckoutCommands` option on the application, being a two-dimensional array.
 The key contains the path where the command shall execute, and the value is another array containing the commands themselves (as taken f.e. from Gerrit / review.typo3.org).
+
 Example::
 
 	$application->setOption('gitPostCheckoutCommands', array(
