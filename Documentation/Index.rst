@@ -117,7 +117,7 @@ executed for real. If a remote SSH command would be executed it will be printed 
 ``... $nodeName: "command"``.
 
 Flow Configuration overrides
------------------------
+----------------------------
 
 If the configuration of a Flow application should be different depending on the deployment configuration
 (e.g. database settings or external services) the typo3.surf:typo3:flow:copyconfiguration task can be used to override
