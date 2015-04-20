@@ -40,9 +40,10 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
 
         $username = $node->hasOption('username') ? $node->getOption('username') . '@' : '';
         $hostname = $node->getHostname();
-        $port = $node->hasOption('port') ? '-p ' . $node->getOption('port') : '';
+        $port = $node->hasOption('port') ? ' -p ' . escapeshellarg($node->getOption('port')) : '';
+        $key = $node->hasOption('privateKeyFile') ? ' -i ' . escapeshellarg($node->getOption('privateKeyFile')) : '';
         $quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
-        $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh ' . $port . '" ');
+        $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $port . $key . '" ');
         $rsyncFlags = isset($options['rsyncFlags']) ? $options['rsyncFlags'] : "--recursive --times --perms --links --delete --delete-excluded --exclude '.git'";
         $destinationArgument = ($node->isLocalhost() ? $remotePath : "{$username}{$hostname}:{$remotePath}");
 

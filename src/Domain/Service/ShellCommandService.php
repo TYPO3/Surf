@@ -130,6 +130,9 @@ class ShellCommandService
         if ($node->hasOption('password')) {
             $sshOptions[] = '-o PubkeyAuthentication=no';
         }
+        if ($node->hasOption('privateKeyFile')) {
+            $sshOptions[] = '-i ' . escapeshellarg($node->getOption('privateKeyFile'));
+        }
 
         $sshCommand = 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command);
 

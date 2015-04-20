@@ -20,8 +20,9 @@ class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase
      * @param string $username
      * @param string $password
      * @param int $port
+     * @param string $privateKey
      */
-    public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null)
+    public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = NULL, $password = NULL, $port = NULL, $privateKey = NULL)
     {
         /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $service */
         $service = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
@@ -39,6 +40,11 @@ class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase
         if ($port !== null) {
             $node->setOption('port', $port);
         }
+
+        if ($privateKey !== NULL) {
+            $node->setOption('privateKeyFile', $privateKey);
+        }
+
         $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
         /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
         $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
@@ -76,6 +82,13 @@ class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase
                 'jdoe',
                 null,
                 12345
+            ),
+            array(
+                'ssh -A -i \'~/.ssh/foo\' \'jdoe@remote-host.example.com\'',
+                'jdoe',
+                null,
+                null,
+                '~/.ssh/foo'
             ),
             array(
                 'expect \'' . $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',

@@ -35,7 +35,23 @@ class RsyncTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, array());
 
         $this->assertCommandExecuted('mkdir -p /home/jdoe/app/cache/transfer');
-        $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh "  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
+        $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
+        $this->assertCommandExecuted('/cp -RPp \/home\/jdoe\/app\/cache\/transfer\/. \/home\/jdoe\/app\/releases\/[0-9]+/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithPrivateKeyAddsFlagToSshCommand()
+    {
+        $this->node->setOption('hostname', 'myserver.local');
+        $this->node->setOption('username', 'jdoe');
+        $this->node->setOption('privateKeyFile', '~/.ssh/foo');
+
+        $this->task->execute($this->node, $this->application, $this->deployment, array());
+
+        $this->assertCommandExecuted('mkdir -p /home/jdoe/app/cache/transfer');
+        $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh -i \'~\/.ssh\/foo\'"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
         $this->assertCommandExecuted('/cp -RPp \/home\/jdoe\/app\/cache\/transfer\/. \/home\/jdoe\/app\/releases\/[0-9]+/');
     }
 
