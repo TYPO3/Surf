@@ -18,7 +18,7 @@ class Neos extends \TYPO3\Surf\Application\TYPO3\Flow {
 	/**
 	 * Constructor
 	 */
-	public function __construct($name = 'TYPO3 Neos') {
+	public function __construct($name = 'TYPO3_Neos') {
 		parent::__construct($name);
 	}
 

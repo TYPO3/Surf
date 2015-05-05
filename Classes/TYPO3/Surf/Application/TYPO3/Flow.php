@@ -30,7 +30,7 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication {
 	/**
 	 * Constructor
 	 */
-	public function __construct($name = 'TYPO3 Flow') {
+	public function __construct($name = 'TYPO3_Flow') {
 		parent::__construct($name);
 		$this->options = array_merge($this->options, array(
 			'updateMethod' => 'composer'
