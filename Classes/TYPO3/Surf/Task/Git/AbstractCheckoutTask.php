@@ -88,6 +88,7 @@ abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task {
 			if [ -d $checkoutPath ];
 				then
 					cd $checkoutPath
+					&& git remote set-url origin $repositoryUrl
 					&& git fetch $quietFlag origin
 					" . (isset($options['fetchAllTags']) && $options['fetchAllTags'] === TRUE ? '&& git fetch --tags' : '') . "
 					&& git reset $quietFlag --hard $sha1
