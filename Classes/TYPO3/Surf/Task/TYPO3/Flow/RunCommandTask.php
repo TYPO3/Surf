@@ -42,9 +42,12 @@ class RunCommandTask extends \TYPO3\Surf\Domain\Model\Task {
 			throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
 		}
 
+		$ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === TRUE;
+		$logOutput = !(isset($options['logOutput']) && $options['logOutput'] === FALSE);
 		$targetPath = $deployment->getApplicationReleasePath($application);
 		$arguments = $this->buildCommandArguments($options);
-		$this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $options['command'] . $arguments, $node, $deployment);
+		$command = 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $options['command'] . $arguments;
+		$this->shell->executeOrSimulate($command, $node, $deployment, $ignoreErrors, $logOutput);
 	}
 
 	/**
