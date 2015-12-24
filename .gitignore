@@ -1,1 +1,4 @@
-.com.apple.timemachine.supported
+vendor/
+
+.idea/
+composer.lock
