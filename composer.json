@@ -1,11 +1,11 @@
 {
     "name": "typo3/surf",
-    "type": "typo3-flow-package",
-    "description": "TYPO3 Surf is a deployment tool based on Flow and suited for a wide variety of applications",
+    "description": "TYPO3 Surf is a deployment tool, suited for a wide variety of applications",
     "license": "GPL-3.0+",
     "require": {
-        "typo3/flow": "*",
-        "symfony/process": "~2.1"
+        "symfony/console": "^3.0",
+        "symfony/process": "^3.0",
+        "psr/log": "^1.0"
     },
     "extra": {
         "branch-alias": {
