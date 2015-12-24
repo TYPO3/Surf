@@ -9,6 +9,6 @@ namespace TYPO3\Surf;
 /**
  * Base Surf exception
  */
-class Exception extends \TYPO3\Flow\Exception
+class Exception extends \Exception
 {
 }

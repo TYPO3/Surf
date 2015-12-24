@@ -9,6 +9,6 @@ namespace TYPO3\Surf\Encryption;
 /**
  * Invalid key exception
  */
-class InvalidKeyException extends \TYPO3\Flow\Exception
+class InvalidKeyException extends \TYPO3\Surf\Exception
 {
 }
