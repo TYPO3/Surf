@@ -43,7 +43,7 @@ class TaskManager
      */
     public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = array())
     {
-        $deployment->getLogger()->log($node->getName() . ' (' . $application->getName() . ') ' . $taskName, LOG_INFO);
+        $deployment->getLogger()->info($node->getName() . ' (' . $application->getName() . ') ' . $taskName);
 
         $task = $this->createTaskInstance($taskName);
 
@@ -72,7 +72,7 @@ class TaskManager
     public function rollback()
     {
         foreach (array_reverse($this->taskHistory) as $historicTask) {
-            $historicTask['deployment']->getLogger()->log('Rolling back ' . get_class($historicTask['task']));
+            $historicTask['deployment']->getLogger()->info('Rolling back ' . get_class($historicTask['task']));
             if (!$historicTask['deployment']->isDryRun()) {
                 $historicTask['task']->rollback($historicTask['node'], $historicTask['application'], $historicTask['deployment'], $historicTask['options']);
             }

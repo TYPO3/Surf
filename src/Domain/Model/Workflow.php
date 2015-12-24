@@ -36,7 +36,7 @@ abstract class Workflow
         if (!$deployment->isInitialized()) {
             throw new \TYPO3\Surf\Exception('Deployment must be initialized before running it', 1335976529);
         }
-        $deployment->getLogger()->log('Using workflow "' . $this->getName() . '"', LOG_DEBUG);
+        $deployment->getLogger()->debug('Using workflow "' . $this->getName() . '"');
     }
 
     /**
@@ -267,7 +267,7 @@ abstract class Workflow
                 $label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
 
                 if (isset($this->tasks['stage'][$applicationName][$stage][$stageStep])) {
-                    $deployment->getLogger()->log('Executing stage "' . $stage . '" (step "' . $stageStep . '") on "' . $node->getName() . '" ' . $label, LOG_DEBUG);
+                    $deployment->getLogger()->debug('Executing stage "' . $stage . '" (step "' . $stageStep . '") on "' . $node->getName() . '" ' . $label);
                     foreach ($this->tasks['stage'][$applicationName][$stage][$stageStep] as $task) {
                         $this->executeTask($task, $node, $application, $deployment, $stage);
                     }

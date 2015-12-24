@@ -6,13 +6,16 @@ namespace TYPO3\Surf\Domain\Model;
  *                                                                        *
  *                                                                        */
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * A Deployment
  *
  * This is the base object exposed to a deployment configuration script and serves as a configuration builder and
  * model for an actual deployment.
  */
-class Deployment
+class Deployment implements LoggerAwareInterface
 {
     const STATUS_SUCCESS = 0;
     const STATUS_FAILED = 1;
@@ -39,7 +42,7 @@ class Deployment
 
     /**
      * A logger instance used to log messages during deployment
-     * @var \TYPO3\Flow\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -145,7 +148,7 @@ class Deployment
      */
     public function deploy()
     {
-        $this->logger->log('Deploying ' . $this->name . ' (' . $this->releaseIdentifier . ')', LOG_NOTICE);
+        $this->logger->notice('Deploying ' . $this->name . ' (' . $this->releaseIdentifier . ')');
         $this->workflow->run($this);
     }
 
@@ -159,7 +162,7 @@ class Deployment
     public function simulate()
     {
         $this->setDryRun(true);
-        $this->logger->log('Simulating ' . $this->name . ' (' . $this->releaseIdentifier . ')', LOG_NOTICE);
+        $this->logger->notice('Simulating ' . $this->name . ' (' . $this->releaseIdentifier . ')');
         $this->workflow->run($this);
     }
 
@@ -275,10 +278,10 @@ class Deployment
 
     /**
      *
-     * @param \TYPO3\Flow\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @return \TYPO3\Surf\Domain\Model\Deployment
      */
-    public function setLogger($logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
         return $this;
@@ -286,7 +289,7 @@ class Deployment
 
     /**
      *
-     * @return \TYPO3\Flow\Log\LoggerInterface
+     * @return LoggerInterface
      */
     public function getLogger()
     {
