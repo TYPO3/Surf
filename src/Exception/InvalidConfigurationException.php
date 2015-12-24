@@ -6,12 +6,9 @@ namespace TYPO3\Surf\Exception;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-
 /**
  * Invalid deployment configuration exception
  */
-class InvalidConfigurationException extends \TYPO3\Surf\Exception {
-
+class InvalidConfigurationException extends \TYPO3\Surf\Exception
+{
 }
-?>

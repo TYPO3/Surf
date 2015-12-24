@@ -13,56 +13,58 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * A key pair consists of a public key and an open or encrypted private key.
  */
-class KeyPair {
+class KeyPair
+{
+    /**
+     * @var string
+     */
+    protected $privateKey;
 
-	/**
-	 * @var string
-	 */
-	protected $privateKey;
+    /**
+     * @var string
+     */
+    protected $publicKey;
 
-	/**
-	 * @var string
-	 */
-	protected $publicKey;
+    /**
+     * @var bool
+     */
+    protected $encrypted;
 
-	/**
-	 * @var boolean
-	 */
-	protected $encrypted;
+    /**
+     * Constructor
+     *
+     * @param string $privateKey A PEM encoded private key
+     * @param string $publicKey A PEM encoded public key
+     * @param bool $encrypted Pass TRUE if the private key is encrypted
+     */
+    public function __construct($privateKey, $publicKey, $encrypted = false)
+    {
+        $this->privateKey = $privateKey;
+        $this->publicKey = $publicKey;
+        $this->encrypted = $encrypted;
+    }
 
-	/**
-	 * Constructor
-	 *
-	 * @param string $privateKey A PEM encoded private key
-	 * @param string $publicKey A PEM encoded public key
-	 * @param boolean $encrypted Pass TRUE if the private key is encrypted
-	 */
-	public function __construct($privateKey, $publicKey, $encrypted = FALSE) {
-		$this->privateKey = $privateKey;
-		$this->publicKey = $publicKey;
-		$this->encrypted = $encrypted;
-	}
+    /**
+     * @return string
+     */
+    public function getPrivateKey()
+    {
+        return $this->privateKey;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getPrivateKey() {
-		return $this->privateKey;
-	}
+    /**
+     * @return string
+     */
+    public function getPublicKey()
+    {
+        return $this->publicKey;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getPublicKey() {
-		return $this->publicKey;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function isEncrypted() {
-		return $this->encrypted;
-	}
-
+    /**
+     * @return bool
+     */
+    public function isEncrypted()
+    {
+        return $this->encrypted;
+    }
 }
-?>

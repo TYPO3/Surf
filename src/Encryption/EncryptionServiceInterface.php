@@ -9,52 +9,50 @@ namespace TYPO3\Surf\Encryption;
 /**
  * Encryption service for key generation and encryption / decryption of data.
  */
-interface EncryptionServiceInterface {
+interface EncryptionServiceInterface
+{
+    /**
+     * Generate a key pair with optional passphrase
+     *
+     * @param string $passphrase A passphrase to encrypt the private key
+     * @return \TYPO3\Surf\Encryption\KeyPair
+     */
+    public function generateKeyPair($passphrase = null);
 
-	/**
-	 * Generate a key pair with optional passphrase
-	 *
-	 * @param string $passphrase A passphrase to encrypt the private key
-	 * @return \TYPO3\Surf\Encryption\KeyPair
-	 */
-	public function generateKeyPair($passphrase = NULL);
+    /**
+     * Open (decrypt) a protected key pair
+     *
+     * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
+     * @param string $passphrase
+     * @return \TYPO3\Surf\Encryption\KeyPair
+     */
+    public function openKeyPair(\TYPO3\Surf\Encryption\KeyPair $keyPair, $passphrase);
 
-	/**
-	 * Open (decrypt) a protected key pair
-	 *
-	 * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
-	 * @param string $passphrase
-	 * @return \TYPO3\Surf\Encryption\KeyPair
-	 */
-	public function openKeyPair(\TYPO3\Surf\Encryption\KeyPair $keyPair, $passphrase);
+    /**
+     * Change the passphrase of a protected key pair
+     *
+     * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
+     * @param string $oldPassphrase
+     * @param string $newPassphrase
+     * @return \TYPO3\Surf\Encryption\KeyPair
+     */
+    public function changePassphrase($keyPair, $oldPassphrase, $newPassphrase);
 
-	/**
-	 * Change the passphrase of a protected key pair
-	 *
-	 * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
-	 * @param string $oldPassphrase
-	 * @param string $newPassphrase
-	 * @return \TYPO3\Surf\Encryption\KeyPair
-	 */
-	public function changePassphrase($keyPair, $oldPassphrase, $newPassphrase);
+    /**
+     * Encrypt data with a public key
+     *
+     * @param string $data Unencrypted data
+     * @param string $publicKey A public key
+     * @return string The encrypted data
+     */
+    public function encryptData($data, $publicKey);
 
-	/**
-	 * Encrypt data with a public key
-	 *
-	 * @param string $data Unencrypted data
-	 * @param string $publicKey A public key
-	 * @return string The encrypted data
-	 */
-	public function encryptData($data, $publicKey);
-
-	/**
-	 * Decrypt data with an open private key
-	 *
-	 * @param string $data Encrypted data
-	 * @param string $privateKey An open private key
-	 * @return string The unencrypted data
-	 */
-	public function decryptData($data, $privateKey);
-
+    /**
+     * Decrypt data with an open private key
+     *
+     * @param string $data Encrypted data
+     * @param string $privateKey An open private key
+     * @return string The unencrypted data
+     */
+    public function decryptData($data, $privateKey);
 }
-?>

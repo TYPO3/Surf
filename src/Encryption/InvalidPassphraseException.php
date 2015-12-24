@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Encryption;
 /**
  * Invalid passphrase exception
  */
-class InvalidPassphraseException extends \TYPO3\Flow\Exception {
-
+class InvalidPassphraseException extends \TYPO3\Flow\Exception
+{
 }
-?>

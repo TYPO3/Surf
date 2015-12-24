@@ -6,14 +6,11 @@ namespace TYPO3\Surf\Exception;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-
 /**
  * An exception during task execution
  *
  * Something went wrong or an assertion during task execution was not successful.
  */
-class TaskExecutionException extends \TYPO3\Surf\Exception {
-
+class TaskExecutionException extends \TYPO3\Surf\Exception
+{
 }
-?>

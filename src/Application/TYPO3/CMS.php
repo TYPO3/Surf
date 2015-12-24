@@ -10,16 +10,15 @@ namespace TYPO3\Surf\Application\TYPO3;
  * A TYPO3 CMS application template
  * @TYPO3\Flow\Annotations\Proxy(false)
  */
-class CMS extends \TYPO3\Surf\Application\BaseApplication {
-
-	/**
-	 * Constructor
-	 *
-	 * @param string $name
-	 */
-	public function __construct($name = 'TYPO3 CMS') {
-		parent::__construct($name);
-	}
-
+class CMS extends \TYPO3\Surf\Application\BaseApplication
+{
+    /**
+     * Constructor
+     *
+     * @param string $name
+     */
+    public function __construct($name = 'TYPO3 CMS')
+    {
+        parent::__construct($name);
+    }
 }
-?>

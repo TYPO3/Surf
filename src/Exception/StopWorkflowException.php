@@ -6,12 +6,9 @@ namespace TYPO3\Surf\Exception;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-
 /**
  * A control exception to stop the execution of a workflow
  */
-class StopWorkflowException extends \TYPO3\Surf\Exception {
-
+class StopWorkflowException extends \TYPO3\Surf\Exception
+{
 }
-?>
