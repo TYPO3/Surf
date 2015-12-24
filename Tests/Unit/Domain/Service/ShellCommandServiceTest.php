@@ -14,176 +14,180 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 /**
  * Unit test for the ShellCommandService
  */
-class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase {
+class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * Test, if the given options are respected in executed SSH command
+     *
+     * @test
+     * @dataProvider commandOptionDataProvider
+     * @param string $expectedCommandArguments
+     * @param string $username
+     * @param string $password
+     * @param int $port
+     */
+    public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null)
+    {
+        $this->markTestSkipped('Package Manager dependency needs to be removed first!');
+        $service = $this->getAccessibleMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
 
-	/**
-	 * Test, if the given options are respected in executed SSH command
-	 *
-	 * @test
-	 * @dataProvider commandOptionDataProvider
-	 * @param string $expectedCommandArguments
-	 * @param string $username
-	 * @param string $password
-	 * @param integer $port
-	 */
-	public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = NULL, $password = NULL, $port = NULL) {
-		$this->markTestSkipped('Package Manager dependency needs to be removed first!');
-		$service = $this->getAccessibleMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
+        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node->setHostname('remote-host.example.com');
+        if ($username !== null) {
+            $node->setOption('username', $username);
+        }
 
-		$node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
-		$node->setHostname('remote-host.example.com');
-		if ($username !== NULL) {
-			$node->setOption('username', $username);
-		}
+        if ($password !== null) {
+            $node->setOption('password', $password);
 
-		if ($password !== NULL) {
-			$node->setOption('password', $password);
+            $mockSurfPackage = $this->getMock('TYPO3\Flow\Package\PackageInterface');
+            $mockSurfPackage->expects($this->once())->method('getResourcesPath')->will($this->returnValue('/your/path/to /TYPO3.Surf'));
+            $mockPackageManager = $this->getMock('TYPO3\Flow\Package\PackageManagerInterface');
+            $mockPackageManager->expects($this->once())->method('getPackage')->with('TYPO3.Surf')->will($this->returnValue($mockSurfPackage));
+            $service->_set('packageManager', $mockPackageManager);
+        }
 
-			$mockSurfPackage = $this->getMock('TYPO3\Flow\Package\PackageInterface');
-			$mockSurfPackage->expects($this->once())->method('getResourcesPath')->will($this->returnValue('/your/path/to /TYPO3.Surf'));
-			$mockPackageManager = $this->getMock('TYPO3\Flow\Package\PackageManagerInterface');
-			$mockPackageManager->expects($this->once())->method('getPackage')->with('TYPO3.Surf')->will($this->returnValue($mockSurfPackage));
-			$service->_set('packageManager', $mockPackageManager);
-		}
+        if ($port !== null) {
+            $node->setOption('port', $port);
+        }
+        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+        $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
+        $deployment->setLogger($mockLogger);
 
-		if ($port !== NULL) {
-			$node->setOption('port', $port);
-		}
-		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-		$mockLogger = $this->getMock('Psr\Log\LoggerInterface');
-		$deployment->setLogger($mockLogger);
+        $expectedCommand = $expectedCommandArguments .  ' \'echo "Hello World"\'';
+        $service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue(array(0, 'Hello World')));
 
-		$expectedCommand = $expectedCommandArguments .  ' \'echo "Hello World"\'';
-		$service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue(array(0, 'Hello World')));
+        $service->executeOrSimulate('echo "Hello World"', $node, $deployment);
+    }
 
-		$service->executeOrSimulate('echo "Hello World"', $node, $deployment);
-	}
+    /**
+     * Data provider for executeRemoteCommandRespectsOptionsInSshCommand
+     *
+     * @return array
+     */
+    public function commandOptionDataProvider()
+    {
+        return array(
+            array(
+                'ssh -A \'remote-host.example.com\'',
+                null,
+                null,
+                null
+            ),
+            array(
+                'ssh -A \'jdoe@remote-host.example.com\'',
+                'jdoe',
+                null,
+                null
+            ),
+            array(
+                'ssh -A -p \'12345\' \'jdoe@remote-host.example.com\'',
+                'jdoe',
+                null,
+                12345
+            ),
 
-	/**
-	 * Data provider for executeRemoteCommandRespectsOptionsInSshCommand
-	 *
-	 * @return array
-	 */
-	public function commandOptionDataProvider() {
-		return array(
-			array(
-				'ssh -A \'remote-host.example.com\'',
-				NULL,
-				NULL,
-				NULL
-			),
-			array(
-				'ssh -A \'jdoe@remote-host.example.com\'',
-				'jdoe',
-				NULL,
-				NULL
-			),
-			array(
-				'ssh -A -p \'12345\' \'jdoe@remote-host.example.com\'',
-				'jdoe',
-				NULL,
-				12345
-			),
+            array(
+                'expect \'/your/path/to /TYPO3.Surf/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',
+                'jdoe',
+                'myPassword',
+                null
+            ),
+        );
+    }
 
-			array(
-				'expect \'/your/path/to /TYPO3.Surf/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',
-				'jdoe',
-				'myPassword',
-				NULL
-			),
-		);
-	}
+    /**
+     * @test
+     */
+    public function executeRemoteCommandRespectsRemoteCommandExecutionHandler()
+    {
+        $shellCommandService = new \TYPO3\Surf\Domain\Service\ShellCommandService();
 
-	/**
-	 * @test
-	 */
-	public function executeRemoteCommandRespectsRemoteCommandExecutionHandler() {
-		$shellCommandService = new \TYPO3\Surf\Domain\Service\ShellCommandService();
+        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node->setHostname('asdf');
+        $arguments = array();
 
-		$node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
-		$node->setHostname('asdf');
-		$arguments = array();
+        $node->setOption('remoteCommandExecutionHandler', function (\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService, $command, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Deployment $deployment, $logOutput) use (&$arguments) {
+            $arguments = func_get_args();
+            return array(0, 'Hello World');
+        });
 
-		$node->setOption('remoteCommandExecutionHandler', function(\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService, $command, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Deployment $deployment, $logOutput) use(&$arguments) {
-			$arguments = func_get_args();
-			return array(0, 'Hello World');
-		});
+        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+        $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
+        $deployment->setLogger($mockLogger);
 
-		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-		$mockLogger = $this->getMock('Psr\Log\LoggerInterface');
-		$deployment->setLogger($mockLogger);
+        $response = $shellCommandService->execute('foo command', $node, $deployment);
+        $this->assertEquals('Hello World', $response);
+        $this->assertSame(array(
+            $shellCommandService,
+            'foo command',
+            $node,
+            $deployment,
+            true
+        ), $arguments);
+    }
 
-		$response = $shellCommandService->execute('foo command', $node, $deployment);
-		$this->assertEquals('Hello World', $response);
-		$this->assertSame(array(
-			$shellCommandService,
-			'foo command',
-			$node,
-			$deployment,
-			TRUE
-		), $arguments);
-	}
+    /**
+     * @test
+     */
+    public function executeOnRemoteNodeJoinsCommandsWithAndOperator()
+    {
+        $shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
 
-	/**
-	 * @test
-	 */
-	public function executeOnRemoteNodeJoinsCommandsWithAndOperator() {
-		$shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
+        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node->setHostname('asdf');
 
-		$node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
-		$node->setHostname('asdf');
+        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+        $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
+        $deployment->setLogger($mockLogger);
 
-		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-		$mockLogger = $this->getMock('Psr\Log\LoggerInterface');
-		$deployment->setLogger($mockLogger);
+        $shellCommandService->expects($this->any())->method('executeProcess')->with(
+            $deployment, $this->stringContains('bin/false && ls -al')
+        )->will($this->returnValue(array(0, 'Foo')));
 
-		$shellCommandService->expects($this->any())->method('executeProcess')->with(
-			$deployment, $this->stringContains('bin/false && ls -al')
-		)->will($this->returnValue(array(0, 'Foo')));
+        $response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
 
-		$response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
+        $this->assertEquals('Foo', $response);
+    }
 
-		$this->assertEquals('Foo', $response);
-	}
+    /**
+     * @test
+     */
+    public function executeOnLocalNodeJoinsCommandsWithAndOperator()
+    {
+        $shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
 
-	/**
-	 * @test
-	 */
-	public function executeOnLocalNodeJoinsCommandsWithAndOperator() {
-		$shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
+        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node->setHostname('localhost');
 
-		$node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
-		$node->setHostname('localhost');
+        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+        $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
+        $deployment->setLogger($mockLogger);
 
-		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-		$mockLogger = $this->getMock('Psr\Log\LoggerInterface');
-		$deployment->setLogger($mockLogger);
+        $shellCommandService->expects($this->any())->method('executeProcess')->with(
+            $deployment, $this->stringContains('bin/false && ls -al')
+        )->will($this->returnValue(array(0, 'Foo')));
 
-		$shellCommandService->expects($this->any())->method('executeProcess')->with(
-			$deployment, $this->stringContains('bin/false && ls -al')
-		)->will($this->returnValue(array(0, 'Foo')));
+        $response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
 
-		$response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
+        $this->assertEquals('Foo', $response);
+    }
 
-		$this->assertEquals('Foo', $response);
-	}
+    /**
+     * @test
+     */
+    public function executeProcessProperlyLogsStandardAndErrorOutput()
+    {
+        $shellCommandService = new \TYPO3\Surf\Domain\Service\ShellCommandService();
+        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+        $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
+        $deployment->setLogger($mockLogger);
 
-	/**
-	 * @test
-	 */
-	public function executeProcessProperlyLogsStandardAndErrorOutput() {
-		$shellCommandService = new \TYPO3\Surf\Domain\Service\ShellCommandService();
-		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-		$mockLogger = $this->getMock('Psr\Log\LoggerInterface');
-		$deployment->setLogger($mockLogger);
+        $mockLogger->expects($this->at(0))->method('log')
+            ->with('$ out', LOG_DEBUG);
+        $mockLogger->expects($this->at(1))->method('log')
+            ->with('$ err', LOG_ERR);
 
-		$mockLogger->expects($this->at(0))->method('log')
-			->with('$ out', LOG_DEBUG);
-		$mockLogger->expects($this->at(1))->method('log')
-			->with('$ err', LOG_ERR);
-
-		$shellCommandService->executeProcess($deployment, 'echo "out" ; echo "err" >&2 ', TRUE, '$ ');
-	}
-
+        $shellCommandService->executeProcess($deployment, 'echo "out" ; echo "err" >&2 ', true, '$ ');
+    }
 }
-?>

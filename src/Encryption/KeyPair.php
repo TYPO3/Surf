@@ -6,8 +6,6 @@ namespace TYPO3\Surf\Encryption;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-
 /**
  * Key pair
  *
