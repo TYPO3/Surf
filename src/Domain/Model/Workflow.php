@@ -6,8 +6,6 @@ namespace TYPO3\Surf\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-
 /**
  * A Workflow
  *
@@ -15,7 +13,6 @@ use TYPO3\Flow\Annotations as Flow;
 abstract class Workflow
 {
     /**
-     * @Flow\Inject
      * @var \TYPO3\Surf\Domain\Service\TaskManager
      */
     protected $taskManager;
@@ -24,6 +21,14 @@ abstract class Workflow
      * @var array
      */
     protected $tasks = array();
+
+    /**
+     * @param \TYPO3\Surf\Domain\Service\TaskManager $taskManager
+     */
+    public function setTaskManager(\TYPO3\Surf\Domain\Service\TaskManager $taskManager)
+    {
+        $this->taskManager = $taskManager;
+    }
 
     /**
      *

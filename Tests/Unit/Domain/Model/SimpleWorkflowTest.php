@@ -19,11 +19,11 @@ use TYPO3\Surf\Domain\Model\Workflow;
 /**
  * Unit test for SimpleWorkflow
  */
-class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
+class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @test
-	 * @expectedException \TYPO3\Flow\Exception
+	 * @expectedException \TYPO3\Surf\Exception
 	 */
 	public function deploymentMustBeInitializedBeforeRunning() {
 		$deployment = $this->buildDeployment();
@@ -34,7 +34,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
-	 * @expectedException \TYPO3\Flow\Exception
+	 * @expectedException \TYPO3\Surf\Exception
 	 */
 	public function runFailsIfNoApplicationIsConfigured() {
 		$deployment = $this->buildDeployment();
@@ -44,7 +44,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 		try {
 			$workflow->run($deployment);
-		} catch(\TYPO3\Flow\Exception $exception) {
+		} catch(\TYPO3\Surf\Exception $exception) {
 			$this->assertEquals(1334652420, $exception->getCode());
 			throw $exception;
 		}
@@ -52,7 +52,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
-	 * @expectedException \TYPO3\Flow\Exception
+	 * @expectedException \TYPO3\Surf\Exception
 	 */
 	public function runFailsIfNoNodesAreConfigured() {
 		$deployment = $this->buildDeployment();
@@ -64,7 +64,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 		try {
 			$workflow->run($deployment);
-		} catch(\TYPO3\Flow\Exception $exception) {
+		} catch(\TYPO3\Surf\Exception $exception) {
 			$this->assertEquals(1334652427, $exception->getCode());
 			throw $exception;
 		}
@@ -329,7 +329,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 */
 	protected function buildDeployment(array &$executedTasks = array()) {
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$mockLogger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
+		$mockLogger = $this->getMock('Psr\Log\LoggerInterface');
 			// Enable log to console to debug tests
 		// $mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
 		// 	echo $message . chr(10);
@@ -342,7 +342,7 @@ class SimpleWorkflowTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		}));
 
 		$workflow = new SimpleWorkflow();
-		\TYPO3\Flow\Reflection\ObjectAccess::setProperty($workflow, 'taskManager', $mockTaskManager, TRUE);
+		$workflow->setTaskManager($mockTaskManager);
 
 		$deployment->setWorkflow($workflow);
 

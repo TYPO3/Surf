@@ -14,7 +14,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 /**
  * Unit test for the TaskManager
  */
-class TaskManagerTest extends \TYPO3\Flow\Tests\UnitTestCase {
+class TaskManagerTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @test
@@ -23,11 +23,11 @@ class TaskManagerTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$node = new \TYPO3\Surf\Domain\Model\Node('Test node');
 		$application = new \TYPO3\Surf\Domain\Model\Application('Test application');
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$logger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
+		$logger = $this->getMock('Psr\Log\LoggerInterface');
 		$deployment->setLogger($logger);
 
 		$task = $this->getMock('TYPO3\Surf\Domain\Model\Task');
-		$taskManager = $this->getAccessibleMock('TYPO3\Surf\Domain\Service\TaskManager', array('createTaskInstance'));
+		$taskManager = $this->getMock('TYPO3\Surf\Domain\Service\TaskManager', array('createTaskInstance'));
 		$taskManager->expects($this->any())->method('createTaskInstance')->with('myvendor.mypackage:taskgroup:mytask')->will($this->returnValue($task));
 
 		$globalOptions = array(
@@ -54,11 +54,11 @@ class TaskManagerTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$node = new \TYPO3\Surf\Domain\Model\Node('Test node');
 		$application = new \TYPO3\Surf\Domain\Model\Application('Test application');
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$logger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
+		$logger = $this->getMock('Psr\Log\LoggerInterface');
 		$deployment->setLogger($logger);
 
 		$task = $this->getMock('TYPO3\Surf\Domain\Model\Task');
-		$taskManager = $this->getAccessibleMock('TYPO3\Surf\Domain\Service\TaskManager', array('createTaskInstance'));
+		$taskManager = $this->getMock('TYPO3\Surf\Domain\Service\TaskManager', array('createTaskInstance'));
 		$taskManager->expects($this->any())->method('createTaskInstance')->with('myvendor.mypackage:taskgroup:mytask')->will($this->returnValue($task));
 
 		$nodeOptions = array(
@@ -84,11 +84,11 @@ class TaskManagerTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$node = new \TYPO3\Surf\Domain\Model\Node('Test node');
 		$application = new \TYPO3\Surf\Domain\Model\Application('Test application');
 		$deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-		$logger = $this->getMock('TYPO3\Flow\Log\LoggerInterface');
+		$logger = $this->getMock('Psr\Log\LoggerInterface');
 		$deployment->setLogger($logger);
 
 		$task = $this->getMock('TYPO3\Surf\Domain\Model\Task');
-		$taskManager = $this->getAccessibleMock('TYPO3\Surf\Domain\Service\TaskManager', array('createTaskInstance'));
+		$taskManager = $this->getMock('TYPO3\Surf\Domain\Service\TaskManager', array('createTaskInstance'));
 		$taskManager->expects($this->any())->method('createTaskInstance')->with('myvendor.mypackage:taskgroup:mytask')->will($this->returnValue($task));
 
 		$applicationOptions = array(
