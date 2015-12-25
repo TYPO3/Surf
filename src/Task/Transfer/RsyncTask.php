@@ -26,12 +26,6 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task
     protected $shell;
 
     /**
-     * @Flow\Inject
-     * @var \TYPO3\Flow\Package\PackageManagerInterface
-     */
-    protected $packageManager;
-
-    /**
      * Execute this task
      *
      * @param \TYPO3\Surf\Domain\Model\Node $node
@@ -61,8 +55,8 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task
         $command = "rsync {$quietFlag} --compress {$rshFlag} {$rsyncFlags} " . escapeshellarg($localPackagePath . '/.') . ' ' . escapeshellarg($destinationArgument);
 
         if ($node->hasOption('password')) {
-            $surfPackage = $this->packageManager->getPackage('TYPO3.Surf');
-            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array($surfPackage->getResourcesPath(), 'Private/Scripts/PasswordSshLogin.expect'));
+            $resourcesPath = realpath(__DIR__ . '/../../../Resources');
+            $passwordSshLoginScriptPathAndFilename = $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect';
             $command = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $command);
         }
 

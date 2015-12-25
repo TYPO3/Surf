@@ -17,12 +17,6 @@ use TYPO3\Surf\Domain\Model\Node;
 class ShellCommandService
 {
     /**
-     * @Flow\Inject
-     * @var \TYPO3\Flow\Package\PackageManagerInterface
-     */
-    protected $packageManager;
-
-    /**
      * Execute a shell command (locally or remote depending on the node hostname)
      *
      * @param mixed $command The shell command to execute, either string or array of commands
@@ -128,7 +122,7 @@ class ShellCommandService
         }
         $hostname = $node->getHostname();
 
-            // TODO Get SSH options from node or deployment
+        // TODO Get SSH options from node or deployment
         $sshOptions = array('-A');
         if ($node->hasOption('port')) {
             $sshOptions[] = '-p ' . escapeshellarg($node->getOption('port'));
@@ -140,8 +134,8 @@ class ShellCommandService
         $sshCommand = 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command);
 
         if ($node->hasOption('password')) {
-            $surfPackage = $this->packageManager->getPackage('TYPO3.Surf');
-            $passwordSshLoginScriptPathAndFilename = \TYPO3\Flow\Utility\Files::concatenatePaths(array($surfPackage->getResourcesPath(), 'Private/Scripts/PasswordSshLogin.expect'));
+            $resourcesPath = realpath(__DIR__ . '/../../../Resources');
+            $passwordSshLoginScriptPathAndFilename = $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect';
             $sshCommand = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $sshCommand);
         }
 
