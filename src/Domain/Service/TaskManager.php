@@ -6,7 +6,6 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -22,12 +21,6 @@ class TaskManager
      * @var array
      */
     protected $taskHistory = array();
-
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Flow\Object\ObjectManagerInterface
-     */
-    protected $objectManager;
 
     /**
      * Execute a task
@@ -135,22 +128,28 @@ class TaskManager
     /**
      * Create a task instance from the given task name
      *
-     * @param string $taskName
+     * @param string $taskIdentifier
      * @return \TYPO3\Surf\Domain\Model\Task
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    protected function createTaskInstance($taskName)
+    protected function createTaskInstance($taskIdentifier)
     {
-        list($packageKey, $taskName) = explode(':', $taskName, 2);
-        $taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskName, ':', '\\') . 'Task';
-        $taskObjectName = $this->objectManager->getCaseSensitiveObjectName($taskClassName);
-        if (!$this->objectManager->isRegistered($taskObjectName)) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Task "' . $taskName . '" was not registered (class "' . $taskClassName . '" not found)', 1335976651);
-        }
-        $task = new $taskObjectName();
+        $taskClassName = $this->calculateTaskClassNameFromTaskIdentifier($taskIdentifier);
+        $task = new $taskClassName();
         if ($task instanceof ShellCommandServiceAwareInterface) {
             $task->setShellCommandService(new ShellCommandService());
         }
         return $task;
+    }
+
+    /**
+     * @param string $taskIdentifier
+     * @return string
+     */
+    protected function calculateTaskClassNameFromTaskIdentifier($taskIdentifier)
+    {
+        list($packageKey, $taskIdentifier) = explode(':', $taskIdentifier, 2);
+        $taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskIdentifier, ':', '\\') . 'Task';
+        return $taskClassName;
     }
 }
