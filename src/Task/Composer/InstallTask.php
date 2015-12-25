@@ -88,7 +88,7 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
      */
     protected function composerManifestExists($path, Node $node, Deployment $deployment)
     {
-        $composerJsonPath = \TYPO3\Flow\Utility\Files::concatenatePaths(array($path, 'composer.json'));
+        $composerJsonPath = $path . '/composer.json';
         $composerJsonExists = $this->shell->executeOrSimulate('test -f ' . escapeshellarg($composerJsonPath), $node, $deployment, true);
         if ($composerJsonExists === false) {
             $deployment->getLogger()->log('No composer.json found in path "' . $composerJsonPath . '"', LOG_DEBUG);

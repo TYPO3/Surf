@@ -35,8 +35,7 @@ class GitCheckoutTask extends AbstractCheckoutTask
         }
 
         $releasePath = $deployment->getApplicationReleasePath($application);
-        $deploymentPath = $application->getDeploymentPath();
-        $checkoutPath = \TYPO3\Flow\Utility\Files::concatenatePaths(array($deploymentPath, 'cache', 'transfer'));
+        $checkoutPath = $application->getDeploymentPath() . '/cache/transfer';
 
         if (!isset($options['hardClean'])) {
             $options['hardClean'] = true;

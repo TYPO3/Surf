@@ -33,7 +33,7 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
         $localPackagePath = $deployment->getWorkspacePath($application);
         $releasePath = $deployment->getApplicationReleasePath($application);
 
-        $remotePath = Files::concatenatePaths(array($application->getDeploymentPath(), 'cache', 'transfer'));
+        $remotePath = $application->getDeploymentPath() . '/cache/transfer';
         // make sure there is a remote .cache folder
         $command = 'mkdir -p ' . $remotePath;
         $this->shell->executeOrSimulate($command, $node, $deployment);

@@ -37,7 +37,7 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task impl
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         $workspacePath = $deployment->getWorkspacePath($application);
-        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : \TYPO3\Flow\Utility\Files::concatenatePaths(array($workspacePath, 'Web'));
+        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : $workspacePath . '/Web';
 
         if (!isset($options['scriptIdentifier'])) {
             // Generate random identifier
