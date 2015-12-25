@@ -15,13 +15,9 @@ use TYPO3\Surf\Domain\Model\Node;
  * A cleanup task to delete old (unused) releases
  *
  */
-class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task
+class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Cleanup old releases by listing all releases and keeping a configurable

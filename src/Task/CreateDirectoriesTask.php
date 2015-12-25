@@ -17,13 +17,9 @@ use TYPO3\Surf\Domain\Model\Node;
  * This task will automatically create needed directories and create a symlink to the upcoming
  * release, called "next".
  */
-class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task
+class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task

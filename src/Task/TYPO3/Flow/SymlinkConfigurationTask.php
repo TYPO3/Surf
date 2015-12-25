@@ -20,13 +20,9 @@ use TYPO3\Surf\Domain\Model\Node;
  *
  * TODO Fix problem with include cached configuration
  */
-class SymlinkConfigurationTask extends \TYPO3\Surf\Domain\Model\Task
+class SymlinkConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task

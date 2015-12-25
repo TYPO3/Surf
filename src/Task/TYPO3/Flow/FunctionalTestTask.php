@@ -15,13 +15,9 @@ use TYPO3\Surf\Domain\Model\Node;
  * A TYPO3 Flow task to run functional tests
  *
  */
-class FunctionalTestTask extends \TYPO3\Surf\Domain\Model\Task
+class FunctionalTestTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

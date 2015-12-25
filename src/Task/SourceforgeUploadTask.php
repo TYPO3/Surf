@@ -16,13 +16,9 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * Task for uploading to sourceforge
  *
  */
-class SourceforgeUploadTask extends \TYPO3\Surf\Domain\Model\Task
+class SourceforgeUploadTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

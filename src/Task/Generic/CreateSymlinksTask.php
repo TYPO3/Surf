@@ -23,13 +23,9 @@ use TYPO3\Surf\Domain\Model\Node;
  *   'Web/foobaz' => '../../../shared/Data/foobaz', # relative link into the shared folder
  * );
  */
-class CreateSymlinksTask extends \TYPO3\Surf\Domain\Model\Task
+class CreateSymlinksTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task

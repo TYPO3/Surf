@@ -15,13 +15,9 @@ use TYPO3\Surf\Domain\Model\Node;
  * Task for preparing a "TYPO3.Release" release
  *
  */
-class PrepareReleaseTask extends \TYPO3\Surf\Domain\Model\Task
+class PrepareReleaseTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

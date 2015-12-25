@@ -14,13 +14,9 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * Downloads composer into the current releasePath.
  */
-class DownloadTask extends \TYPO3\Surf\Domain\Model\Task
+class DownloadTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * @param \TYPO3\Surf\Domain\Model\Node $node

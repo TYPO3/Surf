@@ -20,13 +20,9 @@ use TYPO3\Surf\Domain\Model\Node;
  * * purgeUrl - URL (pattern) to purge, defaults to "."
  * * varnishadm - path to the varnishadm utility, defaults to "/usr/bin/varnishadm"
  */
-class VarnishPurgeTask extends \TYPO3\Surf\Domain\Model\Task
+class VarnishPurgeTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

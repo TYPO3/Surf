@@ -11,6 +11,8 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+
 /**
  * Base unit test for tasks
  */
@@ -57,16 +59,15 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->markTestSkipped('We need to add the Shell injection somewhere!');
-        return;
 
         $this->commands = array('executed' => array());
         $commands = &$this->commands;
         $this->responses = array();
         $responses = &$this->responses;
 
-        $shellComandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService');
-        $shellComandService->expects($this->any())->method('execute')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
+        /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
+        $shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService');
+        $shellCommandService->expects($this->any())->method('execute')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
             if (is_array($command)) {
                 $commands['executed'] = array_merge($commands['executed'], $command);
             } else {
@@ -77,7 +78,7 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
             }
             return '';
         }));
-        $shellComandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback(function ($command) use (&$commands, $responses) {
+        $shellCommandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback(function ($command) use (&$commands, $responses) {
             if (is_array($command)) {
                 $commands['executed'] = array_merge($commands['executed'], $command);
             } else {
@@ -88,15 +89,14 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
             }
             return '';
         }));
-
         $this->task = $this->createTask();
-        try {
-            $this->inject($this->task, 'shell', $shellComandService);
-        } catch (\RuntimeException $e) {
+        if ($this->task instanceof ShellCommandServiceAwareInterface) {
+            $this->task->setShellCommandService($shellCommandService);
         }
 
         $this->node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
         $this->deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+        /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
         $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
         $this->deployment->setLogger($mockLogger);
         $this->application = new \TYPO3\Surf\Domain\Model\Application('TestApplication');

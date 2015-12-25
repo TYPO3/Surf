@@ -6,8 +6,6 @@ namespace TYPO3\Surf\Task\Transfer;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -17,13 +15,9 @@ use TYPO3\Surf\Domain\Model\Node;
  *
  * Copies the application assets from the application workspace to the node using rsync.
  */
-class RsyncTask extends \TYPO3\Surf\Domain\Model\Task
+class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

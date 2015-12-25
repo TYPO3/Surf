@@ -17,13 +17,9 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * A task which can be used to tag a git repository and its submodules
  *
  */
-class TagTask extends Task
+class TagTask extends Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

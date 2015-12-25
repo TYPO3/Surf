@@ -16,13 +16,9 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  * An abstract git checkout task
  *
  */
-abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task
+abstract class AbstractCheckoutTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Simulate this task

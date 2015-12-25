@@ -148,6 +148,9 @@ class TaskManager
             throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Task "' . $taskName . '" was not registered (class "' . $taskClassName . '" not found)', 1335976651);
         }
         $task = new $taskObjectName();
+        if ($task instanceof ShellCommandServiceAwareInterface) {
+            $task->setShellCommandService(new ShellCommandService());
+        }
         return $task;
     }
 }

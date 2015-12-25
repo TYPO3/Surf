@@ -16,13 +16,9 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 /**
  * A TYPO3 Flow publish resources task
  */
-class PublishResourcesTask extends Task
+class PublishResourcesTask extends Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

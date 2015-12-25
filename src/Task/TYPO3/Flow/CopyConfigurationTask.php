@@ -17,13 +17,9 @@ use TYPO3\Surf\Domain\Model\Node;
  * The configuration directory has to exist on the target release path before
  * executing this task!
  */
-class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task
+class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task

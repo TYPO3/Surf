@@ -14,13 +14,9 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * Task for setting file permissions for the TYPO3 Flow application
  */
-class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task
+class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

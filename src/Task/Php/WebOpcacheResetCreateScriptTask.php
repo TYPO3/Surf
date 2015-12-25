@@ -19,13 +19,9 @@ use TYPO3\Surf\Domain\Model\Node;
  *
  * The opcache reset has to be done in the webserver process, so a simple CLI command would not help.
  */
-class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task
+class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shellCommandService;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

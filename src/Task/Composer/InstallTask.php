@@ -14,13 +14,9 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * Installs the composer packages based on a composer.json file in the projects root folder
  */
-class InstallTask extends \TYPO3\Surf\Domain\Model\Task
+class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var \TYPO3\Surf\Domain\Service\ShellCommandService
-     */
-    protected $shell;
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * @param \TYPO3\Surf\Domain\Model\Node $node
