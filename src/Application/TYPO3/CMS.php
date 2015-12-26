@@ -8,7 +8,6 @@ namespace TYPO3\Surf\Application\TYPO3;
 
 /**
  * A TYPO3 CMS application template
- * @TYPO3\Flow\Annotations\Proxy(false)
  */
 class CMS extends \TYPO3\Surf\Application\BaseApplication
 {

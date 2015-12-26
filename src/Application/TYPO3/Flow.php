@@ -11,7 +11,6 @@ use TYPO3\Surf\Domain\Model\Workflow;
 
 /**
  * A TYPO3 Flow application template
-* @TYPO3\Flow\Annotations\Proxy(false)
  */
 class Flow extends \TYPO3\Surf\Application\BaseApplication
 {
