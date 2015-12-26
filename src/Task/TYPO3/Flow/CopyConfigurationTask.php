@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\TYPO3\Flow;
  *                                                                        *
  *                                                                        */
 
+use Symfony\Component\Finder\Finder;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -43,11 +44,16 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
             return;
         }
 
-        $encryptedConfiguration = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml.encrypted');
+        $finder = new Finder();
+        $encryptedConfiguration = $finder->files()
+            ->name('*.yaml.encrypted')
+            ->in($configurationPath);
         if (count($encryptedConfiguration) > 0) {
             throw new \TYPO3\Surf\Exception\TaskExecutionException('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);
         }
-        $configurations = \TYPO3\Flow\Utility\Files::readDirectoryRecursively($configurationPath, 'yaml');
+        $configurations = $finder->files()
+            ->name('*.yaml')
+            ->in($configurationPath);
         $commands = array();
         foreach ($configurations as $configuration) {
             $targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
