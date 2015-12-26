@@ -40,7 +40,9 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task impl
 
         if (!isset($options['scriptIdentifier'])) {
             // Generate random identifier
-            $scriptIdentifier = \TYPO3\Flow\Utility\Algorithms::generateRandomString(32);
+            $factory = new \RandomLib\Factory;
+            $generator = $factory->getMediumStrengthGenerator();
+            $scriptIdentifier = $generator->generateString(32);
 
             // Store the script identifier as an application option
             $application->setOption('typo3.surf:php:webopcacheresetexecute[scriptIdentifier]', $scriptIdentifier);
