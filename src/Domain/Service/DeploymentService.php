@@ -70,7 +70,7 @@ class DeploymentService
      */
     public function getDeploymentsBasePath($path = null)
     {
-        $path = realpath($path ?: './.surf');
+        $path = realpath($path ?: $this->getHomeDir());
         return $path;
     }
 
