@@ -435,7 +435,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get the deployment base path (defaults to FLOW_PATH_ROOT/Build/Surf)
+     * Get the deployment base path (defaults to ./.surf)
      *
      * @return string
      */

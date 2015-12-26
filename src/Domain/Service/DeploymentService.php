@@ -17,7 +17,7 @@ class DeploymentService
     /**
      * Get available deployment names
      *
-     * Will look up all .php files in the directory FLOW_ROOT/Build/Surf/ or the given path if specified.
+     * Will look up all .php files in the directory ./.surf/ or the given path if specified.
      *
      * @param string $path
      * @return array
@@ -34,7 +34,7 @@ class DeploymentService
     /**
      * Get a deployment object by deployment name
      *
-     * Looks up the deployment in directory FLOW_ROOT/Build/Surf/[deploymentName].php
+     * Looks up the deployment in directory ./.surf/[deploymentName].php
      *
      * The script has access to a deployment object as "$deployment". This could change
      * in the future.
