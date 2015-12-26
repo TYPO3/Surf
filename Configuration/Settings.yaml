@@ -1,8 +1,0 @@
-TYPO3:
-  DocTools:
-    bundles:
-      TYPO3SurfHtml:
-        documentationRootPath: '%FLOW_PATH_PACKAGES%Application/TYPO3.Surf/Documentation/Guide/'
-        configurationRootPath: '%FLOW_PATH_PACKAGES%Documentation/TYPO3.DocTools/Resources/Private/Themes/FLOW3/'
-        renderedDocumentationRootPath: '%FLOW_PATH_DATA%Temporary/Documentation/TYPO3.Surf/'
-        renderingOutputFormat: 'html'
