@@ -99,6 +99,7 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
         /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
         $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
         $this->deployment->setLogger($mockLogger);
+        $this->deployment->setWorkspacesBasePath('./Data/Surf');
         $this->application = new \TYPO3\Surf\Domain\Model\Application('TestApplication');
 
         $this->deployment->initialize();

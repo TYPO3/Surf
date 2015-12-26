@@ -45,7 +45,9 @@ class DeploymentService
      */
     public function getDeployment($deploymentName, $path = null)
     {
-        $deploymentConfigurationPath = $this->getDeploymentsBasePath($path);
+        $homeDir = $path ?: $this->getHomeDir();
+        $deploymentConfigurationPath = $this->getDeploymentsBasePath($homeDir);
+        $workspacesBasePath = $this->getWorkspacesBasePath($homeDir);
         $deploymentPathAndFilename = $deploymentConfigurationPath . '/' . $deploymentName . '.php';
         if (!file_exists($deploymentPathAndFilename)) {
             exit(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
@@ -53,6 +55,7 @@ class DeploymentService
 
         $deployment = new Deployment($deploymentName);
         $deployment->setDeploymentBasePath($deploymentConfigurationPath);
+        $deployment->setWorkspacesBasePath($workspacesBasePath);
         require($deploymentPathAndFilename);
         return $deployment;
     }
@@ -60,20 +63,65 @@ class DeploymentService
     /**
      * Get the root path of the surf deployment declarations
      *
-     * This defaults to FLOW_PATH_ROOT/Build/Surf if a NULL path is given.
+     * This defaults to ./.surf if a NULL path is given.
      *
-     * @param string $path An absolute or FLOW_PATH_ROOT relative path (optional)
+     * @param string $path An absolute path (optional)
      * @return string The configuration root path without a trailing slash.
      */
     public function getDeploymentsBasePath($path = null)
     {
-        $path = ($path ?: 'Build/Surf/');
-        if (substr($path, 0, 1) !== '/') {
-            $path = FLOW_PATH_ROOT . $path;
-        }
-        if (substr($path, -1) === '/') {
-            $path = substr($path, 0, -1);
-        }
+        $path = realpath($path ?: './.surf');
         return $path;
     }
+
+    /**
+     * Get the base path to local workspaces
+     *
+     * @param string $path An absolute path (optional)
+     * @return string The workspaces base path without a trailing slash.
+     */
+    public function getWorkspacesBasePath($path = null)
+    {
+        $workspacesBasePath = getenv('SURF_WORKSPACE');
+        if (!$workspacesBasePath) {
+            $path = $path ?: $this->getHomeDir();
+            if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+                if ($workspacesBasePath = getenv('LOCALAPPDATA')) {
+                    $workspacesBasePath .= '/Surf';
+                } else {
+                    $workspacesBasePath = $path . '/workspace';
+                }
+                $workspacesBasePath = strtr($workspacesBasePath, '\\', '/');
+            } else {
+                $workspacesBasePath = $path . '/workspace';
+            }
+        }
+
+        return $workspacesBasePath;
+    }
+
+    /**
+     * @return string
+     * @throws \RuntimeException
+     */
+    protected static function getHomeDir()
+    {
+        $home = getenv('SURF_HOME');
+        if (!$home) {
+            if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+                if (!getenv('APPDATA')) {
+                    throw new \RuntimeException('The APPDATA or SURF_HOME environment variable must be set for composer to run correctly');
+                }
+                $home = strtr(getenv('APPDATA'), '\\', '/') . '/Surf';
+            } else {
+                if (!getenv('HOME')) {
+                    throw new \RuntimeException('The HOME or SURF_HOME environment variable must be set for composer to run correctly');
+                }
+                $home = rtrim(getenv('HOME'), '/') . '/.surf';
+            }
+        }
+
+        return $home;
+    }
+
 }
