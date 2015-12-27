@@ -59,7 +59,6 @@ class SimulateCommand extends Command
         $configurationPath = $input->getOption('configurationPath');
         $deployment = $deploymentService->getDeployment($input->getArgument('deploymentName'), $configurationPath);
         if ($deployment->getLogger() === null) {
-            //$logger = $this->createDefaultLogger($deploymentName, $verbose ? LOG_DEBUG : LOG_INFO, $disableAnsi, FALSE);
             $logger = new ConsoleLogger($output);
             $deployment->setLogger($logger);
         }
