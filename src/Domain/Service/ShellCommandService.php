@@ -35,7 +35,7 @@ class ShellCommandService
             list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment, $logOutput);
         }
         if ($ignoreErrors !== true && $exitCode !== 0) {
-            $deployment->getLogger()->log(rtrim($returnedOutput), LOG_WARNING);
+            $deployment->getLogger()->warning(rtrim($returnedOutput));
             throw new \TYPO3\Surf\Exception\TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
         }
         return ($exitCode === 0 ? $returnedOutput : false);
@@ -53,10 +53,10 @@ class ShellCommandService
     {
         if ($node->isLocalhost()) {
             $command = $this->prepareCommand($command);
-            $deployment->getLogger()->log('... (localhost): "' . $command . '"', LOG_DEBUG);
+            $deployment->getLogger()->debug('... (localhost): "' . $command . '"');
         } else {
             $command = $this->prepareCommand($command);
-            $deployment->getLogger()->log('... $' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
+            $deployment->getLogger()->debug('... $' . $node->getName() . ': "' . $command . '"');
         }
         return true;
     }
@@ -91,7 +91,7 @@ class ShellCommandService
     protected function executeLocalCommand($command, Deployment $deployment, $logOutput = true)
     {
         $command = $this->prepareCommand($command);
-        $deployment->getLogger()->log('(localhost): "' . $command . '"', LOG_DEBUG);
+        $deployment->getLogger()->debug('(localhost): "' . $command . '"');
 
         return $this->executeProcess($deployment, $command, $logOutput, '> ');
     }
@@ -108,7 +108,7 @@ class ShellCommandService
     protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = true)
     {
         $command = $this->prepareCommand($command);
-        $deployment->getLogger()->log('$' . $node->getName() . ': "' . $command . '"', LOG_DEBUG);
+        $deployment->getLogger()->debug('$' . $node->getName() . ': "' . $command . '"');
 
         if ($node->hasOption('remoteCommandExecutionHandler')) {
             $remoteCommandExecutionHandler = $node->getOption('remoteCommandExecutionHandler');
@@ -160,9 +160,9 @@ class ShellCommandService
         if ($logOutput) {
             $callback = function ($type, $data) use ($deployment, $logPrefix) {
                 if ($type === Process::OUT) {
-                    $deployment->getLogger()->log($logPrefix . trim($data), LOG_DEBUG);
+                    $deployment->getLogger()->debug($logPrefix . trim($data));
                 } elseif ($type === Process::ERR) {
-                    $deployment->getLogger()->log($logPrefix . trim($data), LOG_ERR);
+                    $deployment->getLogger()->error($logPrefix . trim($data));
                 }
             };
         }

@@ -300,7 +300,7 @@ abstract class Workflow
         foreach (array('_', $application->getName()) as $applicationName) {
             if (isset($this->tasks['before'][$applicationName][$task])) {
                 foreach ($this->tasks['before'][$applicationName][$task] as $beforeTask) {
-                    $deployment->getLogger()->log('Task "' . $beforeTask . '" before "' . $task, LOG_DEBUG);
+                    $deployment->getLogger()->debug('Task "' . $beforeTask . '" before "' . $task);
                     $this->executeTask($beforeTask, $node, $application, $deployment, $stage, $callstack);
                 }
             }
@@ -318,7 +318,7 @@ abstract class Workflow
             $label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
             if (isset($this->tasks['after'][$applicationName][$task])) {
                 foreach ($this->tasks['after'][$applicationName][$task] as $beforeTask) {
-                    $deployment->getLogger()->log('Task "' . $beforeTask . '" after "' . $task . '" ' . $label, LOG_DEBUG);
+                    $deployment->getLogger()->debug('Task "' . $beforeTask . '" after "' . $task . '" ' . $label);
                     $this->executeTask($beforeTask, $node, $application, $deployment, $stage, $callstack);
                 }
             }

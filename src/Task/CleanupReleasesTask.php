@@ -39,7 +39,7 @@ class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         if (!isset($options['keepReleases'])) {
-            $deployment->getLogger()->log(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"', LOG_DEBUG);
+            $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"');
             return;
         }
 
@@ -66,10 +66,10 @@ class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO
             $removeCommand .= "rm -rf {$releasesPath}/{$removeRelease};rm -f {$releasesPath}/{$removeRelease}REVISION;";
         }
         if (count($removeReleases) > 0) {
-            $deployment->getLogger()->log(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
+            $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
             $this->shell->executeOrSimulate($removeCommand, $node, $deployment);
         } else {
-            $deployment->getLogger()->log('No releases to remove', LOG_DEBUG);
+            $deployment->getLogger()->debug('No releases to remove');
         }
     }
 

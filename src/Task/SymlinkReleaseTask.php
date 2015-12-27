@@ -32,7 +32,7 @@ class SymlinkReleaseTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3
         $releaseIdentifier = $deployment->getReleaseIdentifier();
         $releasesPath = $application->getReleasesPath();
         $this->shell->executeOrSimulate('cd ' . $releasesPath . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./' . $releaseIdentifier . ' ./current && rm -f ./next', $node, $deployment);
-        $deployment->getLogger()->log('<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>', LOG_NOTICE);
+        $deployment->getLogger()->notice('<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>');
     }
 
     /**

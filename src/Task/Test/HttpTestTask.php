@@ -47,7 +47,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\
                 isset($options['additionalCurlParameters']) ? $options['additionalCurlParameters'] : ''
             );
         } else {
-            $deployment->getLogger()->log('Requesting URL "' . $options['url'] . '"', LOG_DEBUG);
+            $deployment->getLogger()->debug('Requesting URL "' . $options['url'] . '"');
             $result = $this->executeLocalCurlRequest(
                 $options['url'],
                 isset($options['timeout']) ? $options['timeout'] : null,

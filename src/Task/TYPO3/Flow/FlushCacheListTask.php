@@ -52,7 +52,7 @@ class FlushCacheListTask extends Task implements \TYPO3\Surf\Domain\Service\Shel
             $caches = is_array($options['flushCacheList']) ? $options['flushCacheList'] : explode(',', $options['flushCacheList']);
             $targetPath = $deployment->getApplicationReleasePath($application);
             foreach ($caches as $cache) {
-                $deployment->getLogger()->log(sprintf('Flush cache with identifier "%s"', $cache));
+                $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
                 $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf('typo3.flow:cache:flushone --identifier %s', $cache), $node, $deployment);
             }
         } else {
