@@ -6,6 +6,8 @@ namespace TYPO3\Surf\Domain\Model;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Domain\Service\TaskManager;
+
 /**
  * A Workflow
  *
@@ -38,6 +40,9 @@ abstract class Workflow
      */
     public function run(Deployment $deployment)
     {
+        if ($this->taskManager === NULL) {
+            $this->taskManager = new TaskManager();
+        }
         if (!$deployment->isInitialized()) {
             throw new \TYPO3\Surf\Exception('Deployment must be initialized before running it', 1335976529);
         }
