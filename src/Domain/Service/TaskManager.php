@@ -23,6 +23,19 @@ class TaskManager
     protected $taskHistory = array();
 
     /**
+     * @var array
+     */
+    protected $legacyClassMap = array();
+
+    /**
+     * TaskManager constructor.
+     */
+    public function __construct()
+    {
+        $this->legacyClassMap = require __DIR__ . '/../../../Migrations/Code/LegacyClassMap.php';
+    }
+
+    /**
      * Execute a task
      *
      * @param string $taskName
@@ -145,11 +158,27 @@ class TaskManager
     /**
      * @param string $taskIdentifier
      * @return string
+     * @throws \TYPO3\Surf\Exception
      */
     protected function calculateTaskClassNameFromTaskIdentifier($taskIdentifier)
     {
-        list($packageKey, $taskIdentifier) = explode(':', $taskIdentifier, 2);
-        $taskClassName = strtr($packageKey, '.', '\\') . '\\Task\\' . strtr($taskIdentifier, ':', '\\') . 'Task';
-        return $taskClassName;
+        //TODO: Refactor this to factory with tests and introduce factory interface
+        $taskIdentifierParts = explode(':', $taskIdentifier);
+        if (strpos($taskIdentifierParts[0], '.') !== false) {
+            $packageKey = array_shift($taskIdentifierParts);
+            array_unshift($taskIdentifierParts, 'Task');
+            foreach (array_reverse(explode('.', $packageKey)) as $packageKeyPart) {
+                array_unshift($taskIdentifierParts, $packageKeyPart);
+            }
+        }
+        $taskIdentifierParts = array_map('ucfirst', $taskIdentifierParts);
+        $taskClassName = implode('\\', $taskIdentifierParts) . 'Task';
+        $lowercaseTaskClassName = strtolower($taskClassName);
+        if (class_exists($taskClassName)) {
+            return $taskClassName;
+        } elseif (!empty($this->legacyClassMap[$lowercaseTaskClassName])) {
+            return $this->legacyClassMap[$lowercaseTaskClassName];
+        }
+        throw new \TYPO3\Surf\Exception(sprintf('No task found for identifier "%s"', $taskIdentifier), 1451210811);
     }
 }
