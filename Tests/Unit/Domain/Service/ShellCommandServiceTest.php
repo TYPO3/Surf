@@ -184,10 +184,10 @@ class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase
         $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
         $deployment->setLogger($mockLogger);
 
-        $mockLogger->expects($this->at(0))->method('log')
-            ->with('$ out', LOG_DEBUG);
-        $mockLogger->expects($this->at(1))->method('log')
-            ->with('$ err', LOG_ERR);
+        $mockLogger->expects($this->at(0))->method('debug')
+            ->with('$ out');
+        $mockLogger->expects($this->at(1))->method('error')
+            ->with('$ err');
 
         $shellCommandService->executeProcess($deployment, 'echo "out" ; echo "err" >&2 ', true, '$ ');
     }
