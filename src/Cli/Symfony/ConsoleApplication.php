@@ -43,6 +43,8 @@ class ConsoleApplication extends \Symfony\Component\Console\Application
             $output->getFormatter()->setStyle('strike', new OutputFormatterStyle(NULL, NULL, array('conceal')));
             $output->getFormatter()->setStyle('success', new OutputFormatterStyle('green'));
             $output->getFormatter()->setStyle('warning', new OutputFormatterStyle('black', 'yellow'));
+            $output->getFormatter()->setStyle('notice', new OutputFormatterStyle('yellow'));
+            $output->getFormatter()->setStyle('info', new OutputFormatterStyle('white'));
         }
         return parent::run($input, $output);
     }
