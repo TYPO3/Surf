@@ -97,7 +97,7 @@ class Application
     /**
      * Get the nodes where this application should be deployed
      *
-     * @return array The application nodes
+     * @return Node[] The application nodes
      */
     public function getNodes()
     {

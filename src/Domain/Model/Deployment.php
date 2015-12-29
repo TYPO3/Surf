@@ -36,7 +36,7 @@ class Deployment implements LoggerAwareInterface
 
     /**
      * The applications deployed with this deployment
-     * @var array
+     * @var Application[]
      */
     protected $applications = array();
 
@@ -209,7 +209,7 @@ class Deployment implements LoggerAwareInterface
     /**
      * Get all nodes of this deployment
      *
-     * @return array The deployment nodes with all application nodes
+     * @return Node[] The deployment nodes with all application nodes
      */
     public function getNodes()
     {
@@ -243,7 +243,7 @@ class Deployment implements LoggerAwareInterface
     /**
      * Get all applications for this deployment
      *
-     * @return array
+     * @return Application[]
      */
     public function getApplications()
     {
