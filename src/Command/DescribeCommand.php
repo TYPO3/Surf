@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Surf describe command
  */
-class DescribeCommand extends Command
+class DescribeCommand extends AbstractSurfCommand
 {
 
     /**
@@ -54,11 +54,7 @@ class DescribeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configurationPath = $input->getOption('configurationPath');
-        $deploymentService = new \TYPO3\Surf\Domain\Service\DeploymentService();
-        $deployment = $deploymentService->getDeployment($input->getArgument('deploymentName'), $configurationPath);
-
-        $deployment->initialize();
+        $deployment = $this->createDeployment($input, $output);
 
         $output->writeln('Deployment' . $deployment->getName());
         $output->writeln('');
@@ -78,4 +74,5 @@ class DescribeCommand extends Command
             $output->writeln('    Nodes: ' . implode(', ', $application->getNodes()));
         }
     }
+
 }

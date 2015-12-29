@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Surf simulate command
  */
-class SimulateCommand extends Command
+class SimulateCommand extends AbstractSurfCommand
 {
 
     /**
@@ -55,14 +55,7 @@ class SimulateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $deploymentService = new \TYPO3\Surf\Domain\Service\DeploymentService();
-        $configurationPath = $input->getOption('configurationPath');
-        $deployment = $deploymentService->getDeployment($input->getArgument('deploymentName'), $configurationPath);
-        if ($deployment->getLogger() === null) {
-            $logger = new ConsoleLogger($output);
-            $deployment->setLogger($logger);
-        }
-        $deployment->initialize();
+        $deployment = $this->createDeployment($input, $output);
 
         $deployment->simulate();
     }
