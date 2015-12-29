@@ -52,10 +52,9 @@ class ShowCommand extends Command
         $deploymentService = new \TYPO3\Surf\Domain\Service\DeploymentService();
         $deploymentNames = $deploymentService->getDeploymentNames($configurationPath);
 
-        $output->writeln('Deployments:' . PHP_EOL);
-
+        $output->writeln('<u>Deployments:</u>');
         foreach ($deploymentNames as $deploymentName) {
-            $line = '  ' . $deploymentName;
+            $line = sprintf('  <info>%s</info>', $deploymentName);
             $output->writeln($line);
         }
     }
