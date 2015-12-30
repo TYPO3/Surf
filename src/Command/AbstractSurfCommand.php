@@ -17,23 +17,6 @@ use TYPO3\Surf\Cli\Symfony\Logger\ConsoleLogger;
 class AbstractSurfCommand extends Command
 {
     /**
-     * Execute
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return null|int null or 0 if everything went fine, or an error code
-     *
-     * @see setCode()
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $deployment = $this->createDeployment($input, $output);
-
-        $deployment->deploy();
-    }
-
-    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return \TYPO3\Surf\Domain\Model\Deployment
