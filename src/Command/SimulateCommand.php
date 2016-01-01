@@ -10,14 +10,16 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\Surf\Integration\FactoryAwareInterface;
+use TYPO3\Surf\Integration\FactoryAwareTrait;
 
 /**
  * Surf simulate command
  */
-class SimulateCommand extends AbstractSurfCommand
+class SimulateCommand extends Command implements FactoryAwareInterface
 {
+    use FactoryAwareTrait;
 
     /**
      * Configure
@@ -47,7 +49,9 @@ class SimulateCommand extends AbstractSurfCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $deployment = $this->createDeployment($input, $output);
+        $configurationPath = $input->getOption('configurationPath');
+        $deploymentName = $input->getArgument('deploymentName');
+        $deployment = $this->factory->createDeployment($deploymentName, $configurationPath);
 
         $deployment->simulate();
     }

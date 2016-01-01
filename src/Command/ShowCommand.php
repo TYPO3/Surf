@@ -16,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ShowCommand extends Command
 {
-
     /**
      * Configure
      */

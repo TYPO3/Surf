@@ -10,14 +10,16 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\Surf\Integration\FactoryAwareInterface;
+use TYPO3\Surf\Integration\FactoryAwareTrait;
 
 /**
  * Surf deploy command
  */
-class DeployCommand extends AbstractSurfCommand
+class DeployCommand extends Command implements FactoryAwareInterface
 {
+    use FactoryAwareTrait;
 
     /**
      * Configure
@@ -50,15 +52,11 @@ class DeployCommand extends AbstractSurfCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $deploymentService = new \TYPO3\Surf\Domain\Service\DeploymentService();
         $configurationPath = $input->getOption('configurationPath');
-        $deployment = $deploymentService->getDeployment($input->getArgument('deploymentName'), $configurationPath);
-        if ($deployment->getLogger() === null) {
-            $logger = new ConsoleLogger($output);
-            $deployment->setLogger($logger);
-        }
-        $deployment = $this->createDeployment($input, $output);
+        $deploymentName = $input->getArgument('deploymentName');
+        $deployment = $this->factory->createDeployment($deploymentName, $configurationPath);
 
         $deployment->deploy();
     }
+
 }

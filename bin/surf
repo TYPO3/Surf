@@ -3,7 +3,6 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use TYPO3\Surf\Cli\Symfony\ConsoleApplication;
-
-$app = new ConsoleApplication('TYPO3 Surf', '2.0.0-alpha1');
+$app = new \TYPO3\Surf\Cli\Symfony\ConsoleApplication('TYPO3 Surf', '2.0.0-alpha1');
+$app->setFactory(new \TYPO3\Surf\Integration\Factory());
 $app->run();
