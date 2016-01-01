@@ -47,16 +47,15 @@ class DeployCommand extends Command implements FactoryAwareInterface
      * @param OutputInterface $output
      *
      * @return null|int null or 0 if everything went fine, or an error code
-     *
-     * @see setCode()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');
         $deployment = $this->factory->createDeployment($deploymentName, $configurationPath);
-
         $deployment->deploy();
+
+        return $deployment->getStatus();
     }
 
 }
