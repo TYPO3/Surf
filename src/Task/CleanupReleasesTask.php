@@ -66,10 +66,10 @@ class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO
             $removeCommand .= "rm -rf {$releasesPath}/{$removeRelease};rm -f {$releasesPath}/{$removeRelease}REVISION;";
         }
         if (count($removeReleases) > 0) {
-            $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
+            $deployment->getLogger()->info(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
             $this->shell->executeOrSimulate($removeCommand, $node, $deployment);
         } else {
-            $deployment->getLogger()->debug('No releases to remove');
+            $deployment->getLogger()->info('No releases to remove');
         }
     }
 
