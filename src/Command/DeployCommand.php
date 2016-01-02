@@ -52,7 +52,7 @@ class DeployCommand extends Command implements FactoryAwareInterface
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');
-        $deployment = $this->factory->createDeployment($deploymentName, $configurationPath);
+        $deployment = $this->factory->createDeployment($deploymentName, $configurationPath, false);
         $deployment->deploy();
 
         return $deployment->getStatus();

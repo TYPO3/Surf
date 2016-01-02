@@ -6,12 +6,14 @@ namespace TYPO3\Surf\Integration;
  *                                                                        *
  *                                                                        */
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\Surf\Cli\Symfony\Logger\ConsoleLogger;
+use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
 use TYPO3\Surf\Command\DeployCommand;
 use TYPO3\Surf\Command\DescribeCommand;
 use TYPO3\Surf\Command\ShowCommand;
@@ -70,14 +72,19 @@ class Factory implements FactoryInterface
     /**
      * @param string $deploymentName
      * @param string $configurationPath
+     * @param bool $simulateDeployment
      * @return Deployment
      */
-    public function createDeployment($deploymentName, $configurationPath = null)
+    public function createDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true)
     {
         $deploymentService = new \TYPO3\Surf\Domain\Service\DeploymentService();
         $deployment = $deploymentService->getDeployment($deploymentName, $configurationPath);
         if ($deployment->getLogger() === null) {
             $logger = $this->createLogger();
+            if (!$simulateDeployment) {
+                $logPath = $deploymentService->getWorkspacesBasePath($configurationPath) . '/logs';
+                $logger->pushHandler(new StreamHandler($logPath . '/' . $deployment->getName() . '.log'));
+            }
             $deployment->setLogger($logger);
         }
         $deployment->initialize();
@@ -86,12 +93,13 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @return ConsoleLogger
+     * @return Logger
      */
     public function createLogger()
     {
         if ($this->logger === null) {
-            $this->logger = new ConsoleLogger($this->createOutput());
+            $consoleHandler = new ConsoleHandler($this->createOutput());
+            $this->logger = new Logger('TYPO3 Surf', array($consoleHandler));
         }
         return $this->logger;
     }

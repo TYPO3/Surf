@@ -26,9 +26,10 @@ interface FactoryInterface
     /**
      * @param string $deploymentName
      * @param string|null $configurationPath
+     * @param bool $simulateDeployment
      * @return Deployment
      */
-    public function createDeployment($deploymentName, $configurationPath = null);
+    public function createDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true);
 
     /**
      * @return LoggerInterface

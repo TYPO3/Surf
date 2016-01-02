@@ -104,7 +104,7 @@ class DeploymentService
      * @return string
      * @throws \RuntimeException
      */
-    protected static function getHomeDir()
+    protected function getHomeDir()
     {
         $home = getenv('SURF_HOME');
         if (!$home) {
