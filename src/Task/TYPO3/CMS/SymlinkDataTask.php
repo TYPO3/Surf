@@ -47,7 +47,7 @@ class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Su
             foreach ($options['directories'] as $directory) {
                 $targetDirectory = escapeshellarg("{$relativeDataPath}/{$directory}");
                 $commands[] = '{ [ -d ' . $targetDirectory . ' ] || mkdir -p ' . $targetDirectory . ' ; }';
-                $commands[] = 'ln -snvf ' . escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . "$relativeDataPath/$directory") . ' ' . escapeshellarg($directory);
+                $commands[] = 'ln -sf ' . escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . "$relativeDataPath/$directory") . ' ' . escapeshellarg($directory);
             }
         }
         $this->shell->executeOrSimulate($commands, $node, $deployment);
