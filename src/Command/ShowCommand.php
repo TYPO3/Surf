@@ -10,12 +10,16 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\Surf\Integration\FactoryAwareInterface;
+use TYPO3\Surf\Integration\FactoryAwareTrait;
 
 /**
  * Surf list command
  */
-class ShowCommand extends Command
+class ShowCommand extends Command implements FactoryAwareInterface
 {
+    use FactoryAwareTrait;
+
     /**
      * Configure
      */
@@ -40,8 +44,7 @@ class ShowCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configurationPath = $input->getOption('configurationPath');
-        $deploymentService = new \TYPO3\Surf\Domain\Service\DeploymentService();
-        $deploymentNames = $deploymentService->getDeploymentNames($configurationPath);
+        $deploymentNames = $this->factory->getDeploymentNames($configurationPath);
 
         $output->writeln('<u>Deployments:</u>');
         foreach ($deploymentNames as $deploymentName) {
@@ -49,4 +52,5 @@ class ShowCommand extends Command
             $output->writeln($line);
         }
     }
+
 }

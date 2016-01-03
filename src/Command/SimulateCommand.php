@@ -51,7 +51,7 @@ class SimulateCommand extends Command implements FactoryAwareInterface
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');
-        $deployment = $this->factory->createDeployment($deploymentName, $configurationPath);
+        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath);
         $deployment->simulate();
 
         return $deployment->getStatus();

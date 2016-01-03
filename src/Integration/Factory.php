@@ -69,28 +69,6 @@ class Factory implements FactoryInterface
         return $this->output;
     }
 
-    /**
-     * @param string $deploymentName
-     * @param string $configurationPath
-     * @param bool $simulateDeployment
-     * @return Deployment
-     */
-    public function createDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true)
-    {
-        $deploymentService = new \TYPO3\Surf\Domain\Service\DeploymentService();
-        $deployment = $deploymentService->getDeployment($deploymentName, $configurationPath);
-        if ($deployment->getLogger() === null) {
-            $logger = $this->createLogger();
-            if (!$simulateDeployment) {
-                $logPath = $deploymentService->getWorkspacesBasePath($configurationPath) . '/logs';
-                $logger->pushHandler(new StreamHandler($logPath . '/' . $deployment->getName() . '.log'));
-            }
-            $deployment->setLogger($logger);
-        }
-        $deployment->initialize();
-
-        return $deployment;
-    }
 
     /**
      * @return Logger
@@ -102,6 +80,138 @@ class Factory implements FactoryInterface
             $this->logger = new Logger('TYPO3 Surf', array($consoleHandler));
         }
         return $this->logger;
+    }
+
+    /**
+     * @param string $deploymentName
+     * @param string $configurationPath
+     * @param bool $simulateDeployment
+     * @return Deployment
+     */
+    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true)
+    {
+        $deployment = $this->createDeployment($deploymentName, $configurationPath);
+        if ($deployment->getLogger() === null) {
+            $logger = $this->createLogger();
+            if (!$simulateDeployment) {
+                $logPath = $this->getWorkspacesBasePath($configurationPath) . '/logs';
+                $logger->pushHandler(new StreamHandler($logPath . '/' . $deployment->getName() . '.log'));
+            }
+            $deployment->setLogger($logger);
+        }
+        $deployment->initialize();
+
+        return $deployment;
+    }
+
+    /**
+     * Get available deployment names
+     *
+     * Will look up all .php files in the directory ./.surf/ or the given path if specified.
+     *
+     * @param string $path
+     * @return array
+     */
+    public function getDeploymentNames($path = null)
+    {
+        $path = $this->getDeploymentsBasePath($path);
+        $files = glob($path . '/*.php');
+        return array_map(function ($file) use ($path) {
+            return substr($file, strlen($path) + 1, -4);
+        }, $files);
+    }
+
+    /**
+     * Get the root path of the surf deployment declarations
+     *
+     * This defaults to ./.surf if a NULL path is given.
+     *
+     * @param string $path An absolute path (optional)
+     * @return string The configuration root path without a trailing slash.
+     */
+    public function getDeploymentsBasePath($path = null)
+    {
+        $path = realpath($path ?: $this->getHomeDir());
+        return $path;
+    }
+
+    /**
+     * Get the base path to local workspaces
+     *
+     * @param string $path An absolute path (optional)
+     * @return string The workspaces base path without a trailing slash.
+     */
+    public function getWorkspacesBasePath($path = null)
+    {
+        $workspacesBasePath = getenv('SURF_WORKSPACE');
+        if (!$workspacesBasePath) {
+            $path = $path ?: $this->getHomeDir();
+            if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+                if ($workspacesBasePath = getenv('LOCALAPPDATA')) {
+                    $workspacesBasePath .= '/Surf';
+                } else {
+                    $workspacesBasePath = $path . '/workspace';
+                }
+                $workspacesBasePath = strtr($workspacesBasePath, '\\', '/');
+            } else {
+                $workspacesBasePath = $path . '/workspace';
+            }
+        }
+
+        return $workspacesBasePath;
+    }
+
+    /**
+     * Get a deployment object by deployment name
+     *
+     * Looks up the deployment in directory ./.surf/[deploymentName].php
+     *
+     * The script has access to a deployment object as "$deployment". This could change
+     * in the future.
+     *
+     * @param string $deploymentName
+     * @param string $path
+     * @return \TYPO3\Surf\Domain\Model\Deployment
+     */
+    protected function createDeployment($deploymentName, $path = null)
+    {
+        $homeDir = $path ?: $this->getHomeDir();
+        $deploymentConfigurationPath = $this->getDeploymentsBasePath($homeDir);
+        $workspacesBasePath = $this->getWorkspacesBasePath($homeDir);
+        $deploymentPathAndFilename = $deploymentConfigurationPath . '/' . $deploymentName . '.php';
+        if (!file_exists($deploymentPathAndFilename)) {
+            exit(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
+        }
+
+        $deployment = new Deployment($deploymentName);
+        $deployment->setDeploymentBasePath($deploymentConfigurationPath);
+        $deployment->setWorkspacesBasePath($workspacesBasePath);
+        require($deploymentPathAndFilename);
+        return $deployment;
+    }
+
+    /**
+     * @return string
+     * @throws \RuntimeException
+     */
+    protected function getHomeDir()
+    {
+        $home = getenv('SURF_HOME');
+        if (!$home) {
+            if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+                if (!getenv('APPDATA')) {
+                    throw new \RuntimeException('The APPDATA or SURF_HOME environment variable must be set for composer to run correctly');
+                }
+                $home = strtr(getenv('APPDATA'), '\\', '/') . '/Surf';
+            } else {
+                if (!getenv('HOME')) {
+                    throw new \RuntimeException('The HOME or SURF_HOME environment variable must be set for composer to run correctly');
+                }
+                $home = rtrim(getenv('HOME'), '/') . '/.surf';
+            }
+        }
+
+        return $home;
     }
 
 }

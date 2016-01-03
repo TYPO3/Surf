@@ -24,16 +24,46 @@ interface FactoryInterface
     public function createOutput();
 
     /**
+     * @return LoggerInterface
+     */
+    public function createLogger();
+
+    /**
+     * Get the deployment object with the specified name
+     *
      * @param string $deploymentName
      * @param string|null $configurationPath
      * @param bool $simulateDeployment
      * @return Deployment
      */
-    public function createDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true);
+    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true);
 
     /**
-     * @return LoggerInterface
+     * Get available deployment names
+     *
+     * Will look up all .php files in the directory ./.surf/ or the given path if specified.
+     *
+     * @param string $path
+     * @return array
      */
-    public function createLogger();
+    public function getDeploymentNames($path = null);
+
+    /**
+     * Get the root path of the surf deployment declarations
+     *
+     * This defaults to ./.surf if a NULL path is given.
+     *
+     * @param string $path An absolute path (optional)
+     * @return string The configuration root path without a trailing slash.
+     */
+    public function getDeploymentsBasePath($path = null);
+
+    /**
+     * Get the base path to local workspaces
+     *
+     * @param string $path An absolute path (optional)
+     * @return string The workspaces base path without a trailing slash.
+     */
+    public function getWorkspacesBasePath($path = null);
 
 }
