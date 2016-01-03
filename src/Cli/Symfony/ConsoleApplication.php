@@ -46,6 +46,13 @@ class ConsoleApplication extends \Symfony\Component\Console\Application
         return parent::run($input, $this->factory->createOutput());
     }
 
+    /**
+     * @param Command $command
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @throws \Exception
+     */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
         if ($command instanceof FactoryAwareInterface) {
@@ -53,6 +60,5 @@ class ConsoleApplication extends \Symfony\Component\Console\Application
         }
         return parent::doRunCommand($command, $input, $output);
     }
-
 
 }
