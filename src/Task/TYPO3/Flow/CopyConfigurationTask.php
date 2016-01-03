@@ -44,16 +44,11 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
             return;
         }
 
-        $finder = new Finder();
-        $encryptedConfiguration = $finder->files()
-            ->name('*.yaml.encrypted')
-            ->in($configurationPath);
+        $encryptedConfiguration = glob($configurationPath . '*.yaml.encrypted');
         if (count($encryptedConfiguration) > 0) {
             throw new \TYPO3\Surf\Exception\TaskExecutionException('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);
         }
-        $configurations = $finder->files()
-            ->name('*.yaml')
-            ->in($configurationPath);
+        $configurations = glob($configurationPath . '*.yaml');
         $commands = array();
         foreach ($configurations as $configuration) {
             $targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
