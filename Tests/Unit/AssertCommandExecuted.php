@@ -1,8 +1,14 @@
 <?php
-
-
 namespace TYPO3\Surf\Tests\Unit;
 
+/*                                                                        *
+ * This script belongs to the TYPO3 project "TYPO3 Surf".                 *
+ *                                                                        *
+ *                                                                        */
+
+/**
+ * Class AssertCommandExecuted
+ */
 class AssertCommandExecuted extends \PHPUnit_Framework_Constraint
 {
     /**
