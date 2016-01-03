@@ -48,8 +48,8 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
      * @var array
      */
     protected $options = array(
-        'packageMethod' => null,
-        'transferMethod' => 'git',
+        'packageMethod' => 'git',
+        'transferMethod' => 'rsync',
         'updateMethod' => null
     );
 
@@ -223,6 +223,14 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
         switch ($packageMethod) {
             case 'git':
                 $workflow->addTask('typo3.surf:package:git', 'package', $this);
+                $workflow->defineTask(
+                    'typo3.surf:composer:localInstall',
+                    'typo3.surf:composer:install', array(
+                        'nodeName' => 'localhost',
+                        'useApplicationWorkspace' => true
+                    )
+                );
+                $workflow->afterTask('typo3.surf:package:git', 'typo3.surf:composer:localInstall', $this);
                 break;
         }
     }

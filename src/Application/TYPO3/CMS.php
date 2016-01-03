@@ -84,16 +84,9 @@ class CMS extends \TYPO3\Surf\Application\BaseApplication
     protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod)
     {
         parent::registerTasksForPackageMethod($workflow, $packageMethod);
-
         switch ($packageMethod) {
             case 'git':
-                $workflow->defineTask('typo3.surf:composer:localInstall', 'typo3.surf:composer:install', array(
-                    'nodeName' => 'localhost',
-                    'useApplicationWorkspace' => true
-                ));
-
-                $workflow->afterStage('package', 'typo3.surf:composer:localInstall', $this)
-                    ->afterTask('typo3.surf:composer:localInstall', 'typo3.surf.cms:typo3:cms:createPackageStates', $this);
+                $workflow->afterTask('typo3.surf:composer:localInstall', 'typo3.surf.cms:typo3:cms:createPackageStates', $this);
                 break;
         }
     }
