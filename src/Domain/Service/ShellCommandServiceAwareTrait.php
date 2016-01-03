@@ -19,8 +19,8 @@ trait ShellCommandServiceAwareTrait
      * @param ShellCommandService $shellCommandService
      * @return null
      */
-    public function setShellCommandService(ShellCommandService $shellCommandService) {
+    public function setShellCommandService(ShellCommandService $shellCommandService)
+    {
         $this->shell = $shellCommandService;
     }
-
 }

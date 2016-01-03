@@ -15,5 +15,4 @@ interface FactoryAwareInterface
      * @param FactoryInterface $factory
      */
     public function setFactory(FactoryInterface $factory);
-
 }

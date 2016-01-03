@@ -55,11 +55,11 @@ class Factory implements FactoryInterface
     {
         if ($this->output === null) {
             $this->output = new ConsoleOutput();
-            $this->output->getFormatter()->setStyle('b', new OutputFormatterStyle(NULL, NULL, array('bold')));
+            $this->output->getFormatter()->setStyle('b', new OutputFormatterStyle(null, null, array('bold')));
             $this->output->getFormatter()->setStyle('i', new OutputFormatterStyle('black', 'white'));
-            $this->output->getFormatter()->setStyle('u', new OutputFormatterStyle(NULL, NULL, array('underscore')));
-            $this->output->getFormatter()->setStyle('em', new OutputFormatterStyle(NULL, NULL, array('reverse')));
-            $this->output->getFormatter()->setStyle('strike', new OutputFormatterStyle(NULL, NULL, array('conceal')));
+            $this->output->getFormatter()->setStyle('u', new OutputFormatterStyle(null, null, array('underscore')));
+            $this->output->getFormatter()->setStyle('em', new OutputFormatterStyle(null, null, array('reverse')));
+            $this->output->getFormatter()->setStyle('strike', new OutputFormatterStyle(null, null, array('conceal')));
             $this->output->getFormatter()->setStyle('success', new OutputFormatterStyle('green'));
             $this->output->getFormatter()->setStyle('warning', new OutputFormatterStyle('black', 'yellow'));
             $this->output->getFormatter()->setStyle('notice', new OutputFormatterStyle('yellow'));
@@ -68,7 +68,6 @@ class Factory implements FactoryInterface
 
         return $this->output;
     }
-
 
     /**
      * @param string $deploymentName
@@ -213,5 +212,4 @@ class Factory implements FactoryInterface
         }
         return $this->logger;
     }
-
 }

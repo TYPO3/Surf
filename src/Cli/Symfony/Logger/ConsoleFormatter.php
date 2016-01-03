@@ -40,5 +40,4 @@ class ConsoleFormatter extends LineFormatter
 
         return parent::format($record);
     }
-
 }

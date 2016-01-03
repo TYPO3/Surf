@@ -40,7 +40,7 @@ abstract class Workflow
      */
     public function run(Deployment $deployment)
     {
-        if ($this->taskManager === NULL) {
+        if ($this->taskManager === null) {
             $this->taskManager = new TaskManager();
         }
         if (!$deployment->isInitialized()) {

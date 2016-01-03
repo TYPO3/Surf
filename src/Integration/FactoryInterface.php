@@ -6,7 +6,6 @@ namespace TYPO3\Surf\Integration;
  *                                                                        *
  *                                                                        */
 
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -60,5 +59,4 @@ interface FactoryInterface
      * @return string The workspaces base path without a trailing slash.
      */
     public function getWorkspacesBasePath($path = null);
-
 }

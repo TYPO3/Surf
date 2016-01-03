@@ -71,5 +71,4 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             $output->writeln('    Nodes: ' . implode(', ', $application->getNodes()));
         }
     }
-
 }

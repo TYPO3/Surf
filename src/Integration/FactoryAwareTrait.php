@@ -6,9 +6,6 @@ namespace TYPO3\Surf\Integration;
  *                                                                        *
  *                                                                        */
 
-use Symfony\Component\Console\Command\Command;
-use TYPO3\Surf\Integration\FactoryInterface;
-
 /**
  * Trait FactoryAwareTrait
  */
@@ -26,5 +23,4 @@ trait FactoryAwareTrait
     {
         $this->factory = $factory;
     }
-
 }

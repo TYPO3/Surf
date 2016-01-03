@@ -57,5 +57,4 @@ class DeployCommand extends Command implements FactoryAwareInterface
 
         return $deployment->getStatus();
     }
-
 }

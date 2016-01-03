@@ -133,5 +133,4 @@ class ConsoleHandler extends AbstractProcessingHandler
 
         return true;
     }
-
 }

@@ -60,5 +60,4 @@ class ConsoleApplication extends \Symfony\Component\Console\Application
         }
         return parent::doRunCommand($command, $input, $output);
     }
-
 }
