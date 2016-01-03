@@ -2,7 +2,7 @@
 namespace TYPO3\Surf\Application\TYPO3;
 
 /*                                                                        *
- * This script belongs to the TYPO3 project "TYPO3 Surf".            *
+ * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
  *                                                                        *
  *                                                                        */
 
