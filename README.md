@@ -1,14 +1,10 @@
-============================
 Surf - TYPO3 Flow deployment
 ============================
-
-*This version of the documentation has been rendered at:* |today|
 
 Description
 ===========
 
-The Surf package is a complete automated deployment tool powered by TYPO3 Flow. It's best used but not limited to deploy
-Flow applications. It might be included in your Flow application but can also be run standalone. It's inspired by some
+Surf package is a complete automated deployment tool. It is best used but by far not limited to deploy Flow applications. It might be included in your Flow application but can also be run standalone. It's inspired by some
 features of Capistrano (thanks) concerning the Git workflow.
 
 Some of the features of the Surf package:
@@ -20,16 +16,15 @@ Some of the features of the Surf package:
 * Create custom tasks with a few lines
 * Simulate deployments with a dry run
 
-.. note:: Surf ist still work-in-progress. API and options are subject to change.
 
 Installation
 ============
 
 Install the Surf package by importing the package to a TYPO3 Flow application:
 
-.. code-block:: none
 
-	composer require typo3/surf:dev-master
+	composer require typo3/surf
+
 
 Guide
 =====
@@ -41,7 +36,7 @@ Each deployment is defined in a configuration (e.g for development, staging, liv
 specifies a workflow for the deployment (for now there is just ``SimpleWorkflow``, but feel free to create
 your own). The deployment configuration has at least one application and one or more nodes for the application(s).
 
-We start by creating a simple deployment configuration in ``%FLOW_ROOT%/Build/Surf/MyDeployment.php`` for a deployment
+We start by creating a simple deployment configuration in ``~/.surf/MyDeployment.php`` for a deployment
 with name **MyDeployment**::
 
 	<?php
@@ -102,13 +97,9 @@ Test a deployment
 
 You can get a description of the deployment by running:
 
-.. code-block:: none
-
     $ ./flow surf:describe MyDeployment
 
 Simulate the deployment by running:
-
-.. code-block:: none
 
     $ ./flow surf:simulate MyDeployment
 
@@ -130,8 +121,6 @@ Run a deployment
 ----------------
 
 If everything looks right, you can run the deployment:
-
-.. code-block:: none
 
     $ ./flow surf:deploy MyDeployment
 
@@ -196,7 +185,7 @@ execution with `afterTask` or `beforeTask`.
 
 Task manipulation
 -----------------
-
+<pre>
 ====================== ================================= ===================================================================================
 Method                 Arguments                         Description
 ====================== ================================= ===================================================================================
@@ -206,6 +195,7 @@ removeTask             $taskName                         Removes the task with t
 afterTask              $taskName, $tasks, ($application) Adds one or more tasks that should run *after* the given task name.
 beforeTask             $taskName, $tasks, ($application) Adds one or more tasks that should run *before* the given task name.
 ====================== ================================= ===================================================================================
+</pre>
 
 Shell Task option expansion
 ---------------------------
