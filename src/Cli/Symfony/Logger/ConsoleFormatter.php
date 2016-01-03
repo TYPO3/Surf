@@ -34,8 +34,8 @@ class ConsoleFormatter extends LineFormatter
             $record['start_tag'] = '<info>';
             $record['end_tag'] = '</info>';
         } else {
-            $record['start_tag'] = '';
-            $record['end_tag'] = '';
+            $record['start_tag'] = '<debug>';
+            $record['end_tag'] = '</debug>';
         }
 
         return parent::format($record);

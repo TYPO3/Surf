@@ -63,7 +63,8 @@ class Factory implements FactoryInterface
             $this->output->getFormatter()->setStyle('success', new OutputFormatterStyle('green'));
             $this->output->getFormatter()->setStyle('warning', new OutputFormatterStyle('black', 'yellow'));
             $this->output->getFormatter()->setStyle('notice', new OutputFormatterStyle('yellow'));
-            $this->output->getFormatter()->setStyle('info', new OutputFormatterStyle('white'));
+            $this->output->getFormatter()->setStyle('info', new OutputFormatterStyle('white', null, array('bold')));
+            $this->output->getFormatter()->setStyle('debug', new OutputFormatterStyle('white'));
         }
 
         return $this->output;
