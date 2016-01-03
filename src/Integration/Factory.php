@@ -19,6 +19,7 @@ use TYPO3\Surf\Command\DescribeCommand;
 use TYPO3\Surf\Command\ShowCommand;
 use TYPO3\Surf\Command\SimulateCommand;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Class Factory
@@ -119,7 +120,8 @@ class Factory implements FactoryInterface
      */
     public function getDeploymentsBasePath($path = null)
     {
-        $path = realpath($path ?: $this->getHomeDir());
+        $path = $path ?: ($this->getHomeDir() . '/deployments');
+        $this->ensureDirectoryExists($path);
         return $path;
     }
 
@@ -145,7 +147,7 @@ class Factory implements FactoryInterface
                 $workspacesBasePath = $path . '/workspace';
             }
         }
-
+        $this->ensureDirectoryExists($workspacesBasePath);
         return $workspacesBasePath;
     }
 
@@ -163,9 +165,8 @@ class Factory implements FactoryInterface
      */
     protected function createDeployment($deploymentName, $path = null)
     {
-        $homeDir = $path ?: $this->getHomeDir();
-        $deploymentConfigurationPath = $this->getDeploymentsBasePath($homeDir);
-        $workspacesBasePath = $this->getWorkspacesBasePath($homeDir);
+        $deploymentConfigurationPath = $this->getDeploymentsBasePath($path);
+        $workspacesBasePath = $this->getWorkspacesBasePath();
         $deploymentPathAndFilename = $deploymentConfigurationPath . '/' . $deploymentName . '.php';
         if (!file_exists($deploymentPathAndFilename)) {
             exit(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
@@ -198,7 +199,7 @@ class Factory implements FactoryInterface
                 $home = rtrim(getenv('HOME'), '/') . '/.surf';
             }
         }
-
+        $this->ensureDirectoryExists($home);
         return $home;
     }
 
@@ -212,5 +213,16 @@ class Factory implements FactoryInterface
             $this->logger = new Logger('TYPO3 Surf', array($consoleHandler));
         }
         return $this->logger;
+    }
+
+    /**
+     * @param string $dir
+     * @throws InvalidConfigurationException
+     */
+    protected function ensureDirectoryExists($dir)
+    {
+        if (!file_exists($dir) && !@mkdir($dir, 0777, true) && !is_dir($dir)) {
+            throw new InvalidConfigurationException(sprintf('Directory "%s" cannot be created!', $dir), 1451862775);
+        }
     }
 }
