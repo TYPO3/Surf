@@ -11,7 +11,6 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
-use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
