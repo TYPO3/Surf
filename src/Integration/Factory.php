@@ -71,18 +71,6 @@ class Factory implements FactoryInterface
 
 
     /**
-     * @return Logger
-     */
-    public function createLogger()
-    {
-        if ($this->logger === null) {
-            $consoleHandler = new ConsoleHandler($this->createOutput());
-            $this->logger = new Logger('TYPO3 Surf', array($consoleHandler));
-        }
-        return $this->logger;
-    }
-
-    /**
      * @param string $deploymentName
      * @param string $configurationPath
      * @param bool $simulateDeployment
@@ -212,6 +200,18 @@ class Factory implements FactoryInterface
         }
 
         return $home;
+    }
+
+    /**
+     * @return Logger
+     */
+    protected function createLogger()
+    {
+        if ($this->logger === null) {
+            $consoleHandler = new ConsoleHandler($this->createOutput());
+            $this->logger = new Logger('TYPO3 Surf', array($consoleHandler));
+        }
+        return $this->logger;
     }
 
 }

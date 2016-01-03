@@ -24,11 +24,6 @@ interface FactoryInterface
     public function createOutput();
 
     /**
-     * @return LoggerInterface
-     */
-    public function createLogger();
-
-    /**
      * Get the deployment object with the specified name
      *
      * @param string $deploymentName
