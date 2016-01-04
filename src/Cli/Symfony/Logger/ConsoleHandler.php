@@ -35,9 +35,9 @@ class ConsoleHandler extends AbstractProcessingHandler
      * @var array
      */
     private $verbosityLevelMap = array(
-        OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
-        OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
-        OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
+        OutputInterface::VERBOSITY_NORMAL => Logger::INFO,
+        OutputInterface::VERBOSITY_VERBOSE => Logger::DEBUG,
+        OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::DEBUG,
         OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
     );
 
