@@ -46,10 +46,11 @@ class ShowCommand extends Command implements FactoryAwareInterface
         $configurationPath = $input->getOption('configurationPath');
         $deploymentNames = $this->factory->getDeploymentNames($configurationPath);
 
-        $output->writeln('<u>Deployments:</u>');
+        $output->writeln(sprintf(PHP_EOL . '<u>Deployments in "%s":</u>' . PHP_EOL, $this->factory->getDeploymentsBasePath($configurationPath)));
         foreach ($deploymentNames as $deploymentName) {
             $line = sprintf('  <info>%s</info>', $deploymentName);
             $output->writeln($line);
         }
+        $output->writeln('');
     }
 }
