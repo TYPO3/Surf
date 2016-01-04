@@ -29,7 +29,7 @@ class SimulateCommand extends Command implements FactoryAwareInterface
         $this->setName('simulate')
             ->addArgument(
                 'deploymentName',
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'The deployment name'
             )
             ->addOption(

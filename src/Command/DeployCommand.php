@@ -29,7 +29,7 @@ class DeployCommand extends Command implements FactoryAwareInterface
         $this->setName('deploy')
             ->addArgument(
                 'deploymentName',
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'The deployment name'
             )
             ->addOption(

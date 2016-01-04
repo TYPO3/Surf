@@ -120,6 +120,10 @@ class Factory implements FactoryInterface
      */
     public function getDeploymentsBasePath($path = null)
     {
+        $localDeploymentDescription = @realpath('./.surf');
+        if (!$path && is_dir($localDeploymentDescription)) {
+            $path = $localDeploymentDescription;
+        }
         $path = $path ?: ($this->getHomeDir() . '/deployments');
         $this->ensureDirectoryExists($path);
         return $path;
@@ -167,6 +171,15 @@ class Factory implements FactoryInterface
     {
         $deploymentConfigurationPath = $this->getDeploymentsBasePath($path);
         $workspacesBasePath = $this->getWorkspacesBasePath();
+
+        if (empty($deploymentName)) {
+            $deploymentNames = $this->getDeploymentNames($path);
+            if (count($deploymentNames) !== 1) {
+                throw new InvalidConfigurationException('No deployment name given!', 1451865016);
+            }
+            $deploymentName = array_pop($deploymentNames);
+        }
+
         $deploymentPathAndFilename = $deploymentConfigurationPath . '/' . $deploymentName . '.php';
         if (!file_exists($deploymentPathAndFilename)) {
             exit(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
