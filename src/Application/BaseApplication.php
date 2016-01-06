@@ -76,8 +76,6 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
-        $this->setDeprecatedTaskOptions($deployment);
-
         $workflow->setTaskOptions(
             'typo3.surf:generic:createDirectories',
             array(
@@ -265,27 +263,5 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
      */
     protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod)
     {
-    }
-
-    /**
-     * Forward deprecated options for backwards compatibility
-     *
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @return void
-     */
-    protected function setDeprecatedTaskOptions(Deployment $deployment)
-    {
-        if ($this->hasOption('git-checkout-sha1')) {
-            $deployment->getLogger()->notice('Option "git-checkout-sha1" is deprecated and will be removed before Surf 1.0.0. Set option "typo3.surf:gitCheckout[sha1]" instead.');
-            $this->setOption('typo3.surf:gitCheckout[sha1]', $this->getOption('git-checkout-sha1'));
-        }
-        if ($this->hasOption('git-checkout-tag')) {
-            $deployment->getLogger()->notice('Option "git-checkout-tag" is deprecated and will be removed before Surf 1.0.0. Set option "typo3.surf:gitCheckout[tag]" instead.');
-            $this->setOption('typo3.surf:gitCheckout[tag]', $this->getOption('git-checkout-tag'));
-        }
-        if ($this->hasOption('git-checkout-branch')) {
-            $deployment->getLogger()->notice('Option "git-checkout-branch" is deprecated and will be removed before Surf 1.0.0. Set option "typo3.surf:gitCheckout[branch]" instead.');
-            $this->setOption('typo3.surf:gitCheckout[branch]', $this->getOption('git-checkout-branch'));
-        }
     }
 }
