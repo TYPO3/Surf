@@ -25,11 +25,11 @@ abstract class Workflow
     protected $tasks = array();
 
     /**
-     * @param \TYPO3\Surf\Domain\Service\TaskManager $taskManager
+     * @param TaskManager $taskManager
      */
-    public function setTaskManager(\TYPO3\Surf\Domain\Service\TaskManager $taskManager)
+    public function __construct(TaskManager $taskManager = null)
     {
-        $this->taskManager = $taskManager;
+        $this->taskManager = $taskManager ?: new TaskManager();
     }
 
     /**
@@ -40,9 +40,6 @@ abstract class Workflow
      */
     public function run(Deployment $deployment)
     {
-        if ($this->taskManager === null) {
-            $this->taskManager = new TaskManager();
-        }
         if (!$deployment->isInitialized()) {
             throw new \TYPO3\Surf\Exception('Deployment must be initialized before running it', 1335976529);
         }

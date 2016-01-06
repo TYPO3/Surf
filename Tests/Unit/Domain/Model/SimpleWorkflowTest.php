@@ -344,9 +344,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             $executedTasks[] = array('task' => $task, 'node' => $node->getName(), 'application' => $application->getName(), 'deployment' => $deployment->getName(), 'stage' => $stage, 'options' => $options);
         }));
 
-        $workflow = new SimpleWorkflow();
-        $workflow->setTaskManager($mockTaskManager);
-
+        $workflow = new SimpleWorkflow($mockTaskManager);
         $deployment->setWorkflow($workflow);
 
         return $deployment;
