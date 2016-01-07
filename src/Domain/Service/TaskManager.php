@@ -23,19 +23,6 @@ class TaskManager
     protected $taskHistory = array();
 
     /**
-     * @var array
-     */
-    protected $legacyClassMap = array();
-
-    /**
-     * TaskManager constructor.
-     */
-    public function __construct()
-    {
-        $this->legacyClassMap = require __DIR__ . '/../../../Migrations/Code/LegacyClassMap.php';
-    }
-
-    /**
      * Execute a task
      *
      * @param string $taskName
@@ -141,13 +128,13 @@ class TaskManager
     /**
      * Create a task instance from the given task name
      *
-     * @param string $taskIdentifier
+     * @param string $taskName
      * @return \TYPO3\Surf\Domain\Model\Task
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    protected function createTaskInstance($taskIdentifier)
+    protected function createTaskInstance($taskName)
     {
-        $taskClassName = $this->calculateTaskClassNameFromTaskIdentifier($taskIdentifier);
+        $taskClassName = $this->mapTaskNameToTaskClass($taskName);
         $task = new $taskClassName();
         if ($task instanceof ShellCommandServiceAwareInterface) {
             $task->setShellCommandService(new ShellCommandService());
@@ -156,19 +143,15 @@ class TaskManager
     }
 
     /**
-     * @param string $taskIdentifier
+     * @param string $taskName
      * @return string
      * @throws \TYPO3\Surf\Exception
      */
-    protected function calculateTaskClassNameFromTaskIdentifier($taskIdentifier)
+    protected function mapTaskNameToTaskClass($taskName)
     {
-        $lowerCaseTaskIdentifier = strtolower($taskIdentifier);
-        if (isset($this->legacyClassMap[$lowerCaseTaskIdentifier])) {
-            return $this->legacyClassMap[$lowerCaseTaskIdentifier];
+        if (class_exists($taskName)) {
+            return $taskName;
         }
-        if (class_exists($taskIdentifier)) {
-            return $taskIdentifier;
-        }
-        throw new \TYPO3\Surf\Exception(sprintf('No task found for identifier "%s"', $taskIdentifier), 1451210811);
+        throw new \TYPO3\Surf\Exception(sprintf('No task found for identifier "%s". Make sure this is a valid class name or a defined task with valid base class name!', $taskName), 1451210811);
     }
 }

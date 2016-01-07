@@ -20,25 +20,3 @@ foreach ($files as $file) {
     }
     file_put_contents($file, $fileContent);
 }
-
-function getTaskIdentifier($className) {
-    return
-        substr(
-            str_replace(
-                array(
-                    'typo3\\surf',
-                    '\\task',
-                    '\\',
-                ),
-                array(
-                    'typo3.surf',
-                    '',
-                    ':',
-                ),
-                strtolower($className)
-            ),
-            0,
-            -4
-        );
-
-}
