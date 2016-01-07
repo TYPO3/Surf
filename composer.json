@@ -10,6 +10,7 @@
         "monolog/monolog": "^1.17"
     },
     "require-dev": {
+        "symfony/finder": "^3.0",
         "phpunit/phpunit": "^4.8"
     },
     "extra": {
