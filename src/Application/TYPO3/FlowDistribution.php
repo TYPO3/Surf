@@ -48,35 +48,35 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
         if ($this->getOption('enableTests') !== false) {
             $workflow
                 ->addTask(array(
-                    'typo3.surf:typo3:flow:unittest',
-                    'typo3.surf:typo3:flow:functionaltest'
+                    'TYPO3\\Surf\\Task\\TYPO3\\Flow\\UnitTestTask',
+                    'TYPO3\\Surf\\Task\\TYPO3\\Flow\\FunctionalTestTask'
                 ), 'test', $this);
         }
 
         $workflow->addTask(array(
-                'createZipDistribution',
-                'createTarGzDistribution',
-                'createTarBz2Distribution',
+                'TYPO3\\Surf\\DefinedTask\\CreateZipDistributionTask',
+                'TYPO3\\Surf\\DefinedTask\\CreateTarGzDistributionTask',
+                'TYPO3\\Surf\\DefinedTask\\CreateTarBz2DistributionTask',
             ), 'cleanup', $this);
 
         if ($this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === true) {
-            $workflow->addTask('typo3.surf:sourceforgeupload', 'cleanup', $this);
+            $workflow->addTask('TYPO3\\Surf\\Task\\SourceforgeUploadTask', 'cleanup', $this);
         }
         if ($this->hasOption('releaseHost')) {
-            $workflow->addTask('typo3.surf:release:preparerelease', 'initialize', $this);
-            $workflow->addTask('typo3.surf:release:release', 'cleanup', $this);
+            $workflow->addTask('TYPO3\\Surf\\Task\\Release\\PrepareReleaseTask', 'initialize', $this);
+            $workflow->addTask('TYPO3\\Surf\\Task\\Release\\ReleaseTask', 'cleanup', $this);
         }
         if ($this->hasOption('releaseHost') && $this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === true) {
-            $workflow->addTask('typo3.surf:release:adddownload', 'cleanup', $this);
+            $workflow->addTask('TYPO3\\Surf\\Task\\Release\\AddDownloadTask', 'cleanup', $this);
         }
         if ($this->hasOption('createTags') && $this->getOption('createTags') === true) {
-            $workflow->addTask('typo3.surf:git:tag', 'cleanup', $this);
-            if ($this->hasOption('pushTags') && $this->getOption('pushTags') === true) {
-                $workflow->afterTask('typo3.surf:git:tag', 'pushTags', $this);
+            $workflow->addTask('TYPO3\\Surf\\Task\\Git\\TagTask', 'cleanup', $this);
+            if ($this->hasOption('TYPO3\\Surf\\DefinedTask\\Git\\PushTagsTask') && $this->getOption('TYPO3\\Surf\\DefinedTask\\Git\\PushTagsTask') === true) {
+                $workflow->afterTask('TYPO3\\Surf\\Task\\Git\\TagTask', 'TYPO3\\Surf\\DefinedTask\\Git\\PushTagsTask', $this);
             }
         }
 
-        $workflow->removeTask('typo3.surf:typo3:flow:migrate');
+        $workflow->removeTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\MigrateTask');
     }
 
     /**
@@ -160,20 +160,20 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
             'exclude' => $excludePatterns
         );
 
-        $workflow->defineTask('createZipDistribution', 'typo3.surf:createArchive', array_merge($baseArchiveConfiguration, array(
+        $workflow->defineTask('TYPO3\\Surf\\DefinedTask\\CreateZipDistributionTask', 'TYPO3\\Surf\\Task\\CreateArchiveTask', array_merge($baseArchiveConfiguration, array(
             'targetFile' => $this->configuration['zipFile']
         )));
 
-        $workflow->defineTask('createTarGzDistribution', 'typo3.surf:createArchive', array_merge($baseArchiveConfiguration, array(
+        $workflow->defineTask('TYPO3\\Surf\\DefinedTask\\CreateTarGzDistributionTask', 'TYPO3\\Surf\\Task\\CreateArchiveTask', array_merge($baseArchiveConfiguration, array(
             'targetFile' => $this->configuration['tarGzFile'],
         )));
 
-        $workflow->defineTask('createTarBz2Distribution', 'typo3.surf:createArchive', array_merge($baseArchiveConfiguration, array(
+        $workflow->defineTask('TYPO3\\Surf\\DefinedTask\\CreateTarBz2DistributionTask', 'TYPO3\\Surf\\Task\\CreateArchiveTask', array_merge($baseArchiveConfiguration, array(
             'targetFile' => $this->configuration['tarBz2File'],
         )));
 
         if ($this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === true) {
-            $workflow->defineTask('typo3.surf:sourceforgeupload', 'typo3.surf:sourceforgeupload', array(
+            $workflow->defineTask('TYPO3\\Surf\\Task\\SourceforgeUploadTask', 'TYPO3\\Surf\\Task\\SourceforgeUploadTask', array(
                 'sourceforgeProjectName' => $this->getOption('sourceforgeProjectName'),
                 'sourceforgePackageName' => $this->getOption('sourceforgePackageName'),
                 'sourceforgeUserName' => $this->getOption('sourceforgeUserName'),
@@ -187,14 +187,14 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
         }
 
         if ($this->hasOption('releaseHost')) {
-            $workflow->defineTask('typo3.surf:release:preparerelease', 'typo3.surf:release:preparerelease', array(
+            $workflow->defineTask('TYPO3\\Surf\\Task\\Release\\PrepareReleaseTask', 'TYPO3\\Surf\\Task\\Release\\PrepareReleaseTask', array(
                 'releaseHost' =>  $this->getOption('releaseHost'),
                 'releaseHostSitePath' => $this->getOption('releaseHostSitePath'),
                 'releaseHostLogin' =>  $this->hasOption('releaseHostLogin') ? $this->getOption('releaseHostLogin') : null,
                 'productName' => $this->getOption('projectName'),
                 'version' => $this->getOption('version'),
             ));
-            $workflow->defineTask('typo3.surf:release:release', 'typo3.surf:release:release', array(
+            $workflow->defineTask('TYPO3\\Surf\\Task\\Release\\ReleaseTask', 'TYPO3\\Surf\\Task\\Release\\ReleaseTask', array(
                 'releaseHost' =>  $this->getOption('releaseHost'),
                 'releaseHostSitePath' => $this->getOption('releaseHostSitePath'),
                 'releaseHostLogin' =>  $this->hasOption('releaseHostLogin') ? $this->getOption('releaseHostLogin') : null,
@@ -205,7 +205,7 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
         }
 
         if ($this->hasOption('releaseHost') && $this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === true) {
-            $workflow->defineTask('typo3.surf:release:adddownload', 'typo3.surf:release:adddownload', array(
+            $workflow->defineTask('TYPO3\\Surf\\Task\\Release\\AddDownloadTask', 'TYPO3\\Surf\\Task\\Release\\AddDownloadTask', array(
                 'releaseHost' =>  $this->getOption('releaseHost'),
                 'releaseHostSitePath' => $this->getOption('releaseHostSitePath'),
                 'releaseHostLogin' =>  $this->hasOption('releaseHostLogin') ? $this->getOption('releaseHostLogin') : null,
@@ -221,13 +221,13 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
             ));
         }
 
-        $workflow->defineTask('typo3.surf:git:tag', 'typo3.surf:git:tag', array(
+        $workflow->defineTask('TYPO3\\Surf\\Task\\Git\\TagTask', 'TYPO3\\Surf\\Task\\Git\\TagTask', array(
             'tagName' => $this->configuration['versionAndProjectName'],
             'description' => 'Tag distribution with tag ' . $this->configuration['versionAndProjectName'],
             'recurseIntoSubmodules' => $this->getOption('tagRecurseIntoSubmodules')
         ));
 
-        $workflow->defineTask('pushTags', 'typo3.surf:git:push', array(
+        $workflow->defineTask('TYPO3\\Surf\\DefinedTask\\Git\\PushTagsTask', 'TYPO3\\Surf\\Task\\Git\\PushTask', array(
             'remote' => 'origin',
             'refspec' => $this->configuration['versionAndProjectName'] . ':refs/tags/' . $this->configuration['versionAndProjectName'],
             'recurseIntoSubmodules' => $this->getOption('tagRecurseIntoSubmodules')

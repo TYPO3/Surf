@@ -108,7 +108,7 @@ class TaskManager
      *
      * Global options for a task should be prefixed with the task name to prevent naming
      * issues between different tasks. For example passing a special option to the
-     * GitCheckoutTask could be expressed like 'typo3.surf:gitcheckout[sha1]' => '1234...'.
+     * GitCheckoutTask could be expressed like 'TYPO3\\Surf\\Task\\GitCheckoutTask[sha1]' => '1234...'.
      *
      * @param string $taskName
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment

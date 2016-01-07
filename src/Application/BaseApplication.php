@@ -77,12 +77,12 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
         $workflow->setTaskOptions(
-            'typo3.surf:generic:createDirectories',
+            'TYPO3\\Surf\\Task\\Generic\\CreateDirectoriesTask',
             array(
                 'directories' => $this->getDirectories()
             ));
         $workflow->setTaskOptions(
-            'typo3.surf:generic:createSymlinks',
+            'TYPO3\\Surf\\Task\\Generic\\CreateSymlinksTask',
             array(
                 'symlinks' => $this->getSymlinks()
             ));
@@ -95,7 +95,7 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
             $this->registerTasksForTransferMethod($workflow, $this->getOption('transferMethod'));
         }
 
-        $workflow->afterStage('transfer', 'typo3.surf:generic:createSymlinks', $this);
+        $workflow->afterStage('transfer', 'TYPO3\\Surf\\Task\\Generic\\CreateSymlinksTask', $this);
 
         if ($this->hasOption('updateMethod')) {
             $this->registerTasksForUpdateMethod($workflow, $this->getOption('updateMethod'));
@@ -104,10 +104,10 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
         // TODO Define tasks for local shell task and local git checkout
 
         $workflow
-            ->addTask('typo3.surf:createdirectories', 'initialize', $this)
-                ->afterTask('typo3.surf:createdirectories', 'typo3.surf:generic:createDirectories', $this)
-            ->addTask('typo3.surf:symlinkrelease', 'switch', $this)
-            ->addTask('typo3.surf:cleanupreleases', 'cleanup', $this);
+            ->addTask('TYPO3\\Surf\\Task\\CreateDirectoriesTask', 'initialize', $this)
+                ->afterTask('TYPO3\\Surf\\Task\\CreateDirectoriesTask', 'TYPO3\\Surf\\Task\\Generic\\CreateDirectoriesTask', $this)
+            ->addTask('TYPO3\\Surf\\Task\\SymlinkReleaseTask', 'switch', $this)
+            ->addTask('TYPO3\\Surf\\Task\\CleanupReleasesTask', 'cleanup', $this);
     }
 
     /**
@@ -220,15 +220,15 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
     {
         switch ($packageMethod) {
             case 'git':
-                $workflow->addTask('typo3.surf:package:git', 'package', $this);
+                $workflow->addTask('TYPO3\\Surf\\Task\\Package\\GitTask', 'package', $this);
                 $workflow->defineTask(
-                    'typo3.surf:composer:localInstall',
-                    'typo3.surf:composer:install', array(
+                    'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
+                    'TYPO3\\Surf\\Task\\Composer\\InstallTask', array(
                         'nodeName' => 'localhost',
                         'useApplicationWorkspace' => true
                     )
                 );
-                $workflow->afterTask('typo3.surf:package:git', 'typo3.surf:composer:localInstall', $this);
+                $workflow->afterTask('TYPO3\\Surf\\Task\\Package\\GitTask', 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', $this);
                 break;
         }
     }
@@ -242,10 +242,10 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
     {
         switch ($transferMethod) {
             case 'git':
-                $workflow->addTask('typo3.surf:gitCheckout', 'transfer', $this);
+                $workflow->addTask('TYPO3\\Surf\\Task\\GitCheckoutTask', 'transfer', $this);
                 break;
             case 'rsync':
-                $workflow->addTask('typo3.surf:transfer:rsync', 'transfer', $this);
+                $workflow->addTask('TYPO3\\Surf\\Task\\Transfer\\RsyncTask', 'transfer', $this);
                 break;
             case 'scp':
                 // TODO

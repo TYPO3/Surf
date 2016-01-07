@@ -111,7 +111,7 @@ Flow Configuration overrides
 ----------------------------
 
 If the configuration of a Flow application should be different depending on the deployment configuration
-(e.g. database settings or external services) the typo3.surf:typo3:flow:copyconfiguration task can be used to override
+(e.g. database settings or external services) the TYPO3\\Surf\\Task\\TYPO3\\Flow\\CopyConfigurationTask task can be used to override
 configuration after the code update (Git checkout).
 
 If a ``Configuration`` folder exists inside a folder named after your deployment ``%FLOW_ROOT%/Build/Surf/MyDeployment``
@@ -152,11 +152,11 @@ template::
 	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
-		'typo3.surf:shell',
+		'TYPO3\\Surf\\Task\\ShellTask',
 		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
-This adds a new task based on the `typo3.surf:shell` task with a custom shell command which would run a Flow command.
+This adds a new task based on the `TYPO3\\Surf\\Task\\ShellTask` task with a custom shell command which would run a Flow command.
 After defining the new task we have to tell the deployment configuration when to execute it::
 
 	<?php
@@ -167,13 +167,13 @@ After defining the new task we have to tell the deployment configuration when to
 	$application = new \TYPO3\Surf\Application\TYPO3\Flow('MyProject');
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
-		'typo3.surf:shell',
+		'TYPO3\\Surf\\Task\\ShellTask',
 		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
 	$deployment->onInitialize(function() use ($workflow, $application) {
 		$workflow->addTask('mycompany.mypackage:initialize', 'migrate', $application);
-		$workflow->removeTask('typo3.surf:typo3:flow:setfilepermissions');
+		$workflow->removeTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\SetFilePermissionsTask');
 	});
 
 This will execute the new task in the *migrate* stage only for the application referenced by ``$application``. As you can
@@ -208,7 +208,7 @@ To access the release path or other release specific options, some placeholders 
 	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
-		'typo3.surf:shell',
+		'TYPO3\\Surf\\Task\\ShellTask',
 		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
@@ -241,7 +241,7 @@ Then, add a test as follows to the deployment configuration::
 		'expectedStatus' => 200,
 		'expectedRegexp' => '/somethingYouExpectOnThePage/'
 	);
-	$workflow->defineTask('yourNamespace:smoketest', 'typo3.surf:test:httptest', $smokeTestOptions);
+	$workflow->defineTask('yourNamespace:smoketest', 'TYPO3\\Surf\\Task\\Test\\HttpTestTask', $smokeTestOptions);
 
 	$workflow->addTask('yourNamespace:smoketest', 'test', $application);
 

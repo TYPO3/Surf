@@ -18,7 +18,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  *
  * You can configure the list of cache identifiers in the task option ```flushCacheList```, like::
  *
- *     $workflow->setTaskOptions('typo3.surf:typo3:flow:flushcachelist', [
+ *     $workflow->setTaskOptions('TYPO3\\Surf\\Task\\TYPO3\\Flow\\FlushCacheListTask', [
  *         'flushCacheList' => 'TYPO3_TypoScript_Content, Flow_Session_MetaData, Flow_Session_Storage'
  *     ])
  *

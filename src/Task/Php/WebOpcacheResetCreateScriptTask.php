@@ -45,7 +45,7 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task impl
             $scriptIdentifier = $generator->generateString(32);
 
             // Store the script identifier as an application option
-            $application->setOption('typo3.surf:php:webopcacheresetexecute[scriptIdentifier]', $scriptIdentifier);
+            $application->setOption('TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask[scriptIdentifier]', $scriptIdentifier);
         } else {
             $scriptIdentifier = $options['scriptIdentifier'];
         }

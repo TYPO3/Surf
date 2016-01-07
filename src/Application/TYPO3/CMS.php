@@ -61,20 +61,20 @@ class CMS extends \TYPO3\Surf\Application\BaseApplication
         parent::registerTasks($workflow, $deployment);
 
         if ($deployment->hasOption('initialDeployment') && $deployment->getOption('initialDeployment') === true) {
-            $workflow->addTask('typo3.surf.cms:dumpDatabase', 'initialize', $this);
-            $workflow->addTask('typo3.surf.cms:rsyncFolders', 'initialize', $this);
+            $workflow->addTask('TYPO3\\Surf\\Task\\DumpDatabaseTask', 'initialize', $this);
+            $workflow->addTask('TYPO3\\Surf\\Task\\RsyncFoldersTask', 'initialize', $this);
         }
 
         $workflow
                 ->afterStage(
                     'update',
                     array(
-                        'typo3.surf.cms:typo3:cms:symlinkData',
-                        'typo3.surf.cms:typo3:cms:copyConfiguration'
+                        'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SymlinkDataTask',
+                        'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CopyConfigurationTask'
                     ), $this
                 )
-                ->addTask('typo3.surf.cms:typo3:cms:compareDatabase', 'migrate', $this)
-                ->afterStage('switch', 'typo3.surf.cms:typo3:cms:flushCaches', $this);
+                ->addTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\CompareDatabaseTask', 'migrate', $this)
+                ->afterStage('switch', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', $this);
     }
 
     /**
@@ -86,7 +86,7 @@ class CMS extends \TYPO3\Surf\Application\BaseApplication
         parent::registerTasksForPackageMethod($workflow, $packageMethod);
         switch ($packageMethod) {
             case 'git':
-                $workflow->afterTask('typo3.surf:composer:localInstall', 'typo3.surf.cms:typo3:cms:createPackageStates', $this);
+                $workflow->afterTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CreatePackageStatesTask', $this);
                 break;
         }
     }

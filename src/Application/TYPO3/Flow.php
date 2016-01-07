@@ -49,14 +49,14 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
         parent::registerTasks($workflow, $deployment);
 
         $workflow
-            ->addTask('typo3.surf:typo3:flow:createdirectories', 'initialize', $this)
+            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\CreateDirectoriesTask', 'initialize', $this)
             ->afterStage('update', array(
-                'typo3.surf:typo3:flow:symlinkdata',
-                'typo3.surf:typo3:flow:symlinkconfiguration',
-                'typo3.surf:typo3:flow:copyconfiguration'
+                'TYPO3\\Surf\\Task\\TYPO3\\Flow\\SymlinkDataTask',
+                'TYPO3\\Surf\\Task\\TYPO3\\Flow\\SymlinkConfigurationTask',
+                'TYPO3\\Surf\\Task\\TYPO3\\Flow\\CopyConfigurationTask'
             ), $this)
-            ->addTask('typo3.surf:typo3:flow:migrate', 'migrate', $this)
-            ->addTask('typo3.surf:typo3:flow:publishresources', 'finalize', $this);
+            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\MigrateTask', 'migrate', $this)
+            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\PublishResourcesTask', 'finalize', $this);
     }
 
     /**
@@ -70,13 +70,13 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
     {
         parent::registerTasksForPackageMethod($workflow, $packageMethod);
 
-        $workflow->defineTask('typo3.surf:composer:localinstall', 'typo3.surf:composer:install', array(
+        $workflow->defineTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', 'TYPO3\\Surf\\Task\\Composer\\InstallTask', array(
             'nodeName' => 'localhost',
             'useApplicationWorkspace' => true
         ));
 
         if ($packageMethod === 'git') {
-            $workflow->afterStage('package', 'typo3.surf:composer:localinstall', $this);
+            $workflow->afterStage('package', 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', $this);
         }
     }
 
@@ -91,7 +91,7 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
     {
         switch ($updateMethod) {
             case 'composer':
-                $workflow->addTask('typo3.surf:composer:install', 'update', $this);
+                $workflow->addTask('TYPO3\\Surf\\Task\\Composer\\InstallTask', 'update', $this);
                 break;
             default:
                 parent::registerTasksForUpdateMethod($workflow, $updateMethod);

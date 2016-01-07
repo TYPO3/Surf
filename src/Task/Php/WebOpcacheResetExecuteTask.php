@@ -32,7 +32,7 @@ class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
             throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No "baseUrl" option provided for WebOpcacheResetExecuteTask', 1421932609);
         }
         if (!isset($options['scriptIdentifier'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No "scriptIdentifier" option provided for WebOpcacheResetExecuteTask, make sure to execute "typo3.surf:php:webopcacheresetcreatescript" before this task or pass one explicitly', 1421932610);
+            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No "scriptIdentifier" option provided for WebOpcacheResetExecuteTask, make sure to execute "TYPO3\\Surf\\Task\\Php\\WebOpcacheResetCreateScriptTask" before this task or pass one explicitly', 1421932610);
         }
 
         $scriptIdentifier = $options['scriptIdentifier'];

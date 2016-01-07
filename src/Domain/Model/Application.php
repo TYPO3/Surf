@@ -62,7 +62,7 @@ class Application
      *
      * Example:
      *
-     *   $workflow->addTask('typo3.surf:createdirectories', 'initialize', $this);
+     *   $workflow->addTask('TYPO3\\Surf\\Task\\CreateDirectoriesTask', 'initialize', $this);
      *
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment

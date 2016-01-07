@@ -48,4 +48,10 @@ return array (
   'typo3.surf:transfer:rsync' => 'TYPO3\\Surf\\Task\\Transfer\\RsyncTask',
   'typo3.surf:varnishban' => 'TYPO3\\Surf\\Task\\VarnishBanTask',
   'typo3.surf:varnishpurge' => 'TYPO3\\Surf\\Task\\VarnishPurgeTask',
+
+  'typo3.surf:composer:localinstall' => 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
+  'createzipdistribution' => 'TYPO3\\Surf\\DefinedTask\\CreateZipDistributionTask',
+  'createtargzdistribution' => 'TYPO3\\Surf\\DefinedTask\\CreateTarGzDistributionTask',
+  'createtarbz2distribution' => 'TYPO3\\Surf\\DefinedTask\\CreateTarBz2DistributionTask',
+  'pushtags' => 'TYPO3\\Surf\\DefinedTask\\Git\\PushTagsTask',
 );
