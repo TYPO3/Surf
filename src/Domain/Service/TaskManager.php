@@ -162,22 +162,12 @@ class TaskManager
      */
     protected function calculateTaskClassNameFromTaskIdentifier($taskIdentifier)
     {
-        //TODO: Refactor this to factory with tests and introduce factory interface
-        $taskIdentifierParts = explode(':', $taskIdentifier);
-        if (strpos($taskIdentifierParts[0], '.') !== false) {
-            $packageKey = array_shift($taskIdentifierParts);
-            array_unshift($taskIdentifierParts, 'Task');
-            foreach (array_reverse(explode('.', $packageKey)) as $packageKeyPart) {
-                array_unshift($taskIdentifierParts, $packageKeyPart);
-            }
+        $lowerCaseTaskIdentifier = strtolower($taskIdentifier);
+        if (isset($this->legacyClassMap[$lowerCaseTaskIdentifier])) {
+            return $this->legacyClassMap[$lowerCaseTaskIdentifier];
         }
-        $taskIdentifierParts = array_map('ucfirst', $taskIdentifierParts);
-        $taskClassName = implode('\\', $taskIdentifierParts) . 'Task';
-        $lowercaseTaskClassName = strtolower($taskClassName);
-        if (class_exists($taskClassName)) {
-            return $taskClassName;
-        } elseif (!empty($this->legacyClassMap[$lowercaseTaskClassName])) {
-            return $this->legacyClassMap[$lowercaseTaskClassName];
+        if (class_exists($taskIdentifier)) {
+            return $taskIdentifier;
         }
         throw new \TYPO3\Surf\Exception(sprintf('No task found for identifier "%s"', $taskIdentifier), 1451210811);
     }
