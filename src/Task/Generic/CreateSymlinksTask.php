@@ -44,7 +44,7 @@ class CreateSymlinksTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3
         $commands = array(
             'cd ' . $deployment->getApplicationReleasePath($application)
         );
-        foreach ($options['symlinks'] as $linkPath => $sourcePath) {
+        foreach ($options['symlinks'] as $sourcePath => $linkPath) {
             $commands[] = 'ln -s ' . $sourcePath . ' ' . $linkPath;
         }
         $this->shell->executeOrSimulate($commands, $node, $deployment);
