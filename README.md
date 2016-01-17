@@ -1,8 +1,6 @@
-Surf - TYPO3 Flow deployment
-============================
+# Surf - TYPO3 Flow deployment [![Build Status](https://travis-ci.org/TYPO3/Surf.svg?branch=master)](https://travis-ci.org/TYPO3/Surf)
 
-Description
-===========
+## Description
 
 Surf package is a complete automated deployment tool. It is best used but by far not limited to deploy Flow applications. It might be included in your Flow application but can also be run standalone. It's inspired by some
 features of Capistrano (thanks) concerning the Git workflow.
@@ -17,8 +15,7 @@ Some of the features of the Surf package:
 * Simulate deployments with a dry run
 
 
-Installation
-============
+## Installation
 
 Install the Surf package by importing the package to a TYPO3 Flow application:
 
@@ -26,11 +23,9 @@ Install the Surf package by importing the package to a TYPO3 Flow application:
 	composer require typo3/surf
 
 
-Guide
-=====
+## Guide
 
-Deployment configurations
--------------------------
+### Deployment configurations
 
 Each deployment is defined in a configuration (e.g for development, staging, live environments). Each *deployment configuration*
 specifies a workflow for the deployment (for now there is just ``SimpleWorkflow``, but feel free to create
@@ -60,8 +55,7 @@ Each application resembles a repository with code. So a more complex deployment 
 and release an extension for a TYPO3 CMS website. Also different roles can be expressed using applications, since every
 task can be registered to run for all or a specific application instance.
 
-SSH Authentication Types
-------------------------
+### SSH Authentication Types
 
 The preferred way of connecting to the remote host is via SSH Public-Key authentication.
 That's why in the example above, only the username and hostname are set.
@@ -76,8 +70,7 @@ as follows::
 Authentication with passwords needs the ``expect`` unix tool which is installed
 by default in most Linux distributions.
 
-Custom Connection
------------------
+### Custom Connection
 
 In case you need to connect to the remote host via more esoteric protocols, you can
 also implement your own remote host connection: In this case, set the option
@@ -92,8 +85,7 @@ also implement your own remote host connection: In this case, set the option
 		// string with the full, trimmed, output.
 	});
 
-Test a deployment
------------------
+### Test a deployment
 
 You can get a description of the deployment by running:
 
@@ -107,8 +99,7 @@ The simulation gives a hint which tasks will be executed on which node. During s
 executed for real. If a remote SSH command would be executed it will be printed in the log messages starting with
 ``... $nodeName: "command"``.
 
-Flow Configuration overrides
-----------------------------
+### Flow Configuration overrides
 
 If the configuration of a Flow application should be different depending on the deployment configuration
 (e.g. database settings or external services) the TYPO3\\Surf\\Task\\TYPO3\\Flow\\CopyConfigurationTask task can be used to override
@@ -117,18 +108,15 @@ configuration after the code update (Git checkout).
 If a ``Configuration`` folder exists inside a folder named after your deployment ``%FLOW_ROOT%/Build/Surf/MyDeployment``
 every file in there will be copied to the release ``Configuration`` folder recursively.
 
-Run a deployment
-----------------
+### Run a deployment
 
 If everything looks right, you can run the deployment:
 
     $ ./flow surf:deploy MyDeployment
 
-Customization
-=============
+## Customization
 
-Using rsync for deployment
---------------------------
+### Using rsync for deployment
 
 By default Surf use git and composer for deployment. But you can also use rsync, by adding the following configuration
 to your Application::
@@ -139,8 +127,7 @@ to your Application::
 
 Using rsync can speed up your deployment and doesn't require composer and git on the production server.
 
-Custom tasks in deployment configurations
------------------------------------------
+### Custom tasks in deployment configurations
 
 Since a deployment configuration is just a plain PHP file with access to any Flow class it's easy to extend it or program
 a more complex behavior. But it's even easier to remove tasks or add some simple shell tasks to an existing application
@@ -183,8 +170,7 @@ specific task configuration.
 Besides specifying the execution point via a stage, you can also give an existing task as an anchor and specify the task
 execution with `afterTask` or `beforeTask`.
 
-Task manipulation
------------------
+### Task manipulation
 <pre>
 ====================== ================================= ===================================================================================
 Method                 Arguments                         Description
@@ -197,8 +183,7 @@ beforeTask             $taskName, $tasks, ($application) Adds one or more tasks 
 ====================== ================================= ===================================================================================
 </pre>
 
-Shell Task option expansion
----------------------------
+### Shell Task option expansion
 
 To access the release path or other release specific options, some placeholders can be used in option values::
 
@@ -220,8 +205,7 @@ The following placeholders are available:
 * currentPath: The path that points to the *current* release
 * previousPath: The path that points to the *previous* release
 
-Smoke Testing
-=============
+## Smoke Testing
 
 As you do automated deployments, you should check if the website is up and running
 before switching it to the live site. This is called a *Smoke Test*. We will give
@@ -271,8 +255,7 @@ Further options:
   is directly passed to CURL. Especially useful to e.g. disable SSL certificate
   check (with --insecure)
 
-Applying Cherry-Picks to Git Repositories: Post-Checkout commands
-=================================================================
+## Applying Cherry-Picks to Git Repositories: Post-Checkout commands
 
 When you want to execute some commands directly after checkout, such as cherry-picking not-yet-committed bugfixes, you can set the  `gitPostCheckoutCommands` option on the application, being a two-dimensional array.
 The key contains the path where the command shall execute, and the value is another array containing the commands themselves (as taken f.e. from Gerrit / review.typo3.org).
@@ -283,7 +266,6 @@ Example::
 		'Packages/Framework/TYPO3.Flow/' => array('git fetch git://git.typo3.org/Flow/Packages/TYPO3.Flow refs/changes/59/6859/1 && git cherry-pick FETCH_HEAD')
 	));
 
-Copyright
-=========
+## Copyright
 
 The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - TYPO3 Flow Agentur](http://www.networkteam.com/typo3-flow-agentur.html).
