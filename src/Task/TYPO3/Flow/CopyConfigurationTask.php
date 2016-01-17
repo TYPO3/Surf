@@ -27,16 +27,12 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!isset($options['username']) && !$node->isLocalhost()) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "username" option for node "%s"', $node->getName()), 1348844231);
-        }
-
+        $options['username'] = isset($options['username']) ? $options['username'] . '@' : '';
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
         $configurationPath = $deployment->getDeploymentConfigurationPath() . '/';
         if (!is_dir($configurationPath)) {
@@ -52,6 +48,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
         foreach ($configurations as $configuration) {
             $targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
             if ($node->isLocalhost()) {
+                $commands[] = "mkdir -p '{$targetReleasePath}/Configuration/{$targetConfigurationPath}/'";
                 $commands[] = "cp {$configuration} {$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
             } else {
                 $username = $options['username'];
@@ -60,8 +57,8 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
                 $sshPort = $node->hasOption('port') ? '-p ' . escapeshellarg($node->getOption('port')) : '';
                 $scpPort = $node->hasOption('port') ? '-P ' . escapeshellarg($node->getOption('port')) : '';
 
-                $commands[] = "ssh {$sshPort} {$username}@{$hostname} -C \"mkdir -p {$targetReleasePath}/Configuration/{$targetConfigurationPath}\"";
-                $commands[] = "scp {$scpPort} {$configuration} {$username}@{$hostname}:{$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
+                $commands[] = "ssh {$sshPort} {$username}{$hostname} 'mkdir -p {$targetReleasePath}/Configuration/{$targetConfigurationPath}/'";
+                $commands[] = "scp {$scpPort} {$configuration} {$username}{$hostname}:{$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
             }
         }
 
