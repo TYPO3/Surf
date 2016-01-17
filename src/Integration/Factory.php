@@ -20,6 +20,7 @@ use TYPO3\Surf\Command\MigrateCommand;
 use TYPO3\Surf\Command\ShowCommand;
 use TYPO3\Surf\Command\SimulateCommand;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\FailedDeployment;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
@@ -184,14 +185,15 @@ class Factory implements FactoryInterface
         }
 
         $deploymentPathAndFilename = $deploymentConfigurationPath . '/' . $deploymentName . '.php';
-        if (!file_exists($deploymentPathAndFilename)) {
-            exit(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
+        if (file_exists($deploymentPathAndFilename)) {
+            $deployment = new Deployment($deploymentName);
+            $deployment->setDeploymentBasePath($deploymentConfigurationPath);
+            $deployment->setWorkspacesBasePath($workspacesBasePath);
+            require($deploymentPathAndFilename);
+        } else {
+            $this->createLogger()->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
+            $deployment = new FailedDeployment();
         }
-
-        $deployment = new Deployment($deploymentName);
-        $deployment->setDeploymentBasePath($deploymentConfigurationPath);
-        $deployment->setWorkspacesBasePath($workspacesBasePath);
-        require($deploymentPathAndFilename);
         return $deployment;
     }
 
