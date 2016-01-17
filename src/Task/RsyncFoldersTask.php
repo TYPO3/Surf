@@ -43,11 +43,11 @@ class RsyncFoldersTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\S
             $folders = array($folders);
         }
         $replacePaths = array(
-            '{deploymentPath}' => $application->getDeploymentPath(),
-            '{sharedPath}' => $application->getSharedPath(),
-            '{releasePath}' => $deployment->getApplicationReleasePath($application),
-            '{currentPath}' => $application->getReleasesPath() . '/current',
-            '{previousPath}' => $application->getReleasesPath() . '/previous'
+            '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
+            '{sharedPath}' => escapeshellarg($application->getSharedPath()),
+            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
+            '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
+            '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous')
         );
 
         $commands = array();

@@ -34,8 +34,7 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         $replacePaths = array();
-        $workspacePath = $deployment->getWorkspacePath($application);
-        $replacePaths['{workspacePath}'] = $workspacePath;
+        $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
 
         if (!isset($options['command'])) {
             throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing "command" option for LocalShellTask', 1311168045);
@@ -78,8 +77,7 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         $replacePaths = array();
-        $workspacePath = $deployment->getWorkspacePath($application);
-        $replacePaths['{workspacePath}'] = $workspacePath;
+        $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
 
         if (!isset($options['rollbackCommand'])) {
             return;
