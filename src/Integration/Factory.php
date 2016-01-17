@@ -168,6 +168,7 @@ class Factory implements FactoryInterface
      * @param string $deploymentName
      * @param string $path
      * @return \TYPO3\Surf\Domain\Model\Deployment
+     * @throws InvalidConfigurationException
      */
     protected function createDeployment($deploymentName, $path = null)
     {
