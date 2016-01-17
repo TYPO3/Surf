@@ -1,4 +1,4 @@
-# Surf - TYPO3 Flow deployment [![Build Status](https://travis-ci.org/TYPO3/Surf.svg?branch=master)](https://travis-ci.org/TYPO3/Surf)
+# TYPO3 Surf - Powerful and flexible deployment tool for PHP projects [![Build Status](https://travis-ci.org/TYPO3/Surf.svg?branch=master)](https://travis-ci.org/TYPO3/Surf)
 
 ## Description
 
