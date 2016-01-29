@@ -28,5 +28,7 @@
             "TYPO3\\Surf\\Tests\\": "Tests"
         }
     },
-    "bin": ["bin/surf"]
+    "bin": [
+        "surf"
+    ]
 }
