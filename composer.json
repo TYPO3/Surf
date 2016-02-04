@@ -3,14 +3,14 @@
     "description": "TYPO3 Surf is a deployment tool, suited for a wide variety of applications",
     "license": "GPL-3.0+",
     "require": {
-        "symfony/console": "^3.0",
-        "symfony/process": "^3.0",
+        "symfony/console": "^2.8",
+        "symfony/process": "^2.8",
         "ircmaxell/random-lib": "^1.1",
         "psr/log": "^1.0",
         "monolog/monolog": "^1.17"
     },
     "require-dev": {
-        "symfony/finder": "^3.0",
+        "symfony/finder": "^2.8",
         "phpunit/phpunit": "^4.8"
     },
     "extra": {
