@@ -64,7 +64,7 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--exclude \'.git\'');
+        $this->assertCommandExecuted('/--exclude \'.git\'/');
     }
 
     /**
@@ -103,7 +103,7 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->assertCommandExecuted('/--exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/');
     }
-    
+
     /**
      * @test
      */
