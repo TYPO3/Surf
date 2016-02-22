@@ -44,7 +44,12 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
         $key = $node->hasOption('privateKeyFile') ? ' -i ' . escapeshellarg($node->getOption('privateKeyFile')) : '';
         $quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
         $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $port . $key . '" ');
-        $rsyncFlags = isset($options['rsyncFlags']) ? $options['rsyncFlags'] : "--recursive --times --perms --links --delete --delete-excluded --exclude '.git'";
+
+        $rsyncExcludes = isset($options['rsyncExcludes']) ? $options['rsyncExcludes'] : ['.git'];
+        $excludeFlags = $this->getExcludeFlags($rsyncExcludes);
+
+        $rsyncFlags = isset($options['rsyncFlags']) ? $options['rsyncFlags'] : '--recursive --times --perms --links --delete --delete-excluded' . $excludeFlags;
+
         $destinationArgument = ($node->isLocalhost() ? $remotePath : "{$username}{$hostname}:{$remotePath}");
 
         $command = "rsync {$quietFlag} --compress {$rshFlag} {$rsyncFlags} " . escapeshellarg($localPackagePath . '/.') . ' ' . escapeshellarg($destinationArgument);
@@ -92,5 +97,20 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
         $this->shell->execute('rm -Rf ' . $releasePath, $node, $deployment, true);
+    }
+
+    /**
+     * Generates the --exclude flags for a given array of exclude patterns
+     *
+     * Example: ['foo', '/bar'] => --exclude 'foo' --exclude '/bar'
+     *
+     * @param array $rsyncExcludes An array of patterns to be excluded
+     * @return string
+     */
+    protected function getExcludeFlags($rsyncExcludes)
+    {
+        return array_reduce($rsyncExcludes, function($excludeOptions, $pattern) {
+            return $excludeOptions . ' --exclude ' . escapeshellarg($pattern);
+        }, '');
     }
 }

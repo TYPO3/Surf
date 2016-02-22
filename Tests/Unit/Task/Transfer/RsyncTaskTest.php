@@ -58,6 +58,55 @@ class RsyncTaskTest extends BaseTaskTest
     /**
      * @test
      */
+    public function executeWithDefaultExcludeList() {
+        $this->node->setOption('hostname', 'myserver.local');
+        $options = [];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('/--exclude \'.git\'/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithEmptyExcludeList() {
+        $this->node->setOption('hostname', 'myserver.local');
+        $options = [
+            'rsyncExcludes' => []
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertThat(
+            $this->commands['executed'],
+            $this->logicalNot(
+                new \TYPO3\Surf\Tests\Unit\AssertCommandExecuted('/--exclude/')
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithCustomExcludeList() {
+        $this->node->setOption('hostname', 'myserver.local');
+        $options = [
+            'rsyncExcludes' => [
+                '.git',
+                '.gitmodules',
+                '/Deploy'
+            ]
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('/--exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/');
+    }
+
+    /**
+     * @test
+     */
     public function executeWithoutUsernameDoesNotAppendUsernameToRsyncTarget()
     {
         $this->node->setOption('hostname', 'myserver.local');
