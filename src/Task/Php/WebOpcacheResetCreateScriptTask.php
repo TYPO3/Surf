@@ -58,7 +58,7 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task impl
             'rm -f surf-opcache-reset-*'
         );
 
-        $this->shellCommandService->executeOrSimulate($commands, $localhost, $deployment);
+        $this->shell->executeOrSimulate($commands, $localhost, $deployment);
 
         if (!$deployment->isDryRun()) {
             $scriptFilename = $scriptBasePath . '/surf-opcache-reset-' . $scriptIdentifier . '.php';
