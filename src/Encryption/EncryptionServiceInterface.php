@@ -15,26 +15,26 @@ interface EncryptionServiceInterface
      * Generate a key pair with optional passphrase
      *
      * @param string $passphrase A passphrase to encrypt the private key
-     * @return \TYPO3\Surf\Encryption\KeyPair
+     * @return KeyPair
      */
     public function generateKeyPair($passphrase = null);
 
     /**
      * Open (decrypt) a protected key pair
      *
-     * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
+     * @param KeyPair $keyPair
      * @param string $passphrase
-     * @return \TYPO3\Surf\Encryption\KeyPair
+     * @return KeyPair
      */
-    public function openKeyPair(\TYPO3\Surf\Encryption\KeyPair $keyPair, $passphrase);
+    public function openKeyPair(KeyPair $keyPair, $passphrase);
 
     /**
      * Change the passphrase of a protected key pair
      *
-     * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
+     * @param KeyPair $keyPair
      * @param string $oldPassphrase
      * @param string $newPassphrase
-     * @return \TYPO3\Surf\Encryption\KeyPair
+     * @return KeyPair
      */
     public function changePassphrase($keyPair, $oldPassphrase, $newPassphrase);
 

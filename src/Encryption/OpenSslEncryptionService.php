@@ -20,7 +20,7 @@ class OpenSslEncryptionService implements EncryptionServiceInterface
      * that protects the private key.
      *
      * @param string $passphrase
-     * @return \TYPO3\Surf\Encryption\KeyPair
+     * @return KeyPair
      */
     public function generateKeyPair($passphrase = null)
     {
@@ -32,17 +32,17 @@ class OpenSslEncryptionService implements EncryptionServiceInterface
         $publicKey = $keyDetails['key'];
         openssl_pkey_free($keyPair);
 
-        return new \TYPO3\Surf\Encryption\KeyPair($privateKey, $publicKey, $encrypted);
+        return new KeyPair($privateKey, $publicKey, $encrypted);
     }
 
     /**
      * Open (decrypt) a protected key pair
      *
-     * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
+     * @param KeyPair $keyPair
      * @param string $passphrase
-     * @return \TYPO3\Surf\Encryption\KeyPair
+     * @return KeyPair
      */
-    public function openKeyPair(\TYPO3\Surf\Encryption\KeyPair $keyPair, $passphrase)
+    public function openKeyPair(KeyPair $keyPair, $passphrase)
     {
         return $this->exportKeyPair($keyPair, $passphrase);
     }
@@ -50,10 +50,10 @@ class OpenSslEncryptionService implements EncryptionServiceInterface
     /**
      * Change the passphrase of a protected key pair
      *
-     * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
+     * @param KeyPair $keyPair
      * @param string $oldPassphrase
      * @param string $newPassphrase
-     * @return \TYPO3\Surf\Encryption\KeyPair
+     * @return KeyPair
      * @throws \InvalidArgumentException
      */
     public function changePassphrase($keyPair, $oldPassphrase, $newPassphrase)
@@ -103,11 +103,12 @@ class OpenSslEncryptionService implements EncryptionServiceInterface
     /**
      * Re-export the private key to change or disable the passphrase
      *
-     * @param \TYPO3\Surf\Encryption\KeyPair $keyPair
+     * @param KeyPair $keyPair
      * @param string $passphrase Passphrase for opening the key pair
      * @param string $exportPassphrase Passphrase for the exported key pair (NULL for unencrypted private key)
-     * @return \TYPO3\Surf\Encryption\KeyPair
+     * @return KeyPair
      * @throws \InvalidArgumentException
+     * @throws InvalidPassphraseException
      */
     protected function exportKeyPair($keyPair, $passphrase, $exportPassphrase = null)
     {
@@ -115,10 +116,10 @@ class OpenSslEncryptionService implements EncryptionServiceInterface
         $encrypted = $exportPassphrase !== null;
         $key = openssl_pkey_get_private($keyPair->getPrivateKey(), $passphrase);
         if ($key === false) {
-            throw new \TYPO3\Surf\Encryption\InvalidPassphraseException('Invalid passphrase, could not open key', 1300101137);
+            throw new InvalidPassphraseException('Invalid passphrase, could not open key', 1300101137);
         }
         openssl_pkey_export($key, $privateKey, $exportPassphrase);
         openssl_free_key($key);
-        return new \TYPO3\Surf\Encryption\KeyPair($privateKey, $keyPair->getPublicKey(), $encrypted);
+        return new KeyPair($privateKey, $keyPair->getPublicKey(), $encrypted);
     }
 }
