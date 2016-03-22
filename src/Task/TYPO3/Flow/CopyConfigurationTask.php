@@ -6,15 +6,14 @@ namespace TYPO3\Surf\Task\TYPO3\Flow;
  *                                                                        *
  *                                                                        */
 
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
  * A task for copying local configuration to the application
- *
- * The configuration directory has to exist on the target release path before
- * executing this task!
  */
 class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {
@@ -32,33 +31,43 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        $options['username'] = isset($options['username']) ? $options['username'] . '@' : '';
+        $configurationFileExtension = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'yaml';
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
-        $configurationPath = $deployment->getDeploymentConfigurationPath() . '/';
+        $configurationPath = $deployment->getDeploymentConfigurationPath();
         if (!is_dir($configurationPath)) {
             return;
         }
 
-        $encryptedConfiguration = glob($configurationPath . '*.yaml.encrypted');
-        if (count($encryptedConfiguration) > 0) {
+        $encryptedConfigurationFiles = Finder::create()
+            ->files()
+            ->name('*.' . $configurationFileExtension . '.encrypted')
+            ->in($configurationPath);
+
+        if ($encryptedConfigurationFiles->count() > 0) {
             throw new \TYPO3\Surf\Exception\TaskExecutionException('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);
         }
-        $configurations = glob($configurationPath . '*.yaml');
+        $configurationFiles = Finder::create()
+            ->files()
+            ->name('*.' . $configurationFileExtension)
+            ->in($configurationPath);
         $commands = array();
-        foreach ($configurations as $configuration) {
-            $targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
+        /** @var SplFileInfo $configuration */
+        foreach ($configurationFiles as $configuration) {
+            $targetConfigurationPath = $configuration->getRelativePath() ? $configuration->getRelativePath() . '/' : '';
+            $escapedSourcePath = escapeshellarg("{$configuration->getRealPath()}");
+            $escapedTargetPath = escapeshellarg("{$targetReleasePath}/Configuration/{$targetConfigurationPath}");
             if ($node->isLocalhost()) {
-                $commands[] = "mkdir -p '{$targetReleasePath}/Configuration/{$targetConfigurationPath}/'";
-                $commands[] = "cp {$configuration} {$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
+                $commands[] = 'mkdir -p ' . $escapedTargetPath;
+                $commands[] = 'cp ' . $escapedSourcePath . ' ' . $escapedTargetPath;
             } else {
-                $username = $options['username'];
+                $username = isset($options['username']) ? $options['username'] . '@' : '';
                 $hostname = $node->getHostname();
 
-                $sshPort = $node->hasOption('port') ? '-p ' . escapeshellarg($node->getOption('port')) : '';
-                $scpPort = $node->hasOption('port') ? '-P ' . escapeshellarg($node->getOption('port')) : '';
-
-                $commands[] = "ssh {$sshPort} {$username}{$hostname} 'mkdir -p {$targetReleasePath}/Configuration/{$targetConfigurationPath}/'";
-                $commands[] = "scp {$scpPort} {$configuration} {$username}{$hostname}:{$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
+                $sshPort = isset($options['port']) ? '-p ' . escapeshellarg($options['port']) . ' ' : '';
+                $scpPort = isset($options['port']) ? '-P ' . escapeshellarg($options['port']) . ' ' : '';
+                $createDirectoryCommand = '"mkdir -p ' . $escapedTargetPath . '"';
+                $commands[] = "ssh {$sshPort}{$username}{$hostname} {$createDirectoryCommand}";
+                $commands[] = "scp {$scpPort}{$escapedSourcePath} {$username}{$hostname}:\"{$escapedTargetPath}\"";
             }
         }
 

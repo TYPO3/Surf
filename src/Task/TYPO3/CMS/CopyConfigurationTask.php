@@ -13,10 +13,8 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * A task to copy host/context specific configuration
  */
-class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class CopyConfigurationTask extends \TYPO3\Surf\Task\TYPO3\Flow\CopyConfigurationTask
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-
     /**
      * Executes this task
      *
@@ -29,48 +27,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        $options['username'] = isset($options['username']) ? $options['username'] . '@' : '';
-        $targetReleasePath = $deployment->getApplicationReleasePath($application);
-        $configurationPath = $deployment->getDeploymentConfigurationPath() . '/';
-        if (!is_dir($configurationPath)) {
-            return;
-        }
-        $configurations = glob($configurationPath . '*');
-        $commands = array();
-        foreach ($configurations as $configuration) {
-            $targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
-            if ($node->isLocalhost()) {
-                $commands[] = "mkdir -p '{$targetReleasePath}/Configuration/{$targetConfigurationPath}/'";
-                $commands[] = "cp {$configuration} {$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
-            } else {
-                $username = $options['username'];
-                $hostname = $node->getHostname();
-
-                $sshPort = $node->hasOption('port') ? '-p ' . escapeshellarg($node->getOption('port')) : '';
-                $scpPort = $node->hasOption('port') ? '-P ' . escapeshellarg($node->getOption('port')) : '';
-
-                $commands[] = "ssh {$sshPort} {$username}{$hostname} 'mkdir -p {$targetReleasePath}/Configuration/{$targetConfigurationPath}/'";
-                $commands[] = "scp {$scpPort} {$configuration} {$username}{$hostname}:{$targetReleasePath}/Configuration/{$targetConfigurationPath}/";
-            }
-        }
-
-        $localhost = new Node('localhost');
-        $localhost->setHostname('localhost');
-
-        $this->shell->executeOrSimulate($commands, $localhost, $deployment);
-    }
-
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @return void
-     */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
-    {
-        $this->execute($node, $application, $deployment, $options);
+        $options['configurationFileExtension'] = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'php';
+        parent::execute($node, $application, $deployment, $options);
     }
 }
