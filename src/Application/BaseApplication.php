@@ -76,16 +76,8 @@ class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
-        $workflow->setTaskOptions(
-            'TYPO3\\Surf\\Task\\Generic\\CreateDirectoriesTask',
-            array(
-                'directories' => $this->getDirectories()
-            ));
-        $workflow->setTaskOptions(
-            'TYPO3\\Surf\\Task\\Generic\\CreateSymlinksTask',
-            array(
-                'symlinks' => $this->getSymlinks()
-            ));
+        $this->setOption('TYPO3\\Surf\\Task\\Generic\\CreateDirectoriesTask[directories]', $this->getDirectories());
+        $this->setOption('TYPO3\\Surf\\Task\\Generic\\CreateSymlinksTask[symlinks]', $this->getSymlinks());
 
         if ($this->hasOption('packageMethod')) {
             $this->registerTasksForPackageMethod($workflow, $this->getOption('packageMethod'));
