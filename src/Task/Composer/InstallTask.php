@@ -87,6 +87,10 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
      */
     protected function composerManifestExists($path, Node $node, Deployment $deployment)
     {
+        // In dry run mode, no checkout is there, this we must not assume a composer.json is there!
+        if ($deployment->isDryRun()) {
+            return false;
+        }
         $composerJsonPath = $path . '/composer.json';
         $composerJsonExists = $this->shell->executeOrSimulate('test -f ' . escapeshellarg($composerJsonPath), $node, $deployment, true);
         if ($composerJsonExists === false) {
