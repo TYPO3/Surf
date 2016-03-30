@@ -6,11 +6,11 @@ namespace TYPO3\Surf\Application\TYPO3;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 
 /**
- * A TYPO3 CMS application template
- * @TYPO3\Flow\Annotations\Proxy(false)
+ * TYPO3 CMS application
  */
 class CMS extends \TYPO3\Surf\Application\BaseApplication
 {
@@ -52,11 +52,11 @@ class CMS extends \TYPO3\Surf\Application\BaseApplication
     /**
      * Register tasks for this application
      *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Workflow $workflow
+     * @param Deployment $deployment
      * @return void
      */
-    public function registerTasks(\TYPO3\Surf\Domain\Model\Workflow $workflow, \TYPO3\Surf\Domain\Model\Deployment $deployment)
+    public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
         parent::registerTasks($workflow, $deployment);
 
