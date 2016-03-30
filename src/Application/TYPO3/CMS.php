@@ -78,6 +78,6 @@ class CMS extends \TYPO3\Surf\Application\BaseApplication
                 $this
             )
             ->afterStage('switch', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', $this)
-            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\CompareDatabaseTask', 'migrate', $this);
+            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask', 'migrate', $this);
     }
 }
