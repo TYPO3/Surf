@@ -51,7 +51,7 @@ class SelfUpdateCommand extends Command implements FactoryAwareInterface
      */
     public function isEnabled()
     {
-        return \Phar::running() != '';
+        return \Phar::running() !== '';
     }
 
     /**
