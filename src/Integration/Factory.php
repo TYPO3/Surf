@@ -17,6 +17,7 @@ use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
 use TYPO3\Surf\Command\DeployCommand;
 use TYPO3\Surf\Command\DescribeCommand;
 use TYPO3\Surf\Command\MigrateCommand;
+use TYPO3\Surf\Command\SelfUpdateCommand;
 use TYPO3\Surf\Command\ShowCommand;
 use TYPO3\Surf\Command\SimulateCommand;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -49,6 +50,7 @@ class Factory implements FactoryInterface
             new DescribeCommand(),
             new DeployCommand(),
             new MigrateCommand(),
+            new SelfUpdateCommand(),
         );
     }
 
