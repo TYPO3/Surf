@@ -89,7 +89,7 @@ class SelfUpdateCommand extends Command implements FactoryAwareInterface
             } elseif (false === $updater->getNewVersion()) {
                 $output->writeln('There are no new builds available.');
             } else {
-                $output->writeln('You have the current stable build installed.');
+                $output->writeln(sprintf('You have the current %s build installed.', $strategy->getStability()));
             }
         } elseif ($input->getOption('rollback')) {
             $result = $updater->rollback();
