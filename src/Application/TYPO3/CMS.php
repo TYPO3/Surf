@@ -65,29 +65,19 @@ class CMS extends \TYPO3\Surf\Application\BaseApplication
             $workflow->addTask('TYPO3\\Surf\\Task\\RsyncFoldersTask', 'initialize', $this);
         }
 
-        $workflow
-                ->afterStage(
-                    'update',
-                    array(
-                        'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SymlinkDataTask',
-                        'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CopyConfigurationTask'
-                    ), $this
-                )
-                ->addTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\CompareDatabaseTask', 'migrate', $this)
-                ->afterStage('switch', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', $this);
-    }
+        $workflow->afterTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CreatePackageStatesTask', $this);
 
-    /**
-     * @param Workflow $workflow
-     * @param string $packageMethod
-     */
-    protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod)
-    {
-        parent::registerTasksForPackageMethod($workflow, $packageMethod);
-        switch ($packageMethod) {
-            case 'git':
-                $workflow->afterTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CreatePackageStatesTask', $this);
-                break;
-        }
+        $workflow
+            ->afterStage('transfer', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CreatePackageStatesTask', $this)
+            ->afterStage(
+                'update',
+                array(
+                    'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SymlinkDataTask',
+                    'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CopyConfigurationTask'
+                ),
+                $this
+            )
+            ->afterStage('switch', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', $this)
+            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\CompareDatabaseTask', 'migrate', $this);
     }
 }
