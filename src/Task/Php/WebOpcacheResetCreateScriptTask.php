@@ -63,12 +63,12 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task impl
         if (!$deployment->isDryRun()) {
             $scriptFilename = $scriptBasePath . '/surf-opcache-reset-' . $scriptIdentifier . '.php';
             $result = file_put_contents($scriptFilename, '<?php
-				if (function_exists("opcache_reset")) {
-					opcache_reset();
-				}
-				@unlink(__FILE__);
-				echo "success";
-			');
+                if (function_exists("opcache_reset")) {
+                    opcache_reset();
+                }
+                @unlink(__FILE__);
+                echo "success";
+            ');
 
             if ($result === false) {
                 throw new \TYPO3\Surf\Exception\TaskExecutionException('Could not write file "' . $scriptFilename . '"', 1421932414);
