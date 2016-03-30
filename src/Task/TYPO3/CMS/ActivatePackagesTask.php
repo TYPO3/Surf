@@ -2,7 +2,7 @@
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3SurfCms.SurfTools".*
+ * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
  *                                                                        *
  *                                                                        */
 
@@ -31,6 +31,7 @@ class ActivatePackagesTask extends AbstractCliTask
         if (!$this->packageExists('typo3_console', $node, $application, $deployment, $options)) {
             throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Extension "typo3_console" is not found! Make sure it is available in your project, or remove this task in your deployment configuration!', 1405527176);
         }
+        $deployment->getLogger()->warning('This task has been deprecated and will be removed in Surf 2.1. Please use SetUpExtensionsTask instead.');
         $activePackages = isset($options['activePackages']) ? $options['activePackages'] : array();
         foreach ($activePackages as $packageKey) {
             $this->executeCliCommand(
