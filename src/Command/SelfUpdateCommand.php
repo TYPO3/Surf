@@ -72,16 +72,18 @@ class SelfUpdateCommand extends Command implements FactoryAwareInterface
         $strategy->setCurrentLocalVersion($this->getApplication()->getVersion());
 
         $stability = $input->getOption('stability');
-        if (!empty($stability)) {
-            $strategy->setStability($stability);
+        if (empty($stability)) {
+            // Unstable by default. Should be removed once we have a 2.0.0 final
+            $stability = GithubStrategy::UNSTABLE;
         }
+        $strategy->setStability($stability);
 
         if ($input->getOption('check')) {
             $result = $updater->hasUpdate();
             if ($result) {
                 $output->writeln(sprintf(
                     'The %s build available remotely is: %s',
-                    $strategy->getStability() === 'any' ? 'latest' : 'current ' . $strategy->getStability(),
+                    $strategy->getStability() === GithubStrategy::ANY ? 'latest' : 'current ' . $strategy->getStability(),
                     $updater->getNewVersion()
                 ));
             } elseif (false === $updater->getNewVersion()) {
