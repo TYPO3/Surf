@@ -68,8 +68,9 @@ class ReleaseCommand extends Command
     {
         $process = new Process($command);
         $process->setTimeout(null);
-        $callback = function ($type, $data) use ($this) {
-            $this->output->writeln(trim($data));
+        $output = $this->output;
+        $callback = function ($type, $data) use ($output) {
+            $output->writeln(trim($data));
         };
         $exitCode = $process->run($callback);
         return array($exitCode, trim($process->getOutput()));
