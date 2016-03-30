@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -29,17 +30,38 @@ class CompareDatabaseTask extends AbstractCliTask
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         $this->ensureApplicationIsTypo3Cms($application);
-        if (!$this->packageExists('coreapi', $node, $application, $deployment, $options)) {
-            $deployment->getLogger()->warning('Extension "coreapi" was not found! Make sure it is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+        $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
+        if (empty($cliArguments)) {
+            $deployment->getLogger()->warning('Neither Extension "typo3_console" nor "coreapi" was not found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
             return;
         }
-        $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '2,4';
         $this->executeCliCommand(
-            array('typo3/cli_dispatch.phpsh', 'extbase', 'databaseapi:databasecompare', $databaseCompareMode),
+            $cliArguments,
             $node,
             $application,
             $deployment,
             $options
         );
+    }
+
+    /**
+     * @param Node $node
+     * @param CMS $application
+     * @param Deployment $deployment
+     * @param array $options
+     * @return array
+     */
+    protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = array())
+    {
+        switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
+            case 'typo3_console':
+                $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '*.add,*.change';
+                return array('./typo3cms', 'database:updateschema', $databaseCompareMode);
+            case 'coreapi':
+                $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '2,4';
+                return array('typo3/cli_dispatch.phpsh', 'extbase', 'databaseapi:databasecompare', $databaseCompareMode);
+            default:
+                return array();
+        }
     }
 }
