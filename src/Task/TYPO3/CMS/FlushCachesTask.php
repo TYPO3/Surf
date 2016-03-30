@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -28,8 +29,14 @@ class FlushCachesTask extends AbstractCliTask
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
+        $this->ensureApplicationIsTypo3Cms($application);
+        $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
+        if (empty($cliArguments)) {
+            $deployment->getLogger()->warning('Neither Extension "typo3_console" nor "coreapi" was not found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            return;
+        }
         $this->executeCliCommand(
-            $this->getSuitableCliArguments($node, $application, $deployment, $options),
+            $cliArguments,
             $node,
             $application,
             $deployment,
@@ -39,13 +46,12 @@ class FlushCachesTask extends AbstractCliTask
 
     /**
      * @param Node $node
-     * @param Application $application
+     * @param CMS $application
      * @param Deployment $deployment
      * @param array $options
      * @return array
-     * @throws InvalidConfigurationException
      */
-    protected function getSuitableCliArguments(Node $node, Application $application, Deployment $deployment, array $options = array())
+    protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = array())
     {
         switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
             case 'typo3_console':
@@ -53,7 +59,7 @@ class FlushCachesTask extends AbstractCliTask
             case 'coreapi':
                 return array('typo3/cli_dispatch.phpsh', 'extbase', 'cacheapi:clearallcaches');
             default:
-                throw new InvalidConfigurationException('No suitable arguments could be resolved', 1405527588);
+                return array();
         }
     }
 }

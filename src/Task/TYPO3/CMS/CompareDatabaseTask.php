@@ -28,8 +28,10 @@ class CompareDatabaseTask extends AbstractCliTask
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
+        $this->ensureApplicationIsTypo3Cms($application);
         if (!$this->packageExists('coreapi', $node, $application, $deployment, $options)) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Extension "coreapi" is not found! Make sure it is available in your project, or remove this task in your deployment configuration!', 1405527176);
+            $deployment->getLogger()->warning('Extension "coreapi" was not found! Make sure it is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            return;
         }
         $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '2,4';
         $this->executeCliCommand(

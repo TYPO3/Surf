@@ -101,13 +101,12 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
 
     /**
      * @param Node $node
-     * @param Application $application
+     * @param CMS $application
      * @param Deployment $deployment
      * @param array $options
      * @return string
-     * @throws InvalidConfigurationException
      */
-    protected function getAvailableCliPackage(Node $node, Application $application, Deployment $deployment, array $options = array())
+    protected function getAvailableCliPackage(Node $node, CMS $application, Deployment $deployment, array $options = array())
     {
         if ($this->packageExists('typo3_console', $node, $application, $deployment, $options)) {
             return 'typo3_console';
@@ -117,7 +116,7 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
             return 'coreapi';
         }
 
-        throw new InvalidConfigurationException('No suitable cli package found for this command! Make sure typo3_console or coreapi is available in your project, or remove this task in your deployment configuration!', 1405527176);
+        return null;
     }
 
     /**
@@ -167,5 +166,17 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
         $pathAndFileName = $this->workingDirectory . '/' . $pathAndFileName;
         return $this->shell->executeOrSimulate('test -f ' . escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) === false ? false : true;
+    }
+
+    /**
+     * @param Application $application
+     * @throws InvalidConfigurationException
+     */
+    protected function ensureApplicationIsTypo3Cms(Application $application)
+    {
+        if (!$application instanceof CMS) {
+            throw new InvalidConfigurationException('Application must be of type TYPO3 CMS when executing this task!',
+                1420210955);
+        }
     }
 }

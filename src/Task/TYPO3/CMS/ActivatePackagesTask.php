@@ -28,8 +28,10 @@ class ActivatePackagesTask extends AbstractCliTask
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
+        $this->ensureApplicationIsTypo3Cms($application);
         if (!$this->packageExists('typo3_console', $node, $application, $deployment, $options)) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Extension "typo3_console" is not found! Make sure it is available in your project, or remove this task in your deployment configuration!', 1405527176);
+            $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure it is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            return;
         }
         $deployment->getLogger()->warning('This task has been deprecated and will be removed in Surf 2.1. Please use SetUpExtensionsTask instead.');
         $activePackages = isset($options['activePackages']) ? $options['activePackages'] : array();
