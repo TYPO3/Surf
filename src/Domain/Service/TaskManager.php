@@ -31,12 +31,13 @@ class TaskManager
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param string $stage
      * @param array $options Local task options
-     * @return void
+     * @param string $definedTaskName
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = array())
+    public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = array(), $definedTaskName = '')
     {
-        $deployment->getLogger()->info($node->getName() . ' (' . $application->getName() . ') ' . $taskName);
+        $definedTaskName = $definedTaskName ?: $taskName;
+        $deployment->getLogger()->info($node->getName() . ' (' . $application->getName() . ') ' . $definedTaskName);
 
         $task = $this->createTaskInstance($taskName);
 

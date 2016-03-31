@@ -311,7 +311,7 @@ abstract class Workflow
             throw new \TYPO3\Surf\Exception\TaskExecutionException('Cycle for task "' . $task . '" detected, aborting.', 1335976544);
         }
         if (isset($this->tasks['defined'][$task])) {
-            $this->taskManager->execute($this->tasks['defined'][$task]['task'], $node, $application, $deployment, $stage, $this->tasks['defined'][$task]['options']);
+            $this->taskManager->execute($this->tasks['defined'][$task]['task'], $node, $application, $deployment, $stage, $this->tasks['defined'][$task]['options'], $task);
         } else {
             $this->taskManager->execute($task, $node, $application, $deployment, $stage);
         }
