@@ -94,7 +94,7 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
                 $targetPath = $deployment->getApplicationReleasePath($application);
             }
             $applicationRootDirectory = isset($options['applicationRootDirectory']) ? $options['applicationRootDirectory'] : '';
-            $this->workingDirectory = $targetPath . '/' . $applicationRootDirectory;
+            $this->workingDirectory = rtrim($targetPath . '/' . trim($applicationRootDirectory, '/'), '/');
             $this->targetNode = $node;
         }
     }
@@ -147,7 +147,8 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
     protected function directoryExists($directory, Node $node, CMS $application, Deployment $deployment, array $options = array())
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
-        $directory = $this->workingDirectory . '/' . $directory;
+        $webDirectory = isset($options['applicationWebDirectory']) ? trim($options['applicationWebDirectory'], '/') . '/' : '';
+        $directory = $this->workingDirectory . '/' . $webDirectory . $directory;
         return $this->shell->executeOrSimulate('test -d ' . escapeshellarg($directory), $this->targetNode, $deployment, true) === false ? false : true;
     }
 

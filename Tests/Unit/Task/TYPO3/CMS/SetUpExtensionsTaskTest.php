@@ -55,4 +55,46 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("php './typo3cms' 'extension:setup' 'foo,bar'");
     }
+
+    /**
+     * @test
+     */
+    public function consoleIsFoundInCorrectPathWithoutAppDirectory()
+    {
+        $options = array(
+            'extensionKeys' => array('foo', 'bar')
+        );
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("php './typo3cms' 'extension:setup' 'foo,bar'");
+    }
+
+    /**
+     * @test
+     */
+    public function consoleIsFoundInCorrectPathWithAppDirectoryAndSlashesAreTrimmed()
+    {
+        $options = array(
+            'extensionKeys' => array('foo', 'bar'),
+            'applicationRootDirectory' => '/web/',
+        );
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}/web'");
+        $this->assertCommandExecuted("php './typo3cms' 'extension:setup' 'foo,bar'");
+    }
+
+    /**
+     * @test
+     */
+    public function consoleIsFoundInCorrectPathWithWebDirectoryAndSlashesAreTrimmed()
+    {
+        $options = array(
+            'extensionKeys' => array('foo', 'bar'),
+            'applicationWebDirectory' => '/web/',
+        );
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("test -d '{$this->deployment->getApplicationReleasePath($this->application)}/web/typo3conf/ext/typo3_console'");
+        $this->assertCommandExecuted("php './typo3cms' 'extension:setup' 'foo,bar'");
+    }
 }
