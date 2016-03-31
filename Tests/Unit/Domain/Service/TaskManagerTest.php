@@ -111,4 +111,85 @@ class TaskManagerTest extends \PHPUnit_Framework_TestCase
         $localOptions = array();
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
     }
+
+    /**
+     * @test
+     */
+    public function nodeOptionsOverrideDeploymentOptions()
+    {
+        $globalOptions = array(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Deployment'
+        );
+        $this->deployment->setOptions($globalOptions);
+        $nodeOptions = array(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Node'
+        );
+        $this->node->setOptions($nodeOptions);
+
+        $this->task
+            ->expects($this->atLeastOnce())
+            ->method('execute')
+            ->willReturnCallback(function($_, $__, $___, $options) {
+                if ($options['taskOption'] !== 'Node') {
+                    throw new \RuntimeException('Node options do not override deployment options!');
+                }
+            });
+
+        $localOptions = array();
+        $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
+    }
+
+    /**
+     * @test
+     */
+    public function applicationOptionsOverrideNodeOptions()
+    {
+        $nodeOptions = array(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Node'
+        );
+        $this->node->setOptions($nodeOptions);
+        $applicationOptions = array(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Application'
+        );
+        $this->application->setOptions($applicationOptions);
+
+        $this->task
+            ->expects($this->atLeastOnce())
+            ->method('execute')
+            ->willReturnCallback(function($_, $__, $___, $options) {
+                if ($options['taskOption'] !== 'Application') {
+                    throw new \RuntimeException('Node options do not override deployment options!');
+                }
+            });
+
+        $localOptions = array();
+        $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
+    }
+
+    /**
+     * @test
+     */
+    public function applicationOptionsOverrideDeploymentOptions()
+    {
+        $globalOptions = array(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Deployment'
+        );
+        $this->deployment->setOptions($globalOptions);
+        $applicationOptions = array(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Application'
+        );
+        $this->application->setOptions($applicationOptions);
+
+        $this->task
+            ->expects($this->atLeastOnce())
+            ->method('execute')
+            ->willReturnCallback(function($_, $__, $___, $options) {
+                if ($options['taskOption'] !== 'Application') {
+                    throw new \RuntimeException('Node options do not override deployment options!');
+                }
+            });
+
+        $localOptions = array();
+        $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
+    }
 }
