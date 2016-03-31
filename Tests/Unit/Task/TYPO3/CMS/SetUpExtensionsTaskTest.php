@@ -28,7 +28,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
         return new SetUpExtensionsTask();
     }
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->application = new \TYPO3\Surf\Application\TYPO3\CMS('TestApplication');

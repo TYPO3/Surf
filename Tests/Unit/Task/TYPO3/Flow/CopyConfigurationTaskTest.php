@@ -16,7 +16,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     /**
      * Set up test dependencies
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

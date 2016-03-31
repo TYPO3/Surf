@@ -51,10 +51,8 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
      * This sets up a stubbed shell command service to record command executions
      * and return predefined command responses.
      */
-    public function setUp()
+    protected function setUp()
     {
-        parent::setUp();
-
         $this->commands = array('executed' => array());
         $commands = &$this->commands;
         $this->responses = array();
