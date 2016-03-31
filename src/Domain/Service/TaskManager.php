@@ -41,7 +41,7 @@ class TaskManager
 
         $task = $this->createTaskInstance($taskName);
 
-        $globalOptions = $this->overrideOptions($taskName, $deployment, $node, $application, $options);
+        $globalOptions = $this->overrideOptions($definedTaskName, $deployment, $node, $application, $options);
 
         if (!$deployment->isDryRun()) {
             $task->execute($node, $application, $deployment, $globalOptions);

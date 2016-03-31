@@ -192,4 +192,46 @@ class TaskManagerTest extends \PHPUnit_Framework_TestCase
         $localOptions = array();
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
     }
+
+    /**
+     * @test
+     */
+    public function executeDoesNotPassPrefixedTaskOptionsOfBaseTaskToDefinedTask()
+    {
+        $globalOptions = array(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Foo'
+        );
+        $this->deployment->setOptions($globalOptions);
+
+        $this->task->expects($this->atLeastOnce())->method('execute')->with(
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $this->logicalNot($this->arrayHasKey('taskOption'))
+        );
+
+        $localOptions = array();
+        $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions, 'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask');
+    }
+
+    /**
+     * @test
+     */
+    public function executePassePrefixedDefinedTaskOptionsToDefinedTask()
+    {
+        $globalOptions = array(
+            'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask[taskOption]' => 'Foo'
+        );
+        $this->deployment->setOptions($globalOptions);
+
+        $this->task->expects($this->atLeastOnce())->method('execute')->with(
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $this->arrayHasKey('taskOption')
+        );
+
+        $localOptions = array();
+        $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions, 'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask');
+    }
 }
