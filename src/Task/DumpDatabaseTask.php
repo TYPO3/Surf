@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task;
  *                                                                        *
  *                                                                        */
 
+use Symfony\Component\Process\ProcessBuilder;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -37,15 +38,53 @@ class DumpDatabaseTask extends Task implements \TYPO3\Surf\Domain\Service\ShellC
     {
         $this->assertRequiredOptionsExist($options);
 
+        $dumpCommand = new ProcessBuilder();
+        $dumpCommand->setPrefix('mysqldump');
+        $dumpCommand->setArguments(
+            array(
+                '-h',
+                $options['sourceHost'],
+                '-u',
+                $options['sourceUser'],
+                '-p' . $options['sourcePassword'],
+                $options['sourceDatabase']
+            )
+        );
+
+        $mysqlCommand = new ProcessBuilder();
+        $mysqlCommand->setPrefix('mysql');
+        $mysqlCommand->setArguments(
+            array(
+                '-h',
+                $options['targetHost'],
+                '-u',
+                $options['targetUser'],
+                '-p' . $options['targetPassword'],
+                $options['targetDatabase']
+            )
+        );
+
+        $arguments = array();
         $username = isset($options['username']) ? $options['username'] . '@' : '';
         $hostname = $node->getHostname();
-        $port = $node->hasOption('port') ? '-P ' . escapeshellarg($node->getOption('port')) : '';
-        $commands[] = "mysqldump -h {$options['sourceHost']} -u{$options['sourceUser']} -p{$options['sourcePassword']} {$options['sourceDatabase']} | ssh {$port} {$username}{$hostname} 'mysql -h {$options['targetHost']} -u{$options['targetUser']} -p{$options['targetPassword']} {$options['targetDatabase']}'";
+        $arguments[] = $username . $hostname;
+        if ($node->hasOption('port')) {
+            $arguments[] = '-P';
+            $arguments[] = $node->getOption('port');
+        }
+        $arguments[] = $mysqlCommand->getProcess()->getCommandLine();
+        $sshCommand = new ProcessBuilder();
+        $sshCommand->setPrefix('ssh');
+        $sshCommand->setArguments($arguments);
+
+        $command = $dumpCommand->getProcess()->getCommandLine()
+            . ' | '
+            . $sshCommand->getProcess()->getCommandLine();
 
         $localhost = new Node('localhost');
         $localhost->setHostname('localhost');
 
-        $this->shell->executeOrSimulate($commands, $localhost, $deployment);
+        $this->shell->executeOrSimulate($command, $localhost, $deployment);
     }
 
     /**

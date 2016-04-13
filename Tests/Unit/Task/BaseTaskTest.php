@@ -88,6 +88,7 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $this->node->setHostname('hostname');
         $this->deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
         /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
         $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
