@@ -22,7 +22,7 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
+     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -40,8 +40,8 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
         }
 
         if ($this->composerManifestExists($composerRootPath, $node, $deployment)) {
-            $command = $this->buildComposerInstallCommand($composerRootPath, $options);
-            $this->shell->executeOrSimulate($command, $node, $deployment);
+            $commands = $this->buildComposerInstallCommands($composerRootPath, $options);
+            $this->shell->executeOrSimulate($commands, $node, $deployment);
         }
     }
 
@@ -64,15 +64,18 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
      *
      * @param string $manifestPath
      * @param array $options
-     * @return string
+     * @return array
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
-    protected function buildComposerInstallCommand($manifestPath, array $options)
+    protected function buildComposerInstallCommands($manifestPath, array $options)
     {
         if (!isset($options['composerCommandPath'])) {
             throw new \TYPO3\Surf\Exception\TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
         }
-        return sprintf('cd %s && %s install --no-ansi --no-interaction --no-dev --no-progress', escapeshellarg($manifestPath), escapeshellcmd($options['composerCommandPath']));
+        return array(
+            'cd ' . escapeshellarg($manifestPath),
+            escapeshellcmd($options['composerCommandPath']) . ' install --no-ansi --no-interaction --no-dev --no-progress 2>&1',
+        );
     }
 
     /**
