@@ -32,8 +32,10 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
             return;
         }
 
+        $baseDirectory = isset($options['baseDirectory']) ? $options['baseDirectory'] : $deployment->getApplicationReleasePath($application);
+
         $commands = array(
-            'cd ' . $deployment->getApplicationReleasePath($application)
+            'cd ' . $baseDirectory
         );
         foreach ($options['directories'] as $path) {
             $commands[] = 'mkdir -p ' . $path;

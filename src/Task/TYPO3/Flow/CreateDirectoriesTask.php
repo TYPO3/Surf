@@ -32,7 +32,8 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTa
                 'shared/Data/Logs',
                 'shared/Data/Persistent',
                 'shared/Configuration'
-            )
+            ),
+            'baseDirectory' => $application->getDeploymentPath()
         );
         parent::execute($node, $application, $deployment, $options);
     }
