@@ -33,7 +33,7 @@ class InstallTaskTest extends BaseTaskTest
         );
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar install --no-ansi --no-interaction --no-dev --no-progress 2>&1$/');
+        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative 2>&1$/');
     }
 
     /**

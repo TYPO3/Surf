@@ -74,7 +74,7 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
         }
         return array(
             'cd ' . escapeshellarg($manifestPath),
-            escapeshellcmd($options['composerCommandPath']) . ' install --no-ansi --no-interaction --no-dev --no-progress 2>&1',
+            escapeshellcmd($options['composerCommandPath']) . ' install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative 2>&1',
         );
     }
 
