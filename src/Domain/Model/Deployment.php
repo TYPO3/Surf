@@ -88,12 +88,19 @@ class Deployment implements LoggerAwareInterface
     protected $deploymentBasePath;
 
     /**
-     * The base path of to the local workspaces when packaging for deployment
+     * The base path to the local workspaces when packaging for deployment
      * (may be temporary directory)
      *
      * @var string
      */
     protected $workspacesBasePath;
+
+    /**
+     * The base path to a temporary directory
+     *
+     * @var string
+     */
+    protected $temporaryPath;
 
     /**
      * Constructor
@@ -453,6 +460,14 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
+     * @param string $temporaryPath
+     */
+    public function setTemporaryPath($temporaryPath)
+    {
+        $this->temporaryPath = rtrim($temporaryPath, '\\/');
+    }
+
+    /**
      * Get the deployment configuration path (defaults to Build/Surf/DeploymentName/Configuration)
      *
      * @return string The path without a trailing slash
@@ -468,5 +483,13 @@ class Deployment implements LoggerAwareInterface
     public function getWorkspacePath(Application $application)
     {
         return  $this->workspacesBasePath . '/' . $this->getName() . '/' . $application->getName();
+    }
+
+    /**
+     * Get path to a temp folder on the filesystem
+     */
+    public function getTemporaryPath()
+    {
+        return  $this->temporaryPath;
     }
 }

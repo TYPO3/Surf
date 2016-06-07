@@ -191,6 +191,9 @@ class Factory implements FactoryInterface
             $deployment = new Deployment($deploymentName);
             $deployment->setDeploymentBasePath($deploymentConfigurationPath);
             $deployment->setWorkspacesBasePath($workspacesBasePath);
+            $tempPath = "$workspacesBasePath/$deploymentName";
+            $this->ensureDirectoryExists($tempPath);
+            $deployment->setTemporaryPath($tempPath);
             require($deploymentPathAndFilename);
         } else {
             $this->createLogger()->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));

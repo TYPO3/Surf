@@ -139,10 +139,18 @@ class ShellCommandService
         if ($node->hasOption('password')) {
             $resourcesPath = realpath(__DIR__ . '/../../../Resources');
             $passwordSshLoginScriptPathAndFilename = $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect';
+            if (\Phar::running() !== '') {
+                $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
+                $passwordSshLoginScriptPathAndFilename = $deployment->getTemporaryPath() . '/PasswordSshLogin.expect';
+                file_put_contents($passwordSshLoginScriptPathAndFilename, $passwordSshLoginScriptContents);
+            }
             $sshCommand = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $sshCommand);
         }
-
-        return $this->executeProcess($deployment, $sshCommand, $logOutput, '    > ');
+        $success = $this->executeProcess($deployment, $sshCommand, $logOutput, '    > ');
+        if (isset($passwordSshLoginScriptPathAndFilename) && \Phar::running() !== '') {
+            unlink($passwordSshLoginScriptPathAndFilename);
+        }
+        return $success;
     }
 
     /**
