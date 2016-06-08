@@ -10,6 +10,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,6 +43,7 @@ class Factory implements FactoryInterface
 
     /**
      * @return Command[]
+     * @throws LogicException
      */
     public function createCommands()
     {
@@ -82,6 +84,10 @@ class Factory implements FactoryInterface
      * @param string $configurationPath
      * @param bool $simulateDeployment
      * @return Deployment
+     * @throws \Exception                If a missing directory is not buildable
+     * @throws \InvalidArgumentException If stream is not a resource or string
+     * @throws \TYPO3\Surf\Exception
+     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true)
     {
@@ -123,6 +129,8 @@ class Factory implements FactoryInterface
      *
      * @param string $path An absolute path (optional)
      * @return string The configuration root path without a trailing slash.
+     * @throws \RuntimeException
+     * @throws InvalidConfigurationException
      */
     public function getDeploymentsBasePath($path = null)
     {
@@ -140,6 +148,8 @@ class Factory implements FactoryInterface
      *
      * @param string $path An absolute path (optional)
      * @return string The workspaces base path without a trailing slash.
+     * @throws \RuntimeException
+     * @throws InvalidConfigurationException
      */
     public function getWorkspacesBasePath($path = null)
     {
@@ -171,6 +181,7 @@ class Factory implements FactoryInterface
      * @param string $deploymentName
      * @param string $path
      * @return \TYPO3\Surf\Domain\Model\Deployment
+     * @throws \RuntimeException
      * @throws InvalidConfigurationException
      */
     protected function createDeployment($deploymentName, $path = null)
@@ -205,6 +216,7 @@ class Factory implements FactoryInterface
     /**
      * @return string
      * @throws \RuntimeException
+     * @throws InvalidConfigurationException
      */
     protected function getHomeDir()
     {
