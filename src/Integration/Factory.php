@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
 use TYPO3\Surf\Command\DeployCommand;
 use TYPO3\Surf\Command\DescribeCommand;
@@ -88,8 +89,8 @@ class Factory implements FactoryInterface
         if ($deployment->getLogger() === null) {
             $logger = $this->createLogger();
             if (!$simulateDeployment) {
-                $logPath = $this->getWorkspacesBasePath($configurationPath) . '/logs';
-                $logger->pushHandler(new StreamHandler($logPath . '/' . $deployment->getName() . '.log'));
+                $logFilePath = Files::concatenatePaths(array($this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log'));
+                $logger->pushHandler(new StreamHandler($logFilePath));
             }
             $deployment->setLogger($logger);
         }
@@ -109,7 +110,7 @@ class Factory implements FactoryInterface
     public function getDeploymentNames($path = null)
     {
         $path = $this->getDeploymentsBasePath($path);
-        $files = glob($path . '/*.php');
+        $files = glob(Files::concatenatePaths(array($path, '*.php')));
         return array_map(function ($file) use ($path) {
             return substr($file, strlen($path) + 1, -4);
         }, $files);
@@ -129,7 +130,7 @@ class Factory implements FactoryInterface
         if (!$path && is_dir($localDeploymentDescription)) {
             $path = $localDeploymentDescription;
         }
-        $path = $path ?: ($this->getHomeDir() . '/deployments');
+        $path = $path ?: Files::concatenatePaths(array($this->getHomeDir(), 'deployments'));
         $this->ensureDirectoryExists($path);
         return $path;
     }
@@ -147,13 +148,12 @@ class Factory implements FactoryInterface
             $path = $path ?: $this->getHomeDir();
             if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
                 if ($workspacesBasePath = getenv('LOCALAPPDATA')) {
-                    $workspacesBasePath .= '/Surf';
+                    $workspacesBasePath = Files::concatenatePaths(array($workspacesBasePath, 'Surf'));
                 } else {
-                    $workspacesBasePath = $path . '/workspace';
+                    $workspacesBasePath = Files::concatenatePaths(array($path, 'workspace'));
                 }
-                $workspacesBasePath = strtr($workspacesBasePath, '\\', '/');
             } else {
-                $workspacesBasePath = $path . '/workspace';
+                $workspacesBasePath = Files::concatenatePaths(array($path, 'workspace'));
             }
         }
         $this->ensureDirectoryExists($workspacesBasePath);
@@ -186,12 +186,12 @@ class Factory implements FactoryInterface
             $deploymentName = array_pop($deploymentNames);
         }
 
-        $deploymentPathAndFilename = $deploymentConfigurationPath . '/' . $deploymentName . '.php';
+        $deploymentPathAndFilename = Files::concatenatePaths(array($deploymentConfigurationPath, $deploymentName . '.php'));
         if (file_exists($deploymentPathAndFilename)) {
             $deployment = new Deployment($deploymentName);
             $deployment->setDeploymentBasePath($deploymentConfigurationPath);
             $deployment->setWorkspacesBasePath($workspacesBasePath);
-            $tempPath = "$workspacesBasePath/$deploymentName";
+            $tempPath = Files::concatenatePaths(array($workspacesBasePath, $deploymentName));
             $this->ensureDirectoryExists($tempPath);
             $deployment->setTemporaryPath($tempPath);
             require($deploymentPathAndFilename);
@@ -214,12 +214,12 @@ class Factory implements FactoryInterface
                 if (!getenv('APPDATA')) {
                     throw new \RuntimeException('The APPDATA or SURF_HOME environment variable must be set for composer to run correctly');
                 }
-                $home = strtr(getenv('APPDATA'), '\\', '/') . '/Surf';
+                $home = Files::concatenatePaths(array(getenv('APPDATA'), 'Surf'));
             } else {
                 if (!getenv('HOME')) {
                     throw new \RuntimeException('The HOME or SURF_HOME environment variable must be set for composer to run correctly');
                 }
-                $home = rtrim(getenv('HOME'), '/') . '/.surf';
+                $home = Files::concatenatePaths(array(getenv('HOME'), '.surf'));
             }
         }
         $this->ensureDirectoryExists($home);

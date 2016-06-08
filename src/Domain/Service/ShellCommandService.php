@@ -7,6 +7,7 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        */
 
 use Symfony\Component\Process\Process;
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
@@ -137,11 +138,10 @@ class ShellCommandService
         $sshCommand = 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command);
 
         if ($node->hasOption('password')) {
-            $resourcesPath = realpath(__DIR__ . '/../../../Resources');
-            $passwordSshLoginScriptPathAndFilename = $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect';
+            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array(dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect'));
             if (\Phar::running() !== '') {
                 $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
-                $passwordSshLoginScriptPathAndFilename = $deployment->getTemporaryPath() . '/PasswordSshLogin.expect';
+                $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array($deployment->getTemporaryPath(), 'PasswordSshLogin.expect'));
                 file_put_contents($passwordSshLoginScriptPathAndFilename, $passwordSshLoginScriptContents);
             }
             $sshCommand = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $sshCommand);

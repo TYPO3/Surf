@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -35,7 +36,7 @@ class GitCheckoutTask extends AbstractCheckoutTask
         }
 
         $releasePath = $deployment->getApplicationReleasePath($application);
-        $checkoutPath = $application->getDeploymentPath() . '/cache/transfer';
+        $checkoutPath = Files::concatenatePaths(array($application->getDeploymentPath(), 'cache/transfer'));
 
         if (!isset($options['hardClean'])) {
             $options['hardClean'] = true;

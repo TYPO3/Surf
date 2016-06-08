@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\Composer;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -94,7 +95,7 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
         if ($deployment->isDryRun()) {
             return false;
         }
-        $composerJsonPath = $path . '/composer.json';
+        $composerJsonPath = Files::concatenatePaths(array($path, 'composer.json'));
         $composerJsonExists = $this->shell->executeOrSimulate('test -f ' . escapeshellarg($composerJsonPath), $node, $deployment, true);
         if ($composerJsonExists === false) {
             $deployment->getLogger()->debug('No composer.json found in path "' . $composerJsonPath . '"');

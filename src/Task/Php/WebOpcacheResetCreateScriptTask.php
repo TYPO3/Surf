@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\Php;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -36,7 +37,7 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task impl
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         $workspacePath = $deployment->getWorkspacePath($application);
-        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : $workspacePath . '/Web';
+        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : Files::concatenatePaths(array($workspacePath, 'Web'));
 
         if (!isset($options['scriptIdentifier'])) {
             // Generate random identifier
