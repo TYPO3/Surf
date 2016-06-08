@@ -6,8 +6,7 @@ namespace TYPO3\Surf\Task\TYPO3\Flow;
  *                                                                        *
  *                                                                        */
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -37,25 +36,16 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
         if (!is_dir($configurationPath)) {
             return;
         }
-
-        $encryptedConfigurationFiles = Finder::create()
-            ->files()
-            ->name('*.' . $configurationFileExtension . '.encrypted')
-            ->in($configurationPath);
-
-        if ($encryptedConfigurationFiles->count() > 0) {
+        $encryptedConfigurationFiles = Files::readDirectoryRecursively($configurationPath, $configurationFileExtension . '.encrypted');
+        if (count($encryptedConfigurationFiles) > 0) {
             throw new \TYPO3\Surf\Exception\TaskExecutionException('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);
         }
-        $configurationFiles = Finder::create()
-            ->files()
-            ->name('*.' . $configurationFileExtension)
-            ->in($configurationPath);
         $commands = array();
-        /** @var SplFileInfo $configuration */
+        $configurationFiles = Files::readDirectoryRecursively($configurationPath, $configurationFileExtension);
         foreach ($configurationFiles as $configuration) {
-            $targetConfigurationPath = $configuration->getRelativePath() ? $configuration->getRelativePath() . '/' : '';
-            $escapedSourcePath = escapeshellarg("{$configuration->getRealPath()}");
-            $escapedTargetPath = escapeshellarg("{$targetReleasePath}/Configuration/{$targetConfigurationPath}");
+            $targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
+            $escapedSourcePath = escapeshellarg($configuration);
+            $escapedTargetPath = escapeshellarg(Files::concatenatePaths(array($targetReleasePath, 'Configuration', $targetConfigurationPath)) . '/');
             if ($node->isLocalhost()) {
                 $commands[] = 'mkdir -p ' . $escapedTargetPath;
                 $commands[] = 'cp ' . $escapedSourcePath . ' ' . $escapedTargetPath;
