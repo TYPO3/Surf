@@ -38,7 +38,7 @@ class DumpDatabaseTaskTest extends BaseTaskTest
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted("'mysqldump' '-h' 'localhost' '-u' 'user' '-p(pass)' 'db' | 'ssh' 'hostname' ''\''mysql'\'' '\''-h'\'' '\''localhost'\'' '\''-u'\'' '\''user'\'' '\''-p(pass)'\'' '\''db'\'''");
+        $this->assertCommandExecuted("'mysqldump' '-h' 'localhost' '-u' 'user' '-p(pass)' 'db' | 'ssh' 'hostname' ''\\''mysql'\\'' '\\''-h'\\'' '\\''localhost'\\'' '\\''-u'\\'' '\\''user'\\'' '\\''-p(pass)'\\'' '\\''db'\\'''");
     }
 
     /**
