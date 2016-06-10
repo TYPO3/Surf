@@ -50,7 +50,7 @@ class ReleaseCommand extends Command
         $this->output = $output;
 
         $this->executeProcess('git clean -dffx');
-        $this->executeProcess('composer install --no-dev');
+        $this->executeProcess('composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative');
         $this->executeProcess('phar-composer build . ../surf.phar');
 
         // disabled for the time being
