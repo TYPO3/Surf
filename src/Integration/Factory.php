@@ -84,7 +84,7 @@ class Factory implements FactoryInterface
      * @param string $configurationPath
      * @param bool $simulateDeployment
      * @return Deployment
-     * @throws \Exception                If a missing directory is not buildable
+     * @throws \Exception If a missing directory is not buildable
      * @throws \InvalidArgumentException If stream is not a resource or string
      * @throws \TYPO3\Surf\Exception
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
