@@ -130,7 +130,7 @@ class TaskManager
      * Create a task instance from the given task name
      *
      * @param string $taskName
-     * @return \TYPO3\Surf\Domain\Model\Task $task
+     * @return \TYPO3\Surf\Domain\Model\Task
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function createTaskInstance($taskName)
