@@ -130,7 +130,7 @@ class TaskManager
      * Create a task instance from the given task name
      *
      * @param string $taskName
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return \TYPO3\Surf\Domain\Model\Task $task
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function createTaskInstance($taskName)
@@ -144,8 +144,10 @@ class TaskManager
     }
 
     /**
+     * Map the task name to the proper task class
+     *
      * @param string $taskName
-     * @return string
+     * @return string $taskName
      * @throws \TYPO3\Surf\Exception
      */
     protected function mapTaskNameToTaskClass($taskName)
