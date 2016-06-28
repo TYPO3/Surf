@@ -144,6 +144,8 @@ class TaskManager
     }
 
     /**
+     * Map the task name to the proper task class
+     *
      * @param string $taskName
      * @return string
      * @throws \TYPO3\Surf\Exception

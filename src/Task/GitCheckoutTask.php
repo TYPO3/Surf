@@ -45,9 +45,9 @@ class GitCheckoutTask extends AbstractCheckoutTask
         $sha1 = $this->executeOrSimulateGitCloneOrUpdate($checkoutPath, $node, $deployment, $options);
 
         $command = strtr("
-			cp -RPp $checkoutPath/. $releasePath
-				&& (echo $sha1 > $releasePath" . 'REVISION)
-			', "\t\n", '  ');
+            cp -RPp $checkoutPath/. $releasePath
+                && (echo $sha1 > $releasePath" . 'REVISION)
+            ', "\t\n", '  ');
 
         $this->shell->executeOrSimulate($command, $node, $deployment);
 
