@@ -89,7 +89,7 @@ class Factory implements FactoryInterface
      * @param string $deploymentName
      * @param string $configurationPath
      * @param bool $simulateDeployment
-     * @return Deployment $deployment
+     * @return Deployment
      * @throws \Exception If a missing directory is not buildable
      * @throws \InvalidArgumentException If stream is not a resource or string
      * @throws \TYPO3\Surf\Exception
@@ -134,7 +134,7 @@ class Factory implements FactoryInterface
      * This defaults to ./.surf if a NULL path is given.
      *
      * @param string $path An absolute path (optional)
-     * @return string $path The configuration root path without a trailing slash.
+     * @return string The configuration root path without a trailing slash.
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
      */
@@ -153,7 +153,7 @@ class Factory implements FactoryInterface
      * Get the base path to local workspaces
      *
      * @param string $path An absolute path (optional)
-     * @return string $workspacesBasePath The workspaces base path without a trailing slash.
+     * @return string The workspaces base path without a trailing slash.
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
      */
@@ -186,7 +186,7 @@ class Factory implements FactoryInterface
      *
      * @param string $deploymentName
      * @param string $path
-     * @return Deployment $deployment
+     * @return Deployment
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
      */
@@ -222,7 +222,7 @@ class Factory implements FactoryInterface
     /**
      * Get the home directory
      *
-     * @return string $home
+     * @return string
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
      */
