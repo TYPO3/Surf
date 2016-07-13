@@ -71,7 +71,7 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
             }
             return '';
         }));
-        $shellCommandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback(function ($command) use (&$commands, $responses) {
+        $shellCommandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
             if (is_array($command)) {
                 $commands['executed'] = array_merge($commands['executed'], $command);
             } else {
