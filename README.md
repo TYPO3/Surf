@@ -266,6 +266,10 @@ Example::
 		'Packages/Framework/TYPO3.Flow/' => array('git fetch git://git.typo3.org/Flow/Packages/TYPO3.Flow refs/changes/59/6859/1 && git cherry-pick FETCH_HEAD')
 	));
 
+## Environment Variables
+
+* SURF_WORKSPACE, defines where the Workspace of Surf is saved (Default: ~/.surf/workspace)
+
 ## Copyright
 
 The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - TYPO3 Flow Agentur](http://www.networkteam.com/typo3-flow-agentur.html).
