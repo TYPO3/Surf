@@ -40,7 +40,11 @@ class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
 
         $result = file_get_contents($scriptUrl);
         if ($result !== 'success') {
-            throw new \TYPO3\Surf\Exception\TaskExecutionException('WebOpcacheResetExecuteTask at "' . $scriptUrl . '" did not return expected result', 1471511860);
+            if ($options['ErrorOnWebOpCacheResetExecuteTask']) {
+                throw new \TYPO3\Surf\Exception\TaskExecutionException('WebOpcacheResetExecuteTask at "' . $scriptUrl . '" did not return expected result', 1471511860);
+            } else {
+                $deployment->getLogger()->warning('Executing PHP opcache reset script at "' . $scriptUrl . '" did not return expected result');
+            }
         }
-    }
+   }
 }
