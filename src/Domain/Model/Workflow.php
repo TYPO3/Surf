@@ -259,6 +259,15 @@ abstract class Workflow
     }
 
     /**
+     * Returns list of all registered tasks
+     *
+     * @return array
+     */
+    public function getTasks() {
+        return $this->tasks;
+    }
+
+    /**
      * Execute a stage for a node and application
      *
      * @param string $stage
