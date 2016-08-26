@@ -13,7 +13,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A TYPO3 Flow publish resources task
+ * A Neos Flow publish resources task
  */
 class PublishResourcesTask extends Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
 {

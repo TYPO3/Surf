@@ -12,7 +12,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * Task for running arbitrary TYPO3 Flow commands
+ * Task for running arbitrary TYPO3 commands
  *
  */
 class RunCommandTask extends AbstractCliTask implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface

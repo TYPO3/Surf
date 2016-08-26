@@ -11,7 +11,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
- * A task to create TYPO3 Flow specific directories
+ * A task to create Neos Flow specific directories
  *
  */
 class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTask

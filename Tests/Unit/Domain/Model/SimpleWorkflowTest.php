@@ -239,7 +239,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'typo3.surf:test:setup',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
                         'options' => array()
@@ -247,7 +247,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'typo3.surf:test:setup',
                         'node' => 'flow-2.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
                         'options' => array()
@@ -263,7 +263,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'typo3.surf:test:doctrine:migrate',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'migrate',
                         'options' => array()
@@ -271,7 +271,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'typo3.surf:test:doctrine:migrate',
                         'node' => 'flow-2.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'migrate',
                         'options' => array()
@@ -303,7 +303,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 
-        $flowApplication = new Application('TYPO3 Flow Application');
+        $flowApplication = new Application('Neos Flow Application');
         $flowApplication
             ->addNode(new Node('flow-1.example.com'))
             ->addNode(new Node('flow-2.example.com'));
@@ -359,7 +359,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 
-        $flowApplication = new Application('TYPO3 Flow Application');
+        $flowApplication = new Application('Neos Flow Application');
         $flowApplication->addNode(new Node('flow-1.example.com'));
 
         $deployment->addApplication($flowApplication);
@@ -386,7 +386,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'before1:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -394,7 +394,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'before2:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -402,7 +402,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'before3:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -410,7 +410,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'task1:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -418,7 +418,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'task2:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -426,7 +426,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'task3:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -434,7 +434,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'after1:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -442,7 +442,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'after2:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -450,7 +450,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'after3:initialize',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
                 'options' => array()
@@ -458,7 +458,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
             array(
                 'task' => 'task1:package',
                 'node' => 'flow-1.example.com',
-                'application' => 'TYPO3 Flow Application',
+                'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'package',
                 'options' => array()
@@ -485,7 +485,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'task2:package',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'package',
                         'options' => array()
@@ -504,7 +504,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'task3:before',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
                         'options' => array()
@@ -512,7 +512,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'task1:initialize',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
                         'options' => array()
@@ -531,7 +531,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'task1:initialize',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
                         'options' => array()
@@ -539,7 +539,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'task3:after',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
                         'options' => array()
@@ -559,7 +559,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 
-        $flowApplication = new Application('TYPO3 Flow Application');
+        $flowApplication = new Application('Neos Flow Application');
         $flowApplication->addNode(new Node('flow-1.example.com'));
         $deployment->addApplication($flowApplication);
         $deployment->initialize();
@@ -586,7 +586,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'task1:switch',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'switch',
                         'options' => array()
@@ -594,7 +594,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
                     array(
                         'task' => 'task2:afterSwitch',
                         'node' => 'flow-1.example.com',
-                        'application' => 'TYPO3 Flow Application',
+                        'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'switch',
                         'options' => array()
@@ -614,7 +614,7 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 
-        $flowApplication = new Application('TYPO3 Flow Application');
+        $flowApplication = new Application('Neos Flow Application');
         $flowApplication->addNode(new Node('flow-1.example.com'));
         $deployment->addApplication($flowApplication);
         $deployment->initialize();
