@@ -66,7 +66,8 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             $output->writeln('    Deployment path: ' . $application->getDeploymentPath());
             $output->writeln('    Options: ');
             foreach ($application->getOptions() as $key => $value) {
-                $output->writeln('      ' . $key . ' => ' . $value);
+                $printableValue = is_scalar($value) ? $value : gettype($value);
+                $output->writeln('      ' . $key . ' => ' . $printableValue);
             }
             $output->writeln('    Nodes: ' . implode(', ', $application->getNodes()));
         }
