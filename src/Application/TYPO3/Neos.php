@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 
 /**
- * A TYPO3 Neos application template
+ * A Neos application template
  *
  */
 class Neos extends \TYPO3\Surf\Application\TYPO3\Flow
@@ -18,7 +18,7 @@ class Neos extends \TYPO3\Surf\Application\TYPO3\Flow
     /**
      * Constructor
      */
-    public function __construct($name = 'TYPO3_Neos')
+    public function __construct($name = 'Neos')
     {
         parent::__construct($name);
     }

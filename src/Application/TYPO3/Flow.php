@@ -10,7 +10,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 
 /**
- * A TYPO3 Flow application template
+ * A Neos Flow application template
  */
 class Flow extends \TYPO3\Surf\Application\BaseApplication
 {
@@ -21,15 +21,16 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
     protected $context = 'Production';
 
     /**
-     * The TYPO3 Flow major and minor version of this application
+     * The Neos Flow major and minor version of this application
      * @var string
      */
     protected $version = '2.0';
 
     /**
      * Constructor
+     * @param string $name
      */
-    public function __construct($name = 'TYPO3_Flow')
+    public function __construct($name = 'Neos Flow')
     {
         parent::__construct($name);
         $this->options = array_merge($this->options, array(

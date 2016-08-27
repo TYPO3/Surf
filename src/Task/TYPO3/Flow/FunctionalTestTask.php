@@ -11,7 +11,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
- * A TYPO3 Flow task to run functional tests
+ * A Neos Flow task to run functional tests
  *
  */
 class FunctionalTestTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface

@@ -11,7 +11,7 @@ use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * An "application" which does bundle Flow or similar distributions.
+ * An "application" which does bundle Neos Flow or similar distributions.
  *
  */
 class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
@@ -26,7 +26,7 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
      */
     public function __construct()
     {
-        parent::__construct('TYPO3 Flow Distribution');
+        parent::__construct('Neos Flow Distribution');
         $this->setOption('tagRecurseIntoSubmodules', true);
     }
 
@@ -91,7 +91,7 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
             throw new InvalidConfigurationException('"version" option needs to be defined. Example: 1.0.0-beta2', 1314187396);
         }
         if (!$this->hasOption('projectName')) {
-            throw new InvalidConfigurationException('"projectName" option needs to be defined. Example: TYPO3 Flow', 1314187397);
+            throw new InvalidConfigurationException('"projectName" option needs to be defined. Example: Neos Flow', 1314187397);
         }
 
         if ($this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === true) {

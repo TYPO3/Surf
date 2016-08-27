@@ -17,7 +17,7 @@ Some of the features of the Surf package:
 
 ## Installation
 
-Install the Surf package by importing the package to a TYPO3 Flow application:
+Install the Surf package by importing the package to a Neos Flow application:
 
 
 	composer require typo3/surf
