@@ -24,7 +24,7 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
      * The Neos Flow major and minor version of this application
      * @var string
      */
-    protected $version = '2.0';
+    protected $version = '3.0';
 
     /**
      * Constructor
