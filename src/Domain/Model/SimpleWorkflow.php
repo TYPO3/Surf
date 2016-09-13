@@ -125,4 +125,12 @@ class SimpleWorkflow extends Workflow
         $this->enableRollback = $enableRollback;
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getStages()
+    {
+        return $this->stages;
+    }
 }
