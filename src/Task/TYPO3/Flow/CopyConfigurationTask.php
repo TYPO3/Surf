@@ -36,10 +36,6 @@ class CopyConfigurationTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
         if (!is_dir($configurationPath)) {
             return;
         }
-        $encryptedConfigurationFiles = Files::readDirectoryRecursively($configurationPath, $configurationFileExtension . '.encrypted');
-        if (count($encryptedConfigurationFiles) > 0) {
-            throw new \TYPO3\Surf\Exception\TaskExecutionException('You have sealed configuration files, please open the configuration for "' . $deployment->getName() . '"', 1317229449);
-        }
         $commands = array();
         $configurationFiles = Files::readDirectoryRecursively($configurationPath, $configurationFileExtension);
         foreach ($configurationFiles as $configuration) {
