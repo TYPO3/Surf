@@ -26,21 +26,6 @@ class CopyConfigurationTaskTest extends BaseTaskTest
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception\TaskExecutionException
-     * @expectedExceptionCode 1317229449
-     */
-    public function executeThrowsExceptionsIfEncryptedFilesAreFound()
-    {
-        $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
-        $this->deployment->setDeploymentBasePath($deployBasePath);
-        $this->deployment->setName('test2');
-        $this->node->setHostname('localhost');
-
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
-    }
-
-    /**
-     * @test
      */
     public function executeOnLocalhostFindsConfigurationRecursively()
     {
