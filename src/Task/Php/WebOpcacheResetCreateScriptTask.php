@@ -22,12 +22,25 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
- * Create a script to reset the PHP opcache
+ * Create a script to reset the PHP opcache.
  *
  * The task creates a temporary script (locally in the release workspace directory) for resetting the PHP opcache in a
  * later web request. A secondary task will execute an HTTP request and thus execute the script.
  *
  * The opcache reset has to be done in the webserver process, so a simple CLI command would not help.
+ *
+ * It takes the following options:
+ *
+ * * scriptBasePath (optional) - The path where the script should be created. Default is `<Workspace Path>/Web`.
+ * * scriptIdentifier (optional) - The name of the script. Default is a random string.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\Php\WebOpcacheResetCreateScriptTask', [
+ *              'scriptBasePath' => '/var/www/outerspace',
+ *              'scriptIdentifier' => 'eraseAllHumans'
+ *          ]
+ *      );
  */
 class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServiceAwareInterface
 {
