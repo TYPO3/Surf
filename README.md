@@ -199,6 +199,7 @@ To access the release path or other release specific options, some placeholders 
 
 The following placeholders are available:
 
+* workspacePath: The path to the local workspace directory
 * deploymentPath: The path to the deployment base directory
 * releasePath: The path to the release directory in work (typically referenced by *next*)
 * sharedPath: The path to the shared directory for all releases
