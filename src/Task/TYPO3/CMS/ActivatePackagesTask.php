@@ -14,8 +14,21 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * This task activates a given set of packages
- * or reads the packages from composer json and activates them
+ * This task activates a given set of packages or reads the packages from `composer.json´ and activates them.
+ *
+ * It takes the following options:
+ *
+ * * activePackages (optional) - An array with extension keys to install.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\TYPO3\CMS\ActivatePackagesTask', [
+ *              'activePackages' => [
+ *                  'news',
+ *                  'devlog'
+ *              ]
+ *          ]
+ *      );
  */
 class ActivatePackagesTask extends AbstractCliTask
 {
