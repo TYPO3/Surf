@@ -16,7 +16,10 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * A symlink task for switching over the current directory to the new release
+ * A symlink task for switching over the current directory to the new release.
+ *
+ * It doesn't take any options.
+ *
  */
 class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterface
 {
