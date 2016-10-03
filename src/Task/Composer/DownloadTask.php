@@ -16,13 +16,26 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * Downloads composer into the current releasePath.
+ * Downloads Composer into the current releasePath.
+ *
+ * It takes the following options:
+ *
+ * * composerDownloadCommand (optional) - The command that should be used to download Composer instead of the regular command.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\Composer\DownloadTask', [
+ *              'composerDownloadCommand' => 'curl -s https://getcomposer.org/installer | php'
+ *          ]
+ *      );
  */
 class DownloadTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
     /**
+     * Execute this task
+     *
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
