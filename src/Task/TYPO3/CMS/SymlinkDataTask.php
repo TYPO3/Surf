@@ -38,17 +38,34 @@ class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Su
         }
         $commands = array(
             "cd $workingDirectory",
-            "{ [ -d {$relativeDataPath}/fileadmin ] || mkdir -p {$relativeDataPath}/fileadmin ; }",
-            "{ [ -d {$relativeDataPath}/uploads ] || mkdir -p {$relativeDataPath}/uploads ; }",
-            "ln -sf {$relativeDataPath}/fileadmin ./fileadmin",
-            "ln -sf {$relativeDataPath}/uploads ./uploads"
         );
+
         if (isset($options['directories']) && is_array($options['directories'])) {
-            foreach ($options['directories'] as $directory) {
-                $targetDirectory = escapeshellarg("{$relativeDataPath}/{$directory}");
-                $commands[] = '{ [ -d ' . $targetDirectory . ' ] || mkdir -p ' . $targetDirectory . ' ; }';
-                $commands[] = 'ln -sf ' . escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . "$relativeDataPath/$directory") . ' ' . escapeshellarg($directory);
+            $directories = $options['directories'];
+        } else {
+            $directories = array();
+        }
+
+        if (!in_array('fileadmin', $directories) && !in_array('./fileadmin', $directories)) {
+            $symlinkFileadmin = TRUE;
+            foreach ($directories as $directory) {
+                if (substr($directory, 0, 10) === 'fileadmin/') {
+                    $symlinkFileadmin = FALSE;
+                    break;
+                }
             }
+            if ($symlinkFileadmin) {
+                $directories[] = 'fileadmin';
+            }
+        }
+        if (!in_array('uploads', $directories) && !in_array('./uploads', $directories)) {
+            $directories[] = 'uploads';
+        }
+
+        foreach ($directories as $directory) {
+            $targetDirectory = escapeshellarg("{$relativeDataPath}/{$directory}");
+            $commands[] = '{ [ -d ' . $targetDirectory . ' ] || mkdir -p ' . $targetDirectory . ' ; }';
+            $commands[] = 'ln -sf ' . escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . "$relativeDataPath/$directory") . ' ' . escapeshellarg($directory);
         }
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
