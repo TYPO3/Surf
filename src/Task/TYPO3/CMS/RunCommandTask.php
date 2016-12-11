@@ -15,9 +15,8 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * Task for running arbitrary TYPO3 commands
  *
  */
-class RunCommandTask extends AbstractCliTask implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class RunCommandTask extends AbstractCliTask
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
