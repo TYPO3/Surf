@@ -37,6 +37,9 @@ class RunCommandTask extends AbstractCliTask
         if (!isset($options['command'])) {
             throw new InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
         }
+        if(!isset($options['scriptFileName'])) {
+            throw new InvalidConfigurationException('Missing option "scriptFileName" for RunCommandTask', 1481489230);
+        }
         $this->executeCliCommand(
             $this->getArguments($options),
             $node,
