@@ -15,9 +15,8 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * Task for running arbitrary TYPO3 commands
  *
  */
-class RunCommandTask extends AbstractCliTask implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class RunCommandTask extends AbstractCliTask
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -37,6 +36,9 @@ class RunCommandTask extends AbstractCliTask implements \TYPO3\Surf\Domain\Servi
         }
         if (!isset($options['command'])) {
             throw new InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
+        }
+        if(!isset($options['scriptFileName'])) {
+            throw new InvalidConfigurationException('Missing option "scriptFileName" for RunCommandTask', 1481489230);
         }
         $this->executeCliCommand(
             $this->getArguments($options),
