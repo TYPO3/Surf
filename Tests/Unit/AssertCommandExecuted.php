@@ -22,7 +22,7 @@ class AssertCommandExecuted extends \PHPUnit_Framework_Constraint
     public function __construct($expectedCommand)
     {
         if (!is_string($expectedCommand)) {
-            throw new \InvalidArgumentException('Expected command should be a string, ' .  gettype($expectedCommand) . ' given');
+            throw new \InvalidArgumentException('Expected command should be a string, ' . gettype($expectedCommand) . ' given');
         }
         $this->expectedCommand = $expectedCommand;
         parent::__construct();

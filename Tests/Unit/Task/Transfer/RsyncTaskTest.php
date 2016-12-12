@@ -58,7 +58,8 @@ class RsyncTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithDefaultExcludeList() {
+    public function executeWithDefaultExcludeList()
+    {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [];
 
@@ -70,7 +71,8 @@ class RsyncTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithEmptyExcludeList() {
+    public function executeWithEmptyExcludeList()
+    {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
             'rsyncExcludes' => []
@@ -89,7 +91,8 @@ class RsyncTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithCustomExcludeList() {
+    public function executeWithCustomExcludeList()
+    {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
             'rsyncExcludes' => [

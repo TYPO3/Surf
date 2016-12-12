@@ -66,5 +66,4 @@ class MigrateCommand extends Command implements FactoryAwareInterface
         file_put_contents($deploymentFileName, $fileContent);
         $output->writeln('<info>Migrated deployment definition "' . $deploymentName . '"</info>');
     }
-
 }

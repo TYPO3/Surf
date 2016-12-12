@@ -22,7 +22,7 @@ class DumpDatabaseTask extends Task implements \TYPO3\Surf\Domain\Service\ShellC
     /**
      * @var array
      */
-    protected $requiredOptions = array('sourceHost', 'sourceUser', 'sourcePassword', 'sourceDatabase','targetHost', 'targetUser', 'targetPassword', 'targetDatabase');
+    protected $requiredOptions = array('sourceHost', 'sourceUser', 'sourcePassword', 'sourceDatabase', 'targetHost', 'targetUser', 'targetPassword', 'targetDatabase');
 
     /**
      * Execute this task

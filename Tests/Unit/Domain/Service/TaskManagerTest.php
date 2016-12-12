@@ -129,7 +129,7 @@ class TaskManagerTest extends \PHPUnit_Framework_TestCase
         $this->task
             ->expects($this->atLeastOnce())
             ->method('execute')
-            ->willReturnCallback(function($_, $__, $___, $options) {
+            ->willReturnCallback(function ($_, $__, $___, $options) {
                 if ($options['taskOption'] !== 'Node') {
                     throw new \RuntimeException('Node options do not override deployment options!');
                 }
@@ -156,7 +156,7 @@ class TaskManagerTest extends \PHPUnit_Framework_TestCase
         $this->task
             ->expects($this->atLeastOnce())
             ->method('execute')
-            ->willReturnCallback(function($_, $__, $___, $options) {
+            ->willReturnCallback(function ($_, $__, $___, $options) {
                 if ($options['taskOption'] !== 'Application') {
                     throw new \RuntimeException('Node options do not override deployment options!');
                 }
@@ -183,7 +183,7 @@ class TaskManagerTest extends \PHPUnit_Framework_TestCase
         $this->task
             ->expects($this->atLeastOnce())
             ->method('execute')
-            ->willReturnCallback(function($_, $__, $___, $options) {
+            ->willReturnCallback(function ($_, $__, $___, $options) {
                 if ($options['taskOption'] !== 'Application') {
                     throw new \RuntimeException('Node options do not override deployment options!');
                 }

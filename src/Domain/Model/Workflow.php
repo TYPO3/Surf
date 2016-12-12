@@ -65,7 +65,9 @@ abstract class Workflow
             foreach ($this->tasks['stage'] as $applicationName => $steps) {
                 foreach ($steps as $step => $tasksByStageStep) {
                     foreach ($tasksByStageStep as $stageName => $tasks) {
-                        $this->tasks['stage'][$applicationName][$step][$stageName] = array_filter($tasks, function ($task) use ($removeTask) { return $task !== $removeTask; });
+                        $this->tasks['stage'][$applicationName][$step][$stageName] = array_filter($tasks, function ($task) use ($removeTask) {
+                            return $task !== $removeTask;
+                        });
                     }
                 }
             }
@@ -73,14 +75,18 @@ abstract class Workflow
         if (isset($this->tasks['after'])) {
             foreach ($this->tasks['after'] as $applicationName => $tasksByTask) {
                 foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) { return $task !== $removeTask; });
+                    $this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
+                        return $task !== $removeTask;
+                    });
                 }
             }
         }
         if (isset($this->tasks['before'])) {
             foreach ($this->tasks['before'] as $applicationName => $tasksByTask) {
                 foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) { return $task !== $removeTask; });
+                    $this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
+                        return $task !== $removeTask;
+                    });
                 }
             }
         }
@@ -263,7 +269,8 @@ abstract class Workflow
      *
      * @return array
      */
-    public function getTasks() {
+    public function getTasks()
+    {
         return $this->tasks;
     }
 

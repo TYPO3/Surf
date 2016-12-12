@@ -10,7 +10,6 @@ use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Clear TYPO3 caches

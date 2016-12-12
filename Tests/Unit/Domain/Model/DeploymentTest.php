@@ -42,7 +42,9 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
             ->addApplication($application2);
 
         $nodes = $deployment->getNodes();
-        $nodeNames = array_map(function ($node) { return $node->getName(); }, $nodes);
+        $nodeNames = array_map(function ($node) {
+            return $node->getName();
+        }, $nodes);
         sort($nodeNames);
 
         $this->assertEquals(array('test1.example.com', 'test2.example.com'), $nodeNames);

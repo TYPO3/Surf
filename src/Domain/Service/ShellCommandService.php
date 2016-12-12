@@ -39,7 +39,7 @@ class ShellCommandService
             $deployment->getLogger()->warning(rtrim($returnedOutput));
             throw new \TYPO3\Surf\Exception\TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
         }
-        return ($exitCode === 0 ? $returnedOutput : false);
+        return $exitCode === 0 ? $returnedOutput : false;
     }
 
     /**

@@ -45,7 +45,7 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
             'mkdir -p ' . $releasesPath,
             'mkdir -p ' . $sharedPath,
             'mkdir -p ' . $releasePath,
-            'cd ' .  $releasesPath . ';ln -snf ./' . $releaseIdentifier . ' next'
+            'cd ' . $releasesPath . ';ln -snf ./' . $releaseIdentifier . ' next'
         );
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }

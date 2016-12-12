@@ -22,7 +22,7 @@ class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase
      * @param int $port
      * @param string $privateKey
      */
-    public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = NULL, $password = NULL, $port = NULL, $privateKey = NULL)
+    public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null, $privateKey = null)
     {
         /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $service */
         $service = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService', array('executeProcess'));
@@ -41,7 +41,7 @@ class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase
             $node->setOption('port', $port);
         }
 
-        if ($privateKey !== NULL) {
+        if ($privateKey !== null) {
             $node->setOption('privateKeyFile', $privateKey);
         }
 
@@ -50,7 +50,7 @@ class ShellCommandServiceTest extends \PHPUnit_Framework_TestCase
         $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
         $deployment->setLogger($mockLogger);
 
-        $expectedCommand = $expectedCommandArguments .  ' \'echo "Hello World"\'';
+        $expectedCommand = $expectedCommandArguments . ' \'echo "Hello World"\'';
         $service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue(array(0, 'Hello World')));
 
         $service->executeOrSimulate('echo "Hello World"', $node, $deployment);

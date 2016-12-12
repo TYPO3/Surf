@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
-use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 

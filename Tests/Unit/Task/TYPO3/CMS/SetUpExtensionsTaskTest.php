@@ -19,7 +19,6 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
      */
     protected $task;
 
-
     /**
      * @return SetUpExtensionsTask
      */

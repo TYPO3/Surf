@@ -48,5 +48,4 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('mkdir -p shared/Data/Persistent');
         $this->assertCommandExecuted('mkdir -p shared/Configuration');
     }
-
 }

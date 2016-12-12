@@ -118,7 +118,7 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
      */
     protected function getExcludeFlags($rsyncExcludes)
     {
-        return array_reduce($rsyncExcludes, function($excludeOptions, $pattern) {
+        return array_reduce($rsyncExcludes, function ($excludeOptions, $pattern) {
             return $excludeOptions . ' --exclude ' . escapeshellarg($pattern);
         }, '');
     }

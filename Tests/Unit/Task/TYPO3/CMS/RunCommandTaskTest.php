@@ -8,10 +8,9 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
  *                                                                        *
  *                                                                        */
 
-
+use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Task\TYPO3\CMS\RunCommandTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
-use TYPO3\Surf\Application\TYPO3\CMS;
 
 class RunCommandTaskTest extends BaseTaskTest
 {
@@ -89,6 +88,4 @@ class RunCommandTaskTest extends BaseTaskTest
     {
         return new RunCommandTask();
     }
-
-
 }
