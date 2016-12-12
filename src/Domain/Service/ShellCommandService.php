@@ -25,7 +25,7 @@ class ShellCommandService
      * @param Deployment $deployment
      * @param bool $ignoreErrors If this command should ignore exit codes unequeal zero
      * @param bool $logOutput TRUE if the output of the command should be logged
-     * @return mixed The output of the shell command or FALSE if the command returned a non-zero exit code and $ignoreErrors was enabled.
+     * @return mixed The output of the shell command or false if the command returned a non-zero exit code and $ignoreErrors was enabled.
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = false, $logOutput = true)
@@ -69,8 +69,8 @@ class ShellCommandService
      * @param Node $node
      * @param Deployment $deployment
      * @param bool $ignoreErrors
-     * @param bool $logOutput TRUE if the output of the command should be logged
-     * @return bool|mixed
+     * @param bool $logOutput true if the output of the command should be logged
+     * @return mixed false if command failed or command output as string
      */
     public function executeOrSimulate($command, Node $node, Deployment $deployment, $ignoreErrors = false, $logOutput = true)
     {

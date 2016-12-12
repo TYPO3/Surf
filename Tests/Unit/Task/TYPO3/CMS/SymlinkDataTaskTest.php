@@ -6,9 +6,6 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Surf\Domain\Model\Application;
-use TYPO3\Surf\Domain\Model\Deployment;
-use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -45,12 +42,13 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $options = array();
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
+        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
         $dataPath = '../../shared/Data';
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin ./fileadmin");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/uploads ./uploads");
+        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin '{$releasePath}'/fileadmin");
+        $this->assertCommandExecuted("ln -sf {$dataPath}/uploads '{$releasePath}'/uploads");
     }
 
     /**
@@ -63,12 +61,13 @@ class SymlinkDataTaskTest extends BaseTaskTest
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
+        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
         $dataPath = '../../shared/Data';
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin ./fileadmin");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/uploads ./uploads");
+        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin '{$releasePath}'/fileadmin");
+        $this->assertCommandExecuted("ln -sf {$dataPath}/uploads '{$releasePath}'/uploads");
         $this->assertCommandExecuted("{ [ -d '{$dataPath}/pictures' ] || mkdir -p '{$dataPath}/pictures' ; }");
         $this->assertCommandExecuted("ln -sf '{$dataPath}/pictures' 'pictures'");
         $this->assertCommandExecuted("{ [ -d '{$dataPath}/test/assets' ] || mkdir -p '{$dataPath}/test/assets' ; }");
@@ -81,16 +80,17 @@ class SymlinkDataTaskTest extends BaseTaskTest
     public function withApplicationRootCreatesCorrectLinks()
     {
         $options = array(
-            'applicationRootDirectory' => 'app/dir/'
+            'webDirectory' => 'web/'
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $dataPath = '../../../../shared/Data';
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}/app/dir'");
+        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $dataPath = '../../shared/Data';
+        $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin ./fileadmin");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/uploads ./uploads");
+        $this->assertCommandExecuted("ln -sf ../{$dataPath}/fileadmin '{$releasePath}/web'/fileadmin");
+        $this->assertCommandExecuted("ln -sf ../{$dataPath}/uploads '{$releasePath}/web'/uploads");
     }
 
     /**
@@ -99,19 +99,22 @@ class SymlinkDataTaskTest extends BaseTaskTest
     public function withAdditionalDirectoriesAndApplicationRootCreatesCorrectLinks()
     {
         $options = array(
-            'applicationRootDirectory' => 'app/dir/',
-            'directories' => array('pictures', 'test/assets'),
+            'webDirectory' => 'web/',
+            'directories' => array('pictures', 'test/assets', '/withSlashes/'),
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $dataPath = '../../../../shared/Data';
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}/app/dir'");
+        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $dataPath = '../../shared/Data';
+        $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin ./fileadmin");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/uploads ./uploads");
+        $this->assertCommandExecuted("ln -sf ../{$dataPath}/fileadmin '{$releasePath}/web'/fileadmin");
+        $this->assertCommandExecuted("ln -sf ../{$dataPath}/uploads '{$releasePath}/web'/uploads");
         $this->assertCommandExecuted("{ [ -d '{$dataPath}/pictures' ] || mkdir -p '{$dataPath}/pictures' ; }");
         $this->assertCommandExecuted("ln -sf '{$dataPath}/pictures' 'pictures'");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/withSlashes' ] || mkdir -p '{$dataPath}/withSlashes' ; }");
+        $this->assertCommandExecuted("ln -sf '{$dataPath}/withSlashes' 'withSlashes'");
         $this->assertCommandExecuted("{ [ -d '{$dataPath}/test/assets' ] || mkdir -p '{$dataPath}/test/assets' ; }");
         $this->assertCommandExecuted("ln -sf '../{$dataPath}/test/assets' 'test/assets'");
     }

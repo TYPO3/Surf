@@ -69,6 +69,7 @@ class CreatePackageStatesTask extends AbstractCliTask
      */
     protected function packageStatesFileExists(Node $node, CMS $application, Deployment $deployment, array $options = array())
     {
-        return $this->fileExists('typo3conf/PackageStates.php', $node, $application, $deployment, $options);
+        $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
+        return $this->fileExists($webDirectory . '/typo3conf/PackageStates.php', $node, $application, $deployment, $options);
     }
 }

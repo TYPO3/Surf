@@ -71,25 +71,11 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function consoleIsFoundInCorrectPathWithAppDirectoryAndSlashesAreTrimmed()
-    {
-        $options = array(
-            'extensionKeys' => array('foo', 'bar'),
-            'applicationRootDirectory' => '/web/',
-        );
-        $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}/web'");
-        $this->assertCommandExecuted("php './typo3cms' 'extension:setup' 'foo,bar'");
-    }
-
-    /**
-     * @test
-     */
     public function consoleIsFoundInCorrectPathWithWebDirectoryAndSlashesAreTrimmed()
     {
         $options = array(
             'extensionKeys' => array('foo', 'bar'),
-            'applicationWebDirectory' => '/web/',
+            'webDirectory' => '/web/',
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");

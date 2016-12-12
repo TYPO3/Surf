@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -82,19 +83,16 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return string
      */
     protected function determineWorkingDirectoryAndTargetNode(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!isset($this->workingDirectory) || !isset($this->targetNode)) {
+        if (!isset($this->workingDirectory, $this->targetNode)) {
             if (isset($options['useApplicationWorkspace']) && $options['useApplicationWorkspace'] === true) {
-                $targetPath = $deployment->getWorkspacePath($application);
+                $this->workingDirectory = $deployment->getWorkspacePath($application);
                 $node = $deployment->getNode('localhost');
             } else {
-                $targetPath = $deployment->getApplicationReleasePath($application);
+                $this->workingDirectory = $deployment->getApplicationReleasePath($application);
             }
-            $applicationRootDirectory = isset($options['applicationRootDirectory']) ? $options['applicationRootDirectory'] : '';
-            $this->workingDirectory = rtrim($targetPath . '/' . trim($applicationRootDirectory, '/'), '/');
             $this->targetNode = $node;
         }
     }
@@ -131,7 +129,8 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
      */
     protected function packageExists($packageKey, Node $node, CMS $application, Deployment $deployment, array $options = array())
     {
-        return $this->directoryExists('typo3conf/ext/' . $packageKey, $node, $application, $deployment, $options);
+        $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
+        return $this->directoryExists($webDirectory . '/typo3conf/ext/' . $packageKey, $node, $application, $deployment, $options);
     }
 
     /**
@@ -147,8 +146,7 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
     protected function directoryExists($directory, Node $node, CMS $application, Deployment $deployment, array $options = array())
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
-        $webDirectory = isset($options['applicationWebDirectory']) ? trim($options['applicationWebDirectory'], '/') . '/' : '';
-        $directory = $this->workingDirectory . '/' . $webDirectory . $directory;
+        $directory = Files::concatenatePaths(array($this->workingDirectory, $directory));
         return $this->shell->executeOrSimulate('test -d ' . escapeshellarg($directory), $this->targetNode, $deployment, true) === false ? false : true;
     }
 

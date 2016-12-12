@@ -45,7 +45,8 @@ class CMS extends \TYPO3\Surf\Application\BaseApplication
         parent::__construct($name);
         $this->options = array_merge($this->options, array(
             'context' => 'Production',
-            'scriptFileName' => './typo3cms'
+            'scriptFileName' => './typo3cms',
+            'webDirectory' => 'web'
         ));
     }
 
