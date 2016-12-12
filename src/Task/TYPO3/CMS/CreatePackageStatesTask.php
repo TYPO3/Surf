@@ -30,15 +30,16 @@ class CreatePackageStatesTask extends AbstractCliTask
     {
         $this->ensureApplicationIsTypo3Cms($application);
         if (!$this->packageStatesFileExists($node, $application, $deployment, $options)) {
-            if (!$this->packageExists('typo3_console', $node, $application, $deployment, $options)) {
-                throw new InvalidConfigurationException('No package states file found in the repository and no typo3_console package found to generate it. We cannot proceed!', 1420210956);
-            } else {
-                $commandArguments = array('./typo3cms', 'install:generatepackagestates');
-                if (!empty($options['removeInactivePackages'])) {
-                    $commandArguments[] = '--remove-inactive-packages';
-                }
-                $this->executeCliCommand($commandArguments, $node, $application, $deployment, $options);
+            try {
+                $scriptFileName = $this->getConsoleScriptFileName($node, $application, $deployment, $options);
+            } catch (InvalidConfigurationException $e) {
+                throw new InvalidConfigurationException('No package states file found in the repository and no typo3_console package found to generate it. We cannot proceed.', 1420210956, $e);
             }
+            $commandArguments = array($scriptFileName, 'install:generatepackagestates');
+            if (!empty($options['removeInactivePackages'])) {
+                $commandArguments[] = '--remove-inactive-packages';
+            }
+            $this->executeCliCommand($commandArguments, $node, $application, $deployment, $options);
         }
     }
 

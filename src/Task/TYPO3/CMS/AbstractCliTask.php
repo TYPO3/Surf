@@ -106,15 +106,32 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
      */
     protected function getAvailableCliPackage(Node $node, CMS $application, Deployment $deployment, array $options = array())
     {
-        if ($this->packageExists('typo3_console', $node, $application, $deployment, $options)) {
+        try {
+            $this->getConsoleScriptFileName($node, $application, $deployment, $options);
             return 'typo3_console';
+        } catch (InvalidConfigurationException $e) {
+            if ($this->packageExists('coreapi', $node, $application, $deployment, $options)) {
+                return 'coreapi';
+            }
         }
-
-        if ($this->packageExists('coreapi', $node, $application, $deployment, $options)) {
-            return 'coreapi';
-        }
-
         return null;
+    }
+
+    /**
+     * @param Node $node
+     * @param CMS $application
+     * @param Deployment $deployment
+     * @param array $options
+     * @return string
+     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     */
+    protected function getConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = array())
+    {
+        if (isset($options['scriptFileName']) && strpos($options['scriptFileName'], 'typo3cms') !== false && $this->fileExists($options['scriptFileName'], $node, $application, $deployment, $options)) {
+            return $options['scriptFileName'];
+        } else {
+            throw new InvalidConfigurationException('TYPO3 Console script was not found. Make sure it is available in your project and you set the "scriptFileName" option correctly. Alternatively you can remove this task (' . get_class($this) . ') in your deployment configuration.', 1481489230);
+        }
     }
 
     /**

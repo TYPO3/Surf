@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * This task sets up extensions using typo3_console.
@@ -31,12 +32,14 @@ class SetUpExtensionsTask extends AbstractCliTask
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         $this->ensureApplicationIsTypo3Cms($application);
-        if (!$this->packageExists('typo3_console', $node, $application, $deployment, $options)) {
-            $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure it is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+        try {
+            $scriptFileName = $this->getConsoleScriptFileName($node, $application, $deployment, $options);
+        } catch (InvalidConfigurationException $e) {
+            $deployment->getLogger()->warning('TYPO3 Console script (' .$options['scriptFileName'] . ') was not found! Make sure it is available in your project, you set the "scriptFileName" option correctly or remove this task (' . __CLASS__ . ') in your deployment configuration!');
             return;
         }
         $extensionKeys = isset($options['extensionKeys']) ? $options['extensionKeys'] : array();
-        $commandArguments = array('./typo3cms');
+        $commandArguments = array($scriptFileName);
         if (empty($extensionKeys)) {
             $commandArguments[] = 'extension:setupactive';
         } else {

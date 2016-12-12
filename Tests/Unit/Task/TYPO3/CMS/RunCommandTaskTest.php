@@ -60,11 +60,11 @@ class RunCommandTaskTest extends BaseTaskTest
     public function executeWithCommandAndScriptFileName()
     {
         $options = array(
-            'scriptFileName' => './typo3cms',
+            'scriptFileName' => 'vendor/bin/typo3cms',
             'command' => 'command:any',
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted("php './typo3cms' 'command:any'");
+        $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'command:any'");
     }
 
     /**
@@ -73,12 +73,41 @@ class RunCommandTaskTest extends BaseTaskTest
     public function executeWithCommandAndScriptFileNameAndArgument()
     {
         $options = array(
-            'scriptFileName' => './typo3cms',
+            'scriptFileName' => 'vendor/bin/typo3cms',
             'command' => 'command:any',
             'arguments' => 'any',
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted("php './typo3cms' 'command:any' 'any'");
+        $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'command:any' 'any'");
+    }
+
+
+    /**
+     * @test
+     */
+    public function phpBinaryIsConfigurable()
+    {
+        $options = array(
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'command' => 'command:any',
+            'phpBinaryPathAndFilename' => 'php_cli',
+        );
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("php_cli 'vendor/bin/typo3cms' 'command:any'");
+    }
+
+    /**
+     * @test
+     */
+    public function contextIsAddedIfConfigured()
+    {
+        $options = array(
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'command' => 'command:any',
+            'context' => 'Production',
+        );
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("TYPO3_CONTEXT='Production' php 'vendor/bin/typo3cms' 'command:any'");
     }
 
     /**

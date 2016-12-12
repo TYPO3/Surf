@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -30,18 +31,12 @@ class RunCommandTask extends AbstractCliTask
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!$application instanceof \TYPO3\Surf\Application\TYPO3\CMS) {
-            // We could make this task generic by checking for $options['scriptFileName'] here only
-            throw new InvalidConfigurationException(sprintf('TYPO3 CMS application needed for RunCommandTask, got "%s"', get_class($application)), 1358863336);
-        }
+        $this->ensureApplicationIsTypo3Cms($application);
         if (!isset($options['command'])) {
             throw new InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
         }
-        if (!isset($options['scriptFileName'])) {
-            throw new InvalidConfigurationException('Missing option "scriptFileName" for RunCommandTask', 1481489230);
-        }
         $this->executeCliCommand(
-            $this->getArguments($options),
+            $this->getArguments($node, $application, $deployment, $options),
             $node,
             $application,
             $deployment,
@@ -81,9 +76,9 @@ class RunCommandTask extends AbstractCliTask
      * @param array $options The command options
      * @return array all arguments
      */
-    protected function getArguments(array $options)
+    protected function getArguments(Node $node, CMS $application, Deployment $deployment, array $options = array())
     {
-        $arguments = array($options['scriptFileName'], $options['command']);
+        $arguments = array($this->getConsoleScriptFileName($node, $application, $deployment, $options), $options['command']);
         if (isset($options['arguments'])) {
             if (!is_array($options['arguments'])) {
                 $options['arguments'] = array($options['arguments']);
