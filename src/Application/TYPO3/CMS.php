@@ -46,7 +46,12 @@ class CMS extends \TYPO3\Surf\Application\BaseApplication
         $this->options = array_merge($this->options, array(
             'context' => 'Production',
             'scriptFileName' => 'vendor/bin/typo3cms',
-            'webDirectory' => 'web'
+            'webDirectory' => 'web',
+            'rsyncExcludes' => array(
+                '.git',
+                'web/fileadmin',
+                'web/uploads'
+            )
         ));
     }
 
