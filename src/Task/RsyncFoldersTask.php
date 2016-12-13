@@ -15,9 +15,28 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * A generic shell task
  *
  */
-class RsyncFoldersTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class RsyncFoldersTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface, \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface
 {
     use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+
+    /**
+     * @var \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface
+     */
+    private $shellReplacePathService;
+
+    /**
+     * RsyncFoldersTask constructor.
+     *
+     * @param \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface|null $shellReplacePathService
+     */
+    public function __construct(\TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface $shellReplacePathService = null)
+    {
+        if(null === $shellReplacePathService)
+        {
+            $shellReplacePathService = new \TYPO3\Surf\Domain\Service\ShellReplacePathService();
+        }
+        $this->shellReplacePathService = $shellReplacePathService;
+    }
 
     /**
      * Executes this task
@@ -42,13 +61,6 @@ class RsyncFoldersTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\S
         if (!is_array($folders)) {
             $folders = array($folders);
         }
-        $replacePaths = array(
-            '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
-            '{sharedPath}' => escapeshellarg($application->getSharedPath()),
-            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
-            '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
-            '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous')
-        );
 
         $commands = array();
 
@@ -60,8 +72,8 @@ class RsyncFoldersTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\S
             if (!is_array($folderPair) || count($folderPair) !== 2) {
                 throw new InvalidConfigurationException('Each rsync folder definition must be an array of exactly two folders', 1405599056);
             }
-            $sourceFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[0]), '/') . '/';
-            $targetFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[1]), '/') . '/';
+            $sourceFolder = rtrim($this->replacePaths($folderPair[0], $application, $deployment), '/') . '/';
+            $targetFolder = rtrim($this->replacePaths($folderPair[1], $application, $deployment), '/') . '/';
             $commands[] = "rsync -avz --delete -e ssh {$sourceFolder} {$username}{$hostname}:{$targetFolder}";
         }
 
@@ -87,4 +99,18 @@ class RsyncFoldersTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\S
     {
         $this->execute($node, $application, $deployment, $options);
     }
+
+    /**
+     * @param $command
+     * @param Application $application
+     * @param Deployment $deployment
+     *
+     * @return mixed|string
+     */
+    public function replacePaths($command, Application $application, Deployment $deployment)
+    {
+        return $this->shellReplacePathService->replacePaths($command, $application, $deployment);
+    }
+
+
 }
