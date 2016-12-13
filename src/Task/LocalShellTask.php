@@ -13,8 +13,29 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * A shell task for local packaging
  */
-class LocalShellTask extends AbstractShellTask
+class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface, \TYPO3\Surf\Domain\Service\ShellReplacePathInterface
 {
+
+    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+
+    /**
+     * @var \TYPO3\Surf\Domain\Service\ShellReplacePathInterface
+     */
+    private $shellReplacePathService;
+
+    /**
+     * ShellTask constructor.
+     *
+     * @param \TYPO3\Surf\Domain\Service\ShellReplacePathInterface|null $shellReplacePath
+     */
+    public function __construct(\TYPO3\Surf\Domain\Service\ShellReplacePathInterface $shellReplacePath = null)
+    {
+        if(null === $shellReplacePath)
+        {
+            $shellReplacePath = new \TYPO3\Surf\Domain\Service\LocalShellReplacePathService(new \TYPO3\Surf\Domain\Service\ShellReplacePathService());
+        }
+        $this->shellReplacePathService = $shellReplacePath;
+    }
 
     /**
      * Executes this task
@@ -27,14 +48,25 @@ class LocalShellTask extends AbstractShellTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
+     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
+        if (!isset($options['command'])) {
+            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "command" option for %s',  get_class($this)), 1311168045);
+        }
+
+        $command = $options['command'];
+
+        $command = $this->replacePaths($command, $application, $deployment);
+        $ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === true;
+        $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
+
         $localhost = new Node('localhost');
         $localhost->setHostname('localhost');
 
-        parent::execute($localhost, $application, $deployment, $options);
+        $this->shell->executeOrSimulate($command, $localhost, $deployment, $ignoreErrors, $logOutput);
     }
 
     /**
@@ -48,10 +80,31 @@ class LocalShellTask extends AbstractShellTask
      */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
+        if (!isset($options['rollbackCommand'])) {
+            return;
+        }
+
+        $command = $options['rollbackCommand'];
+        $command = $this->replacePaths($command, $application, $deployment);
+
         $localhost = new Node('localhost');
         $localhost->setHostname('localhost');
 
-        parent::rollback($localhost, $application, $deployment, $options);
+        $this->shell->execute($command, $localhost, $deployment, true);
+    }
+
+    /**
+     * Simulate this task
+     *
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
+     * @param array $options
+     * @return void
+     */
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    {
+        $this->execute($node, $application, $deployment, $options);
     }
 
     /**
@@ -61,14 +114,9 @@ class LocalShellTask extends AbstractShellTask
      *
      * @return mixed
      */
-    protected function prepareCommand($command, Application $application, Deployment $deployment)
+    public function replacePaths($command, Application $application, Deployment $deployment)
     {
-        $replacePaths = array();
-        $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
-
-        return parent::prepareCommand($command, $application, $deployment);
+        return $this->shellReplacePathService->replacePaths($command, $application, $deployment);
     }
-
 
 }

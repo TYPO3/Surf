@@ -32,6 +32,7 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @test
      * @expectedException \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Missing "command" option for TYPO3\Surf\Task\ShellTask
      */
     public function executeThrowInvalidConfigurationException()
     {
