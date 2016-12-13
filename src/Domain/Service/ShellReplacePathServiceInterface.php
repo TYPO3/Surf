@@ -11,7 +11,7 @@ namespace TYPO3\Surf\Domain\Service;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
-interface ShellReplacePathInterface
+interface ShellReplacePathServiceInterface
 {
 
     /**

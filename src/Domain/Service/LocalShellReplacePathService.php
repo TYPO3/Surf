@@ -11,20 +11,20 @@ namespace TYPO3\Surf\Domain\Service;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
-class LocalShellReplacePathService implements ShellReplacePathInterface
+class LocalShellReplacePathService implements ShellReplacePathServiceInterface
 {
 
     /**
-     * @var ShellReplacePathInterface
+     * @var ShellReplacePathServiceInterface
      */
     private $shellReplacePathService;
 
     /**
      * LocalShellReplacePathService constructor.
      *
-     * @param ShellReplacePathInterface|null $shellReplacePathService
+     * @param ShellReplacePathServiceInterface|null $shellReplacePathService
      */
-    public function __construct(ShellReplacePathInterface $shellReplacePathService = null)
+    public function __construct(ShellReplacePathServiceInterface $shellReplacePathService = null)
     {
         if(null === $shellReplacePathService)
         {

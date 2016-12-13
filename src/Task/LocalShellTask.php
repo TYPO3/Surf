@@ -13,22 +13,22 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * A shell task for local packaging
  */
-class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface, \TYPO3\Surf\Domain\Service\ShellReplacePathInterface
+class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface, \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface
 {
 
     use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
-     * @var \TYPO3\Surf\Domain\Service\ShellReplacePathInterface
+     * @var \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface
      */
     private $shellReplacePathService;
 
     /**
      * ShellTask constructor.
      *
-     * @param \TYPO3\Surf\Domain\Service\ShellReplacePathInterface|null $shellReplacePath
+     * @param \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface|null $shellReplacePath
      */
-    public function __construct(\TYPO3\Surf\Domain\Service\ShellReplacePathInterface $shellReplacePath = null)
+    public function __construct(\TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface $shellReplacePath = null)
     {
         if(null === $shellReplacePath)
         {
