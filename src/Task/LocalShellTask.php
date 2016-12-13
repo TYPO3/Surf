@@ -13,9 +13,8 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * A shell task for local packaging
  */
-class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class LocalShellTask extends AbstractShellTask
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task
@@ -29,40 +28,13 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
      * @return void
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        $replacePaths = array();
-        $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
-
-        if (!isset($options['command'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing "command" option for LocalShellTask', 1311168045);
-        }
-        $command = $options['command'];
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
-
-        $ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === true;
-        $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
-
         $localhost = new Node('localhost');
         $localhost->setHostname('localhost');
 
-        $this->shell->executeOrSimulate($command, $localhost, $deployment, $ignoreErrors, $logOutput);
-    }
-
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @return void
-     */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
-    {
-        $this->execute($node, $application, $deployment, $options);
+        parent::execute($localhost, $application, $deployment, $options);
     }
 
     /**
@@ -76,18 +48,27 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
      */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        $replacePaths = array();
-        $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
-
-        if (!isset($options['rollbackCommand'])) {
-            return;
-        }
-        $command = $options['rollbackCommand'];
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
-
         $localhost = new Node('localhost');
         $localhost->setHostname('localhost');
 
-        $this->shell->execute($command, $localhost, $deployment, true);
+        parent::rollback($localhost, $application, $deployment, $options);
     }
+
+    /**
+     * @param $command
+     * @param Application $application
+     * @param Deployment $deployment
+     *
+     * @return mixed
+     */
+    protected function prepareCommand($command, Application $application, Deployment $deployment)
+    {
+        $replacePaths = array();
+        $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
+        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
+
+        return parent::prepareCommand($command, $application, $deployment);
+    }
+
+
 }
