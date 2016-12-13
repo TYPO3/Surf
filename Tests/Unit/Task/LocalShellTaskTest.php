@@ -10,7 +10,6 @@ namespace TYPO3\Surf\Tests\Unit\Task;
 
 use TYPO3\Surf\Task\LocalShellTask;
 
-
 class LocalShellTaskTest extends BaseTaskTest
 {
 
@@ -50,58 +49,54 @@ class LocalShellTaskTest extends BaseTaskTest
 
     /**
      * @test
-     * @dataProvider pathReplacementProvider
      */
-    public function executeReplacePaths($search, $replace)
+    public function executeReplacePaths()
     {
         $options = array(
-            'command' => 'ln -s {'.$search.'} softlink',
+            'command' => 'command',
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/ln -s '.escapeshellarg($replace).' softlink/');
+        $this->assertCommandExecuted('command');
     }
 
     /**
      * @test
-     * @dataProvider pathReplacementProvider
      */
-    public function simluateReplacePaths($search, $replace)
+    public function simluateReplacePaths()
     {
         $options = array(
-            'command' => 'ln -s {'.$search.'} softlink',
+            'command' => 'command',
         );
         $this->task->simulate($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/ln -s '.escapeshellarg($replace).' softlink/');
+        $this->assertCommandExecuted('command');
     }
 
     /**
      * @test
-     * @dataProvider pathReplacementProvider
      */
-    public function simulateReplacePathsWithIgnoreErrorsAndLogOutput($search, $replace)
+    public function simulateReplacePathsWithIgnoreErrorsAndLogOutput()
     {
         $options = array(
-            'command' => 'ln -s {'.$search.'} softlink',
+            'command'      => 'command',
             'ignoreErrors' => true,
-            'logOutput' => true,
+            'logOutput'    => true,
         );
         $this->task->simulate($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/ln -s '.escapeshellarg($replace).' softlink/');
+        $this->assertCommandExecuted('command');
     }
 
     /**
      * @test
-     * @dataProvider pathReplacementProvider
      */
-    public function executeReplacePathsWithIgnoreErrorsAndLogOutput($search, $replace)
+    public function executeReplacePathsWithIgnoreErrorsAndLogOutput()
     {
         $options = array(
-            'command' => 'ln -s {'.$search.'} softlink',
+            'command'      => 'command',
             'ignoreErrors' => true,
-            'logOutput' => true,
+            'logOutput'    => true,
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/ln -s '.escapeshellarg($replace).' softlink/');
+        $this->assertCommandExecuted('command');
     }
 
     /**
@@ -114,30 +109,14 @@ class LocalShellTaskTest extends BaseTaskTest
 
     /**
      * @test
-     * @dataProvider pathReplacementProvider
      */
-    public function rollbackWithCommandReplacePaths($search, $replace)
+    public function rollbackWithCommandReplacePaths()
     {
         $options = array(
-            'rollbackCommand' => 'ln -s {'.$search.'} softlink',
+            'rollbackCommand' => 'command',
         );
         $this->task->rollback($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/ln -s '.escapeshellarg($replace).' softlink/');
-    }
-
-    /**
-     * @return array
-     */
-    public function pathReplacementProvider()
-    {
-        return array(
-            array('workspacePath', '.\/Data\/Surf\/TestDeployment\/TestApplication'),
-            array('deploymentPath', '\/home\/jdoe\/app'),
-            array('sharedPath', '\/home\/jdoe\/app\/shared'),
-            array('releasePath', '\/home\/jdoe\/app\/releases\/[0-9]+'),
-            array('currentPath', '\/home\/jdoe\/app\/releases\/current'),
-            array('previousPath', '\/home\/jdoe\/app\/releases\/previous'),
-        );
+        $this->assertCommandExecuted('command');
     }
 
     /**
@@ -145,7 +124,10 @@ class LocalShellTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-       return new LocalShellTask();
+        /** @var $replacePathServiceMock \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+        $replacePathServiceMock = $this->getMockBuilder('TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface')->getMock();
+        $replacePathServiceMock->expects($this->any())->method('replacePaths')->willReturn('command');
+        return new LocalShellTask($replacePathServiceMock);
     }
 
 

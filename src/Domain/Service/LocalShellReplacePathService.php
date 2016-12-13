@@ -45,9 +45,10 @@ class LocalShellReplacePathService implements ShellReplacePathServiceInterface
         $replacePaths = array(
             '{workspacePath}' => escapeshellarg($deployment->getWorkspacePath($application))
         );
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
 
-        return $this->shellReplacePathService->replacePaths($command, $application, $deployment);
+        $command = $this->shellReplacePathService->replacePaths($command, $application, $deployment);
+
+        return str_replace(array_keys($replacePaths), $replacePaths, $command);
     }
 
 

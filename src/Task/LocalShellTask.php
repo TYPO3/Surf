@@ -26,15 +26,15 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
     /**
      * ShellTask constructor.
      *
-     * @param \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface|null $shellReplacePath
+     * @param \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface|null $shellReplacePathService
      */
-    public function __construct(\TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface $shellReplacePath = null)
+    public function __construct(\TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface $shellReplacePathService = null)
     {
-        if(null === $shellReplacePath)
+        if(null === $shellReplacePathService)
         {
-            $shellReplacePath = new \TYPO3\Surf\Domain\Service\LocalShellReplacePathService(new \TYPO3\Surf\Domain\Service\ShellReplacePathService());
+            $shellReplacePathService = new \TYPO3\Surf\Domain\Service\LocalShellReplacePathService(new \TYPO3\Surf\Domain\Service\ShellReplacePathService());
         }
-        $this->shellReplacePathService = $shellReplacePath;
+        $this->shellReplacePathService = $shellReplacePathService;
     }
 
     /**
