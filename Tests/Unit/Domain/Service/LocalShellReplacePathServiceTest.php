@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
  *                                                                        */
 
 use TYPO3\Surf\Domain\Service\LocalShellReplacePathService;
-use TYPO3\Surf\Domain\Service\ShellReplacePathService;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 
@@ -22,17 +21,11 @@ class LocalShellReplacePathServiceTest extends \PHPUnit_Framework_TestCase
     private $subject;
 
     /**
-     * @var ShellReplacePathService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $shellReplacePathServiceMock;
-
-    /**
      * @return void
      */
     protected function setUp()
     {
-        $this->shellReplacePathServiceMock = $this->getMock('TYPO3\Surf\Domain\Service\ShellReplacePathService');
-        $this->subject = new LocalShellReplacePathService($this->shellReplacePathServiceMock);
+        $this->subject = new LocalShellReplacePathService();
     }
 
     /**
@@ -49,7 +42,6 @@ class LocalShellReplacePathServiceTest extends \PHPUnit_Framework_TestCase
         $deployment->expects($this->once())->method('getWorkspacePath')->willReturn('workspace');
 
         $command = 'command {'.$search.'}';
-        $this->shellReplacePathServiceMock->expects($this->once())->method('replacePaths')->willReturn($command);
 
         $command = $this->subject->replacePaths($command, $application, $deployment);
         $this->assertSame('command '.escapeshellarg($replace), $command);

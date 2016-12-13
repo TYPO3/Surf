@@ -28,11 +28,17 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
      *
      * @param \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface|null $shellReplacePathService
      */
-    public function __construct(\TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface $shellReplacePathService = null)
-    {
-        if(null === $shellReplacePathService)
-        {
-            $shellReplacePathService = new \TYPO3\Surf\Domain\Service\LocalShellReplacePathService(new \TYPO3\Surf\Domain\Service\ShellReplacePathService());
+    public function __construct(
+        \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface $shellReplacePathService = null
+    ) {
+        if (null === $shellReplacePathService) {
+            $shellReplacePathService = new \TYPO3\Surf\Domain\Service\ShellReplacePathCompositeService(
+                array(
+                    new \TYPO3\Surf\Domain\Service\LocalShellReplacePathService(),
+                    new \TYPO3\Surf\Domain\Service\ShellReplacePathService(),
+                )
+            );
+
         }
         $this->shellReplacePathService = $shellReplacePathService;
     }
@@ -48,20 +54,22 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
+     *
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!isset($options['command'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "command" option for %s',  get_class($this)), 1311168045);
+        if ( ! isset($options['command'])) {
+            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "command" option for %s',
+                get_class($this)), 1311168045);
         }
 
         $command = $options['command'];
 
         $command = $this->replacePaths($command, $application, $deployment);
         $ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === true;
-        $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
+        $logOutput = ! (isset($options['logOutput']) && $options['logOutput'] === false);
 
         $localhost = new Node('localhost');
         $localhost->setHostname('localhost');
@@ -76,11 +84,12 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
+     *
      * @return void
      */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!isset($options['rollbackCommand'])) {
+        if ( ! isset($options['rollbackCommand'])) {
             return;
         }
 
@@ -100,6 +109,7 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
+     *
      * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())

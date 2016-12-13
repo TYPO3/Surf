@@ -15,25 +15,6 @@ class LocalShellReplacePathService implements ShellReplacePathServiceInterface
 {
 
     /**
-     * @var ShellReplacePathServiceInterface
-     */
-    private $shellReplacePathService;
-
-    /**
-     * LocalShellReplacePathService constructor.
-     *
-     * @param ShellReplacePathServiceInterface|null $shellReplacePathService
-     */
-    public function __construct(ShellReplacePathServiceInterface $shellReplacePathService = null)
-    {
-        if(null === $shellReplacePathService)
-        {
-            $shellReplacePathService = new ShellReplacePathService();
-        }
-        $this->shellReplacePathService = $shellReplacePathService;
-    }
-
-    /**
      * @param $command
      * @param Application $application
      * @param Deployment $deployment
@@ -45,9 +26,6 @@ class LocalShellReplacePathService implements ShellReplacePathServiceInterface
         $replacePaths = array(
             '{workspacePath}' => escapeshellarg($deployment->getWorkspacePath($application))
         );
-
-        $command = $this->shellReplacePathService->replacePaths($command, $application, $deployment);
-
         return str_replace(array_keys($replacePaths), $replacePaths, $command);
     }
 
