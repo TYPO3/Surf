@@ -40,7 +40,7 @@ class WebOpcacheResetTask extends Task implements ShellCommandServiceAwareInterf
     /**
      * @var string
      */
-    const SCRIPT_CODE = '<?php if (function_exists("opcache_reset")) { opcache_reset(); } @unlink(__FILE__); echo "success"';
+    const SCRIPT_CODE = '<?php if (function_exists("opcache_reset")) { opcache_reset(); } @unlink(__FILE__); echo "success";';
 
     use ShellCommandServiceAwareTrait;
 
@@ -60,9 +60,11 @@ class WebOpcacheResetTask extends Task implements ShellCommandServiceAwareInterf
                     1421932609);
             }
 
+            // Defaults to Web in the CMS Application
+            $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
             $basePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : Files::concatenatePaths(array(
                 $deployment->getApplicationReleasePath($application),
-                'Web',
+                $webDirectory,
             ));
 
             $identifier = isset($options['scriptIdentifier']) ? $options['scriptIdentifier'] : $this->generateRandomIdentifier();
