@@ -11,9 +11,9 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
- * A task to reset the PHP opcache by executing a prepared script with an HTTP request
+ * @deprecated Not needed anymore. Just use WebOpcacheResetTask directly
  */
-class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
+class WebOpcacheResetExecuteTask extends WebOpcacheResetTask
 {
     /**
      * Execute this task
@@ -28,19 +28,7 @@ class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!isset($options['baseUrl'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No "baseUrl" option provided for WebOpcacheResetExecuteTask', 1421932609);
-        }
-        if (!isset($options['scriptIdentifier'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No "scriptIdentifier" option provided for WebOpcacheResetExecuteTask, make sure to execute "TYPO3\\Surf\\Task\\Php\\WebOpcacheResetCreateScriptTask" before this task or pass one explicitly', 1421932610);
-        }
-
-        $scriptIdentifier = $options['scriptIdentifier'];
-        $scriptUrl = rtrim($options['baseUrl'], '/') . '/surf-opcache-reset-' . $scriptIdentifier . '.php';
-
-        $result = file_get_contents($scriptUrl);
-        if ($result !== 'success') {
-            $deployment->getLogger()->warning('Executing PHP opcache reset script at "' . $scriptUrl . '" did not return expected result');
-        }
+        parent::execute($node, $application, $deployment, $options);
+        $deployment->getLogger()->notice('This task is not needed anymore. Just use WebOpcacheResetTask directly');
     }
 }
