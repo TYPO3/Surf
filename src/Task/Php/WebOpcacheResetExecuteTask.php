@@ -29,6 +29,6 @@ class WebOpcacheResetExecuteTask extends WebOpcacheResetTask
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         parent::execute($node, $application, $deployment, $options);
-        $deployment->getLogger()->notice('This task is not needed anymore. Just use WebOpcacheResetTask directly');
+        $deployment->getLogger()->warning('This task is not needed anymore. Just use WebOpcacheResetTask directly');
     }
 }

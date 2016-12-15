@@ -30,6 +30,6 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        $deployment->getLogger()->notice('This task is not needed anymore. Just use WebOpcacheResetTask');
+        $deployment->getLogger()->warning('This task is not needed anymore. Just use WebOpcacheResetTask');
     }
 }
