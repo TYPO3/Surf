@@ -67,7 +67,7 @@ class WebOpcacheResetTask extends Task implements ShellCommandServiceAwareInterf
 
             $identifier = isset($options['scriptIdentifier']) ? $options['scriptIdentifier'] : $this->generateRandomIdentifier();
             $filename = sprintf('%s-%s.php', self::DEFAULT_SCRIPT_PREFIX, $identifier);
-            $command = sprintf('echo \'%s\' > %s', self::SCRIPT_CODE, $basePath.'/'.$filename);
+            $command = sprintf('echo %s > %s', escapeshellarg(self::SCRIPT_CODE), escapeshellarg($basePath.'/'.$filename));
 
             $this->shell->execute($command, $node, $deployment);
 

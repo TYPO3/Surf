@@ -55,7 +55,8 @@ class WebOpcacheResetTaskTest extends BaseTaskTest
         );
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/echo \'' .preg_quote(WebOpcacheResetTask::SCRIPT_CODE). '\' > \/home\/jdoe\/app\/releases\/[0-9]+\/Web\/'.WebOpcacheResetTask::DEFAULT_SCRIPT_PREFIX. '-[a-zA-Z0-9]{32}/');
+        $pathToFile = '\/home\/jdoe\/app\/releases\/[0-9]+\/Web\/'.WebOpcacheResetTask::DEFAULT_SCRIPT_PREFIX. '-[a-zA-Z0-9]{32}.php';
+        $this->assertCommandExecuted('/echo ' .escapeshellarg(preg_quote(WebOpcacheResetTask::SCRIPT_CODE)). ' > ' .escapeshellarg($pathToFile).'/');
     }
 
     /**
@@ -69,7 +70,8 @@ class WebOpcacheResetTaskTest extends BaseTaskTest
         );
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/echo \'' .preg_quote(WebOpcacheResetTask::SCRIPT_CODE). '\' > basepath\/'.WebOpcacheResetTask::DEFAULT_SCRIPT_PREFIX. '-[a-zA-Z0-9]{32}/');
+        $pathToFile = 'basepath\/' .WebOpcacheResetTask::DEFAULT_SCRIPT_PREFIX. '-[a-zA-Z0-9]{32}.php';
+        $this->assertCommandExecuted('/echo ' .escapeshellarg(preg_quote(WebOpcacheResetTask::SCRIPT_CODE)). ' > '.escapeshellarg($pathToFile).'/');
     }
 
     /**
@@ -84,7 +86,8 @@ class WebOpcacheResetTaskTest extends BaseTaskTest
         );
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/echo \'' .preg_quote(WebOpcacheResetTask::SCRIPT_CODE). '\' > \/home\/jdoe\/app\/releases\/[0-9]+\/Web\/'.WebOpcacheResetTask::DEFAULT_SCRIPT_PREFIX. '-'.$identifier.'/');
+        $pathToFile = '\/home\/jdoe\/app\/releases\/[0-9]+\/Web\/'.WebOpcacheResetTask::DEFAULT_SCRIPT_PREFIX. '-'.$identifier.'.php';
+        $this->assertCommandExecuted('/echo ' .escapeshellarg(preg_quote(WebOpcacheResetTask::SCRIPT_CODE)). ' > ' .escapeshellarg($pathToFile). '/');
     }
 
     /**
@@ -100,7 +103,8 @@ class WebOpcacheResetTaskTest extends BaseTaskTest
         );
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/echo \'' .preg_quote(WebOpcacheResetTask::SCRIPT_CODE). '\' > basepath\/'.WebOpcacheResetTask::DEFAULT_SCRIPT_PREFIX. '-'.$identifier.'/');
+        $pathToFile = 'basepath\/'.WebOpcacheResetTask::DEFAULT_SCRIPT_PREFIX. '-'.$identifier. '.php';
+        $this->assertCommandExecuted('/echo ' .escapeshellarg(preg_quote(WebOpcacheResetTask::SCRIPT_CODE)). ' > ' .escapeshellarg($pathToFile). '/');
     }
 
 
