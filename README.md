@@ -2,7 +2,7 @@
 
 ## Description
 
-Surf package is a complete automated deployment tool. It is best used but by far not limited to deploy Flow applications. It might be included in your Flow application but can also be run standalone. It's inspired by some
+Surf package is a complete automated deployment tool. It is best used but by far not limited to deploy TYPO3 CMS and Flow applications. It's inspired by some
 features of Capistrano (thanks) concerning the Git workflow.
 
 Some of the features of the Surf package:
@@ -17,21 +17,37 @@ Some of the features of the Surf package:
 
 ## Installation
 
-Install the Surf package by importing the package to a Neos Flow application:
+### Install Surf by downloading it from GitHub:
 
 
-	composer require typo3/surf
+	mkdir /usr/local/surf
+	curl -L https://github.com/TYPO3/Surf/releases/download/2.0.0-beta7/surf.phar -o /usr/local/surf/surf.phar
+	chmod +x /usr/local/surf/surf.phar
+	ln -s /usr/local/surf/surf.phar /usr/local/bin/surf
 
+
+You may need extended privileges e.g. `sudo`.
+In this way, you can add `/usr/local/surf` to `PHP Include Paths` of your IDE.
+
+
+### Install Surf via composer
+
+
+    # Until stable release, you need to set minimum-stability to beta
+    composer global config minimum-stability beta
+    composer global require typo3/surf:^2.0.0
+
+In this way, you can add `~/.composer/vendor/typo3/surf` to `PHP Include Paths` of your IDE.
 
 ## Guide
 
 ### Deployment configurations
 
 Each deployment is defined in a configuration (e.g for development, staging, live environments). Each *deployment configuration*
-specifies a workflow for the deployment (for now there is just ``SimpleWorkflow``, but feel free to create
+specifies a workflow for the deployment (for now there is just `SimpleWorkflow`, but feel free to create
 your own). The deployment configuration has at least one application and one or more nodes for the application(s).
 
-We start by creating a simple deployment configuration in ``~/.surf/MyDeployment.php`` for a deployment
+We start by creating a simple deployment configuration in `~/.surf/MyDeployment.php` for a deployment
 with name **MyDeployment**::
 
 	<?php
@@ -89,11 +105,11 @@ also implement your own remote host connection: In this case, set the option
 
 You can get a description of the deployment by running:
 
-    $ ./flow surf:describe MyDeployment
+    $ surf describe MyDeployment
 
 Simulate the deployment by running:
 
-    $ ./flow surf:simulate MyDeployment
+    $ surf simulate MyDeployment
 
 The simulation gives a hint which tasks will be executed on which node. During simulation no harmful tasks will be
 executed for real. If a remote SSH command would be executed it will be printed in the log messages starting with
@@ -112,17 +128,17 @@ every file in there will be copied to the release ``Configuration`` folder recur
 
 If everything looks right, you can run the deployment:
 
-    $ ./flow surf:deploy MyDeployment
+    $ surf deploy MyDeployment
 
 ## Customization
 
-### Using rsync for deployment
+### Using git for deployment
 
-By default Surf use git and composer for deployment. But you can also use rsync, by adding the following configuration
+By default Surf use rsync and composer for deployment. But you can also use git, by adding the following configuration
 to your Application::
 
-	$application->setOption('transferMethod', 'rsync');
-	$application->setOption('packageMethod', 'git');
+	$application->setOption('transferMethod', 'git');
+	$application->setOption('packageMethod', NULL);
 	$application->setOption('updateMethod', NULL);
 
 Using rsync can speed up your deployment and doesn't require composer and git on the production server.
@@ -226,9 +242,9 @@ Then, add a test as follows to the deployment configuration::
 		'expectedStatus' => 200,
 		'expectedRegexp' => '/somethingYouExpectOnThePage/'
 	);
-	$workflow->defineTask('yourNamespace:smoketest', 'TYPO3\\Surf\\Task\\Test\\HttpTestTask', $smokeTestOptions);
+	$workflow->defineTask('MyCompany\\MyPackage\\SmokeTest', 'TYPO3\\Surf\\Task\\Test\\HttpTestTask', $smokeTestOptions);
 
-	$workflow->addTask('yourNamespace:smoketest', 'test', $application);
+	$workflow->addTask('MyCompany\\MyPackage\\SmokeTest', 'test', $application);
 
 The HTTP test has the following options:
 
