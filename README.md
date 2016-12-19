@@ -26,8 +26,8 @@ Some of the features of the Surf package:
 	ln -s /usr/local/surf/surf.phar /usr/local/bin/surf
 
 
-You may need extended privileges e.g. ``sudo``.  
-In this way, you can add ``/usr/local/surf`` to ``PHP Include Paths`` of your IDE.
+You may need extended privileges e.g. `sudo`.
+In this way, you can add `/usr/local/surf` to `PHP Include Paths` of your IDE.
 
 
 ### Install Surf via composer
@@ -37,17 +37,17 @@ In this way, you can add ``/usr/local/surf`` to ``PHP Include Paths`` of your ID
     composer global config minimum-stability beta
     composer global require typo3/surf:^2.0.0
 
-In this way, you can add ``~/.composer/vendor/typo3/surf`` to ``PHP Include Paths`` of your IDE.
+In this way, you can add `~/.composer/vendor/typo3/surf` to `PHP Include Paths` of your IDE.
 
 ## Guide
 
 ### Deployment configurations
 
 Each deployment is defined in a configuration (e.g for development, staging, live environments). Each *deployment configuration*
-specifies a workflow for the deployment (for now there is just ``SimpleWorkflow``, but feel free to create
+specifies a workflow for the deployment (for now there is just `SimpleWorkflow`, but feel free to create
 your own). The deployment configuration has at least one application and one or more nodes for the application(s).
 
-We start by creating a simple deployment configuration in ``~/.surf/MyDeployment.php`` for a deployment
+We start by creating a simple deployment configuration in `~/.surf/MyDeployment.php` for a deployment
 with name **MyDeployment**::
 
 	<?php
