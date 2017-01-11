@@ -287,6 +287,23 @@ Example::
 
 * SURF_WORKSPACE, defines where the Workspace of Surf is saved (Default: ~/.surf/workspace)
 
+## Common Problems
+
+### Some providers may have SSH rate limits
+
+Source and details: https://karsten.dambekalns.de/blog/using-ssh-controlmaster-with-typo3-surf.html
+
+> SSH provides a way to reuse an existing SSH connection for subsequent connection attempts to the same host.
+
+Add something like this to `~/.ssh/config` to reuse existing SSH connections:
+
+```
+Host myhost.uberspace.de
+ControlMaster auto
+ControlPath /tmp/ssh_mux_%h_%p_%r
+ControlPersist 600
+```
+
 ## Copyright
 
 The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - TYPO3 Flow Agentur](http://www.networkteam.com/typo3-flow-agentur.html).
