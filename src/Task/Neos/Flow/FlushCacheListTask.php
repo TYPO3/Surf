@@ -1,16 +1,18 @@
 <?php
-namespace TYPO3\Surf\Task\TYPO3\Flow;
+namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*                                                                        *
  * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Surf\Application\TYPO3\Flow as FlowApplication;
+use TYPO3\Surf\Application\Neos\Flow as FlowApplication;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
@@ -18,14 +20,14 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  *
  * You can configure the list of cache identifiers in the task option ```flushCacheList```, like::
  *
- *     $workflow->setTaskOptions('TYPO3\\Surf\\Task\\TYPO3\\Flow\\FlushCacheListTask', [
+ *     $workflow->setTaskOptions('TYPO3\\Surf\\Task\\Neos\\Flow\\FlushCacheListTask', [
  *         'flushCacheList' => 'TYPO3_TypoScript_Content, Flow_Session_MetaData, Flow_Session_Storage'
  *     ])
  *
  */
-class FlushCacheListTask extends Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -40,22 +42,27 @@ class FlushCacheListTask extends Task implements \TYPO3\Surf\Domain\Service\Shel
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         if (!$application instanceof FlowApplication) {
-            throw new InvalidConfigurationException(sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)), 1429774224);
+            throw new InvalidConfigurationException(sprintf('Flow application needed for MigrateTask, got "%s"',
+                get_class($application)), 1429774224);
         }
 
         if (!isset($options['flushCacheList']) || trim($options['flushCacheList']) === '') {
-            throw new InvalidConfigurationException('Missing option "flushCacheList" for FlushCacheListTask', 1429774229);
+            throw new InvalidConfigurationException('Missing option "flushCacheList" for FlushCacheListTask',
+                1429774229);
         }
 
         if ($application->getVersion() >= '2.3') {
-            $caches = is_array($options['flushCacheList']) ? $options['flushCacheList'] : explode(',', $options['flushCacheList']);
+            $caches = is_array($options['flushCacheList']) ? $options['flushCacheList'] : explode(',',
+                $options['flushCacheList']);
             $targetPath = $deployment->getApplicationReleasePath($application);
             foreach ($caches as $cache) {
                 $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
-                $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf('typo3.flow:cache:flushone --identifier %s', $cache), $node, $deployment);
+                $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf('typo3.flow:cache:flushone --identifier %s',
+                        $cache), $node, $deployment);
             }
         } else {
-            throw new InvalidConfigurationException(sprintf('FlushCacheListTask is available since Flow Framework 2.3, your application version is "%s"', $application->getVersion()), 1434126060);
+            throw new InvalidConfigurationException(sprintf('FlushCacheListTask is available since Flow Framework 2.3, your application version is "%s"',
+                $application->getVersion()), 1434126060);
         }
     }
 

@@ -6,6 +6,9 @@ namespace TYPO3\Surf\Tests\Unit\Task\Transfer;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\Neos\Flow;
+use TYPO3\Surf\Task\Transfer\RsyncTask;
+use TYPO3\Surf\Tests\Unit\AssertCommandExecuted;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
@@ -20,7 +23,7 @@ class RsyncTaskTest extends BaseTaskTest
     {
         parent::setUp();
 
-        $this->application = new \TYPO3\Surf\Application\TYPO3\Flow('TestApplication');
+        $this->application = new Flow('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
@@ -83,7 +86,7 @@ class RsyncTaskTest extends BaseTaskTest
         $this->assertThat(
             $this->commands['executed'],
             $this->logicalNot(
-                new \TYPO3\Surf\Tests\Unit\AssertCommandExecuted('/--exclude/')
+                new AssertCommandExecuted('/--exclude/')
             )
         );
     }
@@ -124,6 +127,6 @@ class RsyncTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        return new \TYPO3\Surf\Task\Transfer\RsyncTask();
+        return new RsyncTask();
     }
 }

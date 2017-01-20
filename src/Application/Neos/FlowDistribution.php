@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Surf\Application\TYPO3;
+namespace TYPO3\Surf\Application\Neos;
 
 /*                                                                        *
  * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
@@ -14,7 +14,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * An "application" which does bundle Neos Flow or similar distributions.
  *
  */
-class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
+class FlowDistribution extends Flow
 {
     /**
      * @var array
@@ -33,8 +33,8 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
     /**
      * Register tasks for this application
      *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Workflow $workflow
+     * @param Deployment $deployment
      * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
@@ -48,8 +48,8 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
         if ($this->getOption('enableTests') !== false) {
             $workflow
                 ->addTask(array(
-                    'TYPO3\\Surf\\Task\\TYPO3\\Flow\\UnitTestTask',
-                    'TYPO3\\Surf\\Task\\TYPO3\\Flow\\FunctionalTestTask'
+                    'TYPO3\\Surf\\Task\\Neos\\Flow\\UnitTestTask',
+                    'TYPO3\\Surf\\Task\\Neos\\Flow\\FunctionalTestTask'
                 ), 'test', $this);
         }
 
@@ -76,14 +76,14 @@ class FlowDistribution extends \TYPO3\Surf\Application\TYPO3\Flow
             }
         }
 
-        $workflow->removeTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\MigrateTask');
+        $workflow->removeTask('TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask');
     }
 
     /**
      * Check if all necessary options to run are set
      *
      * @return void
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @throws InvalidConfigurationException
      */
     protected function checkIfMandatoryOptionsExist()
     {

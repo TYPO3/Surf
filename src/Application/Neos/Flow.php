@@ -1,18 +1,19 @@
 <?php
-namespace TYPO3\Surf\Application\TYPO3;
+namespace TYPO3\Surf\Application\Neos;
 
 /*                                                                        *
  * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 
 /**
  * A Neos Flow application template
  */
-class Flow extends \TYPO3\Surf\Application\BaseApplication
+class Flow extends BaseApplication
 {
     /**
      * The production context
@@ -41,8 +42,8 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
     /**
      * Register tasks for this application
      *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Workflow $workflow
+     * @param Deployment $deployment
      * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
@@ -50,20 +51,20 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
         parent::registerTasks($workflow, $deployment);
 
         $workflow
-            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\CreateDirectoriesTask', 'initialize', $this)
+            ->addTask('TYPO3\\Surf\\Task\\Neos\\Flow\\CreateDirectoriesTask', 'initialize', $this)
             ->afterStage('update', array(
-                'TYPO3\\Surf\\Task\\TYPO3\\Flow\\SymlinkDataTask',
-                'TYPO3\\Surf\\Task\\TYPO3\\Flow\\SymlinkConfigurationTask',
-                'TYPO3\\Surf\\Task\\TYPO3\\Flow\\CopyConfigurationTask'
+                'TYPO3\\Surf\\Task\\Neos\\Flow\\SymlinkDataTask',
+                'TYPO3\\Surf\\Task\\Neos\\Flow\\SymlinkConfigurationTask',
+                'TYPO3\\Surf\\Task\\Neos\\Flow\\CopyConfigurationTask'
             ), $this)
-            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\MigrateTask', 'migrate', $this)
-            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\PublishResourcesTask', 'finalize', $this);
+            ->addTask('TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask', 'migrate', $this)
+            ->addTask('TYPO3\\Surf\\Task\\Neos\\Flow\\PublishResourcesTask', 'finalize', $this);
     }
 
     /**
      * Register local composer install task for packageMethod "git" after stage "package"
      *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
+     * @param Workflow $workflow
      * @param string $packageMethod
      * @return void
      */
@@ -84,7 +85,7 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
     /**
      * Add support for updateMethod "composer"
      *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
+     * @param Workflow $workflow
      * @param string $updateMethod
      * @return void
      */
@@ -104,7 +105,7 @@ class Flow extends \TYPO3\Surf\Application\BaseApplication
      * Set the application production context
      *
      * @param string $context
-     * @return \TYPO3\Surf\Application\TYPO3\Flow
+     * @return Flow
      */
     public function setContext($context)
     {

@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Surf\Task\TYPO3\Flow;
+namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*                                                                        *
  * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
@@ -19,9 +19,9 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTa
     /**
      * Execute this task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
      * @return void
      */

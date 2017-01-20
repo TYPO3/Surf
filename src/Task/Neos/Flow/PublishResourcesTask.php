@@ -1,23 +1,26 @@
 <?php
-namespace TYPO3\Surf\Task\TYPO3\Flow;
+namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*                                                                        *
  * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A Neos Flow publish resources task
  */
-class PublishResourcesTask extends Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class PublishResourcesTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -30,7 +33,7 @@ class PublishResourcesTask extends Task implements \TYPO3\Surf\Domain\Service\Sh
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!$application instanceof \TYPO3\Surf\Application\TYPO3\Flow) {
+        if (!$application instanceof Flow) {
             throw new InvalidConfigurationException(sprintf('Flow application needed for PublishResourcesTask, got "%s"', get_class($application)), 1425568379);
         }
 

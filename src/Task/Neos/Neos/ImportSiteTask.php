@@ -1,40 +1,45 @@
 <?php
-namespace TYPO3\Surf\Task\TYPO3\Neos;
+namespace TYPO3\Surf\Task\Neos\Neos;
 
 /*                                                                        *
  * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for importing content into Neos
  *
  */
-class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
      * @return void
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!$application instanceof \TYPO3\Surf\Application\TYPO3\Flow) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Flow application needed for ImportSiteTask, got "%s"', get_class($application)), 1358863473);
+        if (!$application instanceof Flow) {
+            throw new InvalidConfigurationException(sprintf('Flow application needed for ImportSiteTask, got "%s"', get_class($application)), 1358863473);
         }
         if (!isset($options['sitePackageKey'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('"sitePackageKey" option not set for application "%s"', $application->getName()), 1312312646);
+            throw new InvalidConfigurationException(sprintf('"sitePackageKey" option not set for application "%s"', $application->getName()), 1312312646);
         }
 
         $targetPath = $deployment->getApplicationReleasePath($application);
@@ -59,9 +64,9 @@ class ImportSiteTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
     /**
      * Rollback the task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
      * @return void
      */

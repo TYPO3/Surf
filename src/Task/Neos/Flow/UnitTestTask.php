@@ -1,36 +1,42 @@
 <?php
-namespace TYPO3\Surf\Task\TYPO3\Flow;
+namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*                                                                        *
  * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A Neos Flow task to run unit tests
  *
  */
-class UnitTestTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
      * @return void
+     * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
-        if (!$application instanceof \TYPO3\Surf\Application\TYPO3\Flow) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Flow application needed for UnitTestTask, got "%s"', get_class($application)), 1358866042);
+        if (!$application instanceof Flow) {
+            throw new InvalidConfigurationException(sprintf('Flow application needed for UnitTestTask, got "%s"', get_class($application)), 1358866042);
         }
 
         $targetPath = $deployment->getApplicationReleasePath($application);

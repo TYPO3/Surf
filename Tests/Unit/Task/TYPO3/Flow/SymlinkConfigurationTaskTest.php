@@ -6,6 +6,8 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\Flow;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\Neos\Flow;
+use TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
@@ -20,7 +22,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
     {
         parent::setUp();
 
-        $this->application = new \TYPO3\Surf\Application\TYPO3\Flow('TestApplication');
+        $this->application = new Flow('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
@@ -56,6 +58,6 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        return new \TYPO3\Surf\Task\TYPO3\Flow\SymlinkConfigurationTask();
+        return new SymlinkConfigurationTask();
     }
 }
