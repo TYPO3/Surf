@@ -43,8 +43,11 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
         }
 
         $targetPath = $deployment->getApplicationReleasePath($application);
-        $sitePackageKey = $options['sitePackageKey'];
-        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./flow typo3.neos:site:import --package-key ' . $sitePackageKey, $node, $deployment);
+        $arguments = [
+            '--package-key',
+            $options['sitePackageKey']
+        ];
+        $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'site:import', $arguments), $node, $deployment);
     }
 
     /**

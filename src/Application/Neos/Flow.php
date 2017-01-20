@@ -25,7 +25,7 @@ class Flow extends BaseApplication
      * The Neos Flow major and minor version of this application
      * @var string
      */
-    protected $version = '3.0';
+    protected $version = '4.0';
 
     /**
      * Constructor
@@ -150,9 +150,8 @@ class Flow extends BaseApplication
     {
         if ($this->getVersion() <= '1.1') {
             return 'Common';
-        } else {
-            return 'BuildEssentials';
         }
+        return 'BuildEssentials';
     }
 
     /**
@@ -166,8 +165,38 @@ class Flow extends BaseApplication
     {
         if ($this->getVersion() <= '1.1') {
             return 'flow3';
-        } else {
-            return 'flow';
         }
+        return 'flow';
+    }
+
+    /**
+     *
+     *
+     * @return string
+     */
+    public function getCommandPackageKey()
+    {
+        if ($this->getVersion() < '2.0') {
+            return 'typo3.flow3';
+        }
+        if ($this->getVersion() < '4.0') {
+            return 'typo3.flow';
+        }
+        return 'neos.flow';
+    }
+
+    /**
+     * Returns a executable flow command including the context
+     *
+     * @param string $targetPath the path where the command should be executed
+     * @param string $command the actual command for example `cache:flush`
+     * @param array $arguments list of arguments which will be appended to the command
+     * @return string
+     */
+    public function buildCommand($targetPath, $command, array $arguments = [])
+    {
+        return 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $this->getContext() .
+            ' ./' . $this->getFlowScriptName() . ' ' . $this->getCommandPackageKey() . ':' . $command . ' '
+            . join(' ', array_map('escapeshellarg', $arguments));
     }
 }

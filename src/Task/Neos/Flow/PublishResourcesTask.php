@@ -39,7 +39,7 @@ class PublishResourcesTask extends Task implements ShellCommandServiceAwareInter
 
         if ($application->getVersion() >= '3.0') {
             $targetPath = $deployment->getApplicationReleasePath($application);
-            $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . 'typo3.flow:resource:publish', $node, $deployment);
+            $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'resource:publish'), $node, $deployment);
         }
     }
 

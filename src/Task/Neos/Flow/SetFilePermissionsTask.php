@@ -35,21 +35,20 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         if (!$application instanceof Flow) {
-            throw new InvalidConfigurationException(sprintf('Flow application needed for SetFilePermissionsTask, got "%s"', get_class($application)), 1358863436);
+            throw new InvalidConfigurationException(sprintf('Flow application needed for SetFilePermissionsTask, got "%s"',
+                get_class($application)), 1358863436);
         }
 
         $targetPath = $deployment->getApplicationReleasePath($application);
 
-        $arguments = isset($options['shellUsername']) ? $options['shellUsername'] : (isset($options['username']) ? $options['username'] : 'root');
-        $arguments .= ' ' . (isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data');
-        $arguments .= ' ' . (isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data');
+        $arguments = [
+            isset($options['shellUsername']) ? $options['shellUsername'] : (isset($options['username']) ? $options['username'] : 'root'),
+            isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data',
+            isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data'
+        ];
 
-        $commandPackageKey = 'typo3.flow';
-        if ($application->getVersion() < '2.0') {
-            $commandPackageKey = 'typo3.flow3';
-        }
-
-        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . ':core:setfilepermissions ' . $arguments, $node, $deployment);
+        $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'core:setfilepermissions',
+            [$arguments]), $node, $deployment);
     }
 
     /**

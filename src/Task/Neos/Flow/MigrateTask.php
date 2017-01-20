@@ -39,13 +39,8 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
             throw new InvalidConfigurationException(sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)), 1358863288);
         }
 
-        $commandPackageKey = 'typo3.flow';
-        if ($application->getVersion() < '2.0') {
-            $commandPackageKey = 'typo3.flow3';
-        }
-
         $targetPath = $deployment->getApplicationReleasePath($application);
-        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . ':doctrine:migrate', $node, $deployment);
+        $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'doctrine:migrate'), $node, $deployment);
     }
 
     /**

@@ -21,7 +21,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * You can configure the list of cache identifiers in the task option ```flushCacheList```, like::
  *
  *     $workflow->setTaskOptions('TYPO3\\Surf\\Task\\Neos\\Flow\\FlushCacheListTask', [
- *         'flushCacheList' => 'TYPO3_TypoScript_Content, Flow_Session_MetaData, Flow_Session_Storage'
+ *         'flushCacheList' => 'Neos_Fusion_Content, Flow_Session_MetaData, Flow_Session_Storage'
  *     ])
  *
  */
@@ -57,7 +57,7 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
             $targetPath = $deployment->getApplicationReleasePath($application);
             foreach ($caches as $cache) {
                 $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
-                $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf('typo3.flow:cache:flushone --identifier %s',
+                $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf('flow:cache:flushone --identifier %s',
                         $cache), $node, $deployment);
             }
         } else {
