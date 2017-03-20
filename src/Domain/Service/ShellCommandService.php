@@ -7,6 +7,7 @@ namespace TYPO3\Surf\Domain\Service;
  *                                                                        */
 
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\InputStream;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -17,6 +18,11 @@ use TYPO3\Surf\Domain\Model\Node;
  */
 class ShellCommandService
 {
+    /**
+     * @var InputStream
+     */
+    protected $inputStream;
+
     /**
      * Execute a shell command (locally or remote depending on the node hostname)
      *
@@ -177,7 +183,16 @@ class ShellCommandService
                 }
             };
         }
-        $exitCode = $process->run($callback);
+
+        if ($this->inputStream != null && ($this->inputStream instanceof InputStream)) {
+            $process->setInput($this->inputStream);
+            $process->start($callback);
+            $this->inputStream->close();
+            $exitCode = $process->wait();
+        } else {
+            $exitCode = $process->run($callback);
+        }
+
         return array($exitCode, trim($process->getOutput()));
     }
 
@@ -197,5 +212,31 @@ class ShellCommandService
         } else {
             throw new \TYPO3\Surf\Exception\TaskExecutionException('Command must be string or array, ' . gettype($command) . ' given.', 1312454906);
         }
+    }
+
+    /**
+     * Initialize input stream.
+     */
+    public function initializeInputStream()
+    {
+        if ($this->inputStream == null || !($this->inputStream instanceof InputStream)) {
+            $this->setInputStream(new InputStream());
+        }
+    }
+
+    /**
+     * @return InputStream
+     */
+    public function getInputStream()
+    {
+        return $this->inputStream;
+    }
+
+    /**
+     * @param InputStream $inputStream
+     */
+    public function setInputStream($inputStream)
+    {
+        $this->inputStream = $inputStream;
     }
 }
