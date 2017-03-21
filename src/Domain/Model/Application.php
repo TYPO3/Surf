@@ -15,6 +15,13 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 class Application
 {
     /**
+     * default directory name for shared directory
+     *
+     * @const
+     */
+    const DEFAULT_SHARED_DIR = 'shared';
+
+    /**
      * The name
      * @var string
      */
@@ -173,7 +180,33 @@ class Application
      */
     public function getSharedPath()
     {
-        return $this->getDeploymentPath() . '/shared';
+        return $this->getDeploymentPath() . '/' . $this->getSharedDirectory();
+    }
+
+    /**
+     * Returns the shared directory
+     *
+     * takes directory name from option "sharedDirectory"
+     * if option is not set or empty constant DEFAULT_SHARED_DIR "shared" is used
+     *
+     * @return string
+     * @throws InvalidConfigurationException
+     */
+    public function getSharedDirectory()
+    {
+        $result = self::DEFAULT_SHARED_DIR;
+        if ($this->hasOption('sharedDirectory') && !empty($this->getOption('sharedDirectory'))) {
+            $sharedPath = $this->getOption('sharedDirectory');
+            if (preg_match('/(^|\/)\.\.(\/|$)/', $sharedPath)) {
+                throw new InvalidConfigurationException(
+                    sprintf('Relative constructs as "../" are not allowed in option "sharedDirectory". Given option: "%s"',
+                        $sharedPath),
+                    1490107183141
+                );
+            }
+            $result = rtrim($sharedPath, '/');
+        }
+        return $result;
     }
 
     /**
