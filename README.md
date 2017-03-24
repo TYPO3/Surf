@@ -55,14 +55,15 @@ with name **MyDeployment**::
 	$node->setHostname('example.com');
 	$node->setOption('username', 'myuser');
 
-	$application = new \TYPO3\Surf\Application\TYPO3\Flow();
+	$application = new \TYPO3\Surf\Application\Neos\Flow();
+	$application->setVersion('4.0');
 	$application->setDeploymentPath('/home/my-flow-app/app');
 	$application->setOption('repositoryUrl', 'git@github.com:myuser/my-flow-app.git');
 	$application->addNode($node);
 
 	$deployment->addApplication($application);
 
-That's a very basic deployment based on the default Flow application template ``TYPO3\Surf\Application\TYPO3\Flow``.
+That's a very basic deployment based on the default Flow application template ``TYPO3\Surf\Application\Neos\Flow``.
 The deployment object is available to the script as the variable ``$deployment``. A *node* is basically a deployment
 target representing a server for an application. The node is assigned to the applications for the deployment. Finally
 the application is added to the deployment.
@@ -115,10 +116,20 @@ The simulation gives a hint which tasks will be executed on which node. During s
 executed for real. If a remote SSH command would be executed it will be printed in the log messages starting with
 ``... $nodeName: "command"``.
 
+### Flow version options
+
+The Flow version used in a project can be set using:
+
+	$application = new \TYPO3\Surf\Application\Neos\Flow();
+	$application->setVersion('4.0');
+
+It defaults to 4.0, so if using older Flow version, you need to set the version as `x.y`.
+This switches Surf behavior to call Flow commands correctly.
+
 ### Flow Configuration overrides
 
 If the configuration of a Flow application should be different depending on the deployment configuration
-(e.g. database settings or external services) the TYPO3\\Surf\\Task\\TYPO3\\Flow\\CopyConfigurationTask task can be used to override
+(e.g. database settings or external services) the TYPO3\\Surf\\Task\\Neos\\Flow\\CopyConfigurationTask task can be used to override
 configuration after the code update (Git checkout).
 
 If a ``Configuration`` folder exists inside a folder named after your deployment ``%FLOW_ROOT%/Build/Surf/MyDeployment``
@@ -155,7 +166,7 @@ template::
 	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
-		'TYPO3\\Surf\\Task\\ShellTask',
+		\TYPO3\Surf\Task\ShellTask::class,
 		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
@@ -167,16 +178,16 @@ After defining the new task we have to tell the deployment configuration when to
 	...
 	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
-	$application = new \TYPO3\Surf\Application\TYPO3\Flow('MyProject');
+	$application = new \TYPO3\Surf\Application\Neos\Flow('MyProject');
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
-		'TYPO3\\Surf\\Task\\ShellTask',
+		\TYPO3\Surf\Task\ShellTask::class,
 		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
 	$deployment->onInitialize(function() use ($workflow, $application) {
 		$workflow->addTask('mycompany.mypackage:initialize', 'migrate', $application);
-		$workflow->removeTask('TYPO3\\Surf\\Task\\TYPO3\\Flow\\SetFilePermissionsTask');
+		$workflow->removeTask(\TYPO3\Surf\Task\Neos\Flow\SetFilePermissionsTask::class);
 	});
 
 This will execute the new task in the *migrate* stage only for the application referenced by ``$application``. As you can
@@ -209,7 +220,7 @@ To access the release path or other release specific options, some placeholders 
 	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 	$workflow->defineTask('mycompany.mypackage:initialize',
-		'TYPO3\\Surf\\Task\\ShellTask',
+		\TYPO3\Surf\Task\ShellTask::class,
 		array('command' => 'cd {releasePath} && ./flow mycompany.mypackage:setup:initialize')
 	);
 
@@ -242,9 +253,9 @@ Then, add a test as follows to the deployment configuration::
 		'expectedStatus' => 200,
 		'expectedRegexp' => '/somethingYouExpectOnThePage/'
 	);
-	$workflow->defineTask('MyCompany\\MyPackage\\SmokeTest', 'TYPO3\\Surf\\Task\\Test\\HttpTestTask', $smokeTestOptions);
+	$workflow->defineTask('mycompany.mypackage:smoketest', \TYPO3\Surf\Task\Test\HttpTestTask::class, $smokeTestOptions);
 
-	$workflow->addTask('MyCompany\\MyPackage\\SmokeTest', 'test', $application);
+	$workflow->addTask('mycompany.mypackage:smoketest', 'test', $application);
 
 The HTTP test has the following options:
 
@@ -254,8 +265,8 @@ Most important options:
 * remote: if TRUE, the smoke test is triggered through the SSH channel on the remote host
   via command-line CURL. If false, it is triggered from the deploying host.
 * expectedStatus: expected HTTP status code
-* expectedHeaders: HTTP Header Strings which are expected (can be a multiline string, each header being on
-  a separate line)
+* expectedHeaders: HTTP Header Strings which are expected (can be a multiline string,
+  each header being on a separate line)
 * expectedRegexp: Regular Expression to test the contents of the HTTP response against
 
 Further options:
@@ -274,13 +285,20 @@ Further options:
 
 ## Applying Cherry-Picks to Git Repositories: Post-Checkout commands
 
-When you want to execute some commands directly after checkout, such as cherry-picking not-yet-committed bugfixes, you can set the  `gitPostCheckoutCommands` option on the application, being a two-dimensional array.
-The key contains the path where the command shall execute, and the value is another array containing the commands themselves (as taken f.e. from Gerrit / review.typo3.org).
+When you want to execute some commands directly after checkout, such as cherry-picking
+not-yet-committed bugfixes, you can set the  `gitPostCheckoutCommands` option on the
+application, being a two-dimensional array.
+
+The key contains the path where the command shall execute, and the value is another
+array containing the commands themselves.
 
 Example::
 
 	$application->setOption('gitPostCheckoutCommands', array(
-		'Packages/Framework/TYPO3.Flow/' => array('git fetch git://git.typo3.org/Flow/Packages/TYPO3.Flow refs/changes/59/6859/1 && git cherry-pick FETCH_HEAD')
+		'Packages/Framework/Neos.Flow/' => [
+			'git fetch https://github.com/neos/flow-development-collection.git refs/heads/somefix',
+			'git cherry-pick FETCH_HEAD'
+        ]
 	));
 
 ## Environment Variables
@@ -306,4 +324,6 @@ ControlPersist 600
 
 ## Copyright
 
-The deployment package is licensed under GNU General Public License, version 3 or later (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by [networkteam - TYPO3 Flow Agentur](http://www.networkteam.com/typo3-flow-agentur.html).
+The deployment package is licensed under GNU General Public License, version 3 or later
+(http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by
+[networkteam - TYPO3 Flow Agentur](http://www.networkteam.com/typo3-flow-agentur.html).
