@@ -34,6 +34,6 @@ class Neos extends \TYPO3\Surf\Application\TYPO3\Flow
     {
         parent::registerTasks($workflow, $deployment);
 
-        $workflow->addTask('TYPO3\\Surf\\Task\\TYPO3\\Neos\\ImportSiteTask', 'migrate', $this);
+        $workflow->addTask('TYPO3\\Surf\\Task\\TYPO3\\Neos\\ImportSitesTask', 'migrate', $this);
     }
 }

@@ -43,7 +43,7 @@ return array (
   'typo3.surf:typo3:flow:symlinkconfiguration' => 'TYPO3\\Surf\\Task\\TYPO3\\Flow\\SymlinkConfigurationTask',
   'typo3.surf:typo3:flow:symlinkdata' => 'TYPO3\\Surf\\Task\\TYPO3\\Flow\\SymlinkDataTask',
   'typo3.surf:typo3:flow:unittest' => 'TYPO3\\Surf\\Task\\TYPO3\\Flow\\UnitTestTask',
-  'typo3.surf:typo3:neos:importsite' => 'TYPO3\\Surf\\Task\\TYPO3\\Neos\\ImportSiteTask',
+  'typo3.surf:typo3:neos:importsite' => 'TYPO3\\Surf\\Task\\TYPO3\\Neos\\ImportSitesTask',
   'typo3.surf:test:httptest' => 'TYPO3\\Surf\\Task\\Test\\HttpTestTask',
   'typo3.surf:transfer:rsync' => 'TYPO3\\Surf\\Task\\Transfer\\RsyncTask',
   'typo3.surf:varnishban' => 'TYPO3\\Surf\\Task\\VarnishBanTask',
