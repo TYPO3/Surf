@@ -1,0 +1,93 @@
+<?php
+namespace TYPO3\Surf\Tests\Unit\Task\Generic;
+
+/*                                                                        *
+ * This script belongs to the TYPO3 project "TYPO3 Surf".                 *
+ *                                                                        *
+ *                                                                        */
+
+use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
+use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
+
+/**
+ * Class CreateSymlinksTaskTest
+ */
+class CreateSymlinksTaskTest extends BaseTaskTest
+{
+
+    /**
+     * @var CreateDirectoriesTask
+     */
+    protected $task;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->application = new \TYPO3\Surf\Application\TYPO3\CMS('TestApplication');
+        $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    /**
+     * @return CreateDirectoriesTask
+     */
+    protected function createTask()
+    {
+        return new CreateSymlinksTask();
+    }
+    
+    /**
+     * per default Generic\CreateSymlinksTask uses the current release path as base directory
+     * for symlink creation
+     *
+     * @test
+     */
+    public function createsSymlinkInApplicationReleasePath()
+    {
+        $options = array('symlinks' => array('media' => '../media'));
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
+        $this->assertCommandExecuted('ln -s ../media media');
+    }
+    
+    /**
+     * if option "genericSymlinksBaseDir" is set, instead of release path, the herin given path
+     * is used as  base directory
+     *
+     * @test
+     */
+    public function createsSymlinkInConfiguredBasePath()
+    {
+        $options = array(
+            'symlinks' => array('media' => '../media'),
+            'genericSymlinksBaseDir' => '/home/foobar/data'
+        );
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted("cd /home/foobar/data");
+        $this->assertCommandExecuted('ln -s ../media media');
+    }
+
+    /**
+     * the option "symlinks" is an array of symlinks, the symlinks are created looping through the array
+     *
+     * @test
+     */
+    public function createsMultipleSymlinks()
+    {
+        $options = array(
+            'symlinks' => array(
+                'media' => '../media',
+                'log' => '../log',
+                'var' => '../var',
+            ),
+        );
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
+        $this->assertCommandExecuted('ln -s ../media media');
+        $this->assertCommandExecuted('ln -s ../log log');
+        $this->assertCommandExecuted('ln -s ../var var');
+    }
+}
+
