@@ -73,10 +73,27 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
         if (!isset($options['composerCommandPath'])) {
             throw new \TYPO3\Surf\Exception\TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
         }
-        return array(
+
+        $composerDefaultCommandOptions = [
+            '--no-ansi',
+            '--no-interaction',
+            '--no-dev',
+            '--no-progress',
+            '--classmap-authoritative',
+        ];
+
+        if (isset($options['composerCommandOptions'])) {
+            $options['composerCommandOptions'] = array_merge(
+                $options['composerCommandOptions'], $composerDefaultCommandOptions
+            );
+        } else {
+            $options['composerCommandOptions'] = $composerDefaultCommandOptions;
+        }
+
+        return [
             'cd ' . escapeshellarg($manifestPath),
-            escapeshellcmd($options['composerCommandPath']) . ' install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative 2>&1',
-        );
+            escapeshellcmd($options['composerCommandPath']) . ' install ' . implode(' ', $options['composerCommandOptions']) . ' 2>&1'
+        ];
     }
 
     /**
