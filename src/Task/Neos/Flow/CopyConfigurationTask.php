@@ -56,9 +56,21 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
 
                 $sshPort = isset($options['port']) ? '-p ' . escapeshellarg($options['port']) . ' ' : '';
                 $scpPort = isset($options['port']) ? '-P ' . escapeshellarg($options['port']) . ' ' : '';
+                $sshOptions = '';
+                $expect = '';
+                if ($node->hasOption('password')) {
+                    $sshOptions .= "-o PubkeyAuthentication=no ";
+                    $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array(dirname(dirname(dirname(dirname(__DIR__)))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect'));
+                    if (\Phar::running() !== '') {
+                        $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
+                        $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array($deployment->getTemporaryPath(), 'PasswordSshLogin.expect'));
+                        file_put_contents($passwordSshLoginScriptPathAndFilename, $passwordSshLoginScriptContents);
+                    }
+                    $expect = sprintf('expect %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')));
+                }
                 $createDirectoryCommand = '"mkdir -p ' . $escapedTargetPath . '"';
-                $commands[] = "ssh {$sshPort}{$username}{$hostname} {$createDirectoryCommand}";
-                $commands[] = "scp {$scpPort}{$escapedSourcePath} {$username}{$hostname}:\"{$escapedTargetPath}\"";
+                $commands[] = ltrim("{$expect} ssh {$sshOptions}{$sshPort}{$username}{$hostname} {$createDirectoryCommand}");
+                $commands[] = ltrim("{$expect} scp {$sshOptions}{$scpPort}{$escapedSourcePath} {$username}{$hostname}:\"{$escapedTargetPath}\"");
             }
         }
 

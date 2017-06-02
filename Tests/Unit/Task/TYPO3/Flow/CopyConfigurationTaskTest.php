@@ -93,6 +93,28 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     /**
      * @test
      */
+    public function executeOnRemoteHostFindsConfigurationRecursivelyWithSSHPassword()
+    {
+        $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
+        $this->deployment->setDeploymentBasePath($deployBasePath);
+        $this->deployment->setName('test1');
+        $this->node->setHostname('remote');
+        $this->node->setOption('password', 'password1');
+
+        $this->task->execute($this->node, $this->application, $this->deployment, array());
+
+        $configPath = $this->deployment->getDeploymentConfigurationPath();
+        $releasesPath = $this->deployment->getApplicationReleasePath($this->application);
+
+        $this->assertCommandExecuted("ssh -o PubkeyAuthentication=no remote \"mkdir -p '{$releasesPath}/Configuration/'\"");
+        $this->assertCommandExecuted("scp -o PubkeyAuthentication=no '{$configPath}/Settings.yaml' remote:\"'{$releasesPath}/Configuration/'\"");
+        $this->assertCommandExecuted("ssh -o PubkeyAuthentication=no remote \"mkdir -p '{$releasesPath}/Configuration/Production/'\"");
+        $this->assertCommandExecuted("scp -o PubkeyAuthentication=no '{$configPath}/Production/Settings.yaml' remote:\"'{$releasesPath}/Configuration/Production/'\"");
+    }
+
+    /**
+     * @test
+     */
     public function executeOnRemoteHostCorrectlyAppliesSshOptions()
     {
         $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
