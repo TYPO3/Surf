@@ -34,20 +34,10 @@ class PublishResourcesTask extends Task implements \TYPO3\Surf\Domain\Service\Sh
             throw new InvalidConfigurationException(sprintf('Flow application needed for PublishResourcesTask, got "%s"', get_class($application)), 1425568379);
         }
 
-        /**
-         * Make sure to run the right flow command depending on current Neos version
-         */
-        $commandPackageKey = '';
-        if ($application->getVersion() < '2.0') {
-            $commandPackageKey = 'typo3.flow3:';
-            $deployment->getLogger()->warning('Using commands starting with "typo3.flow3:*" have been renamed to "typo3.flow:*" Neos 2.0');
-        } elseif ($application->getVersion() < '3.0') {
-            $commandPackageKey = 'typo3.flow:';
-            $deployment->getLogger()->warning('Using commands starting with "typo3.flow:*" have changed  Neos 3.0. Same command just remove "typo3.flow"');
+        if ($application->getVersion() >= '3.0') {
+            $targetPath = $deployment->getApplicationReleasePath($application);
+            $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . 'resource:publish', $node, $deployment);
         }
-
-        $targetPath = $deployment->getApplicationReleasePath($application);
-        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . 'resource:publish', $node, $deployment);
     }
 
     /**

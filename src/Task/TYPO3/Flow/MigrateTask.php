@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\TYPO3\Flow;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\TYPO3\Neos;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -36,6 +37,7 @@ class MigrateTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
         /**
          * Make sure to run the right flow command depending on current Neos version
          */
+        
         $commandPackageKey = '';
         if ($application->getVersion() < '2.0') {
             $commandPackageKey = 'typo3.flow3:';
