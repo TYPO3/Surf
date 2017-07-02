@@ -35,15 +35,20 @@ class SetFilePermissionsTask extends \TYPO3\Surf\Domain\Model\Task implements \T
         $targetPath = $deployment->getApplicationReleasePath($application);
 
         $arguments = isset($options['shellUsername']) ? $options['shellUsername'] : (isset($options['username']) ? $options['username'] : 'root');
+
         $arguments .= ' ' . (isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data');
         $arguments .= ' ' . (isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data');
 
-        $commandPackageKey = 'typo3.flow';
+        $commandPackageKey = 'flow:';
         if ($application->getVersion() < '2.0') {
-            $commandPackageKey = 'typo3.flow3';
+            $commandPackageKey = 'typo3.flow3:';
+            $deployment->getLogger()->warning('Using commands starting with "typo3.flow3:*" have been renamed to "typo3.flow:*" Neos 2.0');
+        } elseif ($application->getVersion() < '3.0') {
+            $commandPackageKey = 'typo3.flow:';
+            $deployment->getLogger()->warning('Using commands starting with "typo3.flow:*" have changed  Neos 3.0. Same command just remove "typo3.flow"');
         }
 
-        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . ':core:setfilepermissions ' . $arguments, $node, $deployment);
+        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && sudo FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . 'core:setfilepermissions ' . $arguments, $node, $deployment);
     }
 
     /**
