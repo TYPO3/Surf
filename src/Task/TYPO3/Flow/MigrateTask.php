@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task\TYPO3\Flow;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\TYPO3\Neos;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -33,13 +34,21 @@ class MigrateTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
             throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)), 1358863288);
         }
 
-        $commandPackageKey = 'typo3.flow';
+        /**
+         * Make sure to run the right flow command depending on current Neos version
+         */
+        
+        $commandPackageKey = '';
         if ($application->getVersion() < '2.0') {
-            $commandPackageKey = 'typo3.flow3';
+            $commandPackageKey = 'typo3.flow3:';
+            $deployment->getLogger()->warning('Using commands starting with "typo3.flow3:*" have been renamed to "typo3.flow:*" Neos 2.0');
+        } elseif ($application->getVersion() < '3.0') {
+            $commandPackageKey = 'typo3.flow:';
+            $deployment->getLogger()->warning('Using commands starting with "typo3.flow:*" have changed  Neos 3.0. Same command just remove "typo3.flow"');
         }
 
         $targetPath = $deployment->getApplicationReleasePath($application);
-        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . ':doctrine:migrate', $node, $deployment);
+        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . 'doctrine:migrate', $node, $deployment);
     }
 
     /**

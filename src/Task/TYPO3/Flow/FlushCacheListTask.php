@@ -50,9 +50,15 @@ class FlushCacheListTask extends Task implements \TYPO3\Surf\Domain\Service\Shel
         if ($application->getVersion() >= '2.3') {
             $caches = is_array($options['flushCacheList']) ? $options['flushCacheList'] : explode(',', $options['flushCacheList']);
             $targetPath = $deployment->getApplicationReleasePath($application);
+
+            $commandPackageKey = 'typo3.flow:';
+            if ($application->getVersion() >= '3.0') {
+                $commandPackageKey = '';
+            }
+
             foreach ($caches as $cache) {
                 $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
-                $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf('typo3.flow:cache:flushone --identifier %s', $cache), $node, $deployment);
+                $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $commandPackageKey . sprintf('cache:flushone --identifier %s', $cache), $node, $deployment);
             }
         } else {
             throw new InvalidConfigurationException(sprintf('FlushCacheListTask is available since Flow Framework 2.3, your application version is "%s"', $application->getVersion()), 1434126060);
