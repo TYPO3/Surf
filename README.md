@@ -322,8 +322,19 @@ ControlPath /tmp/ssh_mux_%h_%p_%r
 ControlPersist 600
 ```
 
+## Building a Surf PHAR from source
+
+Surf is built using [clue/phar-composer](https://github.com/clue/phar-composer) and the
+process is simple:
+
+* Download the latest `phar-composer.phar`
+* `cd your/surf/clone`
+* `php phar-composer.phar build .`
+
+The generated `surf.phar` should work as expectd.
+
 ## Copyright
 
 The deployment package is licensed under GNU General Public License, version 3 or later
 (http://www.gnu.org/licenses/gpl.html). Initial development was sponsored by
-[networkteam - TYPO3 Flow Agentur](http://www.networkteam.com/typo3-flow-agentur.html).
+[networkteam - Flow Framework Agentur](https://networkteam.com/fokus/flow-framework.html).
