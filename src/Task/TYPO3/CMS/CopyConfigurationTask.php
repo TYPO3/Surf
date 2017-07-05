@@ -13,7 +13,7 @@ use TYPO3\Surf\Domain\Model\Node;
 /**
  * A task to copy host/context specific configuration
  */
-class CopyConfigurationTask extends \TYPO3\Surf\Task\TYPO3\Flow\CopyConfigurationTask
+class CopyConfigurationTask extends \TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask
 {
     /**
      * Executes this task

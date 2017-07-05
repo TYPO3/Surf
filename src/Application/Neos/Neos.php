@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Surf\Application\TYPO3;
+namespace TYPO3\Surf\Application\Neos;
 
 /*                                                                        *
  * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
@@ -13,10 +13,11 @@ use TYPO3\Surf\Domain\Model\Workflow;
  * A Neos application template
  *
  */
-class Neos extends \TYPO3\Surf\Application\TYPO3\Flow
+class Neos extends Flow
 {
     /**
      * Constructor
+     * @param string $name
      */
     public function __construct($name = 'Neos')
     {
@@ -26,14 +27,14 @@ class Neos extends \TYPO3\Surf\Application\TYPO3\Flow
     /**
      * Register tasks for this application
      *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Workflow $workflow
+     * @param Deployment $deployment
      * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
         parent::registerTasks($workflow, $deployment);
 
-        $workflow->addTask('TYPO3\\Surf\\Task\\TYPO3\\Neos\\ImportSiteTask', 'migrate', $this);
+        $workflow->addTask('TYPO3\\Surf\\Task\\Neos\\Neos\\ImportSiteTask', 'migrate', $this);
     }
 }

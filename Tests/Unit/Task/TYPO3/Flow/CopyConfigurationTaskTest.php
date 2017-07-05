@@ -6,6 +6,8 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\Flow;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Surf\Application\Neos\Flow;
+use TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
@@ -20,7 +22,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     {
         parent::setUp();
 
-        $this->application = new \TYPO3\Surf\Application\TYPO3\Flow('TestApplication');
+        $this->application = new Flow('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
@@ -114,6 +116,6 @@ class CopyConfigurationTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        return new \TYPO3\Surf\Task\TYPO3\Flow\CopyConfigurationTask();
+        return new CopyConfigurationTask();
     }
 }
