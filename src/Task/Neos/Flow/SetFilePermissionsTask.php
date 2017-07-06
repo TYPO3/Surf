@@ -48,7 +48,7 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
         ];
 
         $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'core:setfilepermissions',
-            [$arguments]), $node, $deployment);
+            $arguments), $node, $deployment);
     }
 
     /**
