@@ -41,10 +41,11 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
 
         $username = $node->hasOption('username') ? $node->getOption('username') . '@' : '';
         $hostname = $node->getHostname();
+        $noPubkeyAuthentication = $node->hasOption('password') ? ' -o PubkeyAuthentication=no' : '';
         $port = $node->hasOption('port') ? ' -p ' . escapeshellarg($node->getOption('port')) : '';
         $key = $node->hasOption('privateKeyFile') ? ' -i ' . escapeshellarg($node->getOption('privateKeyFile')) : '';
         $quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
-        $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $port . $key . '" ');
+        $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $noPubkeyAuthentication . $port . $key . '" ');
 
         $rsyncExcludes = isset($options['rsyncExcludes']) ? $options['rsyncExcludes'] : array('.git');
         $excludeFlags = $this->getExcludeFlags($rsyncExcludes);
