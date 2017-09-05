@@ -35,10 +35,15 @@ class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
             throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No "scriptIdentifier" option provided for WebOpcacheResetExecuteTask, make sure to execute "TYPO3\\Surf\\Task\\Php\\WebOpcacheResetCreateScriptTask" before this task or pass one explicitly', 1421932610);
         }
 
+        $streamContext = null;
+        if (isset($options['stream_context']) && is_array($options['stream_context'])) {
+            $streamContext = stream_context_create($options['stream_context']);
+        }
+
         $scriptIdentifier = $options['scriptIdentifier'];
         $scriptUrl = rtrim($options['baseUrl'], '/') . '/surf-opcache-reset-' . $scriptIdentifier . '.php';
 
-        $result = file_get_contents($scriptUrl);
+        $result = file_get_contents($scriptUrl, $streamContext);
         if ($result !== 'success') {
             $deployment->getLogger()->warning('Executing PHP opcache reset script at "' . $scriptUrl . '" did not return expected result');
         }
