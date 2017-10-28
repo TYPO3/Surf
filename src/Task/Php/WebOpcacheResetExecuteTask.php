@@ -43,7 +43,7 @@ class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
         $scriptIdentifier = $options['scriptIdentifier'];
         $scriptUrl = rtrim($options['baseUrl'], '/') . '/surf-opcache-reset-' . $scriptIdentifier . '.php';
 
-        $result = file_get_contents($scriptUrl, $streamContext);
+        $result = file_get_contents($scriptUrl, false, $streamContext);
         if ($result !== 'success') {
             $deployment->getLogger()->warning('Executing PHP opcache reset script at "' . $scriptUrl . '" did not return expected result');
         }
