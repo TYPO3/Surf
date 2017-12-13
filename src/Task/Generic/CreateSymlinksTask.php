@@ -41,8 +41,10 @@ class CreateSymlinksTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3
             return;
         }
 
+        $baseDirectory = isset($options['baseDirectory']) ? $options['baseDirectory'] : $deployment->getApplicationReleasePath($application);
+
         $commands = array(
-            'cd ' . $deployment->getApplicationReleasePath($application)
+            'cd ' . $baseDirectory
         );
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
             $commands[] = 'ln -s ' . $sourcePath . ' ' . $linkPath;
