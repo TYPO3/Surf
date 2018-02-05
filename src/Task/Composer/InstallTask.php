@@ -24,6 +24,7 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -54,6 +55,8 @@ class InstallTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\D
      * @param Deployment $deployment
      * @param array $options
      * @return void
+     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
