@@ -98,9 +98,16 @@ abstract class AbstractComposerTask extends \TYPO3\Surf\Domain\Model\Task implem
             throw new \TYPO3\Surf\Exception\TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
         }
 
+        if (isset($options['additionalArguments'])){
+            $additionalArguments = is_array($options['additionalArguments']) ? $options['additionalArguments'] : array($options['additionalArguments']);
+        } else {
+            $additionalArguments = array();
+        }
+
         $arguments = array_merge(
             array(escapeshellcmd($options['composerCommandPath']), $this->command),
             $this->arguments,
+            array_map('escapeshellarg', $additionalArguments),
             $this->suffix
         );
         $script = implode(' ', $arguments);
