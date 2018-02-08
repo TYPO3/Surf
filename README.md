@@ -91,9 +91,9 @@ by default in most Linux distributions.
 
 In case you need to connect to the remote host via more esoteric protocols, you can
 also implement your own remote host connection: In this case, set the option
-``remoteCommandExutionHandler`` on the node::
+``remoteCommandExecutionHandler`` on the node::
 
-	$node->setOption('remoteCommandExutionHandler', function(\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput = TRUE) {
+	$node->setOption('remoteCommandExecutionHandler', function(\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput = TRUE) {
 		// Now, do what you need to do in order to connect to $node and execute $command.
 		// You can call $shellCommandService->executeProcess() here.
 
