@@ -69,6 +69,7 @@ class Neos extends Flow
     }
 
     /**
+     * Get the package key to prefix the command
      *
      * @param string $command
      * @return string

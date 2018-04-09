@@ -170,7 +170,7 @@ class Flow extends BaseApplication
     }
 
     /**
-     *
+     * Get the package key to prefix the command
      *
      * @param string $command
      * @return string
