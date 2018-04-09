@@ -70,7 +70,7 @@ class Neos extends Flow
 
     /**
      *
-     *
+     * @param string $command
      * @return string
      */
     public function getCommandPackageKey($command = '')
