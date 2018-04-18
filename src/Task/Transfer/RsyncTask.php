@@ -50,7 +50,7 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
         $rsyncExcludes = isset($options['rsyncExcludes']) ? $options['rsyncExcludes'] : array('.git');
         $excludeFlags = $this->getExcludeFlags($rsyncExcludes);
 
-        $rsyncFlags = isset($options['rsyncFlags']) ? $options['rsyncFlags'] : '--recursive --times --perms --links --delete --delete-excluded' . $excludeFlags;
+        $rsyncFlags = (isset($options['rsyncFlags']) ? $options['rsyncFlags'] : '--recursive --times --perms --links --delete --delete-excluded') . $excludeFlags;
 
         $destinationArgument = ($node->isLocalhost() ? $remotePath : "{$username}{$hostname}:{$remotePath}");
 

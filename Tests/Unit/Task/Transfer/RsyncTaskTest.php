@@ -84,7 +84,7 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/ --exclude \'.git\'/');
+        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.git\'/');
     }
 
     /**
@@ -123,7 +123,42 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/');
+        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithCustomRsyncFlags()
+    {
+        $this->node->setOption('hostname', 'myserver.local');
+        $options = [
+            'rsyncFlags' => '--recursive --times --perms --links --delete --delete-excluded --append-verify'
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --append-verify --exclude \'.git\'/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithCustomRsyncFlagsAndCustomExcludeList()
+    {
+        $this->node->setOption('hostname', 'myserver.local');
+        $options = [
+            'rsyncFlags' => '--recursive --times --perms --links --delete --delete-excluded --append-verify',
+            'rsyncExcludes' => [
+                '.git',
+                '.gitmodules',
+                '/Deploy'
+            ]
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --append-verify --exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/');
     }
 
     /**
