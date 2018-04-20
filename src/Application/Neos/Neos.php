@@ -16,12 +16,70 @@ use TYPO3\Surf\Domain\Model\Workflow;
 class Neos extends Flow
 {
     /**
+     * @var array
+     */
+    private $neosCommands = array(
+        'domain:add',
+        'domain:list',
+        'domain:delete',
+        'domain:activate',
+        'domain:deactivate',
+
+        'site:import',
+        'site:export',
+        'site:prune',
+        'site:list',
+
+        'user:list',
+        'user:show',
+        'user:create',
+        'user:delete',
+        'user:activate',
+        'user:deactivate',
+        'user:setpassword',
+        'user:addrole',
+        'user:removerole',
+
+        'workspace:publish',
+        'workspace:discard',
+        'workspace:create',
+        'workspace:delete',
+        'workspace:rebase',
+        'workspace:publishall',
+        'workspace:discardall',
+        'workspace:list'
+    );
+
+    /**
+     * @param string $command
+     * @return bool
+     */
+    protected function isNeosCommand($command)
+    {
+        return in_array($command, $this->neosCommands);
+    }
+
+    /**
      * Constructor
      * @param string $name
      */
     public function __construct($name = 'Neos')
     {
         parent::__construct($name);
+    }
+
+    /**
+     * Get the package key to prefix the command
+     *
+     * @param string $command
+     * @return string
+     */
+    public function getCommandPackageKey($command = '')
+    {
+        if ($this->getVersion() < '4.0') {
+            return $this->isNeosCommand($command) ? 'typo3.neos' : 'typo3.flow';
+        }
+        return $this->isNeosCommand($command) ? 'neos.neos' : 'neos.flow';
     }
 
     /**

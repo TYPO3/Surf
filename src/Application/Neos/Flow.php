@@ -170,11 +170,12 @@ class Flow extends BaseApplication
     }
 
     /**
+     * Get the package key to prefix the command
      *
-     *
+     * @param string $command
      * @return string
      */
-    public function getCommandPackageKey()
+    public function getCommandPackageKey($command = '')
     {
         if ($this->getVersion() < '2.0') {
             return 'typo3.flow3';
@@ -196,7 +197,7 @@ class Flow extends BaseApplication
     public function buildCommand($targetPath, $command, array $arguments = [])
     {
         return 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $this->getContext() .
-            ' ./' . $this->getFlowScriptName() . ' ' . $this->getCommandPackageKey() . ':' . $command . ' '
+            ' ./' . $this->getFlowScriptName() . ' ' . $this->getCommandPackageKey($command) . ':' . $command . ' '
             . join(' ', array_map('escapeshellarg', $arguments));
     }
 }
