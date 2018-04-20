@@ -47,6 +47,8 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
+        $this->assertCommandExecuted("rm -rf '{$releasePath}'/fileadmin");
+        $this->assertCommandExecuted("rm -rf '{$releasePath}'/uploads");
         $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin '{$releasePath}'/fileadmin");
         $this->assertCommandExecuted("ln -sf {$dataPath}/uploads '{$releasePath}'/uploads");
     }
@@ -66,6 +68,8 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
+        $this->assertCommandExecuted("rm -rf '{$releasePath}'/fileadmin");
+        $this->assertCommandExecuted("rm -rf '{$releasePath}'/uploads");
         $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin '{$releasePath}'/fileadmin");
         $this->assertCommandExecuted("ln -sf {$dataPath}/uploads '{$releasePath}'/uploads");
         $this->assertCommandExecuted("{ [ -d '{$dataPath}/pictures' ] || mkdir -p '{$dataPath}/pictures' ; }");
@@ -89,6 +93,8 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
+        $this->assertCommandExecuted("rm -rf '{$releasePath}/web'/fileadmin");
+        $this->assertCommandExecuted("rm -rf '{$releasePath}/web'/uploads");
         $this->assertCommandExecuted("ln -sf ../{$dataPath}/fileadmin '{$releasePath}/web'/fileadmin");
         $this->assertCommandExecuted("ln -sf ../{$dataPath}/uploads '{$releasePath}/web'/uploads");
     }
@@ -109,6 +115,8 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
         $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
+        $this->assertCommandExecuted("rm -rf '{$releasePath}/web'/fileadmin");
+        $this->assertCommandExecuted("rm -rf '{$releasePath}/web'/uploads");
         $this->assertCommandExecuted("ln -sf ../{$dataPath}/fileadmin '{$releasePath}/web'/fileadmin");
         $this->assertCommandExecuted("ln -sf ../{$dataPath}/uploads '{$releasePath}/web'/uploads");
         $this->assertCommandExecuted("{ [ -d '{$dataPath}/pictures' ] || mkdir -p '{$dataPath}/pictures' ; }");

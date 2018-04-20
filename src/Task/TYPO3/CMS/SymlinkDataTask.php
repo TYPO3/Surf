@@ -41,6 +41,8 @@ class SymlinkDataTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Su
             'cd ' . escapeshellarg($targetReleasePath),
             "{ [ -d {$relativeDataPath}/fileadmin ] || mkdir -p {$relativeDataPath}/fileadmin ; }",
             "{ [ -d {$relativeDataPath}/uploads ] || mkdir -p {$relativeDataPath}/uploads ; }",
+            "rm -rf {$absoluteWebDirectory}/fileadmin",
+            "rm -rf {$absoluteWebDirectory}/uploads",
             "ln -sf {$relativeDataPathFromWeb}/fileadmin {$absoluteWebDirectory}/fileadmin",
             "ln -sf {$relativeDataPathFromWeb}/uploads {$absoluteWebDirectory}/uploads"
         );
