@@ -6,6 +6,7 @@ namespace TYPO3\Surf\Task;
  *                                                                        *
  *                                                                        */
 
+
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -14,41 +15,47 @@ use TYPO3\Surf\Domain\Model\Node;
  * A generic shell task
  *
  */
-class ShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class ShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface, \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface
 {
+
     use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
-     * Executes this task
+     * @var \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface
+     */
+    private $shellReplacePathService;
+
+    /**
+     * ShellTask constructor.
      *
-     * Options:
-     *   command: The command to execute
-     *   rollbackCommand: The command to execute as a rollback (optional)
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param \TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface|null $shellReplacePathService
+     */
+    public function __construct(\TYPO3\Surf\Domain\Service\ShellReplacePathServiceInterface $shellReplacePathService = null)
+    {
+        if(null === $shellReplacePathService)
+        {
+            $shellReplacePathService = new \TYPO3\Surf\Domain\Service\ShellReplacePathService();
+        }
+        $this->shellReplacePathService = $shellReplacePathService;
+    }
+
+    /**
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         if (!isset($options['command'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing "command" option for ShellTask', 1311168045);
+            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "command" option for %s',  get_class($this)), 1311168045);
         }
 
-        $replacePaths = array(
-            '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
-            '{sharedPath}' => escapeshellarg($application->getSharedPath()),
-            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
-            '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
-            '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous')
-        );
-
         $command = $options['command'];
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
 
+        $command = $this->replacePaths($command, $application, $deployment);
         $ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === true;
         $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
 
@@ -84,17 +91,21 @@ class ShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
             return;
         }
 
-        $replacePaths = array(
-            '{deploymentPath}' => $application->getDeploymentPath(),
-            '{sharedPath}' => $application->getSharedPath(),
-            '{releasePath}' => $deployment->getApplicationReleasePath($application),
-            '{currentPath}' => $application->getReleasesPath() . '/current',
-            '{previousPath}' => $application->getReleasesPath() . '/previous'
-        );
-
         $command = $options['rollbackCommand'];
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
+        $command = $this->replacePaths($command, $application, $deployment);
 
         $this->shell->execute($command, $node, $deployment, true);
+    }
+
+    /**
+     * @param $command
+     * @param Application $application
+     * @param Deployment $deployment
+     *
+     * @return mixed
+     */
+    public function replacePaths($command, Application $application, Deployment $deployment)
+    {
+        return $this->shellReplacePathService->replacePaths($command, $application, $deployment);
     }
 }

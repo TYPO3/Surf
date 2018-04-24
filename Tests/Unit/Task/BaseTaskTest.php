@@ -60,7 +60,9 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
 
         /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
         $shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService');
-        $shellCommandService->expects($this->any())->method('execute')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
+
+
+        $callbackClosure = function ($command) use (&$commands, &$responses) {
             if (is_array($command)) {
                 $commands['executed'] = array_merge($commands['executed'], $command);
             } else {
@@ -70,18 +72,10 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
                 }
             }
             return '';
-        }));
-        $shellCommandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
-            if (is_array($command)) {
-                $commands['executed'] = array_merge($commands['executed'], $command);
-            } else {
-                $commands['executed'][] = $command;
-                if (isset($responses[$command])) {
-                    return $responses[$command];
-                }
-            }
-            return '';
-        }));
+        };
+        $shellCommandService->expects($this->any())->method('execute')->will($this->returnCallback($callbackClosure));
+        $shellCommandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback($callbackClosure));
+
         $this->task = $this->createTask();
         if ($this->task instanceof ShellCommandServiceAwareInterface) {
             $this->task->setShellCommandService($shellCommandService);
