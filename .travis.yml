@@ -27,6 +27,7 @@ before_install:
   - if [ "$GITHUB_COMPOSER_AUTH" ]; then composer config -g github-oauth.github.com $GITHUB_COMPOSER_AUTH; fi
 
 before_script:
+  - if [ $TRAVIS_PHP_VERSION -lt 7.1.0 ]; then composer update --with-dependencies phpunit/phpunit; fi
   - composer install
 
 script:
