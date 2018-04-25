@@ -11,7 +11,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 /**
  * Base unit test for tasks
  */
-abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
+abstract class BaseTaskTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Executed commands
@@ -59,7 +59,7 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
         $responses = &$this->responses;
 
         /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
-        $shellCommandService = $this->getMock('TYPO3\Surf\Domain\Service\ShellCommandService');
+        $shellCommandService = $this->createMock(\TYPO3\Surf\Domain\Service\ShellCommandService::class);
         $shellCommandService->expects($this->any())->method('execute')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
             if (is_array($command)) {
                 $commands['executed'] = array_merge($commands['executed'], $command);
@@ -91,7 +91,7 @@ abstract class BaseTaskTest extends \PHPUnit_Framework_TestCase
         $this->node->setHostname('hostname');
         $this->deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
         /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
-        $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
+        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
         $this->application = new \TYPO3\Surf\Domain\Model\Application('TestApplication');

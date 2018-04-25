@@ -6,10 +6,13 @@ namespace TYPO3\Surf\Tests\Unit;
  *                                                                        *
  *                                                                        */
 
+if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+    class_alias('PHPUnit_Framework_Constraint', 'PHPUnit\Framework\Constraint\Constraint');
+}
 /**
  * Class AssertCommandExecuted
  */
-class AssertCommandExecuted extends \PHPUnit_Framework_Constraint
+class AssertCommandExecuted extends \PHPUnit\Framework\Constraint\Constraint
 {
     /**
      * @var string
