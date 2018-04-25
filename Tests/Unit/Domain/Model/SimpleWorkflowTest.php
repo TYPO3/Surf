@@ -14,7 +14,7 @@ use TYPO3\Surf\Domain\Model\Workflow;
 /**
  * Unit test for SimpleWorkflow
  */
-class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
+class SimpleWorkflowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -332,14 +332,14 @@ class SimpleWorkflowTest extends \PHPUnit_Framework_TestCase
     protected function buildDeployment(array &$executedTasks = array())
     {
         $deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-        $mockLogger = $this->getMock('Psr\Log\LoggerInterface');
+        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
             // Enable log to console to debug tests
         // $mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
         // 	echo $message . chr(10);
         // }));
         $deployment->setLogger($mockLogger);
 
-        $mockTaskManager = $this->getMock('TYPO3\Surf\Domain\Service\TaskManager');
+        $mockTaskManager = $this->createMock(\TYPO3\Surf\Domain\Service\TaskManager::class);
         $mockTaskManager->expects($this->any())->method('execute')->will($this->returnCallback(function ($task, Node $node, Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, $stage, array $options = array()) use (&$executedTasks) {
             $executedTasks[] = array('task' => $task, 'node' => $node->getName(), 'application' => $application->getName(), 'deployment' => $deployment->getName(), 'stage' => $stage, 'options' => $options);
         }));

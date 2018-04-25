@@ -9,7 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 /**
  * Unit test for the TaskManager
  */
-class TaskManagerTest extends \PHPUnit_Framework_TestCase
+class TaskManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \TYPO3\Surf\Domain\Model\Task|\PHPUnit_Framework_MockObject_MockObject
@@ -42,11 +42,11 @@ class TaskManagerTest extends \PHPUnit_Framework_TestCase
         $this->application = new \TYPO3\Surf\Domain\Model\Application('Test application');
         $this->deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
         /** @var \Psr\Log\LoggerInterface $logger */
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->deployment->setLogger($logger);
-        $this->task = $this->getMock(\TYPO3\Surf\Domain\Model\Task::class);
+        $this->task = $this->createMock(\TYPO3\Surf\Domain\Model\Task::class);
 
-        $this->taskManager = $this->getMock(\TYPO3\Surf\Domain\Service\TaskManager::class, array('createTaskInstance'));
+        $this->taskManager = $this->createPartialMock(\TYPO3\Surf\Domain\Service\TaskManager::class, array('createTaskInstance'));
         $this->taskManager
             ->expects($this->any())
             ->method('createTaskInstance')

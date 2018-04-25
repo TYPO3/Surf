@@ -9,7 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 /**
  * Unit test for Deployment
  */
-class DeploymentTest extends \PHPUnit_Framework_TestCase
+class DeploymentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -19,7 +19,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
         $deployment->initialize();
 
-        $this->assertInstanceOf('TYPO3\Surf\Domain\Model\SimpleWorkflow', $deployment->getWorkflow());
+        $this->assertInstanceOf(\TYPO3\Surf\Domain\Model\SimpleWorkflow::class, $deployment->getWorkflow());
     }
 
     /**

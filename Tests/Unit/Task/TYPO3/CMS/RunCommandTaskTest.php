@@ -32,7 +32,7 @@ class RunCommandTaskTest extends BaseTaskTest
      */
     public function exceptionThrownBecauseApplicationIsNotOfTypeCMS()
     {
-        $wrongApplication = $this->getMockBuilder('TYPO3\Surf\Application\BaseApplication')->disableOriginalConstructor()->getMock();
+        $wrongApplication = $this->getMockBuilder(\TYPO3\Surf\Application\BaseApplication::class)->disableOriginalConstructor()->getMock();
         $this->task->execute($this->node, $wrongApplication, $this->deployment);
     }
 
