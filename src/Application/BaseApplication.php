@@ -23,6 +23,7 @@ use TYPO3\Surf\Task\Package\GitTask;
 use TYPO3\Surf\Task\SymlinkReleaseTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
 use TYPO3\Surf\Task\UnlockDeploymentTask;
+use TYPO3\Surf\Task\Transfer\ScpTask;
 
 /**
  * A base application with Git checkout and basic release directory structure
@@ -277,7 +278,7 @@ class BaseApplication extends Application
                 $workflow->addTask(RsyncTask::class, 'transfer', $this);
                 break;
             case 'scp':
-                // TODO
+                $workflow->addTask(ScpTask::class, 'transfer', $this);
                 break;
         }
     }
