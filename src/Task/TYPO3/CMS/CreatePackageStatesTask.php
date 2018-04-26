@@ -14,7 +14,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Creates the package states file and removes all not active packages from the according folders
- * This task is meant to be used for local packaging only
  */
 class CreatePackageStatesTask extends AbstractCliTask
 {
