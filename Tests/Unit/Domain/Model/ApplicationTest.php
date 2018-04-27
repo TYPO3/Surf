@@ -11,7 +11,7 @@ use TYPO3\Surf\Domain\Model\Application;
 /**
  * Unit test for Application
  */
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The directory for shared assets is by default 'shared'
