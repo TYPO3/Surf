@@ -59,14 +59,20 @@ abstract class Workflow
      *
      * @param string $removeTask
      * @param \TYPO3\Surf\Domain\Model\Application $application if given, task is only removed from application
+     *
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function removeTask($removeTask, Application $application = null)
     {
-        $removeApplicationName = null !== $application ? $application->getName() : null;
+        $removeApplicationName = $application instanceof Application ? $application->getName() : null;
+
+        $applicationRemovalGuardClause = function ($applicationName) use ($removeApplicationName) {
+            return null !== $removeApplicationName && $applicationName !== $removeApplicationName;
+        };
+
         if (isset($this->tasks['stage'])) {
             foreach ($this->tasks['stage'] as $applicationName => $steps) {
-                if ($removeApplicationName !== null && $applicationName !== $removeApplicationName) {
+                if ($applicationRemovalGuardClause($applicationName)) {
                     continue;
                 }
                 foreach ($steps as $step => $tasksByStageStep) {
@@ -78,8 +84,31 @@ abstract class Workflow
                 }
             }
         }
-        $this->removeTaskFromPosition($removeTask,'before',$removeApplicationName);
-        $this->removeTaskFromPosition($removeTask,'after',$removeApplicationName);
+        if (isset($this->tasks['before'])) {
+            foreach ($this->tasks['before'] as $applicationName => $tasksByTask) {
+                if ($applicationRemovalGuardClause($applicationName)) {
+                    continue;
+                }
+                foreach ($tasksByTask as $taskName => $tasks) {
+                    $this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
+                        return $task !== $removeTask;
+                    });
+                }
+            }
+        }
+        if (isset($this->tasks['after'])) {
+            foreach ($this->tasks['after'] as $applicationName => $tasksByTask) {
+                if ($applicationRemovalGuardClause($applicationName)) {
+                    continue;
+                }
+                foreach ($tasksByTask as $taskName => $tasks) {
+                    $this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
+                        return $task !== $removeTask;
+                    });
+                }
+            }
+        }
+
         return $this;
     }
 
@@ -103,7 +132,6 @@ abstract class Workflow
      * @param string $stage The name of the stage when this task shall be executed
      * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
      * @param string $step A stage has three steps "before", "tasks" and "after"
-     * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     protected function addTaskToStage($tasks, $stage, Application $application = null, $step = 'tasks')
     {
@@ -129,11 +157,13 @@ abstract class Workflow
      * @param array|string $tasks
      * @param string $stage The name of the stage when this task shall be executed
      * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
+     *
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function addTask($tasks, $stage, Application $application = null)
     {
         $this->addTaskToStage($tasks, $stage, $application);
+
         return $this;
     }
 
@@ -145,6 +175,7 @@ abstract class Workflow
      * @param string $task
      * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
+     *
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function afterTask($task, $tasks, Application $application = null)
@@ -159,6 +190,7 @@ abstract class Workflow
             $this->tasks['after'][$applicationName][$task] = [];
         }
         $this->tasks['after'][$applicationName][$task] = array_merge($this->tasks['after'][$applicationName][$task], $tasks);
+
         return $this;
     }
 
@@ -170,6 +202,7 @@ abstract class Workflow
      * @param string $task
      * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
+     *
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function beforeTask($task, $tasks, Application $application = null)
@@ -184,6 +217,7 @@ abstract class Workflow
             $this->tasks['before'][$applicationName][$task] = [];
         }
         $this->tasks['before'][$applicationName][$task] = array_merge($this->tasks['before'][$applicationName][$task], $tasks);
+
         return $this;
     }
 
@@ -193,6 +227,7 @@ abstract class Workflow
      * @param string $taskName
      * @param string $baseTask
      * @param array $options
+     *
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function defineTask($taskName, $baseTask, $options)
@@ -210,11 +245,13 @@ abstract class Workflow
      * @param string $stage
      * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
+     *
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function beforeStage($stage, $tasks, Application $application = null)
     {
         $this->addTaskToStage($tasks, $stage, $application, 'before');
+
         return $this;
     }
 
@@ -224,11 +261,13 @@ abstract class Workflow
      * @param string $stage
      * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
+     *
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function afterStage($stage, $tasks, Application $application = null)
     {
         $this->addTaskToStage($tasks, $stage, $application, 'after');
+
         return $this;
     }
 
@@ -237,6 +276,7 @@ abstract class Workflow
      *
      * @param string $taskName
      * @param array $options
+     *
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function setTaskOptions($taskName, $options)
@@ -250,6 +290,7 @@ abstract class Workflow
             }
         }
         $this->defineTask($taskName, $baseTask, $options);
+
         return $this;
     }
 
@@ -328,30 +369,5 @@ abstract class Workflow
                 }
             }
         }
-    }
-
-    /**
-     * remove task from before or after position
-     *
-     * @param string $removeTask
-     * @param string $position
-     * @param string $removeApplication if given, task is removed only from application
-     * @return $this
-     */
-    protected function removeTaskFromPosition($removeTask,$position, $removeApplication = null)
-    {
-        if ( isset($this->tasks[$position]) ) {
-            foreach ($this->tasks[$position] as $applicationName => $tasksByTask) {
-                if (null !== $removeApplication && $applicationName !== $removeApplication) {
-                    continue;
-                }
-                foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks[$position][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
-                        return $task !== $removeTask;
-                    });
-                }
-            }
-        }
-        return $this;
     }
 }

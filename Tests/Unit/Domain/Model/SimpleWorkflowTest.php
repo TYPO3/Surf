@@ -235,6 +235,7 @@ class SimpleWorkflowTest extends TestCase
                 'Specific tasks for applications',
                 function ($workflow, $applications) {
                     list($flowApplication, $typo3Application) = $applications;
+
                     return function () use ($workflow, $flowApplication, $typo3Application) {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
@@ -300,6 +301,7 @@ class SimpleWorkflowTest extends TestCase
     /**
      * @test
      * @dataProvider applicationTaskDefinitions
+     *
      * @param string $message
      * @param \Closure $initializeCallback
      * @param array $expectedExecutions
@@ -334,6 +336,7 @@ class SimpleWorkflowTest extends TestCase
      * Build a Deployment object with Workflow for testing
      *
      * @param array $executedTasks Register for executed tasks
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment A configured Deployment for testing
      */
     protected function buildDeployment(array &$executedTasks = [])
@@ -557,8 +560,111 @@ class SimpleWorkflowTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    public function taskRegistrationExamplesForDifferentApplications()
+    {
+        return [
+            'remove task in stage for specific application' => [
+                [
+                    [
+                        'application' => 'Neos Flow Application',
+                        'node' => 'flow-1.example.com',
+                        'callable' => function (Workflow $workflow, Application $application) {
+                            $workflow->addTask('task1:initialize', 'initialize', $application);
+                            $workflow->addTask('task2:package', 'package', $application);
+                            $workflow->afterTask('task2:package', 'task2:whatever', $application);
+                            $workflow->removeTask('task2:whatever', $application);
+                        },
+                    ],
+                    [
+                        'application' => 'TYPO3 Application',
+                        'node' => 'typo3.example.com',
+                        'callable' => function (Workflow $workflow, Application $application) {
+                            $workflow->addTask('task1:initialize', 'initialize', $application);
+                            $workflow->addTask('task2:package', 'package', $application);
+                            $workflow->afterTask('task2:package', 'task2:whatever', $application);
+                            $workflow->removeTask('task1:initialize', $application);
+                        },
+                    ],
+                ],
+                [
+                    [
+                        'task' => 'task1:initialize',
+                        'node' => 'flow-1.example.com',
+                        'application' => 'Neos Flow Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => 'initialize',
+                        'options' => [],
+                    ],
+                    [
+                        'task' => 'task2:package',
+                        'node' => 'flow-1.example.com',
+                        'application' => 'Neos Flow Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => 'package',
+                        'options' => [],
+                    ],
+                    [
+                        'task' => 'task2:package',
+                        'node' => 'typo3.example.com',
+                        'application' => 'TYPO3 Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => 'package',
+                        'options' => [],
+                    ],
+                    [
+                        'task' => 'task2:whatever',
+                        'node' => 'typo3.example.com',
+                        'application' => 'TYPO3 Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => 'package',
+                        'options' => [],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider taskRegistrationExamplesForDifferentApplications
+     *
+     * @param array $applications
+     * @param array $expectedTasks
+     *
+     * @throws SurfException
+     * @throws SurfException\InvalidConfigurationException
+     */
+    public function removeTaskRemovesTaskFromStagesForSpecificApplication(array $applications, array $expectedTasks)
+    {
+        $executedTasks = [];
+        $deployment = $this->buildDeployment($executedTasks);
+        $workflow = $deployment->getWorkflow();
+
+        foreach ($applications as $applicationConfiguration) {
+            $application = new Application($applicationConfiguration['application']);
+            $application->addNode(new Node($applicationConfiguration['node']));
+            $deployment->addApplication($application);
+            $applicationConfiguration['callable']($workflow, $application);
+        }
+
+        $deployment->initialize();
+
+        $workflow->run($deployment);
+
+        $this->assertEquals($expectedTasks, $executedTasks);
+    }
+
+    /**
      * @test
      * @dataProvider taskRegistrationExamples
+     *
+     * @param $callback
+     * @param $expectedTasks
+     *
+     * @throws SurfException
+     * @throws SurfException\InvalidConfigurationException
      */
     public function removeTaskRemovesTaskFromStages($callback, $expectedTasks)
     {
