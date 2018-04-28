@@ -29,12 +29,13 @@ before_install:
 before_script:
   - if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then composer install; else composer update --with-dependencies phpunit/phpunit; fi
 
-script:
-  - >
-    echo;
-    echo "Running unit tests";
-    vendor/bin/phpunit Tests/Unit/
-  - >
-    echo;
-    echo "Running php lint";
-    find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+jobs:
+  include:
+    - stage: test
+      script:
+      - echo "Running unit tests";
+      - vendor/bin/phpunit Tests/Unit/
+    - stage: test
+      script:
+      - echo "Running php lint";
+      - find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
