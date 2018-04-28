@@ -40,7 +40,7 @@ jobs:
       stage: test
       php: 7.2
       env: PHPUnit
-      before_scipt: composer install
+      before_script: composer install
       script: vendor/bin/phpunit Tests/Unit/
     - <<: *phpunit
       php: 7.1
