@@ -10,6 +10,7 @@ use Symfony\Component\Process\Process;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A shell command service
@@ -20,13 +21,13 @@ class ShellCommandService
     /**
      * Execute a shell command (locally or remote depending on the node hostname)
      *
-     * @param mixed $command The shell command to execute, either string or array of commands
+     * @param string|array $command The shell command to execute, either string or array of commands
      * @param Node $node Node to execute command against
      * @param Deployment $deployment
      * @param bool $ignoreErrors If this command should ignore exit codes unequeal zero
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return mixed The output of the shell command or false if the command returned a non-zero exit code and $ignoreErrors was enabled.
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @throws TaskExecutionException
      */
     public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = false, $logOutput = true)
     {
@@ -37,7 +38,7 @@ class ShellCommandService
         }
         if ($ignoreErrors !== true && $exitCode !== 0) {
             $deployment->getLogger()->warning(rtrim($returnedOutput));
-            throw new \TYPO3\Surf\Exception\TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
+            throw new TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
         }
         return $exitCode === 0 ? $returnedOutput : false;
     }
@@ -45,10 +46,11 @@ class ShellCommandService
     /**
      * Simulate a command by just outputting what would be executed
      *
-     * @param string $command
+     * @param string|array $command
      * @param Node|NULL $node
      * @param Deployment $deployment
      * @return bool
+     * @throws TaskExecutionException
      */
     public function simulate($command, Node $node, Deployment $deployment)
     {
@@ -65,12 +67,13 @@ class ShellCommandService
     /**
      * Execute or simulate a command (if the deployment is in dry run mode)
      *
-     * @param string $command
+     * @param string|array $command
      * @param Node $node
      * @param Deployment $deployment
      * @param bool $ignoreErrors
      * @param bool $logOutput true if the output of the command should be logged
      * @return mixed false if command failed or command output as string
+     * @throws TaskExecutionException
      */
     public function executeOrSimulate($command, Node $node, Deployment $deployment, $ignoreErrors = false, $logOutput = true)
     {
@@ -84,10 +87,11 @@ class ShellCommandService
     /**
      * Execute a shell command locally
      *
-     * @param mixed $command
+     * @param string|array $command
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return array
+     * @throws TaskExecutionException
      */
     protected function executeLocalCommand($command, Deployment $deployment, $logOutput = true)
     {
@@ -100,11 +104,12 @@ class ShellCommandService
     /**
      * Execute a shell command via SSH
      *
-     * @param mixed $command
+     * @param string|array $command
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return array
+     * @throws TaskExecutionException
      */
     protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = true)
     {
@@ -184,9 +189,9 @@ class ShellCommandService
     /**
      * Prepare a command
      *
-     * @param mixed $command
+     * @param string|array $command
      * @return string
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @throws TaskExecutionException
      */
     protected function prepareCommand($command)
     {
@@ -195,7 +200,7 @@ class ShellCommandService
         } elseif (is_array($command)) {
             return implode(' && ', $command);
         } else {
-            throw new \TYPO3\Surf\Exception\TaskExecutionException('Command must be string or array, ' . gettype($command) . ' given.', 1312454906);
+            throw new TaskExecutionException('Command must be string or array, ' . gettype($command) . ' given.', 1312454906);
         }
     }
 }
