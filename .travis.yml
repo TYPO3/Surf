@@ -1,11 +1,5 @@
 language: php
 
-php:
-  - 5.6
-  - 7.0
-  - 7.1
-  - 7.2
-
 sudo: false
 cache:
   directories:
@@ -26,15 +20,32 @@ before_install:
   - composer --version
   - if [ "$GITHUB_COMPOSER_AUTH" ]; then composer config -g github-oauth.github.com $GITHUB_COMPOSER_AUTH; fi
 
-before_script:
-  - if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then composer install; else composer update --with-dependencies phpunit/phpunit; fi
+jobs:
+  include:
+    - &lint
+      stage: test
+      php: 7.2
+      env: PHP Lint
+      before_install: skip
+      install: skip
+      script: find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+    - <<: *lint
+      php: 7.1
+    - <<: *lint
+      php: 7.0
+    - <<: *lint
+      php: 5.6
 
-script:
-  - >
-    echo;
-    echo "Running unit tests";
-    vendor/bin/phpunit Tests/Unit/
-  - >
-    echo;
-    echo "Running php lint";
-    find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+    - &phpunit
+      stage: test
+      php: 7.2
+      env: PHPUnit
+      before_script: composer install
+      script: vendor/bin/phpunit Tests/Unit/
+    - <<: *phpunit
+      php: 7.1
+    - <<: *phpunit
+      php: 7.0
+    - <<: *phpunit
+      php: 5.6
+      before_script: composer update --with-dependencies phpunit/phpunit
