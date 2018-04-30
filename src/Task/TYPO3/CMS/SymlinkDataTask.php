@@ -1,10 +1,12 @@
 <?php
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
-/*                                                                        *
- * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
- *                                                                        *
- *                                                                        */
+/*
+ * This file is part of TYPO3 Surf.
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
 
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;

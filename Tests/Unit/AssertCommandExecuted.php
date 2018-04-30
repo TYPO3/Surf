@@ -1,10 +1,12 @@
 <?php
 namespace TYPO3\Surf\Tests\Unit;
 
-/*                                                                        *
- * This script belongs to the TYPO3 project "TYPO3 Surf".                 *
- *                                                                        *
- *                                                                        */
+/*
+ * This file is part of TYPO3 Surf.
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
 
 if (version_compare(PHP_VERSION, '7.0.0', '<')) {
     class_alias('PHPUnit_Framework_Constraint', 'PHPUnit\Framework\Constraint\Constraint');
