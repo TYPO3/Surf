@@ -333,6 +333,15 @@ process is simple:
 
 The generated `surf.phar` should work as expectd.
 
+## Contributing to the documentation
+
+You can simply edit or add a .rst file in the `Documentation` folder on Github and create a pull request.
+
+The online documentation will automatically update after changes to the master branch.
+To preview the documentation locally please follow this [guide](https://github.com/t3docs/docker-render-documentation).
+
+The documentation was set up according to the [TYPO3 documentation guide](https://docs.typo3.org/typo3cms/RenderTYPO3DocumentationGuide/Index.html).
+
 ## Copyright
 
 The deployment package is licensed under GNU General Public License, version 3 or later
