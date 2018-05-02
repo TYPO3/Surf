@@ -1,10 +1,12 @@
 <?php
 namespace TYPO3\Surf\Task\Composer;
 
-/*                                                                        *
- * This script belongs to the TYPO3 project "TYPO3 Surf"                  *
- *                                                                        *
- *                                                                        */
+/*
+ * This file is part of TYPO3 Surf.
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
 
 /**
  * Installs the composer packages based on a composer.json file in the projects root folder
