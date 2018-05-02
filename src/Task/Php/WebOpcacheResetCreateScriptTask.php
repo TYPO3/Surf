@@ -8,9 +8,11 @@ namespace TYPO3\Surf\Task\Php;
  * file that was distributed with this source code.
  */
 
-use RandomLib\Factory;
-use RandomLib\Generator;
 use TYPO3\Flow\Utility\Files;
+use TYPO3\Surf\Domain\Filesystem\Filesystem;
+use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
+use TYPO3\Surf\Domain\Generator\RandomBytesGenerator;
+use TYPO3\Surf\Domain\Generator\RandomBytesGeneratorInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -32,28 +34,54 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
     use ShellCommandServiceAwareTrait;
 
     /**
+     * @var RandomBytesGeneratorInterface
+     */
+    private $randomBytesGenerator;
+
+    /**
+     * @var FilesystemInterface
+     */
+    private $filesystem;
+
+    /**
+     * WebOpcacheResetCreateScriptTask constructor.
+     *
+     * @param RandomBytesGeneratorInterface $randomBytesGenerator
+     * @param FilesystemInterface $filesystem
+     */
+    public function __construct(RandomBytesGeneratorInterface $randomBytesGenerator = null, FilesystemInterface $filesystem = null)
+    {
+        if ( ! $randomBytesGenerator instanceof RandomBytesGeneratorInterface) {
+            $randomBytesGenerator = new RandomBytesGenerator();
+        }
+
+        if ( ! $filesystem instanceof FilesystemInterface) {
+            $filesystem = new Filesystem();
+        }
+
+        $this->filesystem = $filesystem;
+        $this->randomBytesGenerator = $randomBytesGenerator;
+    }
+
+    /**
      * Execute this task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options Supported options: "scriptBasePath" and "scriptIdentifier"
+     *
      * @return void
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @throws TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         $workspacePath = $deployment->getWorkspacePath($application);
         $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : Files::concatenatePaths(array($workspacePath, 'Web'));
 
-        if (!isset($options['scriptIdentifier'])) {
-            // Generate random identifier
-            $factory = new Factory;
-            $generator = $factory->getMediumStrengthGenerator();
-            $scriptIdentifier = $generator->generateString(32, Generator::CHAR_ALNUM);
-
+        if ( ! isset($options['scriptIdentifier'])) {
             // Store the script identifier as an application option
+            $scriptIdentifier = bin2hex($this->randomBytesGenerator->generate(32));
             $application->setOption('TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask[scriptIdentifier]', $scriptIdentifier);
         } else {
             $scriptIdentifier = $options['scriptIdentifier'];
@@ -63,15 +91,15 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         $localhost->setHostname('localhost');
 
         $commands = array(
-            'cd ' . escapeshellarg($scriptBasePath),
-            'rm -f surf-opcache-reset-*'
+            'cd '.escapeshellarg($scriptBasePath),
+            'rm -f surf-opcache-reset-*',
         );
 
         $this->shell->executeOrSimulate($commands, $localhost, $deployment);
 
-        if (!$deployment->isDryRun()) {
-            $scriptFilename = $scriptBasePath . '/surf-opcache-reset-' . $scriptIdentifier . '.php';
-            $result = file_put_contents($scriptFilename, '<?php
+        if ( ! $deployment->isDryRun()) {
+            $scriptFilename = sprintf('%s/surf-opcache-reset-%s.php', $scriptBasePath, $scriptIdentifier);
+            $result = $this->filesystem->put($scriptFilename, '<?php
                 if (function_exists("opcache_reset")) {
                     opcache_reset();
                 }
@@ -80,7 +108,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
             ');
 
             if ($result === false) {
-                throw new TaskExecutionException('Could not write file "' . $scriptFilename . '"', 1421932414);
+                throw new TaskExecutionException('Could not write file "'.$scriptFilename.'"', 1421932414);
             }
         }
     }
