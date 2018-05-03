@@ -9,6 +9,8 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Domain\Clock\ClockInterface;
+use TYPO3\Surf\Domain\Clock\SystemClock;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -29,9 +31,11 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
  * It takes the following options:
  *
  * * keepReleases - The number of releases to keep.
+ * * onlyRemoveReleasesOlderThanXSeconds - Remove only those releases older than the defined seconds
  *
  * Example configuration:
  *     $application->setOption('keepReleases', 2);
+ *     $application->setOption('onlyRemoveReleasesOlderThan', '121 seconds ago')
  * Note: There is no rollback for this cleanup, so we have to be sure not to delete any
  *       live or referenced releases.
  */
@@ -40,22 +44,44 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     use ShellCommandServiceAwareTrait;
 
     /**
+     * @var ClockInterface|SystemClock|null
+     */
+    private $clock;
+
+    /**
+     * CleanupReleasesTask constructor.
+     *
+     * @param ClockInterface|null $clock
+     */
+    public function __construct(ClockInterface $clock = null)
+    {
+        if (null === $clock) {
+            $clock = new SystemClock();
+        }
+
+        $this->clock = $clock;
+    }
+
+    /**
      * Execute this task
      *
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
+     *
+     * @return void|null
+     * @throws \TYPO3\Surf\Domain\Clock\ClockException
+     * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (! isset($options['keepReleases'])) {
+        if (! isset($options['keepReleases']) && ! isset($options['onlyRemoveReleasesOlderThan'])) {
             $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"');
 
             return;
         }
 
-        $keepReleases = $options['keepReleases'];
         $releasesPath = $application->getReleasesPath();
         $currentReleaseIdentifier = $deployment->getReleaseIdentifier();
 
@@ -66,13 +92,16 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
             return $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous';
         }));
 
-        sort($removableReleases);
-
-        $removeReleases = array_slice($removableReleases, 0, count($removableReleases) - $keepReleases);
-        $removeCommand = '';
-        foreach ($removeReleases as $removeRelease) {
-            $removeCommand .= "rm -rf {$releasesPath}/{$removeRelease};rm -f {$releasesPath}/{$removeRelease}REVISION;";
+        if (isset($options['onlyRemoveReleasesOlderThan'])) {
+            $removeReleases = $this->removeReleasesByAge($options, $removableReleases);
+        } else {
+            $removeReleases = $this->removeReleasesByNumber($options, $removableReleases);
         }
+
+        $removeCommand = array_reduce($removeReleases, function ($command, $removeRelease) use ($releasesPath) {
+            return $command . "rm -rf {$releasesPath}/{$removeRelease};rm -f {$releasesPath}/{$removeRelease}REVISION;";
+        }, '');
+
         if (count($removeReleases) > 0) {
             $deployment->getLogger()->info(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
             $this->shell->executeOrSimulate($removeCommand, $node, $deployment);
@@ -92,5 +121,34 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
+    }
+
+    /**
+     * @param array $options
+     * @param array $removableReleases
+     *
+     * @return array
+     * @throws \TYPO3\Surf\Domain\Clock\ClockException
+     */
+    private function removeReleasesByAge(array $options, array $removableReleases)
+    {
+        $onlyRemoveReleasesOlderThan = $this->clock->stringToTime($options['onlyRemoveReleasesOlderThan']);
+        $currentTime = $this->clock->currentTime();
+        return array_filter($removableReleases, function ($removeRelease) use ($onlyRemoveReleasesOlderThan, $currentTime) {
+            return ($currentTime - $this->clock->createTimestampFromFormat('YmdHis', $removeRelease)) > ($currentTime - $onlyRemoveReleasesOlderThan);
+        });
+    }
+
+    /**
+     * @param array $options
+     * @param array $removableReleases
+     *
+     * @return array
+     */
+    private function removeReleasesByNumber(array $options, array $removableReleases)
+    {
+        sort($removableReleases);
+        $keepReleases = $options['keepReleases'];
+        return array_slice($removableReleases, 0, count($removableReleases) - $keepReleases);
     }
 }
