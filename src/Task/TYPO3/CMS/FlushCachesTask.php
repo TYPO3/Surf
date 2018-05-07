@@ -12,6 +12,7 @@ use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\ErrorMessageFactory;
 
 /**
  * Clear TYPO3 caches
@@ -58,6 +59,7 @@ class FlushCachesTask extends AbstractCliTask
             case 'typo3_console':
                 return array($this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush', '--force');
             case 'coreapi':
+                $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForCoreApiUsage());
                 return array('typo3/cli_dispatch.phpsh', 'extbase', 'cacheapi:clearallcaches');
             default:
                 return array();
