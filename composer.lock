@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9d3ee10a8cb189cfee7e3c1aca99168",
+    "content-hash": "581ed6456888e34b20477728a7232466",
     "packages": [
         {
             "name": "ircmaxell/random-lib",

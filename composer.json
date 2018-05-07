@@ -13,7 +13,6 @@
         "symfony/process": "^3.0 || ^4.0"
     },
     "require-dev": {
-        "doctrine/instantiator": "1.0.*",
         "phpunit/phpunit": "^5.7 || ^6.5",
         "symfony/finder": "^3.0 || ^4.0"
     },
