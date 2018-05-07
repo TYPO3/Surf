@@ -13,6 +13,7 @@ use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\ErrorMessageFactory;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
@@ -113,6 +114,7 @@ abstract class AbstractCliTask extends \TYPO3\Surf\Domain\Model\Task implements 
             return 'typo3_console';
         } catch (InvalidConfigurationException $e) {
             if ($this->packageExists('coreapi', $node, $application, $deployment, $options)) {
+                $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForCoreApiUsage());
                 return 'coreapi';
             }
         }
