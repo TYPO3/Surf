@@ -107,8 +107,15 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             $this->output->writeln('    <comment>Deployment path</comment>: <success>' . $application->getDeploymentPath() . '</success>');
             $this->output->writeln('    <comment>Options</comment>: ');
             foreach ($application->getOptions() as $key => $value) {
-                $printableValue = is_scalar($value) ? $value : gettype($value);
-                $this->output->writeln('      ' . $key . ' => <success>' . $printableValue . '</success>');
+                if(is_array($value)) {
+                    $this->output->writeln('      ' . $key . ' =>');
+                    foreach($value as $item) {
+                        $this->output->writeln(sprintf('        <success>%s</success>', $item));
+                    }
+                } else {
+                    $printableValue = is_scalar($value) ? $value : gettype($value);
+                    $this->output->writeln('      ' . $key . ' => <success>' . $printableValue . '</success>');
+                }
             }
             $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(', ',
                     $application->getNodes()) . '</success>');
