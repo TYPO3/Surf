@@ -11,14 +11,18 @@ namespace TYPO3\Surf\Task\Release;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for adding a "TYPO3.Release" download
  *
  */
-class AddDownloadTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class AddDownloadTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -73,7 +77,7 @@ class AddDownloadTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Su
     {
         foreach (array('releaseHost', 'releaseHostSitePath', 'version', 'label', 'downloadUriPattern', 'productName', 'files') as $optionName) {
             if (!isset($options[$optionName])) {
-                throw new \TYPO3\Surf\Exception\InvalidConfigurationException('"' . $optionName . '" option not set', 1321549657);
+                throw new InvalidConfigurationException('"' . $optionName . '" option not set', 1321549657);
             }
         }
     }

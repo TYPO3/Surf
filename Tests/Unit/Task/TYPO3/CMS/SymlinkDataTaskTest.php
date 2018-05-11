@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -24,7 +25,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     protected function setUp()
     {
         parent::setUp();
-        $this->application = new \TYPO3\Surf\Application\TYPO3\CMS('TestApplication');
+        $this->application = new CMS('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 

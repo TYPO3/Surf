@@ -8,12 +8,13 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
 use TYPO3\Surf\Domain\Model\Application;
 
 /**
  * Unit test for Application
  */
-class ApplicationTest extends \PHPUnit\Framework\TestCase
+class ApplicationTest extends TestCase
 {
     /**
      * The directory for shared assets is by default 'shared'

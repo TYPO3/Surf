@@ -11,14 +11,17 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
  * A cleanup task to delete old (unused) releases
  *
  */
-class CleanupReleasesTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Cleanup old releases by listing all releases and keeping a configurable

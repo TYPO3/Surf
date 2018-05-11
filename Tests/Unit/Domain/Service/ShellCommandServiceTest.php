@@ -8,10 +8,16 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Service\ShellCommandService;
+
 /**
  * Unit test for the ShellCommandService
  */
-class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
+class ShellCommandServiceTest extends TestCase
 {
     /**
      * Test, if the given options are respected in executed SSH command
@@ -26,10 +32,10 @@ class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null, $privateKey = null)
     {
-        /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $service */
-        $service = $this->createPartialMock(\TYPO3\Surf\Domain\Service\ShellCommandService::class, array('executeProcess'));
+        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $service */
+        $service = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
 
-        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node = new Node('TestNode');
         $node->setHostname('remote-host.example.com');
         if ($username !== null) {
             $node->setOption('username', $username);
@@ -47,9 +53,9 @@ class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
             $node->setOption('privateKeyFile', $privateKey);
         }
 
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-        /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
-        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $deployment = new Deployment('TestDeployment');
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
         $expectedCommand = $expectedCommandArguments . ' \'echo "Hello World"\'';
@@ -106,20 +112,20 @@ class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function executeRemoteCommandRespectsRemoteCommandExecutionHandler()
     {
-        $shellCommandService = new \TYPO3\Surf\Domain\Service\ShellCommandService();
+        $shellCommandService = new ShellCommandService();
 
-        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node = new Node('TestNode');
         $node->setHostname('asdf');
         $arguments = array();
 
-        $node->setOption('remoteCommandExecutionHandler', function (\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService, $command, \TYPO3\Surf\Domain\Model\Node $node, \TYPO3\Surf\Domain\Model\Deployment $deployment, $logOutput) use (&$arguments) {
+        $node->setOption('remoteCommandExecutionHandler', function (ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput) use (&$arguments) {
             $arguments = func_get_args();
             return array(0, 'Hello World');
         });
 
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        $deployment = new Deployment('TestDeployment');
+        $mockLogger = $this->createMock(LoggerInterface::class);
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
         $deployment->setLogger($mockLogger);
 
         $response = $shellCommandService->execute('foo command', $node, $deployment);
@@ -138,15 +144,15 @@ class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function executeOnRemoteNodeJoinsCommandsWithAndOperator()
     {
-        /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
-        $shellCommandService = $this->createPartialMock(\TYPO3\Surf\Domain\Service\ShellCommandService::class, array('executeProcess'));
+        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
+        $shellCommandService = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
 
-        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node = new Node('TestNode');
         $node->setHostname('asdf');
 
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-        /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
-        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $deployment = new Deployment('TestDeployment');
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
         $shellCommandService->expects($this->any())->method('executeProcess')->with(
@@ -163,15 +169,15 @@ class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function executeOnLocalNodeJoinsCommandsWithAndOperator()
     {
-        /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
-        $shellCommandService = $this->createPartialMock(\TYPO3\Surf\Domain\Service\ShellCommandService::class, array('executeProcess'));
+        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
+        $shellCommandService = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
 
-        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node = new Node('TestNode');
         $node->setHostname('localhost');
 
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-        /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
-        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $deployment = new Deployment('TestDeployment');
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
         $shellCommandService->expects($this->any())->method('executeProcess')->with(
@@ -188,10 +194,10 @@ class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function executeProcessProperlyLogsStandardAndErrorOutput()
     {
-        $shellCommandService = new \TYPO3\Surf\Domain\Service\ShellCommandService();
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
-        /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
-        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $shellCommandService = new ShellCommandService();
+        $deployment = new Deployment('TestDeployment');
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
         $mockLogger->expects($this->at(0))->method('debug')

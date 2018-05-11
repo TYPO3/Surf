@@ -8,12 +8,19 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Tests\Unit\AssertCommandExecuted;
 
 /**
  * Base unit test for tasks
  */
-abstract class BaseTaskTest extends \PHPUnit\Framework\TestCase
+abstract class BaseTaskTest extends TestCase
 {
     /**
      * Executed commands
@@ -61,7 +68,7 @@ abstract class BaseTaskTest extends \PHPUnit\Framework\TestCase
         $responses = &$this->responses;
 
         /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
-        $shellCommandService = $this->createMock(\TYPO3\Surf\Domain\Service\ShellCommandService::class);
+        $shellCommandService = $this->createMock(ShellCommandService::class);
         $shellCommandService->expects($this->any())->method('execute')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
             if (is_array($command)) {
                 $commands['executed'] = array_merge($commands['executed'], $command);
@@ -89,14 +96,14 @@ abstract class BaseTaskTest extends \PHPUnit\Framework\TestCase
             $this->task->setShellCommandService($shellCommandService);
         }
 
-        $this->node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
-        $this->deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+        $this->deployment = new Deployment('TestDeployment');
         /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
-        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
-        $this->application = new \TYPO3\Surf\Domain\Model\Application('TestApplication');
+        $this->application = new Application('TestApplication');
 
         $this->deployment->initialize();
     }
@@ -112,7 +119,7 @@ abstract class BaseTaskTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertCommandExecuted($commandSubstring)
     {
-        $this->assertThat($this->commands['executed'], new \TYPO3\Surf\Tests\Unit\AssertCommandExecuted($commandSubstring));
+        $this->assertThat($this->commands['executed'], new AssertCommandExecuted($commandSubstring));
     }
 
     /**

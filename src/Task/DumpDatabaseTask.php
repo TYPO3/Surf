@@ -13,13 +13,16 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * This task dumps a complete database from a source system to a target system
  */
-class DumpDatabaseTask extends Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * @var array
@@ -104,7 +107,7 @@ class DumpDatabaseTask extends Task implements \TYPO3\Surf\Domain\Service\ShellC
     {
         foreach ($this->requiredOptions as $optionName) {
             if (!isset($options[$optionName])) {
-                throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Required option "%s" is not set!', $optionName), 1405592631);
+                throw new InvalidConfigurationException(sprintf('Required option "%s" is not set!', $optionName), 1405592631);
             }
         }
     }

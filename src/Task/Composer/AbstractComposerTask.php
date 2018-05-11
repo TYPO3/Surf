@@ -12,13 +12,18 @@ use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * Installs the composer packages based on a composer.json file in the projects root folder
  */
-abstract class AbstractComposerTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+abstract class AbstractComposerTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Command to run
@@ -60,7 +65,7 @@ abstract class AbstractComposerTask extends \TYPO3\Surf\Domain\Model\Task implem
         if (isset($options['nodeName'])) {
             $node = $deployment->getNode($options['nodeName']);
             if ($node === null) {
-                throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Node "%s" not found', $options['nodeName']), 1369759412);
+                throw new InvalidConfigurationException(sprintf('Node "%s" not found', $options['nodeName']), 1369759412);
             }
         }
 
@@ -97,7 +102,7 @@ abstract class AbstractComposerTask extends \TYPO3\Surf\Domain\Model\Task implem
     protected function buildComposerCommands($manifestPath, array $options)
     {
         if (!isset($options['composerCommandPath'])) {
-            throw new \TYPO3\Surf\Exception\TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
+            throw new TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
         }
 
         if (isset($options['additionalArguments'])){

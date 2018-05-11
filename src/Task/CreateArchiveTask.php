@@ -11,7 +11,11 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task for creating an zip / tar.gz / tar.bz2 archive.
@@ -27,9 +31,9 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * - zip
  *
  */
-class CreateArchiveTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task
@@ -69,7 +73,7 @@ class CreateArchiveTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\
             $this->shell->execute(sprintf('cd %s; tar -xf out.tar; rm out.tar; zip --quiet -9 -r out %s', $temporaryDirectory, $options['baseDirectory']), $node, $deployment);
             $this->shell->execute(sprintf('mv %s/out.zip %s; rm -Rf %s', $temporaryDirectory, $options['targetFile'], $temporaryDirectory), $node, $deployment);
         } else {
-            throw new \TYPO3\Surf\Exception\TaskExecutionException('Unknown target file format', 1314248387);
+            throw new TaskExecutionException('Unknown target file format', 1314248387);
         }
     }
 

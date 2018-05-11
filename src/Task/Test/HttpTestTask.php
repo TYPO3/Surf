@@ -11,6 +11,10 @@ namespace TYPO3\Surf\Task\Test;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
@@ -19,9 +23,9 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  * This task could be used to do smoke-tests against web applications in release (e.g. on a virtual host mounted
  * on the "next" symlink).
  */
-class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -36,7 +40,7 @@ class HttpTestTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         if (!isset($options['url'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No url option provided for HttpTestTask', 1319534939);
+            throw new InvalidConfigurationException('No url option provided for HttpTestTask', 1319534939);
         }
 
         // $this->logRequest($node, $application, $deployment, $options);

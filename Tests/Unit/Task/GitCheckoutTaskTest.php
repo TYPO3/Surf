@@ -8,6 +8,9 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Exception\TaskExecutionException;
+use TYPO3\Surf\Task\GitCheckoutTask;
+
 /**
  * Unit test for the GitCheckoutTask
  */
@@ -126,7 +129,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
 
         try {
             $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        } catch (\TYPO3\Surf\Exception\TaskExecutionException $exception) {
+        } catch (TaskExecutionException $exception) {
             $this->assertEquals(1335974926, $exception->getCode());
             throw $exception;
         }
@@ -137,6 +140,6 @@ class GitCheckoutTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        return new \TYPO3\Surf\Task\GitCheckoutTask();
+        return new GitCheckoutTask();
     }
 }

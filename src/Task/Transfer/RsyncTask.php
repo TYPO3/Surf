@@ -8,19 +8,23 @@ namespace TYPO3\Surf\Task\Transfer;
  * file that was distributed with this source code.
  */
 
+use Phar;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
  * A rsync transfer task
  *
  * Copies the application assets from the application workspace to the node using rsync.
  */
-class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class RsyncTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -60,7 +64,7 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
 
         if ($node->hasOption('password')) {
             $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array(dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect'));
-            if (\Phar::running() !== '') {
+            if (Phar::running() !== '') {
                 $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
                 $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array($deployment->getTemporaryPath(), 'PasswordSshLogin.expect'));
                 file_put_contents($passwordSshLoginScriptPathAndFilename, $passwordSshLoginScriptContents);
@@ -72,7 +76,7 @@ class RsyncTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
         $localhost->setHostname('localhost');
         $this->shell->executeOrSimulate($command, $localhost, $deployment);
 
-        if (isset($passwordSshLoginScriptPathAndFilename) && \Phar::running() !== '') {
+        if (isset($passwordSshLoginScriptPathAndFilename) && Phar::running() !== '') {
             unlink($passwordSshLoginScriptPathAndFilename);
         }
 

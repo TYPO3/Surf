@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Application;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 
@@ -16,7 +17,7 @@ use TYPO3\Surf\Domain\Model\Workflow;
  *
  * Most specific applications will extend from BaseApplication.
  */
-class BaseApplication extends \TYPO3\Surf\Domain\Model\Application
+class BaseApplication extends Application
 {
     /**
      * Symlinks, which should be created for each release.

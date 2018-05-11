@@ -11,14 +11,18 @@ namespace TYPO3\Surf\Task\Release;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for preparing a "TYPO3.Release" release
  *
  */
-class PrepareReleaseTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class PrepareReleaseTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -66,7 +70,7 @@ class PrepareReleaseTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3
     {
         foreach (array('releaseHost', 'releaseHostSitePath', 'version', 'productName') as $optionName) {
             if (!isset($options[$optionName])) {
-                throw new \TYPO3\Surf\Exception\InvalidConfigurationException('"' . $optionName . '" option not set', 1321549659);
+                throw new InvalidConfigurationException('"' . $optionName . '" option not set', 1321549659);
             }
         }
     }

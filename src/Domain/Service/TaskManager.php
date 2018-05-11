@@ -11,6 +11,7 @@ namespace TYPO3\Surf\Domain\Service;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Exception as SurfException;
 
 /**
  * A task manager
@@ -150,13 +151,13 @@ class TaskManager
      *
      * @param string $taskName
      * @return string
-     * @throws \TYPO3\Surf\Exception
+     * @throws SurfException
      */
     protected function mapTaskNameToTaskClass($taskName)
     {
         if (class_exists($taskName)) {
             return $taskName;
         }
-        throw new \TYPO3\Surf\Exception(sprintf('No task found for identifier "%s". Make sure this is a valid class name or a defined task with valid base class name!', $taskName), 1451210811);
+        throw new SurfException(sprintf('No task found for identifier "%s". Make sure this is a valid class name or a defined task with valid base class name!', $taskName), 1451210811);
     }
 }

@@ -12,6 +12,7 @@ use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
 
 /**
@@ -34,7 +35,7 @@ class GitCheckoutTask extends AbstractCheckoutTask
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         if (!isset($options['repositoryUrl'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', $application->getName()), 1335974764);
+            throw new InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', $application->getName()), 1335974764);
         }
 
         $releasePath = $deployment->getApplicationReleasePath($application);

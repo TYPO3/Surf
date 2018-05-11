@@ -11,14 +11,18 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A generic shell task
  *
  */
-class ShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class ShellTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task
@@ -37,7 +41,7 @@ class ShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Dom
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         if (!isset($options['command'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing "command" option for ShellTask', 1311168045);
+            throw new InvalidConfigurationException('Missing "command" option for ShellTask', 1311168045);
         }
 
         $replacePaths = array(

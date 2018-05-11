@@ -11,6 +11,10 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task to create initial directories and the release directory for the current release
@@ -18,9 +22,9 @@ use TYPO3\Surf\Domain\Model\Node;
  * This task will automatically create needed directories and create a symlink to the upcoming
  * release, called "next".
  */
-class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task
@@ -41,7 +45,7 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
         $releasePath = $deployment->getApplicationReleasePath($application);
         $result = $this->shell->execute('test -d ' . $deploymentPath, $node, $deployment, true);
         if ($result === false) {
-            throw new \TYPO3\Surf\Exception\TaskExecutionException('Deployment directory "' . $deploymentPath . '" does not exist on node ' . $node->getName(), 1311003253);
+            throw new TaskExecutionException('Deployment directory "' . $deploymentPath . '" does not exist on node ' . $node->getName(), 1311003253);
         }
         $commands = array(
             'mkdir -p ' . $releasesPath,
