@@ -20,4 +20,12 @@ final class ErrorMessageFactory
         return 'The usage of coreapi is deprecated. Please use typo3_console instead. Integration in TYPO3 Surf will be removed in Version 3.0.0';
     }
 
+    /**
+     * @return string
+     */
+    public static function createDeprecationWarningForSourceforgeUploadTask()
+    {
+        return 'The usage of SourceforgeUploadTask is deprecated and will be removed in TYPO3 Surf Version 3.0.0';
+    }
+
 }
