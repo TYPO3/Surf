@@ -11,6 +11,7 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\ErrorMessageFactory;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
@@ -32,6 +33,7 @@ class SourceforgeUploadTask extends \TYPO3\Surf\Domain\Model\Task implements \TY
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
+        $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForSourceforgeUploadTask());
         $this->checkOptionsForValidity($options);
         $projectName = $options['sourceforgeProjectName'];
 
