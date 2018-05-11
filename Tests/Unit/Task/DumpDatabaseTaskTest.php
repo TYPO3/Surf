@@ -8,6 +8,8 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Task\DumpDatabaseTask;
+
 /**
  * Unit test for the DumpDatabaseTaskTest
  */
@@ -48,6 +50,6 @@ class DumpDatabaseTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        return new \TYPO3\Surf\Task\DumpDatabaseTask();
+        return new DumpDatabaseTask();
     }
 }

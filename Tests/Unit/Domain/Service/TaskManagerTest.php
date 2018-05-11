@@ -8,10 +8,19 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use RuntimeException;
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\TaskManager;
+
 /**
  * Unit test for the TaskManager
  */
-class TaskManagerTest extends \PHPUnit\Framework\TestCase
+class TaskManagerTest extends TestCase
 {
     /**
      * @var \TYPO3\Surf\Domain\Model\Task|\PHPUnit_Framework_MockObject_MockObject
@@ -40,15 +49,15 @@ class TaskManagerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->node = new \TYPO3\Surf\Domain\Model\Node('Test node');
-        $this->application = new \TYPO3\Surf\Domain\Model\Application('Test application');
-        $this->deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
+        $this->node = new Node('Test node');
+        $this->application = new Application('Test application');
+        $this->deployment = new Deployment('Test deployment');
         /** @var \Psr\Log\LoggerInterface $logger */
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($logger);
-        $this->task = $this->createMock(\TYPO3\Surf\Domain\Model\Task::class);
+        $this->task = $this->createMock(Task::class);
 
-        $this->taskManager = $this->createPartialMock(\TYPO3\Surf\Domain\Service\TaskManager::class, array('createTaskInstance'));
+        $this->taskManager = $this->createPartialMock(TaskManager::class, array('createTaskInstance'));
         $this->taskManager
             ->expects($this->any())
             ->method('createTaskInstance')
@@ -133,7 +142,7 @@ class TaskManagerTest extends \PHPUnit\Framework\TestCase
             ->method('execute')
             ->willReturnCallback(function ($_, $__, $___, $options) {
                 if ($options['taskOption'] !== 'Node') {
-                    throw new \RuntimeException('Node options do not override deployment options!');
+                    throw new RuntimeException('Node options do not override deployment options!');
                 }
             });
 

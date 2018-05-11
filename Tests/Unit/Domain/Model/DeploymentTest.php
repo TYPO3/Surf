@@ -8,20 +8,26 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
+use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\SimpleWorkflow;
+
 /**
  * Unit test for Deployment
  */
-class DeploymentTest extends \PHPUnit\Framework\TestCase
+class DeploymentTest extends TestCase
 {
     /**
      * @test
      */
     public function initializeUsesSimpleWorkflowAsDefault()
     {
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
+        $deployment = new Deployment('Test deployment');
         $deployment->initialize();
 
-        $this->assertInstanceOf(\TYPO3\Surf\Domain\Model\SimpleWorkflow::class, $deployment->getWorkflow());
+        $this->assertInstanceOf(SimpleWorkflow::class, $deployment->getWorkflow());
     }
 
     /**
@@ -29,15 +35,15 @@ class DeploymentTest extends \PHPUnit\Framework\TestCase
      */
     public function getNodesReturnsNodesFromApplicationsAsSet()
     {
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-        $application1 = new \TYPO3\Surf\Domain\Model\Application('Test application 1');
-        $application2 = new \TYPO3\Surf\Domain\Model\Application('Test application 2');
+        $deployment = new Deployment('Test deployment');
+        $application1 = new Application('Test application 1');
+        $application2 = new Application('Test application 2');
 
         $application1
-            ->addNode(new \TYPO3\Surf\Domain\Model\Node('test1.example.com'));
+            ->addNode(new Node('test1.example.com'));
         $application2
-            ->addNode(new \TYPO3\Surf\Domain\Model\Node('test1.example.com'))
-            ->addNode(new \TYPO3\Surf\Domain\Model\Node('test2.example.com'));
+            ->addNode(new Node('test1.example.com'))
+            ->addNode(new Node('test2.example.com'));
 
         $deployment
             ->addApplication($application1)

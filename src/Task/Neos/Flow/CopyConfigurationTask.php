@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Task\Neos\Flow;
  * file that was distributed with this source code.
  */
 
+use Phar;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -63,7 +64,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
                 if ($node->hasOption('password')) {
                     $sshOptions .= "-o PubkeyAuthentication=no ";
                     $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array(dirname(dirname(dirname(dirname(__DIR__)))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect'));
-                    if (\Phar::running() !== '') {
+                    if (Phar::running() !== '') {
                         $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
                         $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array($deployment->getTemporaryPath(), 'PasswordSshLogin.expect'));
                         file_put_contents($passwordSshLoginScriptPathAndFilename, $passwordSshLoginScriptContents);

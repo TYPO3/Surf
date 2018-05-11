@@ -8,10 +8,16 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Service\ShellCommandService;
+
 /**
  * Unit test for the ShellCommandService
  */
-class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
+class ShellCommandServiceTest extends TestCase
 {
     /**
      * Test, if the given options are respected in executed SSH command
@@ -27,9 +33,9 @@ class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
     public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null, $privateKey = null)
     {
         /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $service */
-        $service = $this->createPartialMock(\TYPO3\Surf\Domain\Service\ShellCommandService::class, array('executeProcess'));
+        $service = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
 
-        $node = new \TYPO3\Surf\Domain\Model\Node('TestNode');
+        $node = new Node('TestNode');
         $node->setHostname('remote-host.example.com');
         if ($username !== null) {
             $node->setOption('username', $username);
@@ -47,9 +53,9 @@ class ShellCommandServiceTest extends \PHPUnit\Framework\TestCase
             $node->setOption('privateKeyFile', $privateKey);
         }
 
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('TestDeployment');
+        $deployment = new Deployment('TestDeployment');
         /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
-        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
         $expectedCommand = $expectedCommandArguments . ' \'echo "Hello World"\'';

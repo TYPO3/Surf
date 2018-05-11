@@ -11,13 +11,17 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A shell task for local packaging
  */
-class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Executes this task
@@ -39,7 +43,7 @@ class LocalShellTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Sur
         $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
 
         if (!isset($options['command'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Missing "command" option for LocalShellTask', 1311168045);
+            throw new InvalidConfigurationException('Missing "command" option for LocalShellTask', 1311168045);
         }
         $command = $options['command'];
         $command = str_replace(array_keys($replacePaths), $replacePaths, $command);

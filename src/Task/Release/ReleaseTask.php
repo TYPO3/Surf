@@ -11,14 +11,15 @@ namespace TYPO3\Surf\Task\Release;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
  * Task for doing a "TYPO3.Release" release
  *
  */
-class ReleaseTask extends PrepareReleaseTask implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class ReleaseTask extends PrepareReleaseTask
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

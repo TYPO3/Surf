@@ -11,12 +11,13 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\StopWorkflowException;
 
 /**
  * A stop task that will stop execution inside a workflow (for testing purposes)
  */
-class StopTask extends \TYPO3\Surf\Domain\Model\Task
+class StopTask extends Task
 {
     /**
      * Executes this task

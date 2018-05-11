@@ -11,6 +11,9 @@ namespace TYPO3\Surf\Task;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
  * Task for banning in Varnish, should be used for Varnish 3.x
@@ -21,9 +24,9 @@ use TYPO3\Surf\Domain\Model\Node;
  * * banUrl - URL (pattern) to ban, defaults to ".*"
  * * varnishadm - path to the varnishadm utility, defaults to "/usr/bin/varnishadm"
  */
-class VarnishBanTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class VarnishBanTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task

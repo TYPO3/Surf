@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Generic;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -18,25 +19,25 @@ class CreateSymlinksTaskTest extends BaseTaskTest
 {
 
     /**
-     * @var CreateDirectoriesTask
+     * @var CreateSymlinksTask
      */
     protected $task;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->application = new \TYPO3\Surf\Application\TYPO3\CMS('TestApplication');
+        $this->application = new CMS('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
-     * @return CreateDirectoriesTask
+     * @return CreateSymlinksTask
      */
     protected function createTask()
     {
         return new CreateSymlinksTask();
     }
-    
+
     /**
      * per default Generic\CreateSymlinksTask uses the current release path as base directory
      * for symlink creation
@@ -51,7 +52,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
         $this->assertCommandExecuted('ln -s ../media media');
     }
-    
+
     /**
      * if option "genericSymlinksBaseDir" is set, instead of release path, the herin given path
      * is used as  base directory

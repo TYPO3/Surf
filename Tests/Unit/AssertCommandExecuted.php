@@ -8,13 +8,16 @@ namespace TYPO3\Surf\Tests\Unit;
  * file that was distributed with this source code.
  */
 
+use InvalidArgumentException;
+use PHPUnit\Framework\Constraint\Constraint;
+
 if (version_compare(PHP_VERSION, '7.0.0', '<')) {
     class_alias('PHPUnit_Framework_Constraint', 'PHPUnit\Framework\Constraint\Constraint');
 }
 /**
  * Class AssertCommandExecuted
  */
-class AssertCommandExecuted extends \PHPUnit\Framework\Constraint\Constraint
+class AssertCommandExecuted extends Constraint
 {
     /**
      * @var string
@@ -27,7 +30,7 @@ class AssertCommandExecuted extends \PHPUnit\Framework\Constraint\Constraint
     public function __construct($expectedCommand)
     {
         if (!is_string($expectedCommand)) {
-            throw new \InvalidArgumentException('Expected command should be a string, ' . gettype($expectedCommand) . ' given');
+            throw new InvalidArgumentException('Expected command should be a string, ' . gettype($expectedCommand) . ' given');
         }
         $this->expectedCommand = $expectedCommand;
         parent::__construct();

@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Git;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Task\Git\TagTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
@@ -62,6 +63,6 @@ class TagTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        return new \TYPO3\Surf\Task\Git\TagTask();
+        return new TagTask();
     }
 }

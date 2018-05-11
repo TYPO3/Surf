@@ -8,15 +8,20 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Domain\Service\TaskManager;
+use TYPO3\Surf\Exception as SurfException;
 
 /**
  * Unit test for SimpleWorkflow
  */
-class SimpleWorkflowTest extends \PHPUnit\Framework\TestCase
+class SimpleWorkflowTest extends TestCase
 {
     /**
      * @test
@@ -64,7 +69,7 @@ class SimpleWorkflowTest extends \PHPUnit\Framework\TestCase
 
         try {
             $workflow->run($deployment);
-        } catch (\TYPO3\Surf\Exception $exception) {
+        } catch (SurfException $exception) {
             $this->assertEquals(1334652427, $exception->getCode());
             throw $exception;
         }
@@ -333,16 +338,16 @@ class SimpleWorkflowTest extends \PHPUnit\Framework\TestCase
      */
     protected function buildDeployment(array &$executedTasks = array())
     {
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
-        $mockLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $deployment = new Deployment('Test deployment');
+        $mockLogger = $this->createMock(LoggerInterface::class);
             // Enable log to console to debug tests
         // $mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
         // 	echo $message . chr(10);
         // }));
         $deployment->setLogger($mockLogger);
 
-        $mockTaskManager = $this->createMock(\TYPO3\Surf\Domain\Service\TaskManager::class);
-        $mockTaskManager->expects($this->any())->method('execute')->will($this->returnCallback(function ($task, Node $node, Application $application, \TYPO3\Surf\Domain\Model\Deployment $deployment, $stage, array $options = array()) use (&$executedTasks) {
+        $mockTaskManager = $this->createMock(TaskManager::class);
+        $mockTaskManager->expects($this->any())->method('execute')->will($this->returnCallback(function ($task, Node $node, Application $application, Deployment $deployment, $stage, array $options = array()) use (&$executedTasks) {
             $executedTasks[] = array('task' => $task, 'node' => $node->getName(), 'application' => $application->getName(), 'deployment' => $deployment->getName(), 'stage' => $stage, 'options' => $options);
         }));
 

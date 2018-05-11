@@ -8,10 +8,16 @@ namespace TYPO3\Surf\Task\Php;
  * file that was distributed with this source code.
  */
 
+use RandomLib\Factory;
+use RandomLib\Generator;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * Create a script to reset the PHP opcache
@@ -21,9 +27,9 @@ use TYPO3\Surf\Domain\Model\Node;
  *
  * The opcache reset has to be done in the webserver process, so a simple CLI command would not help.
  */
-class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -43,9 +49,9 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task impl
 
         if (!isset($options['scriptIdentifier'])) {
             // Generate random identifier
-            $factory = new \RandomLib\Factory;
+            $factory = new Factory;
             $generator = $factory->getMediumStrengthGenerator();
-            $scriptIdentifier = $generator->generateString(32, \RandomLib\Generator::CHAR_ALNUM);
+            $scriptIdentifier = $generator->generateString(32, Generator::CHAR_ALNUM);
 
             // Store the script identifier as an application option
             $application->setOption('TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask[scriptIdentifier]', $scriptIdentifier);
@@ -74,7 +80,7 @@ class WebOpcacheResetCreateScriptTask extends \TYPO3\Surf\Domain\Model\Task impl
             ');
 
             if ($result === false) {
-                throw new \TYPO3\Surf\Exception\TaskExecutionException('Could not write file "' . $scriptFilename . '"', 1421932414);
+                throw new TaskExecutionException('Could not write file "' . $scriptFilename . '"', 1421932414);
             }
         }
     }

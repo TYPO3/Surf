@@ -11,11 +11,14 @@ namespace TYPO3\Surf\Task\Php;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task to reset the PHP opcache by executing a prepared script with an HTTP request
  */
-class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
+class WebOpcacheResetExecuteTask extends Task
 {
     /**
      * Execute this task
@@ -31,10 +34,10 @@ class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
         if (!isset($options['baseUrl'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No "baseUrl" option provided for WebOpcacheResetExecuteTask', 1421932609);
+            throw new InvalidConfigurationException('No "baseUrl" option provided for WebOpcacheResetExecuteTask', 1421932609);
         }
         if (!isset($options['scriptIdentifier'])) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('No "scriptIdentifier" option provided for WebOpcacheResetExecuteTask, make sure to execute "TYPO3\\Surf\\Task\\Php\\WebOpcacheResetCreateScriptTask" before this task or pass one explicitly', 1421932610);
+            throw new InvalidConfigurationException('No "scriptIdentifier" option provided for WebOpcacheResetExecuteTask, make sure to execute "TYPO3\\Surf\\Task\\Php\\WebOpcacheResetCreateScriptTask" before this task or pass one explicitly', 1421932610);
         }
 
         $streamContext = null;
@@ -48,7 +51,7 @@ class WebOpcacheResetExecuteTask extends \TYPO3\Surf\Domain\Model\Task
         $result = file_get_contents($scriptUrl, false, $streamContext);
         if ($result !== 'success') {
             if (isset($options['throwErrorOnWebOpCacheResetExecuteTask']) && $options['throwErrorOnWebOpCacheResetExecuteTask']) {
-                throw new \TYPO3\Surf\Exception\TaskExecutionException('WebOpcacheResetExecuteTask at "' . $scriptUrl . '" did not return expected result', 1471511860);
+                throw new TaskExecutionException('WebOpcacheResetExecuteTask at "' . $scriptUrl . '" did not return expected result', 1471511860);
             } else {
                 $deployment->getLogger()->warning('Executing PHP opcache reset script at "' . $scriptUrl . '" did not return expected result');
             }

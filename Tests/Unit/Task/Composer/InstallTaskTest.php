@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Composer;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
@@ -57,6 +58,6 @@ class InstallTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        return new \TYPO3\Surf\Task\Composer\InstallTask();
+        return new InstallTask();
     }
 }

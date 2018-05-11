@@ -8,13 +8,14 @@ namespace TYPO3\Surf\Application\TYPO3;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 
 /**
  * TYPO3 CMS application
  */
-class CMS extends \TYPO3\Surf\Application\BaseApplication
+class CMS extends BaseApplication
 {
     /**
      * Set the application production context

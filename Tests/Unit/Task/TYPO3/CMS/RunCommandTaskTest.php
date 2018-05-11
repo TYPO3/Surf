@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Task\TYPO3\CMS\RunCommandTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
@@ -34,7 +35,7 @@ class RunCommandTaskTest extends BaseTaskTest
      */
     public function exceptionThrownBecauseApplicationIsNotOfTypeCMS()
     {
-        $wrongApplication = $this->getMockBuilder(\TYPO3\Surf\Application\BaseApplication::class)->disableOriginalConstructor()->getMock();
+        $wrongApplication = $this->getMockBuilder(BaseApplication::class)->disableOriginalConstructor()->getMock();
         $this->task->execute($this->node, $wrongApplication, $this->deployment);
     }
 
