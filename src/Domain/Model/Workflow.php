@@ -9,6 +9,8 @@ namespace TYPO3\Surf\Domain\Model;
  */
 
 use TYPO3\Surf\Domain\Service\TaskManager;
+use TYPO3\Surf\Exception as SurfException;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A Workflow
@@ -38,12 +40,12 @@ abstract class Workflow
      *
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @return void
-     * @throws \TYPO3\Surf\Exception
+     * @throws SurfException
      */
     public function run(Deployment $deployment)
     {
         if (!$deployment->isInitialized()) {
-            throw new \TYPO3\Surf\Exception('Deployment must be initialized before running it', 1335976529);
+            throw new SurfException('Deployment must be initialized before running it', 1335976529);
         }
         $deployment->getLogger()->debug('Using workflow "' . $this->getName() . '"');
     }
@@ -313,7 +315,7 @@ abstract class Workflow
      * @param string $stage
      * @param array $callstack
      * @return void
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @throws TaskExecutionException
      */
     protected function executeTask($task, Node $node, Application $application, Deployment $deployment, $stage, array &$callstack = array())
     {
@@ -326,7 +328,7 @@ abstract class Workflow
             }
         }
         if (isset($callstack[$task])) {
-            throw new \TYPO3\Surf\Exception\TaskExecutionException('Cycle for task "' . $task . '" detected, aborting.', 1335976544);
+            throw new TaskExecutionException('Cycle for task "' . $task . '" detected, aborting.', 1335976544);
         }
         if (isset($this->tasks['defined'][$task])) {
             $this->taskManager->execute($this->tasks['defined'][$task]['task'], $node, $application, $deployment, $stage, $this->tasks['defined'][$task]['options'], $task);

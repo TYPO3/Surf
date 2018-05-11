@@ -48,7 +48,7 @@ class SimpleWorkflowTest extends TestCase
 
         try {
             $workflow->run($deployment);
-        } catch (\TYPO3\Surf\Exception $exception) {
+        } catch (SurfException $exception) {
             $this->assertEquals(1334652420, $exception->getCode());
             throw $exception;
         }

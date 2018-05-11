@@ -8,9 +8,11 @@ namespace TYPO3\Surf\Exception;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Exception as SurfException;
+
 /**
  * Invalid deployment configuration exception
  */
-class InvalidConfigurationException extends \TYPO3\Surf\Exception
+class InvalidConfigurationException extends SurfException
 {
 }

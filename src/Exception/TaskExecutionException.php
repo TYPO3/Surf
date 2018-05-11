@@ -8,11 +8,13 @@ namespace TYPO3\Surf\Exception;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Exception as SurfException;
+
 /**
  * An exception during task execution
  *
  * Something went wrong or an assertion during task execution was not successful.
  */
-class TaskExecutionException extends \TYPO3\Surf\Exception
+class TaskExecutionException extends SurfException
 {
 }

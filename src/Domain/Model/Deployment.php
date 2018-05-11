@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Domain\Model;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use TYPO3\Surf\Exception as SurfException;
 
 /**
  * A Deployment
@@ -124,13 +125,13 @@ class Deployment implements LoggerAwareInterface
      * callbacks given to the deployment with onInitialize(...).
      *
      * @return void
-     * @throws \TYPO3\Surf\Exception
+     * @throws SurfException
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function initialize()
     {
         if ($this->initialized) {
-            throw new \TYPO3\Surf\Exception('Already initialized', 1335976472);
+            throw new SurfException('Already initialized', 1335976472);
         }
         if ($this->workflow === null) {
             $this->workflow = new SimpleWorkflow();
@@ -481,6 +482,8 @@ class Deployment implements LoggerAwareInterface
 
     /**
      * Get a local workspace directory for the application
+     * @param Application $application
+     * @return string
      */
     public function getWorkspacePath(Application $application)
     {

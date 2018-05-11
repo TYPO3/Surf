@@ -63,7 +63,7 @@ class DeploymentTest extends TestCase
      */
     public function constructorCreatesReleaseIdentifier()
     {
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
+        $deployment = new Deployment('Test deployment');
 
         $releaseIdentifier = $deployment->getReleaseIdentifier();
         $this->assertNotEmpty($releaseIdentifier);
@@ -75,8 +75,8 @@ class DeploymentTest extends TestCase
      */
     public function initializeIsAllowedOnlyOnce()
     {
-        $workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
-        $deployment = new \TYPO3\Surf\Domain\Model\Deployment('Test deployment');
+        $workflow = new SimpleWorkflow();
+        $deployment = new Deployment('Test deployment');
         $deployment->setWorkflow($workflow);
         $deployment->initialize();
 

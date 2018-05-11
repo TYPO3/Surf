@@ -8,9 +8,11 @@ namespace TYPO3\Surf\Exception;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Exception as SurfException;
+
 /**
  * A control exception to stop the execution of a workflow
  */
-class StopWorkflowException extends \TYPO3\Surf\Exception
+class StopWorkflowException extends SurfException
 {
 }
