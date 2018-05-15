@@ -16,7 +16,6 @@ use TYPO3\Surf\ErrorMessageFactory;
 
 /**
  * This task create new tables or add new fields to them.
- * This task requires the extension coreapi.
  */
 class CompareDatabaseTask extends AbstractCliTask
 {
