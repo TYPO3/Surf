@@ -26,7 +26,7 @@ class ShellCommandService
      * @param string|array $command The shell command to execute, either string or array of commands
      * @param Node $node Node to execute command against
      * @param Deployment $deployment
-     * @param bool $ignoreErrors If this command should ignore exit codes unequeal zero
+     * @param bool $ignoreErrors If this command should ignore exit codes unequal zero
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return mixed The output of the shell command or false if the command returned a non-zero exit code and $ignoreErrors was enabled.
      * @throws TaskExecutionException

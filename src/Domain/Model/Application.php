@@ -66,7 +66,7 @@ class Application
     /**
      * Register tasks for this application
      *
-     * This is a template method that should be overriden by specific applications to define
+     * This is a template method that should be overridden by specific applications to define
      * new task or to add tasks to the workflow.
      *
      * Example:
