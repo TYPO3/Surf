@@ -142,7 +142,7 @@ class BaseApplication extends Application
     }
 
     /**
-     * Register an array of additonal symlinks to be created for the application
+     * Register an array of additional symlinks to be created for the application
      *
      * @param array $symlinks
      * @return \TYPO3\Surf\Application\BaseApplication
@@ -180,7 +180,7 @@ class BaseApplication extends Application
     }
 
     /**
-     * Register an additional diretory to be created for the application
+     * Register an additional directory to be created for the application
      *
      * @param string $path
      * @return \TYPO3\Surf\Application\BaseApplication
@@ -192,7 +192,7 @@ class BaseApplication extends Application
     }
 
     /**
-     * Register an array of additonal directories to be created for the application
+     * Register an array of additional directories to be created for the application
      *
      * @param array $directories
      * @return \TYPO3\Surf\Application\BaseApplication
