@@ -49,6 +49,22 @@ class DescribeCommandTest extends TestCase
         $this->application->setOption('TYPO3\\Surf\\Task\\Transfer\\RsyncTask[rsyncExcludes]', array('.git', 'web/fileadmin', 'web/uploads'));
         $this->application->addNode($this->node);
         $this->deployment->addApplication($this->application);
+        $this->deployment->onInitialize(function () {
+            $workflow = $this->deployment->getWorkflow();
+            $workflow->defineTask('TYPO3\\Surf\\Task\\CustomTask', 'TYPO3\\Surf\\Task\\LocalShellTask', array(
+                'command' => array(
+                    "touch test.txt",
+                ),
+            ));
+            $workflow->defineTask('TYPO3\\Surf\\Task\\OtherCustomTask', 'TYPO3\\Surf\\Task\\LocalShellTask', array(
+                'command' => array(
+                    "touch test.txt",
+                ),
+            ));
+            $workflow->addTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', 'finalize');
+            $workflow->afterTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', 'TYPO3\\Surf\\Task\\CustomTask');
+            $workflow->beforeTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', 'TYPO3\\Surf\\Task\\CustomTask');
+        });
         $this->deployment->initialize();
     }
 
@@ -98,6 +114,10 @@ Applications:
       update:
       migrate:
       finalize:
+        tasks:
+          <success>Task TYPO3\Surf\Task\CustomTask before TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask</success> (for all applications)
+          <success>TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask</success> (for all applications)
+          <success>Task TYPO3\Surf\Task\CustomTask after TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask</success> (for all applications)
       test:
       switch:
       cleanup:
