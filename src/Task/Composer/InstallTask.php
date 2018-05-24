@@ -25,11 +25,11 @@ class InstallTask extends AbstractComposerTask
      *
      * @var array
      */
-    protected $arguments = array(
+    protected $arguments = [
         '--no-ansi',
         '--no-interaction',
         '--no-dev',
         '--no-progress',
         '--classmap-authoritative'
-    );
+    ];
 }

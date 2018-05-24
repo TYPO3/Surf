@@ -31,11 +31,11 @@ class TagTaskTest extends BaseTaskTest
      */
     public function executeWithRequiredOptionsAndPushTagCreatesAndPushesTag()
     {
-        $options = array(
+        $options = [
             'tagName' => 'release-{releaseIdentifier}',
             'description' => 'Release {releaseIdentifier} - by Surf.',
             'pushTag' => true
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('git tag -f -a -m \'Release ' . $this->deployment->getReleaseIdentifier() . ' - by Surf.\' \'release-' . $this->deployment->getReleaseIdentifier() . '\'');
@@ -47,11 +47,11 @@ class TagTaskTest extends BaseTaskTest
      */
     public function executeWithRequiredOptionsAndRecurseIntoSubmodulesCreatesTagOnRootAndSubmodules()
     {
-        $options = array(
+        $options = [
             'tagName' => 'release-{releaseIdentifier}',
             'description' => 'Release {releaseIdentifier} - by Surf.',
             'recurseIntoSubmodules' => true
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('git tag -f -a -m \'Release ' . $this->deployment->getReleaseIdentifier() . ' - by Surf.\' \'release-' . $this->deployment->getReleaseIdentifier() . '\'');

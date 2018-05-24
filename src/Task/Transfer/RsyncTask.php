@@ -33,14 +33,13 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $localPackagePath = $deployment->getWorkspacePath($application);
         $releasePath = $deployment->getApplicationReleasePath($application);
 
-        $remotePath = Files::concatenatePaths(array($application->getDeploymentPath(), 'cache/transfer'));
+        $remotePath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache/transfer']);
         // make sure there is a remote .cache folder
         $command = 'mkdir -p ' . $remotePath;
         $this->shell->executeOrSimulate($command, $node, $deployment);
@@ -53,7 +52,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
         $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $noPubkeyAuthentication . $port . $key . '" ');
 
-        $rsyncExcludes = isset($options['rsyncExcludes']) ? $options['rsyncExcludes'] : array('.git');
+        $rsyncExcludes = isset($options['rsyncExcludes']) ? $options['rsyncExcludes'] : ['.git'];
         $excludeFlags = $this->getExcludeFlags($rsyncExcludes);
 
         $rsyncFlags = (isset($options['rsyncFlags']) ? $options['rsyncFlags'] : '--recursive --times --perms --links --delete --delete-excluded') . $excludeFlags;
@@ -63,10 +62,10 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $command = "rsync {$quietFlag} --compress {$rshFlag} {$rsyncFlags} " . escapeshellarg($localPackagePath . '/.') . ' ' . escapeshellarg($destinationArgument);
 
         if ($node->hasOption('password')) {
-            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array(dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect'));
+            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
             if (Phar::running() !== '') {
                 $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
-                $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array($deployment->getTemporaryPath(), 'PasswordSshLogin.expect'));
+                $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([$deployment->getTemporaryPath(), 'PasswordSshLogin.expect']);
                 file_put_contents($passwordSshLoginScriptPathAndFilename, $passwordSshLoginScriptContents);
             }
             $command = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $command);
@@ -93,9 +92,8 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -107,9 +105,8 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
         $this->shell->execute('rm -Rf ' . $releasePath, $node, $deployment, true);

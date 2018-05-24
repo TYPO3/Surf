@@ -51,14 +51,14 @@ class Factory implements FactoryInterface
      */
     public function createCommands()
     {
-        return array(
+        return [
             new ShowCommand(),
             new SimulateCommand(),
             new DescribeCommand(),
             new DeployCommand(),
             new MigrateCommand(),
             new SelfUpdateCommand(),
-        );
+        ];
     }
 
     /**
@@ -70,15 +70,15 @@ class Factory implements FactoryInterface
     {
         if ($this->output === null) {
             $this->output = new ConsoleOutput();
-            $this->output->getFormatter()->setStyle('b', new OutputFormatterStyle(null, null, array('bold')));
+            $this->output->getFormatter()->setStyle('b', new OutputFormatterStyle(null, null, ['bold']));
             $this->output->getFormatter()->setStyle('i', new OutputFormatterStyle('black', 'white'));
-            $this->output->getFormatter()->setStyle('u', new OutputFormatterStyle(null, null, array('underscore')));
-            $this->output->getFormatter()->setStyle('em', new OutputFormatterStyle(null, null, array('reverse')));
-            $this->output->getFormatter()->setStyle('strike', new OutputFormatterStyle(null, null, array('conceal')));
+            $this->output->getFormatter()->setStyle('u', new OutputFormatterStyle(null, null, ['underscore']));
+            $this->output->getFormatter()->setStyle('em', new OutputFormatterStyle(null, null, ['reverse']));
+            $this->output->getFormatter()->setStyle('strike', new OutputFormatterStyle(null, null, ['conceal']));
             $this->output->getFormatter()->setStyle('success', new OutputFormatterStyle('green'));
             $this->output->getFormatter()->setStyle('warning', new OutputFormatterStyle('black', 'yellow'));
             $this->output->getFormatter()->setStyle('notice', new OutputFormatterStyle('yellow'));
-            $this->output->getFormatter()->setStyle('info', new OutputFormatterStyle('white', null, array('bold')));
+            $this->output->getFormatter()->setStyle('info', new OutputFormatterStyle('white', null, ['bold']));
             $this->output->getFormatter()->setStyle('debug', new OutputFormatterStyle('white'));
         }
 
@@ -103,7 +103,7 @@ class Factory implements FactoryInterface
         if ($deployment->getLogger() === null) {
             $logger = $this->createLogger();
             if (!$simulateDeployment) {
-                $logFilePath = Files::concatenatePaths(array($this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log'));
+                $logFilePath = Files::concatenatePaths([$this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log']);
                 $logger->pushHandler(new StreamHandler($logFilePath));
             }
             $deployment->setLogger($logger);
@@ -124,7 +124,7 @@ class Factory implements FactoryInterface
     public function getDeploymentNames($path = null)
     {
         $path = $this->getDeploymentsBasePath($path);
-        $files = glob(Files::concatenatePaths(array($path, '*.php')));
+        $files = glob(Files::concatenatePaths([$path, '*.php']));
         return array_map(function ($file) use ($path) {
             return substr($file, strlen($path) + 1, -4);
         }, $files);
@@ -146,7 +146,7 @@ class Factory implements FactoryInterface
         if (!$path && is_dir($localDeploymentDescription)) {
             $path = $localDeploymentDescription;
         }
-        $path = $path ?: Files::concatenatePaths(array($this->getHomeDir(), 'deployments'));
+        $path = $path ?: Files::concatenatePaths([$this->getHomeDir(), 'deployments']);
         $this->ensureDirectoryExists($path);
         return $path;
     }
@@ -166,12 +166,12 @@ class Factory implements FactoryInterface
             $path = $path ?: $this->getHomeDir();
             if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
                 if ($workspacesBasePath = getenv('LOCALAPPDATA')) {
-                    $workspacesBasePath = Files::concatenatePaths(array($workspacesBasePath, 'Surf'));
+                    $workspacesBasePath = Files::concatenatePaths([$workspacesBasePath, 'Surf']);
                 } else {
-                    $workspacesBasePath = Files::concatenatePaths(array($path, 'workspace'));
+                    $workspacesBasePath = Files::concatenatePaths([$path, 'workspace']);
                 }
             } else {
-                $workspacesBasePath = Files::concatenatePaths(array($path, 'workspace'));
+                $workspacesBasePath = Files::concatenatePaths([$path, 'workspace']);
             }
         }
         $this->ensureDirectoryExists($workspacesBasePath);
@@ -205,12 +205,12 @@ class Factory implements FactoryInterface
             $deploymentName = array_pop($deploymentNames);
         }
 
-        $deploymentPathAndFilename = Files::concatenatePaths(array($deploymentConfigurationPath, $deploymentName . '.php'));
+        $deploymentPathAndFilename = Files::concatenatePaths([$deploymentConfigurationPath, $deploymentName . '.php']);
         if (file_exists($deploymentPathAndFilename)) {
             $deployment = new Deployment($deploymentName);
             $deployment->setDeploymentBasePath($deploymentConfigurationPath);
             $deployment->setWorkspacesBasePath($workspacesBasePath);
-            $tempPath = Files::concatenatePaths(array($workspacesBasePath, $deploymentName));
+            $tempPath = Files::concatenatePaths([$workspacesBasePath, $deploymentName]);
             $this->ensureDirectoryExists($tempPath);
             $deployment->setTemporaryPath($tempPath);
             require($deploymentPathAndFilename);
@@ -236,12 +236,12 @@ class Factory implements FactoryInterface
                 if (!getenv('APPDATA')) {
                     throw new \RuntimeException('The APPDATA or SURF_HOME environment variable must be set for composer to run correctly');
                 }
-                $home = Files::concatenatePaths(array(getenv('APPDATA'), 'Surf'));
+                $home = Files::concatenatePaths([getenv('APPDATA'), 'Surf']);
             } else {
                 if (!getenv('HOME')) {
                     throw new \RuntimeException('The HOME or SURF_HOME environment variable must be set for composer to run correctly');
                 }
-                $home = Files::concatenatePaths(array(getenv('HOME'), '.surf'));
+                $home = Files::concatenatePaths([getenv('HOME'), '.surf']);
             }
         }
         $this->ensureDirectoryExists($home);
@@ -257,7 +257,7 @@ class Factory implements FactoryInterface
     {
         if ($this->logger === null) {
             $consoleHandler = new ConsoleHandler($this->createOutput());
-            $this->logger = new Logger('TYPO3 Surf', array($consoleHandler));
+            $this->logger = new Logger('TYPO3 Surf', [$consoleHandler]);
         }
         return $this->logger;
     }
@@ -266,7 +266,6 @@ class Factory implements FactoryInterface
      * Check that the directory exists
      *
      * @param string $dir
-     * @return void
      * @throws InvalidConfigurationException
      */
     protected function ensureDirectoryExists($dir)

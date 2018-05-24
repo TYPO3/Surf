@@ -37,7 +37,7 @@ class RsyncTaskTest extends BaseTaskTest
         $this->node->setOption('hostname', 'myserver.local');
         $this->node->setOption('username', 'jdoe');
 
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('mkdir -p /home/jdoe/app/cache/transfer');
         $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
@@ -53,7 +53,7 @@ class RsyncTaskTest extends BaseTaskTest
         $this->node->setOption('username', 'jdoe');
         $this->node->setOption('password', 'jdoe');
 
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('mkdir -p /home/jdoe/app/cache/transfer');
         $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh -o PubkeyAuthentication=no"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
@@ -69,7 +69,7 @@ class RsyncTaskTest extends BaseTaskTest
         $this->node->setOption('username', 'jdoe');
         $this->node->setOption('privateKeyFile', '~/.ssh/foo');
 
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('mkdir -p /home/jdoe/app/cache/transfer');
         $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh -i \'~\/.ssh\/foo\'"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
@@ -170,7 +170,7 @@ class RsyncTaskTest extends BaseTaskTest
     {
         $this->node->setOption('hostname', 'myserver.local');
 
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('/rsync .* \'myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
     }

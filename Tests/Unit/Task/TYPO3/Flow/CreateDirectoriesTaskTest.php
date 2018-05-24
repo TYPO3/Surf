@@ -43,7 +43,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
      */
     public function createsDirectoriesInDeploymentRoot()
     {
-        $options = array();
+        $options = [];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted("cd {$this->application->getDeploymentPath()}");

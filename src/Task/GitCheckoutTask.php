@@ -17,7 +17,6 @@ use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
 
 /**
  * A Git checkout task
- *
  */
 class GitCheckoutTask extends AbstractCheckoutTask
 {
@@ -28,18 +27,17 @@ class GitCheckoutTask extends AbstractCheckoutTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['repositoryUrl'])) {
             throw new InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', $application->getName()), 1335974764);
         }
 
         $releasePath = $deployment->getApplicationReleasePath($application);
-        $checkoutPath = Files::concatenatePaths(array($application->getDeploymentPath(), 'cache/transfer'));
+        $checkoutPath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache/transfer']);
 
         if (!isset($options['hardClean'])) {
             $options['hardClean'] = true;
@@ -64,9 +62,8 @@ class GitCheckoutTask extends AbstractCheckoutTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
         $this->shell->execute('rm -f ' . $releasePath . 'REVISION', $node, $deployment, true);

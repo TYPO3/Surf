@@ -18,7 +18,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for adding a "TYPO3.Release" download
- *
  */
 class AddDownloadTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -31,9 +30,8 @@ class AddDownloadTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->checkOptionsForValidity($options);
         $host = $options['releaseHost'];
@@ -45,7 +43,7 @@ class AddDownloadTask extends Task implements ShellCommandServiceAwareInterface
         $productName = $options['productName'];
         $files = $options['files'];
 
-        $downloads = array();
+        $downloads = [];
         foreach ($files as $file) {
             $downloads[] = sprintf('"%s,%s,%s"', basename($file), sha1($file), sprintf($uriPattern, basename($file)));
         }
@@ -59,9 +57,8 @@ class AddDownloadTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -70,12 +67,11 @@ class AddDownloadTask extends Task implements ShellCommandServiceAwareInterface
      * Check if all required options are given
      *
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function checkOptionsForValidity(array $options)
     {
-        foreach (array('releaseHost', 'releaseHostSitePath', 'version', 'label', 'downloadUriPattern', 'productName', 'files') as $optionName) {
+        foreach (['releaseHost', 'releaseHostSitePath', 'version', 'label', 'downloadUriPattern', 'productName', 'files'] as $optionName) {
             if (!isset($options[$optionName])) {
                 throw new InvalidConfigurationException('"' . $optionName . '" option not set', 1321549657);
             }

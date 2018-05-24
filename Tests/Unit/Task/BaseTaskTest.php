@@ -62,12 +62,12 @@ abstract class BaseTaskTest extends TestCase
      */
     protected function setUp()
     {
-        $this->commands = array('executed' => array());
+        $this->commands = ['executed' => []];
         $commands = &$this->commands;
-        $this->responses = array();
+        $this->responses = [];
         $responses = &$this->responses;
 
-        /** @var \TYPO3\Surf\Domain\Service\ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService */
         $shellCommandService = $this->createMock(ShellCommandService::class);
         $shellCommandService->expects($this->any())->method('execute')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
             if (is_array($command)) {
@@ -99,7 +99,7 @@ abstract class BaseTaskTest extends TestCase
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
         $this->deployment = new Deployment('TestDeployment');
-        /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
@@ -115,7 +115,6 @@ abstract class BaseTaskTest extends TestCase
      * (called with execute or executeOrSimulate).
      *
      * @param string $commandSubstring A command substring that was expected to be executed or a PREG pattern (e.g. "/git init .* -q/")
-     * @return void
      */
     protected function assertCommandExecuted($commandSubstring)
     {

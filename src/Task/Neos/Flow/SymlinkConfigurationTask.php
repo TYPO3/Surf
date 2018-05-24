@@ -36,9 +36,8 @@ class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareI
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
 
@@ -48,11 +47,11 @@ class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareI
             $context = 'Production';
         }
 
-        $commands = array(
+        $commands = [
             "cd {$targetReleasePath}/Configuration",
             "if [ -d {$context} ]; then rm -Rf {$context}; fi",
             "mkdir -p ../../../shared/Configuration/{$context}"
-        );
+        ];
 
         if (strpos($context, '/') !== false) {
             $baseContext = dirname($context);
@@ -72,9 +71,8 @@ class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareI
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

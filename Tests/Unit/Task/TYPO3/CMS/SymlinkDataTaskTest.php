@@ -42,7 +42,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
      */
     public function withoutOptionsCreatesCorrectLinks()
     {
-        $options = array();
+        $options = [];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
@@ -59,9 +59,9 @@ class SymlinkDataTaskTest extends BaseTaskTest
      */
     public function withAdditionalDirectoriesCreatesCorrectLinks()
     {
-        $options = array(
-            'directories' => array('pictures', 'test/assets'),
-        );
+        $options = [
+            'directories' => ['pictures', 'test/assets'],
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
@@ -82,9 +82,9 @@ class SymlinkDataTaskTest extends BaseTaskTest
      */
     public function withApplicationRootCreatesCorrectLinks()
     {
-        $options = array(
+        $options = [
             'webDirectory' => 'web/'
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
@@ -101,10 +101,10 @@ class SymlinkDataTaskTest extends BaseTaskTest
      */
     public function withAdditionalDirectoriesAndApplicationRootCreatesCorrectLinks()
     {
-        $options = array(
+        $options = [
             'webDirectory' => 'web/',
-            'directories' => array('pictures', 'test/assets', '/withSlashes/'),
-        );
+            'directories' => ['pictures', 'test/assets', '/withSlashes/'],
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);

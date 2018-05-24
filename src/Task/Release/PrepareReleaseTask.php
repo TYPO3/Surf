@@ -18,7 +18,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for preparing a "TYPO3.Release" release
- *
  */
 class PrepareReleaseTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -31,9 +30,8 @@ class PrepareReleaseTask extends Task implements ShellCommandServiceAwareInterfa
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->checkOptionsForValidity($options);
         $host = $options['releaseHost'];
@@ -52,9 +50,8 @@ class PrepareReleaseTask extends Task implements ShellCommandServiceAwareInterfa
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -63,12 +60,11 @@ class PrepareReleaseTask extends Task implements ShellCommandServiceAwareInterfa
      * Check if all required options are given
      *
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function checkOptionsForValidity(array $options)
     {
-        foreach (array('releaseHost', 'releaseHostSitePath', 'version', 'productName') as $optionName) {
+        foreach (['releaseHost', 'releaseHostSitePath', 'version', 'productName'] as $optionName) {
             if (!isset($options[$optionName])) {
                 throw new InvalidConfigurationException('"' . $optionName . '" option not set', 1321549659);
             }

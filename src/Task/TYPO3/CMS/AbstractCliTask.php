@@ -50,7 +50,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param array $options
      * @return bool|mixed
      */
-    protected function executeCliCommand(array $cliArguments, Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function executeCliCommand(array $cliArguments, Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
         $phpBinaryPathAndFilename = isset($options['phpBinaryPathAndFilename']) ? $options['phpBinaryPathAndFilename'] : 'php';
@@ -62,10 +62,10 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
 
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
 
-        return $this->shell->executeOrSimulate(array(
+        return $this->shell->executeOrSimulate([
             'cd ' . escapeshellarg($this->workingDirectory),
             $commandPrefix . implode(' ', array_map('escapeshellarg', $cliArguments))
-        ), $this->targetNode, $deployment);
+        ], $this->targetNode, $deployment);
     }
 
     /**
@@ -75,9 +75,8 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -90,7 +89,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param Deployment $deployment
      * @param array $options
      */
-    protected function determineWorkingDirectoryAndTargetNode(Node $node, Application $application, Deployment $deployment, array $options = array())
+    protected function determineWorkingDirectoryAndTargetNode(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($this->workingDirectory, $this->targetNode)) {
             if (isset($options['useApplicationWorkspace']) && $options['useApplicationWorkspace'] === true) {
@@ -110,7 +109,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param array $options
      * @return string
      */
-    protected function getAvailableCliPackage(Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function getAvailableCliPackage(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         try {
             $this->getConsoleScriptFileName($node, $application, $deployment, $options);
@@ -132,13 +131,12 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @return string
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    protected function getConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function getConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         if (isset($options['scriptFileName']) && strpos($options['scriptFileName'], 'typo3cms') !== false && $this->fileExists($options['scriptFileName'], $node, $application, $deployment, $options)) {
             return $options['scriptFileName'];
-        } else {
-            throw new InvalidConfigurationException('TYPO3 Console script was not found. Make sure it is available in your project and you set the "scriptFileName" option correctly. Alternatively you can remove this task (' . get_class($this) . ') in your deployment configuration.', 1481489230);
         }
+        throw new InvalidConfigurationException('TYPO3 Console script was not found. Make sure it is available in your project and you set the "scriptFileName" option correctly. Alternatively you can remove this task (' . get_class($this) . ') in your deployment configuration.', 1481489230);
     }
 
     /**
@@ -151,7 +149,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param array $options
      * @return bool
      */
-    protected function packageExists($packageKey, Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function packageExists($packageKey, Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
         return $this->directoryExists($webDirectory . '/typo3conf/ext/' . $packageKey, $node, $application, $deployment, $options);
@@ -167,10 +165,10 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param array $options
      * @return bool
      */
-    protected function directoryExists($directory, Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function directoryExists($directory, Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
-        $directory = Files::concatenatePaths(array($this->workingDirectory, $directory));
+        $directory = Files::concatenatePaths([$this->workingDirectory, $directory]);
         return $this->shell->executeOrSimulate('test -d ' . escapeshellarg($directory), $this->targetNode, $deployment, true) === false ? false : true;
     }
 
@@ -184,7 +182,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param array $options
      * @return bool
      */
-    protected function fileExists($pathAndFileName, Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function fileExists($pathAndFileName, Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
         $pathAndFileName = $this->workingDirectory . '/' . $pathAndFileName;
@@ -198,8 +196,10 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     protected function ensureApplicationIsTypo3Cms(Application $application)
     {
         if (!$application instanceof CMS) {
-            throw new InvalidConfigurationException('Application must be of type TYPO3 CMS when executing this task!',
-                1420210955);
+            throw new InvalidConfigurationException(
+                'Application must be of type TYPO3 CMS when executing this task!',
+                1420210955
+            );
         }
     }
 
@@ -208,7 +208,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      *
      * @return string
      */
-    protected function getCliDispatchScriptFileName(array $options = array())
+    protected function getCliDispatchScriptFileName(array $options = [])
     {
         $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
         return $webDirectory !== '' ? sprintf('%s/typo3/cli_dispatch.phpsh', $webDirectory) : 'typo3/cli_dispatch.phpsh';

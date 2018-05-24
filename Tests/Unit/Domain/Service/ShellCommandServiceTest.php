@@ -32,8 +32,8 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null, $privateKey = null)
     {
-        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $service */
-        $service = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $service */
+        $service = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
         $node->setHostname('remote-host.example.com');
@@ -59,7 +59,7 @@ class ShellCommandServiceTest extends TestCase
         $deployment->setLogger($mockLogger);
 
         $expectedCommand = $expectedCommandArguments . ' \'echo "Hello World"\'';
-        $service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue(array(0, 'Hello World')));
+        $service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue([0, 'Hello World']));
 
         $service->executeOrSimulate('echo "Hello World"', $node, $deployment);
     }
@@ -72,39 +72,39 @@ class ShellCommandServiceTest extends TestCase
     public function commandOptionDataProvider()
     {
         $resourcesPath = realpath(__DIR__ . '/../../../../Resources');
-        return array(
-            array(
+        return [
+            [
                 'ssh -A \'remote-host.example.com\'',
                 null,
                 null,
                 null
-            ),
-            array(
+            ],
+            [
                 'ssh -A \'jdoe@remote-host.example.com\'',
                 'jdoe',
                 null,
                 null
-            ),
-            array(
+            ],
+            [
                 'ssh -A -p \'12345\' \'jdoe@remote-host.example.com\'',
                 'jdoe',
                 null,
                 12345
-            ),
-            array(
+            ],
+            [
                 'ssh -A -i \'~/.ssh/foo\' \'jdoe@remote-host.example.com\'',
                 'jdoe',
                 null,
                 null,
                 '~/.ssh/foo'
-            ),
-            array(
+            ],
+            [
                 'expect \'' . $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',
                 'jdoe',
                 'myPassword',
                 null
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -116,11 +116,11 @@ class ShellCommandServiceTest extends TestCase
 
         $node = new Node('TestNode');
         $node->setHostname('asdf');
-        $arguments = array();
+        $arguments = [];
 
         $node->setOption('remoteCommandExecutionHandler', function (ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput) use (&$arguments) {
             $arguments = func_get_args();
-            return array(0, 'Hello World');
+            return [0, 'Hello World'];
         });
 
         $deployment = new Deployment('TestDeployment');
@@ -130,13 +130,13 @@ class ShellCommandServiceTest extends TestCase
 
         $response = $shellCommandService->execute('foo command', $node, $deployment);
         $this->assertEquals('Hello World', $response);
-        $this->assertSame(array(
+        $this->assertSame([
             $shellCommandService,
             'foo command',
             $node,
             $deployment,
             true
-        ), $arguments);
+        ], $arguments);
     }
 
     /**
@@ -144,8 +144,8 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeOnRemoteNodeJoinsCommandsWithAndOperator()
     {
-        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
-        $shellCommandService = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
+        $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
         $node->setHostname('asdf');
@@ -156,10 +156,11 @@ class ShellCommandServiceTest extends TestCase
         $deployment->setLogger($mockLogger);
 
         $shellCommandService->expects($this->any())->method('executeProcess')->with(
-            $deployment, $this->stringContains('bin/false && ls -al')
-        )->will($this->returnValue(array(0, 'Foo')));
+            $deployment,
+            $this->stringContains('bin/false && ls -al')
+        )->will($this->returnValue([0, 'Foo']));
 
-        $response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
+        $response = $shellCommandService->execute(['bin/false', 'ls -al'], $node, $deployment);
 
         $this->assertEquals('Foo', $response);
     }
@@ -169,8 +170,8 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeOnLocalNodeJoinsCommandsWithAndOperator()
     {
-        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
-        $shellCommandService = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
+        $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
         $node->setHostname('localhost');
@@ -181,10 +182,11 @@ class ShellCommandServiceTest extends TestCase
         $deployment->setLogger($mockLogger);
 
         $shellCommandService->expects($this->any())->method('executeProcess')->with(
-            $deployment, $this->stringContains('bin/false && ls -al')
-        )->will($this->returnValue(array(0, 'Foo')));
+            $deployment,
+            $this->stringContains('bin/false && ls -al')
+        )->will($this->returnValue([0, 'Foo']));
 
-        $response = $shellCommandService->execute(array('bin/false', 'ls -al'), $node, $deployment);
+        $response = $shellCommandService->execute(['bin/false', 'ls -al'], $node, $deployment);
 
         $this->assertEquals('Foo', $response);
     }

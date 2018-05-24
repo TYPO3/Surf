@@ -46,7 +46,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
      */
     public function createsSymlinkInApplicationReleasePath()
     {
-        $options = array('symlinks' => array('media' => '../media'));
+        $options = ['symlinks' => ['media' => '../media']];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
@@ -61,13 +61,13 @@ class CreateSymlinksTaskTest extends BaseTaskTest
      */
     public function createsSymlinkInConfiguredBasePath()
     {
-        $options = array(
-            'symlinks' => array('media' => '../media'),
+        $options = [
+            'symlinks' => ['media' => '../media'],
             'genericSymlinksBaseDir' => '/home/foobar/data'
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted("cd /home/foobar/data");
+        $this->assertCommandExecuted('cd /home/foobar/data');
         $this->assertCommandExecuted('ln -s ../media media');
     }
 
@@ -78,13 +78,13 @@ class CreateSymlinksTaskTest extends BaseTaskTest
      */
     public function createsMultipleSymlinks()
     {
-        $options = array(
-            'symlinks' => array(
+        $options = [
+            'symlinks' => [
                 'media' => '../media',
                 'log' => '../log',
                 'var' => '../var',
-            ),
-        );
+            ],
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
@@ -93,4 +93,3 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('ln -s ../var var');
     }
 }
-

@@ -27,7 +27,7 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @var array
      */
-    protected $requiredOptions = array('sourceHost', 'sourceUser', 'sourcePassword', 'sourceDatabase', 'targetHost', 'targetUser', 'targetPassword', 'targetDatabase');
+    protected $requiredOptions = ['sourceHost', 'sourceUser', 'sourcePassword', 'sourceDatabase', 'targetHost', 'targetUser', 'targetPassword', 'targetDatabase'];
 
     /**
      * Execute this task
@@ -37,13 +37,12 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->assertRequiredOptionsExist($options);
 
-        $dumpCommand = new Process(array(
+        $dumpCommand = new Process([
             'mysqldump',
             '-h',
             $options['sourceHost'],
@@ -51,9 +50,9 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
             $options['sourceUser'],
             '-p' . $options['sourcePassword'],
             $options['sourceDatabase']
-        ));
+        ]);
 
-        $mysqlCommand = new Process(array(
+        $mysqlCommand = new Process([
             'mysql',
             '-h',
             $options['targetHost'],
@@ -62,9 +61,9 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
             '-p' . $options['targetPassword'],
             $options['targetDatabase']
 
-        ));
+        ]);
 
-        $sshCommand = array('ssh');
+        $sshCommand = ['ssh'];
         $username = isset($options['username']) ? $options['username'] . '@' : '';
         $hostname = $node->getHostname();
         $sshCommand[] = $username . $hostname;
@@ -92,9 +91,8 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

@@ -31,14 +31,15 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!$application instanceof Flow) {
-            throw new InvalidConfigurationException(sprintf('Flow application needed for SetFilePermissionsTask, got "%s"',
-                get_class($application)), 1358863436);
+            throw new InvalidConfigurationException(sprintf(
+                'Flow application needed for SetFilePermissionsTask, got "%s"',
+                get_class($application)
+            ), 1358863436);
         }
 
         $targetPath = $deployment->getApplicationReleasePath($application);
@@ -49,8 +50,11 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
             isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data'
         ];
 
-        $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'core:setfilepermissions',
-            $arguments), $node, $deployment);
+        $this->shell->executeOrSimulate($application->buildCommand(
+            $targetPath,
+            'core:setfilepermissions',
+            $arguments
+        ), $node, $deployment);
     }
 
     /**
@@ -60,9 +64,8 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -74,9 +77,8 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
     }
 }

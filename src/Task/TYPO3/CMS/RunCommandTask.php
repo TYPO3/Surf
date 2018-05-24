@@ -16,7 +16,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for running arbitrary TYPO3 commands
- *
  */
 class RunCommandTask extends AbstractCliTask
 {
@@ -28,10 +27,9 @@ class RunCommandTask extends AbstractCliTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->ensureApplicationIsTypo3Cms($application);
         if (!isset($options['command'])) {
@@ -53,9 +51,8 @@ class RunCommandTask extends AbstractCliTask
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -67,9 +64,8 @@ class RunCommandTask extends AbstractCliTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         // TODO Implement rollback
     }
@@ -78,12 +74,12 @@ class RunCommandTask extends AbstractCliTask
      * @param array $options The command options
      * @return array all arguments
      */
-    protected function getArguments(Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function getArguments(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
-        $arguments = array($this->getConsoleScriptFileName($node, $application, $deployment, $options), $options['command']);
+        $arguments = [$this->getConsoleScriptFileName($node, $application, $deployment, $options), $options['command']];
         if (isset($options['arguments'])) {
             if (!is_array($options['arguments'])) {
-                $options['arguments'] = array($options['arguments']);
+                $options['arguments'] = [$options['arguments']];
             }
             $arguments = array_merge($arguments, $options['arguments']);
         }

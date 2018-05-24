@@ -20,7 +20,6 @@ class ApplicationTest extends TestCase
      * The directory for shared assets is by default 'shared'
      *
      * @test
-     * @return void
      */
     public function getSharedDirectoryReturnsDefaultIfNoOptionsGiven()
     {
@@ -33,7 +32,6 @@ class ApplicationTest extends TestCase
      * by getSharedDirectory
      *
      * @test
-     * @return void
      */
     public function getSharedDirectoryReturnsContentOfOptionIfConfigured()
     {
@@ -48,7 +46,6 @@ class ApplicationTest extends TestCase
      *
      * @test
      * @expectedException \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @return void
      */
     public function getSharedDirectoryThrowsExceptionOnRelativePaths()
     {
@@ -57,4 +54,3 @@ class ApplicationTest extends TestCase
         $application->getSharedDirectory();
     }
 }
-

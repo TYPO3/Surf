@@ -9,16 +9,16 @@ namespace TYPO3\Surf\Tests\Unit\Command;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\Surf\Command\DescribeCommand;
-use PHPUnit\Framework\TestCase;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Integration\FactoryInterface;
+use TYPO3\Surf\Task\LocalShellTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
 use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
-use TYPO3\Surf\Task\LocalShellTask;
 
 class DescribeCommandTest extends TestCase
 {
@@ -48,22 +48,22 @@ class DescribeCommandTest extends TestCase
         $this->node->setHostname('hostname');
         $this->deployment = new Deployment('TestDeployment');
         $this->application = new Application('TestApplication');
-        $this->application->setOption('rsyncExcludes', array('.git', 'web/fileadmin', 'web/uploads'));
-        $this->application->setOption(RsyncTask::class . '[rsyncExcludes]', array('.git', 'web/fileadmin', 'web/uploads'));
+        $this->application->setOption('rsyncExcludes', ['.git', 'web/fileadmin', 'web/uploads']);
+        $this->application->setOption(RsyncTask::class . '[rsyncExcludes]', ['.git', 'web/fileadmin', 'web/uploads']);
         $this->application->addNode($this->node);
         $this->deployment->addApplication($this->application);
         $this->deployment->onInitialize(function () {
             $workflow = $this->deployment->getWorkflow();
-            $workflow->defineTask('TYPO3\\Surf\\Task\\CustomTask', LocalShellTask::class, array(
-                'command' => array(
-                    "touch test.txt",
-                ),
-            ));
-            $workflow->defineTask('TYPO3\\Surf\\Task\\OtherCustomTask', LocalShellTask::class, array(
-                'command' => array(
-                    "touch test.txt",
-                ),
-            ));
+            $workflow->defineTask('TYPO3\\Surf\\Task\\CustomTask', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\OtherCustomTask', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
             $workflow->addTask(FlushCachesTask::class, 'finalize');
             $workflow->afterTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
             $workflow->beforeTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
@@ -81,9 +81,9 @@ class DescribeCommandTest extends TestCase
         $command = new DescribeCommand();
         $command->setFactory($factory);
         $commandTester = new CommandTester($command);
-        $commandTester->execute(array(
+        $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
-        ));
+        ]);
 
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
@@ -126,5 +126,4 @@ Applications:
       cleanup:
 ', $commandTester->getDisplay());
     }
-
 }

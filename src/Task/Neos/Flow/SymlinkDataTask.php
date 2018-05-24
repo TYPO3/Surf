@@ -17,7 +17,6 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
  * A symlink task for linking the shared data directory
- *
  */
 class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -30,18 +29,17 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releaseIdentifier = $deployment->getReleaseIdentifier();
         $releasesPath = $application->getReleasesPath();
-        $commands = array(
+        $commands = [
             "mkdir -p $releasesPath/$releaseIdentifier/Data",
             "cd $releasesPath/$releaseIdentifier",
             'ln -sf ../../../shared/Data/Logs ./Data/Logs',
             'ln -sf ../../../shared/Data/Persistent ./Data/Persistent'
-        );
+        ];
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
@@ -52,9 +50,8 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
