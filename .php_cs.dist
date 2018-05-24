@@ -48,6 +48,7 @@ return PhpCsFixer\Config::create()
                             'phpdoc_no_package' => true,
                             'phpdoc_scalar' => true,
                             'no_blank_lines_after_phpdoc' => true,
+                            'array_syntax' => ['syntax' => 'short'],
                             'whitespace_after_comma_in_array' => true,
                             'function_typehint_space' => true,
                             'hash_to_slash_comment' => true,

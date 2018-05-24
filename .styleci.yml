@@ -1,0 +1,44 @@
+preset: psr2
+
+enabled:
+    - no_leading_import_slash
+    - no_trailing_comma_in_singleline_array
+    - no_singleline_whitespace_before_semicolons
+    - no_unused_imports
+    - concat_with_spaces
+    - no_whitespace_in_blank_line
+    - ordered_imports
+    - single_quote
+    - no_extra_consecutive_blank_lines
+    - phpdoc_no_package
+    - phpdoc_scalar
+    - no_blank_lines_after_phpdoc
+    - whitespace_after_comma_in_array
+    - function_typehint_space
+    - hash_to_slash_comment
+    - no_alias_functions
+    - lowercase_cast
+    - no_leading_namespace_whitespace
+    - native_function_casing
+    - no_empty_statement
+    - self_accessor
+    - no_short_bool_cast
+    - no_unneeded_control_parentheses
+    - phpdoc_no_empty_return
+    - phpdoc_trim
+    - no_superfluous_elseif
+    - no_useless_else
+    - phpdoc_types
+    - phpdoc_types_order
+    - dir_constant
+
+finder:
+  name:
+    - "*.php"
+  not-path:
+    - "Configuration"
+    - "Documentation"
+    - "Meta"
+    - "Migrations"
+    - "Resources"
+    - "vendor"
