@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Model;
 
 /*
@@ -106,13 +107,28 @@ class Deployment implements LoggerAwareInterface
     protected $temporaryPath;
 
     /**
+     * @var bool
+     */
+    private $forceRun = false;
+
+    /**
+     * @var string
+     */
+    private $deploymentLockIdentifier;
+
+    const DEFAULT_DEPLOYMENT_LOCK_IDENTIFIER = 'environment variable SURF_LOCK_IDENTIFIER not set on deploying instance';
+
+    /**
      * Constructor
      *
      * @param string $name
+     * @param string|null $deploymentLockIdentifier
      */
-    public function __construct($name)
+    public function __construct($name, $deploymentLockIdentifier = null)
     {
         $this->name = $name;
+
+        $this->setDeploymentLockIdentifier($deploymentLockIdentifier);
         $this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
     }
 
@@ -125,7 +141,6 @@ class Deployment implements LoggerAwareInterface
      * callbacks given to the deployment with onInitialize(...).
      *
      * @throws SurfException
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function initialize()
     {
@@ -150,19 +165,24 @@ class Deployment implements LoggerAwareInterface
      * Add a callback to the initialization
      *
      * @param callable $callback
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment
      */
     public function onInitialize($callback)
     {
         $this->initCallbacks[] = $callback;
+
         return $this;
     }
 
     /**
      * Run this deployment
+     *
+     * @param bool $force
      */
-    public function deploy()
+    public function deploy($force = false)
     {
+        $this->setForceRun($force);
         $this->logger->notice('Deploying ' . $this->name . ' (' . $this->releaseIdentifier . ')');
         $this->workflow->run($this);
     }
@@ -181,6 +201,7 @@ class Deployment implements LoggerAwareInterface
 
     /**
      * @param \TYPO3\Surf\Domain\Model\Application $application
+     *
      * @return string
      */
     public function getApplicationReleasePath(Application $application)
@@ -202,11 +223,13 @@ class Deployment implements LoggerAwareInterface
      * Sets the deployment name
      *
      * @param string $name The deployment name
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -223,6 +246,7 @@ class Deployment implements LoggerAwareInterface
                 $nodes[$node->getName()] = $node;
             }
         }
+
         return $nodes;
     }
 
@@ -238,9 +262,11 @@ class Deployment implements LoggerAwareInterface
         if ($name === 'localhost') {
             $node = new Node('localhost');
             $node->setHostname('localhost');
+
             return $node;
         }
         $nodes = $this->getNodes();
+
         return isset($nodes[$name]) ? $nodes[$name] : null;
     }
 
@@ -258,11 +284,13 @@ class Deployment implements LoggerAwareInterface
      * Add an application to this deployment
      *
      * @param \TYPO3\Surf\Domain\Model\Application $application The application to add
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
      */
     public function addApplication(Application $application)
     {
         $this->applications[$application->getName()] = $application;
+
         return $this;
     }
 
@@ -280,21 +308,25 @@ class Deployment implements LoggerAwareInterface
      * Sets the deployment workflow
      *
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow The workflow to set
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
      */
     public function setWorkflow($workflow)
     {
         $this->workflow = $workflow;
+
         return $this;
     }
 
     /**
      * @param LoggerInterface $logger
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment
      */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
+
         return $this;
     }
 
@@ -330,21 +362,25 @@ class Deployment implements LoggerAwareInterface
      * Set the dry run mode for this deployment
      *
      * @param bool $dryRun
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
      */
     public function setDryRun($dryRun)
     {
         $this->dryRun = $dryRun;
+
         return $this;
     }
 
     /**
      * @param int $status
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment
      */
     public function setStatus($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -383,6 +419,7 @@ class Deployment implements LoggerAwareInterface
      * Get an option defined on the deployment
      *
      * @param string $key
+     *
      * @return mixed
      */
     public function getOption($key)
@@ -394,6 +431,7 @@ class Deployment implements LoggerAwareInterface
      * Test if an option was set for this deployment
      *
      * @param string $key The option key
+     *
      * @return bool TRUE If the option was set
      */
     public function hasOption($key)
@@ -405,11 +443,13 @@ class Deployment implements LoggerAwareInterface
      * Sets all options for the deployment
      *
      * @param array $options The options to set indexed by option key
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment The current instance for chaining
      */
     public function setOptions($options)
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -418,11 +458,13 @@ class Deployment implements LoggerAwareInterface
      *
      * @param string $key The option key
      * @param mixed $value The option value
+     *
      * @return \TYPO3\Surf\Domain\Model\Deployment The current instance for chaining
      */
     public function setOption($key, $value)
     {
         $this->options[$key] = $value;
+
         return $this;
     }
 
@@ -474,12 +516,14 @@ class Deployment implements LoggerAwareInterface
 
     /**
      * Get a local workspace directory for the application
+     *
      * @param Application $application
+     *
      * @return string
      */
     public function getWorkspacePath(Application $application)
     {
-        return  $this->workspacesBasePath . '/' . $this->getName() . '/' . $application->getName();
+        return $this->workspacesBasePath . '/' . $this->getName() . '/' . $application->getName();
     }
 
     /**
@@ -487,6 +531,41 @@ class Deployment implements LoggerAwareInterface
      */
     public function getTemporaryPath()
     {
-        return  $this->temporaryPath;
+        return $this->temporaryPath;
+    }
+
+    /**
+     * @param bool $force
+     */
+    public function setForceRun($force)
+    {
+        $this->forceRun = $force;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getForceRun()
+    {
+        return $this->forceRun;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeploymentLockIdentifier()
+    {
+        return $this->deploymentLockIdentifier;
+    }
+
+    /**
+     * @param string|null $deploymentLockIdentifier
+     */
+    private function setDeploymentLockIdentifier($deploymentLockIdentifier = null)
+    {
+        if (! is_string($deploymentLockIdentifier) || $deploymentLockIdentifier === '') {
+            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') : self::DEFAULT_DEPLOYMENT_LOCK_IDENTIFIER;
+        }
+        $this->deploymentLockIdentifier = $deploymentLockIdentifier;
     }
 }

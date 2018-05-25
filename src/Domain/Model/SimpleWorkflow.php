@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Model;
 
 /*
@@ -8,6 +9,8 @@ namespace TYPO3\Surf\Domain\Model;
  * file that was distributed with this source code.
  */
 
+use Exception;
+use TYPO3\Surf\Exception\DeploymentLockedException;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
@@ -29,13 +32,14 @@ class SimpleWorkflow extends Workflow
     protected $stages = [
         // Initialize directories etc. (first time deploy)
         'initialize',
+        // Lock deployment
+        'lock',
         // Local preparation of and packaging of application assets (code and files)
         'package',
         // Transfer of application assets to the node
         'transfer',
         // Update the application assets on the node
         'update',
-
         // Migrate (Doctrine, custom)
         'migrate',
         // Prepare final release (e.g. warmup)
@@ -45,7 +49,9 @@ class SimpleWorkflow extends Workflow
         // Do symlink to current release
         'switch',
         // Delete temporary files or previous releases
-        'cleanup'
+        'cleanup',
+        // Unlock deployment
+        'unlock',
     ];
 
     /**
@@ -55,6 +61,7 @@ class SimpleWorkflow extends Workflow
      * A rollback will be done for all nodes as long as the stage switch was not completed.
      *
      * @param Deployment $deployment
+     *
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function run(Deployment $deployment)
@@ -76,7 +83,7 @@ class SimpleWorkflow extends Workflow
             foreach ($nodes as $node) {
                 $deployment->getLogger()->debug('Node ' . $node->getName());
                 foreach ($applications as $application) {
-                    if (!$application->hasNode($node)) {
+                    if (! $application->hasNode($node)) {
                         continue;
                     }
 
@@ -84,10 +91,18 @@ class SimpleWorkflow extends Workflow
 
                     try {
                         $this->executeStage($stage, $node, $application, $deployment);
-                    } catch (\Exception $exception) {
+                    } catch (DeploymentLockedException $exception) {
+                        $deployment->setStatus(Deployment::STATUS_CANCELLED);
+                        $deployment->getLogger()->info($exception->getMessage());
+                        if ($this->enableRollback) {
+                            $this->taskManager->rollback();
+                        }
+
+                        return;
+                    } catch (Exception $exception) {
                         $deployment->setStatus(Deployment::STATUS_FAILED);
                         if ($this->enableRollback) {
-                            if (array_search($stage, $this->stages) <= array_search('switch', $this->stages)) {
+                            if (array_search($stage, $this->stages, false) <= array_search('switch', $this->stages, false)) {
                                 $deployment->getLogger()->error('Got exception "' . $exception->getMessage() . '" rolling back.');
                                 $this->taskManager->rollback();
                             } else {
@@ -97,6 +112,7 @@ class SimpleWorkflow extends Workflow
                         } else {
                             $deployment->getLogger()->error('Got exception "' . $exception->getMessage() . '" but rollback disabled. Stopping.');
                         }
+
                         return;
                     }
                 }
@@ -117,11 +133,13 @@ class SimpleWorkflow extends Workflow
 
     /**
      * @param bool $enableRollback
+     *
      * @return \TYPO3\Surf\Domain\Model\SimpleWorkflow
      */
     public function setEnableRollback($enableRollback)
     {
         $this->enableRollback = $enableRollback;
+
         return $this;
     }
 

@@ -120,6 +120,7 @@ Applications:
     Nodes: <success>TestNode</success>
     Detailed workflow: 
       initialize:
+      lock:
       package:
       transfer:
       update:
@@ -132,6 +133,7 @@ Applications:
       test:
       switch:
       cleanup:
+      unlock:
 ', $commandTester->getDisplay());
     }
 
@@ -179,6 +181,7 @@ Applications:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
+      lockDeployment => <success>1</success>
       context => <success>Production</success>
       scriptFileName => <success>vendor/bin/typo3cms</success>
       webDirectory => <success>web</success>
@@ -197,6 +200,9 @@ Applications:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application TYPO3 CMS)
           <success>Task TYPO3\Surf\Task\Generic\CreateDirectoriesTask after TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application TYPO3 CMS)
+      lock:
+        tasks:
+          <success>TYPO3\Surf\Task\LockDeploymentTask</success> (for application TYPO3 CMS)
       package:
         tasks:
           <success>TYPO3\Surf\Task\Package\GitTask</success> (for application TYPO3 CMS)
@@ -224,6 +230,9 @@ Applications:
       cleanup:
         tasks:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application TYPO3 CMS)
+      unlock:
+        tasks:
+          <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application TYPO3 CMS)
 ', $commandTester->getDisplay());
     }
 
@@ -257,6 +266,7 @@ Applications:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>composer</success>
+      lockDeployment => <success>1</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>
@@ -269,6 +279,9 @@ Applications:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
           <success>Task TYPO3\Surf\Task\Generic\CreateDirectoriesTask after TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
           <success>TYPO3\Surf\Task\Neos\Flow\CreateDirectoriesTask</success> (for application Neos)
+      lock:
+        tasks:
+          <success>TYPO3\Surf\Task\LockDeploymentTask</success> (for application Neos)
       package:
         tasks:
           <success>TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
@@ -299,6 +312,9 @@ Applications:
       cleanup:
         tasks:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application Neos)
+      unlock:
+        tasks:
+          <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application Neos)
 ', $commandTester->getDisplay());
     }
 }

@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Domain\Model;
 
 use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception as SurfException;
+use TYPO3\Surf\Exception\DeploymentLockedException;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
@@ -281,6 +282,7 @@ abstract class Workflow
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @throws DeploymentLockedException
      */
     protected function executeStage($stage, Node $node, Application $application, Deployment $deployment)
     {
@@ -310,6 +312,7 @@ abstract class Workflow
      * @param string $stage
      * @param array $callstack
      * @throws TaskExecutionException
+     * @throws DeploymentLockedException
      */
     protected function executeTask($task, Node $node, Application $application, Deployment $deployment, $stage, array &$callstack = [])
     {
