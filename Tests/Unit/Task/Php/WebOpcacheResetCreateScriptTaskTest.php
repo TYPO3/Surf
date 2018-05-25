@@ -14,6 +14,7 @@ use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Generator\RandomBytesGeneratorInterface;
 use TYPO3\Surf\Exception\TaskExecutionException;
 use TYPO3\Surf\Task\Php\WebOpcacheResetCreateScriptTask;
+use TYPO3\Surf\Task\Php\WebOpcacheResetExecuteTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
@@ -42,7 +43,7 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
         $this->randomBytesGenerator->expects($this->once())->method('generate')->willReturn($randomBytes);
         $this->task->execute($this->node, $this->application, $this->deployment);
 
-        $this->assertSame($expectedScriptIdentifier, $this->application->getOption('TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask[scriptIdentifier]'));
+        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class.'[scriptIdentifier]'));
     }
 
     /**

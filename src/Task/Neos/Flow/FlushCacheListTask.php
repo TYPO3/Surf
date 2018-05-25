@@ -22,7 +22,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  *
  * You can configure the list of cache identifiers in the task option ```flushCacheList```, like::
  *
- *     $workflow->setTaskOptions('TYPO3\\Surf\\Task\\Neos\\Flow\\FlushCacheListTask', [
+ *     $workflow->setTaskOptions(FlushCacheListTask::class, [
  *         'flushCacheList' => 'Neos_Fusion_Content, Flow_Session_MetaData, Flow_Session_Storage'
  *     ])
  *

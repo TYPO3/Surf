@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Application\Neos;
 
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Task\Neos\Neos\ImportSiteTask;
 
 /**
  * A Neos application template
@@ -95,6 +96,6 @@ class Neos extends Flow
     {
         parent::registerTasks($workflow, $deployment);
 
-        $workflow->addTask('TYPO3\\Surf\\Task\\Neos\\Neos\\ImportSiteTask', 'migrate', $this);
+        $workflow->addTask(ImportSiteTask::class, 'migrate', $this);
     }
 }
