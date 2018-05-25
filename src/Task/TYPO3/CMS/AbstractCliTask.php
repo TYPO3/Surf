@@ -202,4 +202,15 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
                 1420210955);
         }
     }
+
+    /**
+     * @param array $options
+     *
+     * @return string
+     */
+    protected function getCliDispatchScriptFileName(array $options = array())
+    {
+        $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
+        return $webDirectory !== '' ? sprintf('%s/typo3/cli_dispatch.phpsh', $webDirectory) : 'typo3/cli_dispatch.phpsh';
+    }
 }
