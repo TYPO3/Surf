@@ -25,7 +25,10 @@
     "autoload": {
         "psr-4": {
             "TYPO3\\Surf\\": "src"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
