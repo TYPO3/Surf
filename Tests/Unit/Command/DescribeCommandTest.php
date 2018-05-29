@@ -9,16 +9,16 @@ namespace TYPO3\Surf\Tests\Unit\Command;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\Surf\Command\DescribeCommand;
-use PHPUnit\Framework\TestCase;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Integration\FactoryInterface;
+use TYPO3\Surf\Task\LocalShellTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
 use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
-use TYPO3\Surf\Task\LocalShellTask;
 
 class DescribeCommandTest extends TestCase
 {
@@ -56,12 +56,12 @@ class DescribeCommandTest extends TestCase
             $workflow = $this->deployment->getWorkflow();
             $workflow->defineTask('TYPO3\\Surf\\Task\\CustomTask', LocalShellTask::class, array(
                 'command' => array(
-                    "touch test.txt",
+                    'touch test.txt',
                 ),
             ));
             $workflow->defineTask('TYPO3\\Surf\\Task\\OtherCustomTask', LocalShellTask::class, array(
                 'command' => array(
-                    "touch test.txt",
+                    'touch test.txt',
                 ),
             ));
             $workflow->addTask(FlushCachesTask::class, 'finalize');
@@ -126,5 +126,4 @@ Applications:
       cleanup:
 ', $commandTester->getDisplay());
     }
-
 }

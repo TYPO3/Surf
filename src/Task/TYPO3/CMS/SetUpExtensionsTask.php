@@ -29,7 +29,6 @@ class SetUpExtensionsTask extends AbstractCliTask
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -37,7 +36,7 @@ class SetUpExtensionsTask extends AbstractCliTask
         try {
             $scriptFileName = $this->getConsoleScriptFileName($node, $application, $deployment, $options);
         } catch (InvalidConfigurationException $e) {
-            $deployment->getLogger()->warning('TYPO3 Console script (' .$options['scriptFileName'] . ') was not found! Make sure it is available in your project, you set the "scriptFileName" option correctly or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            $deployment->getLogger()->warning('TYPO3 Console script (' . $options['scriptFileName'] . ') was not found! Make sure it is available in your project, you set the "scriptFileName" option correctly or remove this task (' . __CLASS__ . ') in your deployment configuration!');
             return;
         }
         $extensionKeys = isset($options['extensionKeys']) ? $options['extensionKeys'] : array();

@@ -12,10 +12,9 @@ interface RandomBytesGeneratorInterface
 {
 
     /**
-     * @param integer $length
+     * @param int $length
      *
      * @return string
      */
     public function generate($length);
-
 }

@@ -31,7 +31,6 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -67,7 +66,6 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {

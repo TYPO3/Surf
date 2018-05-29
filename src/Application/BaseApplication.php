@@ -12,13 +12,13 @@ namespace TYPO3\Surf\Application;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Task\CleanupReleasesTask;
+use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Task\Generic\CreateDirectoriesTask;
 use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
-use TYPO3\Surf\Task\SymlinkReleaseTask;
-use TYPO3\Surf\Task\CleanupReleasesTask;
-use TYPO3\Surf\Task\Package\GitTask;
-use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Task\GitCheckoutTask;
+use TYPO3\Surf\Task\Package\GitTask;
+use TYPO3\Surf\Task\SymlinkReleaseTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
 
 /**
@@ -84,13 +84,11 @@ class BaseApplication extends Application
      *
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     *
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
-        $this->setOption(CreateDirectoriesTask::class.'[directories]', $this->getDirectories());
-        $this->setOption(CreateSymlinksTask::class.'[symlinks]', $this->getSymlinks());
+        $this->setOption(CreateDirectoriesTask::class . '[directories]', $this->getDirectories());
+        $this->setOption(CreateSymlinksTask::class . '[symlinks]', $this->getSymlinks());
 
         if ($this->hasOption('packageMethod')) {
             $this->registerTasksForPackageMethod($workflow, $this->getOption('packageMethod'));
@@ -231,8 +229,6 @@ class BaseApplication extends Application
     /**
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param string $packageMethod
-     *
-     * @return void
      */
     protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod)
     {
@@ -254,8 +250,6 @@ class BaseApplication extends Application
     /**
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param string $transferMethod
-     *
-     * @return void
      */
     protected function registerTasksForTransferMethod(Workflow $workflow, $transferMethod)
     {
@@ -278,8 +272,6 @@ class BaseApplication extends Application
     /**
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param string $updateMethod
-     *
-     * @return void
      */
     protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod)
     {

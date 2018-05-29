@@ -10,7 +10,6 @@ namespace TYPO3\Surf\Domain\Model;
 
 /**
  * A Node
- *
  */
 class Node
 {
@@ -106,7 +105,6 @@ class Node
     }
 
     /**
-     *
      * @param string $key
      * @return mixed
      */
@@ -116,7 +114,6 @@ class Node
     }
 
     /**
-     *
      * @param string $key
      * @param mixed $value
      * @return \TYPO3\Surf\Domain\Model\Node
@@ -145,7 +142,6 @@ class Node
     }
 
     /**
-     *
      * @return string
      */
     public function __toString()

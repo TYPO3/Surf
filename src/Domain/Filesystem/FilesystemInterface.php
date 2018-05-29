@@ -15,8 +15,7 @@ interface FilesystemInterface
      * @param string $filename
      * @param string $content
      *
-     * @return int|bool
+     * @return bool|int
      */
     public function put($filename, $content);
-
 }

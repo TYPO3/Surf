@@ -25,7 +25,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  *     $workflow->setTaskOptions(FlushCacheListTask::class, [
  *         'flushCacheList' => 'Neos_Fusion_Content, Flow_Session_MetaData, Flow_Session_Storage'
  *     ])
- *
  */
 class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -38,7 +37,6 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
@@ -75,7 +73,6 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -89,7 +86,6 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
     {

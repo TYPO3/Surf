@@ -26,7 +26,7 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
     private $filesystem;
 
     /**
-     * @var RandomBytesGeneratorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|RandomBytesGeneratorInterface
      */
     private $randomBytesGenerator;
 
@@ -43,7 +43,7 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
         $this->randomBytesGenerator->expects($this->once())->method('generate')->willReturn($randomBytes);
         $this->task->execute($this->node, $this->application, $this->deployment);
 
-        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class.'[scriptIdentifier]'));
+        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]'));
     }
 
     /**
@@ -88,6 +88,4 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
 
         return new WebOpcacheResetCreateScriptTask($this->randomBytesGenerator, $this->filesystem);
     }
-
-
 }

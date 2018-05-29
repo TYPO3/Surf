@@ -82,7 +82,6 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
@@ -105,7 +104,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
             throw new TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
         }
 
-        if (isset($options['additionalArguments'])){
+        if (isset($options['additionalArguments'])) {
             $additionalArguments = is_array($options['additionalArguments']) ? $options['additionalArguments'] : array($options['additionalArguments']);
         } else {
             $additionalArguments = array();

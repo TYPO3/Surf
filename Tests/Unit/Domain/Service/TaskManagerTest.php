@@ -23,7 +23,7 @@ use TYPO3\Surf\Domain\Service\TaskManager;
 class TaskManagerTest extends TestCase
 {
     /**
-     * @var \TYPO3\Surf\Domain\Model\Task|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Model\Task
      */
     protected $task;
 
@@ -43,7 +43,7 @@ class TaskManagerTest extends TestCase
     protected $deployment;
 
     /**
-     * @var \TYPO3\Surf\Domain\Service\TaskManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Service\TaskManager
      */
     protected $taskManager;
 

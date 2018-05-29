@@ -19,7 +19,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for uploading to sourceforge
- *
  */
 class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -32,7 +31,6 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -55,7 +53,6 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -66,7 +63,6 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
      * Check if all required options are given
      *
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function checkOptionsForValidity(array $options)

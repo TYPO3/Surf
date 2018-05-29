@@ -12,7 +12,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A generic application without any tasks
- *
  */
 class Application
 {
@@ -75,7 +74,6 @@ class Application
      *
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {

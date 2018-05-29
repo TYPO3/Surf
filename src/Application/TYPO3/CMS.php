@@ -13,11 +13,11 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Task\DumpDatabaseTask;
 use TYPO3\Surf\Task\RsyncFoldersTask;
-use TYPO3\Surf\Task\TYPO3\CMS\CreatePackageStatesTask;
-use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 use TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask;
+use TYPO3\Surf\Task\TYPO3\CMS\CreatePackageStatesTask;
 use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
 use TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask;
+use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 
 /**
  * TYPO3 CMS application
@@ -70,7 +70,6 @@ class CMS extends BaseApplication
      *
      * @param Workflow $workflow
      * @param Deployment $deployment
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {

@@ -27,7 +27,6 @@ class WebOpcacheResetExecuteTask extends Task
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options Supported options: "baseUrl" (required) and "scriptIdentifier" (is passed by the create script task)
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
@@ -52,9 +51,8 @@ class WebOpcacheResetExecuteTask extends Task
         if ($result !== 'success') {
             if (isset($options['throwErrorOnWebOpCacheResetExecuteTask']) && $options['throwErrorOnWebOpCacheResetExecuteTask']) {
                 throw new TaskExecutionException('WebOpcacheResetExecuteTask at "' . $scriptUrl . '" did not return expected result', 1471511860);
-            } else {
-                $deployment->getLogger()->warning('Executing PHP opcache reset script at "' . $scriptUrl . '" did not return expected result');
             }
+            $deployment->getLogger()->warning('Executing PHP opcache reset script at "' . $scriptUrl . '" did not return expected result');
         }
-   }
+    }
 }

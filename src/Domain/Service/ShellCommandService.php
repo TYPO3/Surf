@@ -16,14 +16,13 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A shell command service
- *
  */
 class ShellCommandService
 {
     /**
      * Execute a shell command (locally or remote depending on the node hostname)
      *
-     * @param string|array $command The shell command to execute, either string or array of commands
+     * @param array|string $command The shell command to execute, either string or array of commands
      * @param Node $node Node to execute command against
      * @param Deployment $deployment
      * @param bool $ignoreErrors If this command should ignore exit codes unequal zero
@@ -48,8 +47,8 @@ class ShellCommandService
     /**
      * Simulate a command by just outputting what would be executed
      *
-     * @param string|array $command
-     * @param Node|NULL $node
+     * @param array|string $command
+     * @param Node|null $node
      * @param Deployment $deployment
      * @return bool
      * @throws TaskExecutionException
@@ -69,7 +68,7 @@ class ShellCommandService
     /**
      * Execute or simulate a command (if the deployment is in dry run mode)
      *
-     * @param string|array $command
+     * @param array|string $command
      * @param Node $node
      * @param Deployment $deployment
      * @param bool $ignoreErrors
@@ -81,15 +80,14 @@ class ShellCommandService
     {
         if (!$deployment->isDryRun()) {
             return $this->execute($command, $node, $deployment, $ignoreErrors, $logOutput);
-        } else {
-            return $this->simulate($command, $node, $deployment);
         }
+        return $this->simulate($command, $node, $deployment);
     }
 
     /**
      * Execute a shell command locally
      *
-     * @param string|array $command
+     * @param array|string $command
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return array
@@ -106,7 +104,7 @@ class ShellCommandService
     /**
      * Execute a shell command via SSH
      *
-     * @param string|array $command
+     * @param array|string $command
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param bool $logOutput TRUE if the output of the command should be logged
@@ -191,7 +189,7 @@ class ShellCommandService
     /**
      * Prepare a command
      *
-     * @param string|array $command
+     * @param array|string $command
      * @return string
      * @throws TaskExecutionException
      */
@@ -199,10 +197,10 @@ class ShellCommandService
     {
         if (is_string($command)) {
             return trim($command);
-        } elseif (is_array($command)) {
-            return implode(' && ', $command);
-        } else {
-            throw new TaskExecutionException('Command must be string or array, ' . gettype($command) . ' given.', 1312454906);
         }
+        if (is_array($command)) {
+            return implode(' && ', $command);
+        }
+        throw new TaskExecutionException('Command must be string or array, ' . gettype($command) . ' given.', 1312454906);
     }
 }

@@ -15,7 +15,6 @@ use TYPO3\Surf\Exception as SurfException;
 
 /**
  * A task manager
- *
  */
 class TaskManager
 {
@@ -63,8 +62,6 @@ class TaskManager
 
     /**
      * Rollback all tasks stored in the task history in reverse order
-     *
-     * @return void
      */
     public function rollback()
     {
@@ -79,8 +76,6 @@ class TaskManager
 
     /**
      * Reset the task history
-     *
-     * @return void
      */
     public function reset()
     {

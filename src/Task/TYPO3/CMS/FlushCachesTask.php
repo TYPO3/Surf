@@ -27,7 +27,6 @@ class FlushCachesTask extends AbstractCliTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -65,5 +64,4 @@ class FlushCachesTask extends AbstractCliTask
                 return array();
         }
     }
-
 }

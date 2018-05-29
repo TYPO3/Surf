@@ -67,7 +67,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         );
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted("cd /home/foobar/data");
+        $this->assertCommandExecuted('cd /home/foobar/data');
         $this->assertCommandExecuted('ln -s ../media media');
     }
 
@@ -93,4 +93,3 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('ln -s ../var var');
     }
 }
-

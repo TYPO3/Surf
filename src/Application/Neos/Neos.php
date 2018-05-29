@@ -14,7 +14,6 @@ use TYPO3\Surf\Task\Neos\Neos\ImportSiteTask;
 
 /**
  * A Neos application template
- *
  */
 class Neos extends Flow
 {
@@ -90,7 +89,6 @@ class Neos extends Flow
      *
      * @param Workflow $workflow
      * @param Deployment $deployment
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {

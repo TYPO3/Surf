@@ -21,6 +21,4 @@ class RandomBytesGenerator implements RandomBytesGeneratorInterface
     {
         return random_bytes($length);
     }
-
-
 }

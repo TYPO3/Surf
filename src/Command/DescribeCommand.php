@@ -62,8 +62,6 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     *
-     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -73,10 +71,10 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         $deploymentName = $input->getArgument('deploymentName');
         $deployment = $this->factory->getDeployment($deploymentName, $configurationPath);
 
-        if ( ! $deployment instanceof FailedDeployment) {
-            $output->writeln('<success>Deployment '.$deployment->getName().'</success>');
+        if (! $deployment instanceof FailedDeployment) {
+            $output->writeln('<success>Deployment ' . $deployment->getName() . '</success>');
             $output->writeln('');
-            $output->writeln('Workflow: <success>'.$deployment->getWorkflow()->getName().'</success>'.PHP_EOL);
+            $output->writeln('Workflow: <success>' . $deployment->getWorkflow()->getName() . '</success>' . PHP_EOL);
 
             $this->printNodes($deployment->getNodes());
 
@@ -89,9 +87,9 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      */
     protected function printNodes($nodes)
     {
-        $this->output->writeln('Nodes:'.PHP_EOL);
+        $this->output->writeln('Nodes:' . PHP_EOL);
         foreach ($nodes as $node) {
-            $this->output->writeln('  <success>'.$node->getName().'</success> <info>('.$node->getHostname().')</info>');
+            $this->output->writeln('  <success>' . $node->getName() . '</success> <info>(' . $node->getHostname() . ')</info>');
         }
     }
 
@@ -103,24 +101,24 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      */
     protected function printApplications(array $applications, Workflow $workflow)
     {
-        $this->output->writeln(PHP_EOL.'Applications:'.PHP_EOL);
+        $this->output->writeln(PHP_EOL . 'Applications:' . PHP_EOL);
         foreach ($applications as $application) {
-            $this->output->writeln('  <success>'.$application->getName().':</success>');
-            $this->output->writeln('    <comment>Deployment path</comment>: <success>'.$application->getDeploymentPath().'</success>');
+            $this->output->writeln('  <success>' . $application->getName() . ':</success>');
+            $this->output->writeln('    <comment>Deployment path</comment>: <success>' . $application->getDeploymentPath() . '</success>');
             $this->output->writeln('    <comment>Options</comment>: ');
             foreach ($application->getOptions() as $key => $value) {
                 if (is_array($value)) {
-                    $this->output->writeln('      '.$key.' =>');
+                    $this->output->writeln('      ' . $key . ' =>');
                     foreach ($value as $item) {
                         $this->output->writeln(sprintf('        <success>%s</success>', $item));
                     }
                 } else {
                     $printableValue = is_scalar($value) ? $value : gettype($value);
-                    $this->output->writeln('      '.$key.' => <success>'.$printableValue.'</success>');
+                    $this->output->writeln('      ' . $key . ' => <success>' . $printableValue . '</success>');
                 }
             }
-            $this->output->writeln('    <comment>Nodes</comment>: <success>'.implode(', ',
-                    $application->getNodes()).'</success>');
+            $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(', ',
+                    $application->getNodes()) . '</success>');
 
             if ($workflow instanceof SimpleWorkflow) {
                 $this->output->writeln('    <comment>Detailed workflow</comment>: ');
@@ -139,22 +137,22 @@ class DescribeCommand extends Command implements FactoryAwareInterface
     protected function printStages(Application $application, array $stages, array $tasks)
     {
         foreach ($stages as $stage) {
-            $this->output->writeln('      <comment>'.$stage.':</comment>');
+            $this->output->writeln('      <comment>' . $stage . ':</comment>');
             foreach (['before', 'tasks', 'after'] as $stageStep) {
                 $output = '';
                 foreach (['_', $application->getName()] as $applicationName) {
-                    $label = $applicationName === '_' ? 'for all applications' : 'for application '.$applicationName;
+                    $label = $applicationName === '_' ? 'for all applications' : 'for application ' . $applicationName;
                     if (isset($tasks['stage'][$applicationName][$stage][$stageStep])) {
                         foreach ($tasks['stage'][$applicationName][$stage][$stageStep] as $task) {
                             $this->printBeforeAfterTasks($tasks, $applicationName, $task, 'before', $output);
-                            $output .= '          <success>'.$task.'</success> <info>('.$label.')</info>'.PHP_EOL;
+                            $output .= '          <success>' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
                             $this->printBeforeAfterTasks($tasks, $applicationName, $task, 'after', $output);
                         }
                     }
                 }
 
                 if (strlen($output) > 0) {
-                    $this->output->writeln('        <info>'.$stageStep.':</info>');
+                    $this->output->writeln('        <info>' . $stageStep . ':</info>');
                 }
                 $this->output->write($output);
             }
@@ -172,11 +170,11 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      */
     private function printBeforeAfterTasks(array $tasks, $applicationName, $task, $step, &$output)
     {
-        $label = $applicationName === '_' ? 'for all applications' : 'for application '.$applicationName;
+        $label = $applicationName === '_' ? 'for all applications' : 'for application ' . $applicationName;
         if (isset($tasks[$step][$applicationName][$task])) {
             // 'Task "' . $beforeTask . '" before "' . $task
             foreach ($tasks[$step][$applicationName][$task] as $beforeAfterTask) {
-                $output .= '          <success>Task '.$beforeAfterTask.' '.$step.' '.$task.'</success> <info>('.$label.')</info>'.PHP_EOL;
+                $output .= '          <success>Task ' . $beforeAfterTask . ' ' . $step . ' ' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
             }
         }
     }

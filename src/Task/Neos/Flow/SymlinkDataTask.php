@@ -17,7 +17,6 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
  * A symlink task for linking the shared data directory
- *
  */
 class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -30,7 +29,6 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -52,7 +50,6 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
