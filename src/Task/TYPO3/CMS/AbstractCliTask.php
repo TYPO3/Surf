@@ -10,13 +10,13 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Application\TYPO3\CMS;
+use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\ErrorMessageFactory;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
@@ -116,7 +116,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
             return 'typo3_console';
         } catch (InvalidConfigurationException $e) {
             if ($this->packageExists('coreapi', $node, $application, $deployment, $options)) {
-                $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForCoreApiUsage());
+                $deployment->getLogger()->warning(DeprecationMessageFactory::createDeprecationWarningForCoreApiUsage());
                 return 'coreapi';
             }
         }

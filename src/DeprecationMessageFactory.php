@@ -9,7 +9,7 @@ namespace TYPO3\Surf;
  * file that was distributed with this source code.
  */
 
-final class ErrorMessageFactory
+final class DeprecationMessageFactory
 {
 
     /**
@@ -21,10 +21,13 @@ final class ErrorMessageFactory
     }
 
     /**
+     * @param string $className
+     * @param string $versionOfSurfToRemoveTask
+     *
      * @return string
      */
-    public static function createDeprecationWarningForSourceforgeUploadTask()
+    public static function createGenericDeprecationWarningForTask($className, $versionOfSurfToRemoveTask = '3.0.0')
     {
-        return 'The usage of SourceforgeUploadTask is deprecated and will be removed in TYPO3 Surf Version 3.0.0';
+        return sprintf('The usage of %s is deprecated and will be removed in TYPO3 Surf Version %s', $className, $versionOfSurfToRemoveTask);
     }
 }
