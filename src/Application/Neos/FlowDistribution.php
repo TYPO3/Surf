@@ -11,20 +11,19 @@ namespace TYPO3\Surf\Application\Neos;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
-use TYPO3\Surf\Task\Neos\Flow\UnitTestTask;
-use TYPO3\Surf\Task\Neos\Flow\FunctionalTestTask;
-use TYPO3\Surf\Task\SourceforgeUploadTask;
-use TYPO3\Surf\Task\Release\PrepareReleaseTask;
-use TYPO3\Surf\Task\Release\ReleaseTask;
-use TYPO3\Surf\Task\Release\AddDownloadTask;
-use TYPO3\Surf\Task\Git\TagTask;
-use TYPO3\Surf\Task\Neos\Flow\MigrateTask;
 use TYPO3\Surf\Task\CreateArchiveTask;
 use TYPO3\Surf\Task\Git\PushTask;
+use TYPO3\Surf\Task\Git\TagTask;
+use TYPO3\Surf\Task\Neos\Flow\FunctionalTestTask;
+use TYPO3\Surf\Task\Neos\Flow\MigrateTask;
+use TYPO3\Surf\Task\Neos\Flow\UnitTestTask;
+use TYPO3\Surf\Task\Release\AddDownloadTask;
+use TYPO3\Surf\Task\Release\PrepareReleaseTask;
+use TYPO3\Surf\Task\Release\ReleaseTask;
+use TYPO3\Surf\Task\SourceforgeUploadTask;
 
 /**
  * An "application" which does bundle Neos Flow or similar distributions.
- *
  */
 class FlowDistribution extends Flow
 {
@@ -47,7 +46,6 @@ class FlowDistribution extends Flow
      *
      * @param Workflow $workflow
      * @param Deployment $deployment
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
@@ -94,7 +92,6 @@ class FlowDistribution extends Flow
     /**
      * Check if all necessary options to run are set
      *
-     * @return void
      * @throws InvalidConfigurationException
      */
     protected function checkIfMandatoryOptionsExist()
@@ -135,8 +132,6 @@ class FlowDistribution extends Flow
 
     /**
      * Build configuration which we need later into $this->configuration
-     *
-     * @return void
      */
     protected function buildConfiguration()
     {
@@ -153,7 +148,6 @@ class FlowDistribution extends Flow
      *
      * @param Workflow $workflow
      * @param Deployment $deployment
-     * @return void
      */
     protected function defineTasks(Workflow $workflow, Deployment $deployment)
     {

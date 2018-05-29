@@ -18,7 +18,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A task which can push to a git remote
- *
  */
 class PushTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -36,7 +35,6 @@ class PushTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
@@ -64,7 +62,6 @@ class PushTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {

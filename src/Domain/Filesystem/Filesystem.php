@@ -22,6 +22,4 @@ class Filesystem implements FilesystemInterface
     {
         return file_put_contents($filename, $content);
     }
-
-
 }

@@ -34,7 +34,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
@@ -75,7 +74,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @param array $options
      * @param array $result
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     protected function assertExpectedStatus(array $options, array $result)
@@ -92,7 +90,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @param array $options
      * @param array $result
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     protected function assertExpectedHeaders(array $options, array $result)
@@ -119,12 +116,11 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             foreach ($expectedHeaders as $headerName => $expectedValue) {
                 if (!isset($result['headers'][$headerName])) {
                     throw new TaskExecutionException('Expected header "' . $headerName . '" not present', 1319535441);
-                } else {
-                    $headerValue = $result['headers'][$headerName];
-                    $partialSuccess = $this->testSingleHeader($headerValue, $expectedValue);
-                    if (!$partialSuccess) {
-                        throw new TaskExecutionException('Expected header value for "' . $headerName . '" did not match "' . $expectedValue . '": "' . $headerValue . '"', 1319535733);
-                    }
+                }
+                $headerValue = $result['headers'][$headerName];
+                $partialSuccess = $this->testSingleHeader($headerValue, $expectedValue);
+                if (!$partialSuccess) {
+                    throw new TaskExecutionException('Expected header value for "' . $headerName . '" did not match "' . $expectedValue . '": "' . $headerValue . '"', 1319535733);
                 }
             }
         }
@@ -133,7 +129,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @param array $options
      * @param array $result
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     protected function assertExpectedRegexp(array $options, array $result)
@@ -171,19 +166,19 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             return false;
         }
 
-            // = Value equals
+        // = Value equals
         if (strpos($expectedValue, '=') === 0) {
             $result = $headerValue === trim(substr($expectedValue, 1));
         }
-            // < Intval smaller than
+        // < Intval smaller than
         elseif (strpos($expectedValue, '<') === 0) {
             $result = intval($headerValue) < intval(substr($expectedValue, 1));
         }
-            // > Intval bigger than
+        // > Intval bigger than
         elseif (strpos($expectedValue, '>') === 0) {
             $result = intval($headerValue) > intval(substr($expectedValue, 1));
         }
-            // Default
+        // Default
         else {
             $result = $headerValue === $expectedValue;
         }
@@ -198,7 +193,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -279,7 +273,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     *
      * @param string $url Request URL
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment

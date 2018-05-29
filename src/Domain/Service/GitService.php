@@ -10,7 +10,6 @@ namespace TYPO3\Surf\Domain\Service;
 
 /**
  * A Git service
- *
  */
 class GitService
 {

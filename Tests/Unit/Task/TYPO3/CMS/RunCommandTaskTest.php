@@ -84,7 +84,6 @@ class RunCommandTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'command:any' 'any'");
     }
 
-
     /**
      * @test
      */

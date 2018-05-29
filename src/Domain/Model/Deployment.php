@@ -124,7 +124,6 @@ class Deployment implements LoggerAwareInterface
      * A time-based release identifier will be created on initialization. It also executes
      * callbacks given to the deployment with onInitialize(...).
      *
-     * @return void
      * @throws SurfException
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
@@ -150,7 +149,7 @@ class Deployment implements LoggerAwareInterface
     /**
      * Add a callback to the initialization
      *
-     * @param callback $callback
+     * @param callable $callback
      * @return \TYPO3\Surf\Domain\Model\Deployment
      */
     public function onInitialize($callback)
@@ -161,8 +160,6 @@ class Deployment implements LoggerAwareInterface
 
     /**
      * Run this deployment
-     *
-     * @return void
      */
     public function deploy()
     {
@@ -174,8 +171,6 @@ class Deployment implements LoggerAwareInterface
      * Simulate this deployment without executing tasks
      *
      * It will set dryRun = TRUE which can be inspected by any task.
-     *
-     * @return void
      */
     public function simulate()
     {
@@ -185,7 +180,6 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     *
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return string
      */
@@ -295,7 +289,6 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     *
      * @param LoggerInterface $logger
      * @return \TYPO3\Surf\Domain\Model\Deployment
      */
@@ -306,7 +299,6 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     *
      * @return LoggerInterface
      */
     public function getLogger()

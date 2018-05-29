@@ -18,7 +18,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A task which can be used to tag a git repository and its submodules
- *
  */
 class TagTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -37,7 +36,6 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
@@ -68,7 +66,6 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -77,7 +74,6 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function validateOptions(array $options)

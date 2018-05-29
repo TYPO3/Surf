@@ -14,7 +14,6 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A Workflow
- *
  */
 abstract class Workflow
 {
@@ -37,9 +36,7 @@ abstract class Workflow
     }
 
     /**
-     *
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @return void
      * @throws SurfException
      */
     public function run(Deployment $deployment)
@@ -98,9 +95,8 @@ abstract class Workflow
     }
 
     /**
-     *
      * @param string $stage
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function forStage($stage, $tasks)
@@ -114,7 +110,7 @@ abstract class Workflow
      * The tasks will be executed for the given stage. If an application is given,
      * the tasks will be executed only for the stage and application.
      *
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param string $stage The name of the stage when this task shall be executed
      * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
      * @param string $step A stage has three steps "before", "tasks" and "after"
@@ -141,7 +137,7 @@ abstract class Workflow
      * The tasks will be executed for the given stage. If an application is given,
      * the tasks will be executed only for the stage and application.
      *
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param string $stage The name of the stage when this task shall be executed
      * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
      * @return \TYPO3\Surf\Domain\Model\Workflow
@@ -158,7 +154,7 @@ abstract class Workflow
      * The execution will not depend on a stage but on an optional application.
      *
      * @param string $task
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
@@ -183,7 +179,7 @@ abstract class Workflow
      * The execution will not depend on a stage but on an optional application.
      *
      * @param string $task
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
@@ -223,7 +219,7 @@ abstract class Workflow
      * Add tasks that shall be executed before the given stage
      *
      * @param string $stage
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
@@ -237,7 +233,7 @@ abstract class Workflow
      * Add tasks that shall be executed after the given stage
      *
      * @param string $stage
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
@@ -285,7 +281,6 @@ abstract class Workflow
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @return void
      */
     protected function executeStage($stage, Node $node, Application $application, Deployment $deployment)
     {
@@ -314,7 +309,6 @@ abstract class Workflow
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param string $stage
      * @param array $callstack
-     * @return void
      * @throws TaskExecutionException
      */
     protected function executeTask($task, Node $node, Application $application, Deployment $deployment, $stage, array &$callstack = array())

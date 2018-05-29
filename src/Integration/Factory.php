@@ -266,7 +266,6 @@ class Factory implements FactoryInterface
      * Check that the directory exists
      *
      * @param string $dir
-     * @return void
      * @throws InvalidConfigurationException
      */
     protected function ensureDirectoryExists($dir)

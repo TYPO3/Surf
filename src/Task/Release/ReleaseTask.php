@@ -11,12 +11,9 @@ namespace TYPO3\Surf\Task\Release;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
-use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
-use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
  * Task for doing a "TYPO3.Release" release
- *
  */
 class ReleaseTask extends PrepareReleaseTask
 {
@@ -28,7 +25,6 @@ class ReleaseTask extends PrepareReleaseTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
     {

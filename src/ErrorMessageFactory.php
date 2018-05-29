@@ -27,5 +27,4 @@ final class ErrorMessageFactory
     {
         return 'The usage of SourceforgeUploadTask is deprecated and will be removed in TYPO3 Surf Version 3.0.0';
     }
-
 }

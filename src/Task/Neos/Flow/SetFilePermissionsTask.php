@@ -31,7 +31,6 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
@@ -60,7 +59,6 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -74,7 +72,6 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
     {

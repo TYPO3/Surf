@@ -340,7 +340,7 @@ class SimpleWorkflowTest extends TestCase
     {
         $deployment = new Deployment('Test deployment');
         $mockLogger = $this->createMock(LoggerInterface::class);
-            // Enable log to console to debug tests
+        // Enable log to console to debug tests
         // $mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
         // 	echo $message . chr(10);
         // }));

@@ -32,7 +32,7 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null, $privateKey = null)
     {
-        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $service */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $service */
         $service = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
 
         $node = new Node('TestNode');
@@ -144,7 +144,7 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeOnRemoteNodeJoinsCommandsWithAndOperator()
     {
-        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
 
         $node = new Node('TestNode');
@@ -169,7 +169,7 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeOnLocalNodeJoinsCommandsWithAndOperator()
     {
-        /** @var ShellCommandService|\PHPUnit_Framework_MockObject_MockObject $shellCommandService */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, array('executeProcess'));
 
         $node = new Node('TestNode');

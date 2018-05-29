@@ -29,7 +29,6 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  * This task needs the following unix command line tools:
  * - tar / gnutar
  * - zip
- *
  */
 class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -42,7 +41,6 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
@@ -79,7 +77,6 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
 
     /**
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function checkOptionsForValidity(array $options)

@@ -19,7 +19,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for running arbitrary Neos Flow commands
- *
  */
 class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -32,7 +31,6 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
@@ -59,7 +57,6 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
@@ -73,7 +70,6 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
     {
