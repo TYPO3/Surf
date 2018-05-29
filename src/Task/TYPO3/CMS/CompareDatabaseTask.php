@@ -62,7 +62,7 @@ class CompareDatabaseTask extends AbstractCliTask
             case 'coreapi':
                 $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForCoreApiUsage());
                 $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '2,4';
-                return array('typo3/cli_dispatch.phpsh', 'extbase', 'databaseapi:databasecompare', $databaseCompareMode);
+                return array($this->getCliDispatchScriptFileName($options), 'extbase', 'databaseapi:databasecompare', $databaseCompareMode);
             default:
                 return array();
         }

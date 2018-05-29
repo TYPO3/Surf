@@ -34,7 +34,7 @@ class FlushCachesTask extends AbstractCliTask
         $this->ensureApplicationIsTypo3Cms($application);
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
-            $deployment->getLogger()->warning('Neither Extension "typo3_console" nor "coreapi" was not found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            $deployment->getLogger()->warning('Neither Extension "typo3_console" nor "coreapi" was found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
             return;
         }
         $this->executeCliCommand(
@@ -60,9 +60,10 @@ class FlushCachesTask extends AbstractCliTask
                 return array($this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush', '--force');
             case 'coreapi':
                 $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForCoreApiUsage());
-                return array('typo3/cli_dispatch.phpsh', 'extbase', 'cacheapi:clearallcaches');
+                return array($this->getCliDispatchScriptFileName($options), 'extbase', 'cacheapi:clearallcaches');
             default:
                 return array();
         }
     }
+
 }
