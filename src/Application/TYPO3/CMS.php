@@ -11,6 +11,13 @@ namespace TYPO3\Surf\Application\TYPO3;
 use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Task\DumpDatabaseTask;
+use TYPO3\Surf\Task\RsyncFoldersTask;
+use TYPO3\Surf\Task\TYPO3\CMS\CreatePackageStatesTask;
+use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
+use TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask;
+use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
+use TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask;
 
 /**
  * TYPO3 CMS application
@@ -70,20 +77,20 @@ class CMS extends BaseApplication
         parent::registerTasks($workflow, $deployment);
 
         if ($deployment->hasOption('initialDeployment') && $deployment->getOption('initialDeployment') === true) {
-            $workflow->addTask('TYPO3\\Surf\\Task\\DumpDatabaseTask', 'initialize', $this);
-            $workflow->addTask('TYPO3\\Surf\\Task\\RsyncFoldersTask', 'initialize', $this);
+            $workflow->addTask(DumpDatabaseTask::class, 'initialize', $this);
+            $workflow->addTask(RsyncFoldersTask::class, 'initialize', $this);
         }
         $workflow
-            ->afterStage('transfer', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CreatePackageStatesTask', $this)
+            ->afterStage('transfer', CreatePackageStatesTask::class, $this)
             ->afterStage(
                 'update',
                 array(
-                    'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SymlinkDataTask',
-                    'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CopyConfigurationTask'
+                    SymlinkDataTask::class,
+                    CopyConfigurationTask::class
                 ),
                 $this
             )
-            ->afterStage('switch', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', $this)
-            ->addTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask', 'migrate', $this);
+            ->afterStage('switch', FlushCachesTask::class, $this)
+            ->addTask(SetUpExtensionsTask::class, 'migrate', $this);
     }
 }

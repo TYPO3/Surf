@@ -16,6 +16,9 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Integration\FactoryInterface;
+use TYPO3\Surf\Task\Transfer\RsyncTask;
+use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
+use TYPO3\Surf\Task\LocalShellTask;
 
 class DescribeCommandTest extends TestCase
 {
@@ -46,24 +49,24 @@ class DescribeCommandTest extends TestCase
         $this->deployment = new Deployment('TestDeployment');
         $this->application = new Application('TestApplication');
         $this->application->setOption('rsyncExcludes', array('.git', 'web/fileadmin', 'web/uploads'));
-        $this->application->setOption('TYPO3\\Surf\\Task\\Transfer\\RsyncTask[rsyncExcludes]', array('.git', 'web/fileadmin', 'web/uploads'));
+        $this->application->setOption(RsyncTask::class . '[rsyncExcludes]', array('.git', 'web/fileadmin', 'web/uploads'));
         $this->application->addNode($this->node);
         $this->deployment->addApplication($this->application);
         $this->deployment->onInitialize(function () {
             $workflow = $this->deployment->getWorkflow();
-            $workflow->defineTask('TYPO3\\Surf\\Task\\CustomTask', 'TYPO3\\Surf\\Task\\LocalShellTask', array(
+            $workflow->defineTask('TYPO3\\Surf\\Task\\CustomTask', LocalShellTask::class, array(
                 'command' => array(
                     "touch test.txt",
                 ),
             ));
-            $workflow->defineTask('TYPO3\\Surf\\Task\\OtherCustomTask', 'TYPO3\\Surf\\Task\\LocalShellTask', array(
+            $workflow->defineTask('TYPO3\\Surf\\Task\\OtherCustomTask', LocalShellTask::class, array(
                 'command' => array(
                     "touch test.txt",
                 ),
             ));
-            $workflow->addTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', 'finalize');
-            $workflow->afterTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', 'TYPO3\\Surf\\Task\\CustomTask');
-            $workflow->beforeTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask', 'TYPO3\\Surf\\Task\\CustomTask');
+            $workflow->addTask(FlushCachesTask::class, 'finalize');
+            $workflow->afterTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
+            $workflow->beforeTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
         });
         $this->deployment->initialize();
     }

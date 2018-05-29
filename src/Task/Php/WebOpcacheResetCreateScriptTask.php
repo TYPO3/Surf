@@ -82,7 +82,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         if ( ! isset($options['scriptIdentifier'])) {
             // Store the script identifier as an application option
             $scriptIdentifier = bin2hex($this->randomBytesGenerator->generate(32));
-            $application->setOption('TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask[scriptIdentifier]', $scriptIdentifier);
+            $application->setOption(WebOpcacheResetExecuteTask::class. '[scriptIdentifier]', $scriptIdentifier);
         } else {
             $scriptIdentifier = $options['scriptIdentifier'];
         }
