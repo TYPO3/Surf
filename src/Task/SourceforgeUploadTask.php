@@ -18,8 +18,31 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * Task for uploading to sourceforge
+ * A task for uploading to sourceforge.
  * @deprecated
+ *
+ * It takes the following options:
+ *
+ * * sourceforgeProjectName - The project name at SourceForge.
+ * * sourceforgeUserName - The user name to log in at SourceForge.
+ * * sourceforgePackageName - The package name of the package that shouldd be uploaded.
+ * * version - The version of the project.
+ * * files - An array with files to upload to SourceForge.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\SourceforgeUploadTask', [
+ *              'sourceforgeProjectName' => 'enterprise',
+ *              'sourceforgeUserName' => 'picard',
+ *              'sourceforgePackageName' => 'nextGeneration',
+ *              'version' => '1.0.0',
+ *              'files' => [
+ *                  '/var/borg',
+ *                  '/var/q',
+ *                  '/var/data'
+ *              ]
+ *          ]
+ *      );
  */
 class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInterface
 {
