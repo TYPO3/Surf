@@ -44,6 +44,8 @@ TYPO3 Surf |version| documentation
      :titlesonly:
      :glob:
 
-     Quickstart/Index
+     GettingStarted/Index
+     Installation/Index
+     Examples/Index
      Migration/Index
 
