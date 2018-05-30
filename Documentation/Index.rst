@@ -46,6 +46,7 @@ TYPO3 Surf |version| documentation
 
      GettingStarted/Index
      Installation/Index
+     ApiReference/Index
      Examples/Index
      Migration/Index
 

@@ -1,4 +1,9 @@
 .idea/
 phpunit.xml
 vendor/
+
+# The Api reference is auto generated and should not be part of the repository
 /Documentation-GENERATED-temp
+/Documentation/ApiReference/*
+!/Documentation/ApiReference/.gitkeep
+sphpdox.phar
