@@ -31,9 +31,8 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
         $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
@@ -42,17 +41,17 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
             $relativeDataPathFromWeb = str_repeat('../', substr_count(trim($webDirectory, '/'), '/') + 1) . $relativeDataPath;
         }
         $absoluteWebDirectory = escapeshellarg(rtrim("$targetReleasePath/$webDirectory", '/'));
-        $commands = array(
+        $commands = [
             'cd ' . escapeshellarg($targetReleasePath),
             "{ [ -d {$relativeDataPath}/fileadmin ] || mkdir -p {$relativeDataPath}/fileadmin ; }",
             "{ [ -d {$relativeDataPath}/uploads ] || mkdir -p {$relativeDataPath}/uploads ; }",
             "ln -sf {$relativeDataPathFromWeb}/fileadmin {$absoluteWebDirectory}/fileadmin",
             "ln -sf {$relativeDataPathFromWeb}/uploads {$absoluteWebDirectory}/uploads"
-        );
+        ];
         if (isset($options['directories']) && is_array($options['directories'])) {
             foreach ($options['directories'] as $directory) {
                 $directory = trim($directory, '\\/');
-                $targetDirectory = Files::concatenatePaths(array($relativeDataPath, $directory));
+                $targetDirectory = Files::concatenatePaths([$relativeDataPath, $directory]);
                 $commands[] = '{ [ -d ' . escapeshellarg($targetDirectory) . ' ] || mkdir -p ' . escapeshellarg($targetDirectory) . ' ; }';
                 $commands[] = 'ln -sf ' . escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . $targetDirectory) . ' ' . escapeshellarg($directory);
             }
@@ -67,9 +66,8 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

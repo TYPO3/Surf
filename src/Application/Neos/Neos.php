@@ -14,14 +14,13 @@ use TYPO3\Surf\Task\Neos\Neos\ImportSiteTask;
 
 /**
  * A Neos application template
- *
  */
 class Neos extends Flow
 {
     /**
      * @var array
      */
-    private $neosCommands = array(
+    private $neosCommands = [
         'domain:add',
         'domain:list',
         'domain:delete',
@@ -51,7 +50,7 @@ class Neos extends Flow
         'workspace:publishall',
         'workspace:discardall',
         'workspace:list'
-    );
+    ];
 
     /**
      * @param string $command
@@ -90,7 +89,6 @@ class Neos extends Flow
      *
      * @param Workflow $workflow
      * @param Deployment $deployment
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {

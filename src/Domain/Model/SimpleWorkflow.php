@@ -12,7 +12,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A simple workflow
- *
  */
 class SimpleWorkflow extends Workflow
 {
@@ -27,7 +26,7 @@ class SimpleWorkflow extends Workflow
      *
      * @var array
      */
-    protected $stages = array(
+    protected $stages = [
         // Initialize directories etc. (first time deploy)
         'initialize',
         // Local preparation of and packaging of application assets (code and files)
@@ -47,7 +46,7 @@ class SimpleWorkflow extends Workflow
         'switch',
         // Delete temporary files or previous releases
         'cleanup'
-    );
+    ];
 
     /**
      * Sequentially execute the stages for each node, so first all nodes will go through the initialize stage and
@@ -56,7 +55,6 @@ class SimpleWorkflow extends Workflow
      * A rollback will be done for all nodes as long as the stage switch was not completed.
      *
      * @param Deployment $deployment
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function run(Deployment $deployment)
@@ -118,7 +116,6 @@ class SimpleWorkflow extends Workflow
     }
 
     /**
-     *
      * @param bool $enableRollback
      * @return \TYPO3\Surf\Domain\Model\SimpleWorkflow
      */

@@ -14,7 +14,6 @@ use TYPO3\Surf\Domain\Model\Node;
 
 /**
  * A task to create Neos Flow specific directories
- *
  */
 class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTask
 {
@@ -25,18 +24,17 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTa
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $options = array(
-            'directories' => array(
+        $options = [
+            'directories' => [
                 'shared/Data/Logs',
                 'shared/Data/Persistent',
                 'shared/Configuration'
-            ),
+            ],
             'baseDirectory' => $application->getDeploymentPath()
-        );
+        ];
         parent::execute($node, $application, $deployment, $options);
     }
 }

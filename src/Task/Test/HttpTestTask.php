@@ -34,10 +34,9 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['url'])) {
             throw new InvalidConfigurationException('No url option provided for HttpTestTask', 1319534939);
@@ -75,7 +74,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @param array $options
      * @param array $result
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     protected function assertExpectedStatus(array $options, array $result)
@@ -92,7 +90,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @param array $options
      * @param array $result
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     protected function assertExpectedHeaders(array $options, array $result)
@@ -101,7 +98,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             return;
         }
 
-        $expectedHeaders = array();
+        $expectedHeaders = [];
         $expectedHeadersConfiguration = $options['expectedHeaders'];
         if ($expectedHeadersConfiguration) {
             $configurationLines = explode(chr(10), $expectedHeadersConfiguration);
@@ -119,12 +116,11 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             foreach ($expectedHeaders as $headerName => $expectedValue) {
                 if (!isset($result['headers'][$headerName])) {
                     throw new TaskExecutionException('Expected header "' . $headerName . '" not present', 1319535441);
-                } else {
-                    $headerValue = $result['headers'][$headerName];
-                    $partialSuccess = $this->testSingleHeader($headerValue, $expectedValue);
-                    if (!$partialSuccess) {
-                        throw new TaskExecutionException('Expected header value for "' . $headerName . '" did not match "' . $expectedValue . '": "' . $headerValue . '"', 1319535733);
-                    }
+                }
+                $headerValue = $result['headers'][$headerName];
+                $partialSuccess = $this->testSingleHeader($headerValue, $expectedValue);
+                if (!$partialSuccess) {
+                    throw new TaskExecutionException('Expected header value for "' . $headerName . '" did not match "' . $expectedValue . '": "' . $headerValue . '"', 1319535733);
                 }
             }
         }
@@ -133,7 +129,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @param array $options
      * @param array $result
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     protected function assertExpectedRegexp(array $options, array $result)
@@ -142,7 +137,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             return;
         }
 
-        $expectedRegexp = array();
+        $expectedRegexp = [];
         $expectedRegexpConfiguration = $options['expectedRegexp'];
         if ($expectedRegexpConfiguration) {
             $expectedRegexp = explode(chr(10), $expectedRegexpConfiguration);
@@ -171,19 +166,19 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             return false;
         }
 
-            // = Value equals
+        // = Value equals
         if (strpos($expectedValue, '=') === 0) {
             $result = $headerValue === trim(substr($expectedValue, 1));
         }
-            // < Intval smaller than
+        // < Intval smaller than
         elseif (strpos($expectedValue, '<') === 0) {
             $result = intval($headerValue) < intval(substr($expectedValue, 1));
         }
-            // > Intval bigger than
+        // > Intval bigger than
         elseif (strpos($expectedValue, '>') === 0) {
             $result = intval($headerValue) > intval(substr($expectedValue, 1));
         }
-            // Default
+        // Default
         else {
             $result = $headerValue === $expectedValue;
         }
@@ -198,9 +193,8 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         // $this->logRequest($node, $application, $deployment, $options);
     }
@@ -244,12 +238,12 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         switch ($method) {
             case 'POST':
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-                curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Length: ' . strlen($data)));
+                curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Length: ' . strlen($data)]);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
                 break;
             case 'PUT':
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
-                curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Length: ' . strlen($data)));
+                curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Length: ' . strlen($data)]);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
                 break;
             case 'DELETE':
@@ -271,15 +265,14 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         list($headerText, $body) = preg_split('/\n[\s]*\n/', $response, 2);
         $headers = $this->extractResponseHeaders($headerText);
 
-        return array(
+        return [
             'headers' => $headers,
             'body' => $body,
             'info' => $info
-        );
+        ];
     }
 
     /**
-     *
      * @param string $url Request URL
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
@@ -297,16 +290,16 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         list($status, $headersString) = explode(chr(10), $head, 2);
         $statusParts = explode(' ', $status);
         $statusCode = $statusParts[1];
-        $info = array(
+        $info = [
             'http_code' => $statusCode
-        );
+        ];
         $headers = $this->extractResponseHeaders(trim($headersString));
 
-        return array(
+        return [
             'headers' => $headers,
             'body' => $body,
             'info' => $info
-        );
+        ];
     }
 
     /**
@@ -317,7 +310,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function extractResponseHeaders($headerText)
     {
-        $headers = array();
+        $headers = [];
         if ($headerText) {
             $headerLines = explode(chr(10), $headerText);
             foreach ($headerLines as $headerLine) {

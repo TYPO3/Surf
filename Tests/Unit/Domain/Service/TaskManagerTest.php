@@ -23,7 +23,7 @@ use TYPO3\Surf\Domain\Service\TaskManager;
 class TaskManagerTest extends TestCase
 {
     /**
-     * @var \TYPO3\Surf\Domain\Model\Task|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Model\Task
      */
     protected $task;
 
@@ -43,7 +43,7 @@ class TaskManagerTest extends TestCase
     protected $deployment;
 
     /**
-     * @var \TYPO3\Surf\Domain\Service\TaskManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Service\TaskManager
      */
     protected $taskManager;
 
@@ -57,7 +57,7 @@ class TaskManagerTest extends TestCase
         $this->deployment->setLogger($logger);
         $this->task = $this->createMock(Task::class);
 
-        $this->taskManager = $this->createPartialMock(TaskManager::class, array('createTaskInstance'));
+        $this->taskManager = $this->createPartialMock(TaskManager::class, ['createTaskInstance']);
         $this->taskManager
             ->expects($this->any())
             ->method('createTaskInstance')
@@ -69,9 +69,9 @@ class TaskManagerTest extends TestCase
      */
     public function executePassesPrefixedTaskOptionsToTask()
     {
-        $globalOptions = array(
+        $globalOptions = [
             'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Foo'
-        );
+        ];
         $this->deployment->setOptions($globalOptions);
 
         $this->task->expects($this->atLeastOnce())->method('execute')->with(
@@ -81,7 +81,7 @@ class TaskManagerTest extends TestCase
             $this->arrayHasKey('taskOption')
         );
 
-        $localOptions = array();
+        $localOptions = [];
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
     }
 
@@ -90,17 +90,19 @@ class TaskManagerTest extends TestCase
      */
     public function executePassesNodeOptionsToTask()
     {
-        $nodeOptions = array(
+        $nodeOptions = [
             'ssh[username]' => 'jdoe'
-        );
+        ];
         $this->node->setOptions($nodeOptions);
 
         $this->task->expects($this->atLeastOnce())->method('execute')->with(
-            $this->anything(), $this->anything(), $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
             $this->arrayHasKey('ssh[username]')
         );
 
-        $localOptions = array();
+        $localOptions = [];
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
     }
 
@@ -109,17 +111,19 @@ class TaskManagerTest extends TestCase
      */
     public function executePassesApplicationOptionsToTask()
     {
-        $applicationOptions = array(
+        $applicationOptions = [
             'repositoryUrl' => 'ssh://review.typo3.org/foo'
-        );
+        ];
         $this->application->setOptions($applicationOptions);
 
         $this->task->expects($this->atLeastOnce())->method('execute')->with(
-            $this->anything(), $this->anything(), $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
             $this->arrayHasKey('repositoryUrl')
         );
 
-        $localOptions = array();
+        $localOptions = [];
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
     }
 
@@ -128,13 +132,13 @@ class TaskManagerTest extends TestCase
      */
     public function nodeOptionsOverrideDeploymentOptions()
     {
-        $globalOptions = array(
+        $globalOptions = [
             'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Deployment'
-        );
+        ];
         $this->deployment->setOptions($globalOptions);
-        $nodeOptions = array(
+        $nodeOptions = [
             'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Node'
-        );
+        ];
         $this->node->setOptions($nodeOptions);
 
         $this->task
@@ -146,7 +150,7 @@ class TaskManagerTest extends TestCase
                 }
             });
 
-        $localOptions = array();
+        $localOptions = [];
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
     }
 
@@ -155,13 +159,13 @@ class TaskManagerTest extends TestCase
      */
     public function applicationOptionsOverrideNodeOptions()
     {
-        $nodeOptions = array(
+        $nodeOptions = [
             'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Node'
-        );
+        ];
         $this->node->setOptions($nodeOptions);
-        $applicationOptions = array(
+        $applicationOptions = [
             'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Application'
-        );
+        ];
         $this->application->setOptions($applicationOptions);
 
         $this->task
@@ -173,7 +177,7 @@ class TaskManagerTest extends TestCase
                 }
             });
 
-        $localOptions = array();
+        $localOptions = [];
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
     }
 
@@ -182,13 +186,13 @@ class TaskManagerTest extends TestCase
      */
     public function applicationOptionsOverrideDeploymentOptions()
     {
-        $globalOptions = array(
+        $globalOptions = [
             'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Deployment'
-        );
+        ];
         $this->deployment->setOptions($globalOptions);
-        $applicationOptions = array(
+        $applicationOptions = [
             'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Application'
-        );
+        ];
         $this->application->setOptions($applicationOptions);
 
         $this->task
@@ -200,7 +204,7 @@ class TaskManagerTest extends TestCase
                 }
             });
 
-        $localOptions = array();
+        $localOptions = [];
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
     }
 
@@ -209,9 +213,9 @@ class TaskManagerTest extends TestCase
      */
     public function executeDoesNotPassPrefixedTaskOptionsOfBaseTaskToDefinedTask()
     {
-        $globalOptions = array(
+        $globalOptions = [
             'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Foo'
-        );
+        ];
         $this->deployment->setOptions($globalOptions);
 
         $this->task->expects($this->atLeastOnce())->method('execute')->with(
@@ -221,7 +225,7 @@ class TaskManagerTest extends TestCase
             $this->logicalNot($this->arrayHasKey('taskOption'))
         );
 
-        $localOptions = array();
+        $localOptions = [];
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions, 'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask');
     }
 
@@ -230,9 +234,9 @@ class TaskManagerTest extends TestCase
      */
     public function executePassePrefixedDefinedTaskOptionsToDefinedTask()
     {
-        $globalOptions = array(
+        $globalOptions = [
             'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask[taskOption]' => 'Foo'
-        );
+        ];
         $this->deployment->setOptions($globalOptions);
 
         $this->task->expects($this->atLeastOnce())->method('execute')->with(
@@ -242,7 +246,7 @@ class TaskManagerTest extends TestCase
             $this->arrayHasKey('taskOption')
         );
 
-        $localOptions = array();
+        $localOptions = [];
         $this->taskManager->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions, 'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask');
     }
 }

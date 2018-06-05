@@ -12,13 +12,13 @@ namespace TYPO3\Surf\Application;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Task\CleanupReleasesTask;
+use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Task\Generic\CreateDirectoriesTask;
 use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
-use TYPO3\Surf\Task\SymlinkReleaseTask;
-use TYPO3\Surf\Task\CleanupReleasesTask;
-use TYPO3\Surf\Task\Package\GitTask;
-use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Task\GitCheckoutTask;
+use TYPO3\Surf\Task\Package\GitTask;
+use TYPO3\Surf\Task\SymlinkReleaseTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
 
 /**
@@ -34,14 +34,14 @@ class BaseApplication extends Application
      * @see \TYPO3\Surf\Task\Generic\CreateSymlinksTask
      * @var array
      */
-    protected $symlinks = array();
+    protected $symlinks = [];
 
     /**
      * Directories which should be created on deployment. E.g. shared folders.
      *
      * @var array
      */
-    protected $directories = array();
+    protected $directories = [];
 
     /**
      * Basic application specific options
@@ -59,11 +59,11 @@ class BaseApplication extends Application
      *
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'packageMethod' => 'git',
         'transferMethod' => 'rsync',
         'updateMethod' => null,
-    );
+    ];
 
     /**
      * Register tasks for the base application
@@ -84,13 +84,11 @@ class BaseApplication extends Application
      *
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     *
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
-        $this->setOption(CreateDirectoriesTask::class.'[directories]', $this->getDirectories());
-        $this->setOption(CreateSymlinksTask::class.'[symlinks]', $this->getSymlinks());
+        $this->setOption(CreateDirectoriesTask::class . '[directories]', $this->getDirectories());
+        $this->setOption(CreateSymlinksTask::class . '[symlinks]', $this->getSymlinks());
 
         if ($this->hasOption('packageMethod')) {
             $this->registerTasksForPackageMethod($workflow, $this->getOption('packageMethod'));
@@ -231,8 +229,6 @@ class BaseApplication extends Application
     /**
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param string $packageMethod
-     *
-     * @return void
      */
     protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod)
     {
@@ -241,10 +237,11 @@ class BaseApplication extends Application
                 $workflow->addTask(GitTask::class, 'package', $this);
                 $workflow->defineTask(
                     'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
-                    InstallTask::class, array(
+                    InstallTask::class,
+                    [
                         'nodeName' => 'localhost',
                         'useApplicationWorkspace' => true,
-                    )
+                    ]
                 );
                 $workflow->afterTask(GitTask::class, 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', $this);
                 break;
@@ -254,8 +251,6 @@ class BaseApplication extends Application
     /**
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param string $transferMethod
-     *
-     * @return void
      */
     protected function registerTasksForTransferMethod(Workflow $workflow, $transferMethod)
     {
@@ -278,8 +273,6 @@ class BaseApplication extends Application
     /**
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param string $updateMethod
-     *
-     * @return void
      */
     protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod)
     {

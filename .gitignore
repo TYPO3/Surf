@@ -1,4 +1,6 @@
 .idea/
 phpunit.xml
 vendor/
+.php_cs.cache
+.php_cs
 /Documentation-GENERATED-temp

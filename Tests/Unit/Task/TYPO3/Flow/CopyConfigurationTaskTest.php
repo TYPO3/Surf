@@ -38,7 +38,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->deployment->setName('test1');
         $this->node->setHostname('localhost');
 
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $configPath = $this->deployment->getDeploymentConfigurationPath();
         $releasesPath = $this->deployment->getApplicationReleasePath($this->application);
@@ -58,9 +58,9 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
         $this->node->setHostname('localhost');
-        $options = array(
+        $options = [
             'configurationFileExtension' => 'php',
-        );
+        ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -81,7 +81,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->deployment->setName('test1');
         $this->node->setHostname('remote');
 
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $configPath = $this->deployment->getDeploymentConfigurationPath();
         $releasesPath = $this->deployment->getApplicationReleasePath($this->application);
@@ -103,7 +103,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->node->setHostname('remote');
         $this->node->setOption('password', 'password1');
 
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $configPath = $this->deployment->getDeploymentConfigurationPath();
         $releasesPath = $this->deployment->getApplicationReleasePath($this->application);
@@ -123,10 +123,10 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
         $this->node->setHostname('remote');
-        $options = array(
+        $options = [
             'port' => '22',
             'username' => 'foo',
-        );
+        ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 

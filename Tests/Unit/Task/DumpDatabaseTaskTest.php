@@ -30,7 +30,7 @@ class DumpDatabaseTaskTest extends BaseTaskTest
      */
     public function executeProperlyEscapesInputOptions()
     {
-        $options = array(
+        $options = [
             'sourceHost' => 'localhost',
             'sourceUser' => 'user',
             'sourcePassword' => '(pass)',
@@ -39,7 +39,7 @@ class DumpDatabaseTaskTest extends BaseTaskTest
             'targetUser' => 'user',
             'targetPassword' => '(pass)',
             'targetDatabase' => 'db',
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted("'mysqldump' '-h' 'localhost' '-u' 'user' '-p(pass)' 'db' | 'ssh' 'hostname' ''\\''mysql'\\'' '\\''-h'\\'' '\\''localhost'\\'' '\\''-u'\\'' '\\''user'\\'' '\\''-p(pass)'\\'' '\\''db'\\'''");

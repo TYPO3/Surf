@@ -19,7 +19,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A Neos Flow task to run functional tests
- *
  */
 class FunctionalTestTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -32,10 +31,9 @@ class FunctionalTestTask extends Task implements ShellCommandServiceAwareInterfa
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!$application instanceof Flow) {
             throw new InvalidConfigurationException(sprintf('Flow application needed for FunctionalTestTask, got "%s"', get_class($application)), 1358865890);
@@ -52,9 +50,8 @@ class FunctionalTestTask extends Task implements ShellCommandServiceAwareInterfa
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

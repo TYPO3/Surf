@@ -27,7 +27,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Task\Neos\Flow\CopyConfiguration
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options['configurationFileExtension'] = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'php';
         parent::execute($node, $application, $deployment, $options);

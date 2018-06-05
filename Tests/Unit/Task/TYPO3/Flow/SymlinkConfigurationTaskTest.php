@@ -34,7 +34,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
     public function executeWithFlowApplicationRespectsContext()
     {
         $this->application->setContext('Development');
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('if [ -d Development ]; then rm -Rf Development; fi');
         $this->assertCommandExecuted('mkdir -p ../../../shared/Configuration/Development');
@@ -47,7 +47,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
     public function executeWithFlowApplicationRespectsSubContext()
     {
         $this->application->setContext('Production/Foo');
-        $this->task->execute($this->node, $this->application, $this->deployment, array());
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('if [ -d Production/Foo ]; then rm -Rf Production/Foo; fi');
         $this->assertCommandExecuted('mkdir -p ../../../shared/Configuration/Production/Foo');

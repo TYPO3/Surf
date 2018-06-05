@@ -84,9 +84,9 @@ class SimpleWorkflowTest extends TestCase
      */
     public function globalTaskDefinitions()
     {
-        return array(
+        return [
 
-            array(
+            [
                 'Just one global task in stage initialize',
                 function ($workflow, $application) {
                     return function () use ($workflow, $application) {
@@ -94,65 +94,65 @@ class SimpleWorkflowTest extends TestCase
                             ->addTask('typo3.surf:test:setup', 'initialize');
                     };
                 },
-                array(
-                    array(
+                [
+                    [
                         'task' => 'typo3.surf:test:setup',
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    )
-                )
-            ),
+                        'options' => []
+                    ]
+                ]
+            ],
 
-            array(
+            [
                 'Add multiple tasks with afterTask',
                 function ($workflow, $application) {
                     return function () use ($workflow, $application) {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
-                            ->afterTask('typo3.surf:test:setup', array('typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'))
+                            ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
                             ->afterTask('typo3.surf:test:secondsetup', 'typo3.surf:test:finalize');
                     };
                 },
-                array(
-                    array(
+                [
+                    [
                         'task' => 'typo3.surf:test:setup',
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:secondsetup',
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:finalize',
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:thirdsetup',
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    )
-                )
-            ),
+                        'options' => []
+                    ]
+                ]
+            ],
 
-            array(
+            [
                 'Tasks in different stages',
                 function ($workflow, $application) {
                     return function () use ($workflow, $application) {
@@ -162,35 +162,35 @@ class SimpleWorkflowTest extends TestCase
                             ->addTask('typo3.surf:test:symlink', 'switch');
                     };
                 },
-                array(
-                    array(
+                [
+                    [
                         'task' => 'typo3.surf:test:setup',
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:checkout',
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
                         'stage' => 'update',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:symlink',
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
                         'stage' => 'switch',
-                        'options' => array()
-                    )
-                )
-            )
+                        'options' => []
+                    ]
+                ]
+            ]
 
-        );
+        ];
     }
 
     /**
@@ -203,7 +203,7 @@ class SimpleWorkflowTest extends TestCase
      */
     public function globalTaskDefinitionsAreExecutedCorrectly($message, $initializeCallback, array $expectedExecutions)
     {
-        $executedTasks = array();
+        $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 
@@ -229,9 +229,9 @@ class SimpleWorkflowTest extends TestCase
      */
     public function applicationTaskDefinitions()
     {
-        return array(
+        return [
 
-            array(
+            [
                 'Specific tasks for applications',
                 function ($workflow, $applications) {
                     list($flowApplication, $typo3Application) = $applications;
@@ -242,59 +242,59 @@ class SimpleWorkflowTest extends TestCase
                             ->addTask('typo3.surf:test:em:updatedatabase', 'migrate', $typo3Application);
                     };
                 },
-                array(
-                    array(
+                [
+                    [
                         'task' => 'typo3.surf:test:setup',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:setup',
                         'node' => 'flow-2.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:setup',
                         'node' => 'neos.example.com',
                         'application' => 'TYPO3 Neos Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:doctrine:migrate',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'migrate',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:doctrine:migrate',
                         'node' => 'flow-2.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'migrate',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'typo3.surf:test:em:updatedatabase',
                         'node' => 'neos.example.com',
                         'application' => 'TYPO3 Neos Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'migrate',
-                        'options' => array()
-                    )
-                )
-            )
+                        'options' => []
+                    ]
+                ]
+            ]
 
-        );
+        ];
     }
 
     /**
@@ -306,7 +306,7 @@ class SimpleWorkflowTest extends TestCase
      */
     public function applicationTaskDefinitionsAreExecutedCorrectly($message, $initializeCallback, array $expectedExecutions)
     {
-        $executedTasks = array();
+        $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 
@@ -321,7 +321,7 @@ class SimpleWorkflowTest extends TestCase
         $deployment
             ->addApplication($flowApplication)
             ->addApplication($neosApplication)
-            ->onInitialize($initializeCallback($workflow, array($flowApplication, $neosApplication)));
+            ->onInitialize($initializeCallback($workflow, [$flowApplication, $neosApplication]));
 
         $deployment->initialize();
 
@@ -336,19 +336,19 @@ class SimpleWorkflowTest extends TestCase
      * @param array $executedTasks Register for executed tasks
      * @return \TYPO3\Surf\Domain\Model\Deployment A configured Deployment for testing
      */
-    protected function buildDeployment(array &$executedTasks = array())
+    protected function buildDeployment(array &$executedTasks = [])
     {
         $deployment = new Deployment('Test deployment');
         $mockLogger = $this->createMock(LoggerInterface::class);
-            // Enable log to console to debug tests
+        // Enable log to console to debug tests
         // $mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
         // 	echo $message . chr(10);
         // }));
         $deployment->setLogger($mockLogger);
 
         $mockTaskManager = $this->createMock(TaskManager::class);
-        $mockTaskManager->expects($this->any())->method('execute')->will($this->returnCallback(function ($task, Node $node, Application $application, Deployment $deployment, $stage, array $options = array()) use (&$executedTasks) {
-            $executedTasks[] = array('task' => $task, 'node' => $node->getName(), 'application' => $application->getName(), 'deployment' => $deployment->getName(), 'stage' => $stage, 'options' => $options);
+        $mockTaskManager->expects($this->any())->method('execute')->will($this->returnCallback(function ($task, Node $node, Application $application, Deployment $deployment, $stage, array $options = []) use (&$executedTasks) {
+            $executedTasks[] = ['task' => $task, 'node' => $node->getName(), 'application' => $application->getName(), 'deployment' => $deployment->getName(), 'stage' => $stage, 'options' => $options];
         }));
 
         $workflow = new SimpleWorkflow($mockTaskManager);
@@ -362,7 +362,7 @@ class SimpleWorkflowTest extends TestCase
      */
     public function tasksAreExecutedInTheRightOrder()
     {
-        $executedTasks = array();
+        $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 
@@ -389,88 +389,88 @@ class SimpleWorkflowTest extends TestCase
 
         $workflow->run($deployment);
 
-        $expected = array(
-            array(
+        $expected = [
+            [
                 'task' => 'before1:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'before2:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'before3:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'task1:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'task2:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'task3:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'after1:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'after2:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'after3:initialize',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'initialize',
-                'options' => array()
-            ),
-            array(
+                'options' => []
+            ],
+            [
                 'task' => 'task1:package',
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
                 'stage' => 'package',
-                'options' => array()
-            )
-        );
+                'options' => []
+            ]
+        ];
 
         $this->assertEquals($expected, $executedTasks);
     }
@@ -480,26 +480,26 @@ class SimpleWorkflowTest extends TestCase
      */
     public function taskRegistrationExamples()
     {
-        return array(
-            'remove task in stage' => array(
+        return [
+            'remove task in stage' => [
                 function ($workflow, $application) {
                     $workflow->addTask('task1:initialize', 'initialize');
                     $workflow->addTask('task2:package', 'package');
 
                     $workflow->removeTask('task1:initialize');
                 },
-                array(
-                    array(
+                [
+                    [
                         'task' => 'task2:package',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'package',
-                        'options' => array()
-                    )
-                )
-            ),
-            'remove task in before hook' => array(
+                        'options' => []
+                    ]
+                ]
+            ],
+            'remove task in before hook' => [
                 function ($workflow, $application) {
                     $workflow->addTask('task1:initialize', 'initialize');
                     $workflow->beforeTask('task1:initialize', 'task2:before');
@@ -507,26 +507,26 @@ class SimpleWorkflowTest extends TestCase
 
                     $workflow->removeTask('task2:before');
                 },
-                array(
-                    array(
+                [
+                    [
                         'task' => 'task3:before',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'task1:initialize',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    )
-                )
-            ),
-            'remove task in after hook' => array(
+                        'options' => []
+                    ]
+                ]
+            ],
+            'remove task in after hook' => [
                 function ($workflow, $application) {
                     $workflow->addTask('task1:initialize', 'initialize');
                     $workflow->afterTask('task1:initialize', 'task2:after');
@@ -534,26 +534,26 @@ class SimpleWorkflowTest extends TestCase
 
                     $workflow->removeTask('task2:after');
                 },
-                array(
-                    array(
+                [
+                    [
                         'task' => 'task1:initialize',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'task3:after',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'initialize',
-                        'options' => array()
-                    )
-                )
-            )
-        );
+                        'options' => []
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -562,7 +562,7 @@ class SimpleWorkflowTest extends TestCase
      */
     public function removeTaskRemovesTaskFromStages($callback, $expectedTasks)
     {
-        $executedTasks = array();
+        $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 
@@ -583,32 +583,32 @@ class SimpleWorkflowTest extends TestCase
      */
     public function stageStepExamples()
     {
-        return array(
-            'task in stage for specific application, task after stage for any application' => array(
+        return [
+            'task in stage for specific application, task after stage for any application' => [
                 function (Workflow $workflow, Application $application) {
                     $workflow->addTask('task1:switch', 'switch', $application);
                     $workflow->afterStage('switch', 'task2:afterSwitch');
                 },
-                array(
-                    array(
+                [
+                    [
                         'task' => 'task1:switch',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'switch',
-                        'options' => array()
-                    ),
-                    array(
+                        'options' => []
+                    ],
+                    [
                         'task' => 'task2:afterSwitch',
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
                         'stage' => 'switch',
-                        'options' => array()
-                    )
-                )
-            )
-        );
+                        'options' => []
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -617,7 +617,7 @@ class SimpleWorkflowTest extends TestCase
      */
     public function beforeAndAfterStageStepsAreIndependentOfApplications($callback, $expectedTasks)
     {
-        $executedTasks = array();
+        $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
 

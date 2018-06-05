@@ -62,11 +62,12 @@ class ImportSiteTaskTest extends BaseTaskTest
      * @param string $commandPackageKey
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function useCorrectCommandPackageKey($version = '4.0', $commandPackageKey = 'neos.neos') {
+    public function useCorrectCommandPackageKey($version = '4.0', $commandPackageKey = 'neos.neos')
+    {
         $this->application->setVersion($version);
-        $options = array(
+        $options = [
             'sitePackageKey' => 'Test.Site'
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("./flow $commandPackageKey:site:import '--package-key' 'Test.Site'");
     }

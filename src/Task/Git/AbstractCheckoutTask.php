@@ -18,7 +18,6 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * An abstract git checkout task
- *
  */
 abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -31,9 +30,8 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

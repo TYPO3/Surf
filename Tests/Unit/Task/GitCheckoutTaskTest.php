@@ -31,12 +31,12 @@ class GitCheckoutTaskTest extends BaseTaskTest
      */
     public function executeWithEmptyOptionsAndValidSha1FetchesResetsCopiesAndCleansRepository()
     {
-        $options = array(
+        $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git'
-        );
-        $this->responses = array(
+        ];
+        $this->responses = [
             'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('git fetch -q origin');
@@ -50,13 +50,13 @@ class GitCheckoutTaskTest extends BaseTaskTest
      */
     public function executeWithBranchOptionAndValidSha1FetchesResetsAndCopiesRepository()
     {
-        $options = array(
+        $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
             'branch' => 'release/production'
-        );
-        $this->responses = array(
+        ];
+        $this->responses = [
             'git ls-remote ssh://git.example.com/project/path.git refs/heads/release/production | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('git fetch -q origin');
@@ -69,13 +69,13 @@ class GitCheckoutTaskTest extends BaseTaskTest
      */
     public function executeWithDisabledRecursiveSubmodulesOptionDoesNotUpdateSubmodulesRecursively()
     {
-        $options = array(
+        $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
             'recursiveSubmodules' => false
-        );
-        $this->responses = array(
+        ];
+        $this->responses = [
             'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('/git submodule -q update --init (?!--recursive)/');
@@ -86,12 +86,12 @@ class GitCheckoutTaskTest extends BaseTaskTest
      */
     public function executeWithoutRecursiveSubmodulesOptionUpdatesSubmodulesRecursively()
     {
-        $options = array(
+        $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git'
-        );
-        $this->responses = array(
+        ];
+        $this->responses = [
             'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('/git submodule -q update --init --recursive/');
@@ -102,13 +102,13 @@ class GitCheckoutTaskTest extends BaseTaskTest
      */
     public function executeWithFetachAllTagsOptionExecutesFetchTags()
     {
-        $options = array(
+        $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
             'fetchAllTags' => true
-        );
-        $this->responses = array(
+        ];
+        $this->responses = [
             'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('git fetch --tags');
@@ -120,12 +120,12 @@ class GitCheckoutTaskTest extends BaseTaskTest
      */
     public function executeWithEmptyOptionsAndInvalidSha1ThrowsException()
     {
-        $options = array(
+        $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git'
-        );
-        $this->responses = array(
+        ];
+        $this->responses = [
             'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'foo-bar d5b7769852a5faa69574fcd3db0799f4ffbd9eec'
-        );
+        ];
 
         try {
             $this->task->execute($this->node, $this->application, $this->deployment, $options);

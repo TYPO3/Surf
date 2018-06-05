@@ -14,7 +14,6 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A Workflow
- *
  */
 abstract class Workflow
 {
@@ -26,7 +25,7 @@ abstract class Workflow
     /**
      * @var array
      */
-    protected $tasks = array();
+    protected $tasks = [];
 
     /**
      * @param TaskManager $taskManager
@@ -37,9 +36,7 @@ abstract class Workflow
     }
 
     /**
-     *
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @return void
      * @throws SurfException
      */
     public function run(Deployment $deployment)
@@ -98,9 +95,8 @@ abstract class Workflow
     }
 
     /**
-     *
      * @param string $stage
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function forStage($stage, $tasks)
@@ -114,7 +110,7 @@ abstract class Workflow
      * The tasks will be executed for the given stage. If an application is given,
      * the tasks will be executed only for the stage and application.
      *
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param string $stage The name of the stage when this task shall be executed
      * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
      * @param string $step A stage has three steps "before", "tasks" and "after"
@@ -123,13 +119,13 @@ abstract class Workflow
     protected function addTaskToStage($tasks, $stage, Application $application = null, $step = 'tasks')
     {
         if (!is_array($tasks)) {
-            $tasks = array($tasks);
+            $tasks = [$tasks];
         }
 
         $applicationName = $application !== null ? $application->getName() : '_';
 
         if (!isset($this->tasks['stage'][$applicationName][$stage][$step])) {
-            $this->tasks['stage'][$applicationName][$stage][$step] = array();
+            $this->tasks['stage'][$applicationName][$stage][$step] = [];
         }
 
         $this->tasks['stage'][$applicationName][$stage][$step] = array_merge($this->tasks['stage'][$applicationName][$stage][$step], $tasks);
@@ -141,7 +137,7 @@ abstract class Workflow
      * The tasks will be executed for the given stage. If an application is given,
      * the tasks will be executed only for the stage and application.
      *
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param string $stage The name of the stage when this task shall be executed
      * @param \TYPO3\Surf\Domain\Model\Application $application If given the task will be specific for this application
      * @return \TYPO3\Surf\Domain\Model\Workflow
@@ -158,20 +154,20 @@ abstract class Workflow
      * The execution will not depend on a stage but on an optional application.
      *
      * @param string $task
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function afterTask($task, $tasks, Application $application = null)
     {
         if (!is_array($tasks)) {
-            $tasks = array($tasks);
+            $tasks = [$tasks];
         }
 
         $applicationName = $application !== null ? $application->getName() : '_';
 
         if (!isset($this->tasks['after'][$applicationName][$task])) {
-            $this->tasks['after'][$applicationName][$task] = array();
+            $this->tasks['after'][$applicationName][$task] = [];
         }
         $this->tasks['after'][$applicationName][$task] = array_merge($this->tasks['after'][$applicationName][$task], $tasks);
         return $this;
@@ -183,20 +179,20 @@ abstract class Workflow
      * The execution will not depend on a stage but on an optional application.
      *
      * @param string $task
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
     public function beforeTask($task, $tasks, Application $application = null)
     {
         if (!is_array($tasks)) {
-            $tasks = array($tasks);
+            $tasks = [$tasks];
         }
 
         $applicationName = $application !== null ? $application->getName() : '_';
 
         if (!isset($this->tasks['before'][$applicationName][$task])) {
-            $this->tasks['before'][$applicationName][$task] = array();
+            $this->tasks['before'][$applicationName][$task] = [];
         }
         $this->tasks['before'][$applicationName][$task] = array_merge($this->tasks['before'][$applicationName][$task], $tasks);
         return $this;
@@ -212,10 +208,10 @@ abstract class Workflow
      */
     public function defineTask($taskName, $baseTask, $options)
     {
-        $this->tasks['defined'][$taskName] = array(
+        $this->tasks['defined'][$taskName] = [
             'task' => $baseTask,
             'options' => $options
-        );
+        ];
         return $this;
     }
 
@@ -223,7 +219,7 @@ abstract class Workflow
      * Add tasks that shall be executed before the given stage
      *
      * @param string $stage
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
@@ -237,7 +233,7 @@ abstract class Workflow
      * Add tasks that shall be executed after the given stage
      *
      * @param string $stage
-     * @param string|array $tasks
+     * @param array|string $tasks
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
@@ -285,12 +281,11 @@ abstract class Workflow
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @return void
      */
     protected function executeStage($stage, Node $node, Application $application, Deployment $deployment)
     {
-        foreach (array('before', 'tasks', 'after') as $stageStep) {
-            foreach (array('_', $application->getName()) as $applicationName) {
+        foreach (['before', 'tasks', 'after'] as $stageStep) {
+            foreach (['_', $application->getName()] as $applicationName) {
                 $label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
 
                 if (isset($this->tasks['stage'][$applicationName][$stage][$stageStep])) {
@@ -314,12 +309,11 @@ abstract class Workflow
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param string $stage
      * @param array $callstack
-     * @return void
      * @throws TaskExecutionException
      */
-    protected function executeTask($task, Node $node, Application $application, Deployment $deployment, $stage, array &$callstack = array())
+    protected function executeTask($task, Node $node, Application $application, Deployment $deployment, $stage, array &$callstack = [])
     {
-        foreach (array('_', $application->getName()) as $applicationName) {
+        foreach (['_', $application->getName()] as $applicationName) {
             if (isset($this->tasks['before'][$applicationName][$task])) {
                 foreach ($this->tasks['before'][$applicationName][$task] as $beforeTask) {
                     $deployment->getLogger()->debug('Task "' . $beforeTask . '" before "' . $task);
@@ -336,7 +330,7 @@ abstract class Workflow
             $this->taskManager->execute($task, $node, $application, $deployment, $stage);
         }
         $callstack[$task] = true;
-        foreach (array('_', $application->getName()) as $applicationName) {
+        foreach (['_', $application->getName()] as $applicationName) {
             $label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
             if (isset($this->tasks['after'][$applicationName][$task])) {
                 foreach ($this->tasks['after'][$applicationName][$task] as $beforeTask) {

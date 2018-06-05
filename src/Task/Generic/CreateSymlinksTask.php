@@ -38,9 +38,8 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['symlinks']) || !is_array($options['symlinks'])) {
             return;
@@ -52,9 +51,9 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
             $baseDirectory = $deployment->getApplicationReleasePath($application);
         }
 
-        $commands = array(
+        $commands = [
             'cd ' . $baseDirectory
-        );
+        ];
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
             $commands[] = 'ln -s ' . $sourcePath . ' ' . $linkPath;
         }
@@ -68,9 +67,8 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

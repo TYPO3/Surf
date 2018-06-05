@@ -24,10 +24,9 @@ class CreatePackageStatesTask extends AbstractCliTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->ensureApplicationIsTypo3Cms($application);
         if (!$this->packageStatesFileExists($node, $application, $deployment, $options)) {
@@ -36,7 +35,7 @@ class CreatePackageStatesTask extends AbstractCliTask
             } catch (InvalidConfigurationException $e) {
                 throw new InvalidConfigurationException('No package states file found in the repository and no typo3_console package found to generate it. We cannot proceed.', 1420210956, $e);
             }
-            $commandArguments = array($scriptFileName, 'install:generatepackagestates');
+            $commandArguments = [$scriptFileName, 'install:generatepackagestates'];
             if (!empty($options['removeInactivePackages'])) {
                 $commandArguments[] = '--remove-inactive-packages';
             }
@@ -51,9 +50,8 @@ class CreatePackageStatesTask extends AbstractCliTask
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -69,7 +67,7 @@ class CreatePackageStatesTask extends AbstractCliTask
      * @param array $options
      * @return bool
      */
-    protected function packageStatesFileExists(Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function packageStatesFileExists(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
         return $this->fileExists($webDirectory . '/typo3conf/PackageStates.php', $node, $application, $deployment, $options);
