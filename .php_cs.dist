@@ -63,7 +63,7 @@ return PhpCsFixer\Config::create()
                             'no_superfluous_elseif' => true,
                             'no_useless_else' => true,
                             'phpdoc_types' => true,
-                            'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
+                            'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'alpha'],
                             'return_type_declaration' => ['space_before' => 'none'],
                             'cast_spaces' => ['space' => 'none'],
                             'declare_equal_normalize' => ['space' => 'single'],
