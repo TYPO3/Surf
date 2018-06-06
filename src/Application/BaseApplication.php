@@ -14,7 +14,8 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Task\CleanupReleasesTask;
 use TYPO3\Surf\Task\Composer\InstallTask;
-use TYPO3\Surf\Task\Generic\CreateDirectoriesTask;
+use TYPO3\Surf\Task\CreateDirectoriesTask;
+use TYPO3\Surf\Task\Generic\CreateDirectoriesTask as GenericCreateDirectoriesTask;
 use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
 use TYPO3\Surf\Task\GitCheckoutTask;
 use TYPO3\Surf\Task\Package\GitTask;
@@ -87,7 +88,7 @@ class BaseApplication extends Application
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
-        $this->setOption(CreateDirectoriesTask::class . '[directories]', $this->getDirectories());
+        $this->setOption(GenericCreateDirectoriesTask::class . '[directories]', $this->getDirectories());
         $this->setOption(CreateSymlinksTask::class . '[symlinks]', $this->getSymlinks());
 
         if ($this->hasOption('packageMethod')) {
@@ -108,7 +109,7 @@ class BaseApplication extends Application
 
         $workflow
             ->addTask(CreateDirectoriesTask::class, 'initialize', $this)
-            ->afterTask(CreateDirectoriesTask::class, CreateDirectoriesTask::class, $this)
+            ->afterTask(CreateDirectoriesTask::class, GenericCreateDirectoriesTask::class, $this)
             ->addTask(SymlinkReleaseTask::class, 'switch', $this)
             ->addTask(CleanupReleasesTask::class, 'cleanup', $this);
     }
