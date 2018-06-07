@@ -265,9 +265,6 @@ class BaseApplication extends Application
             case 'scp':
                 // TODO
                 break;
-            case 'ftp':
-                // TODO
-                break;
         }
     }
 
