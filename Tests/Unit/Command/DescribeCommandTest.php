@@ -163,8 +163,7 @@ Applications:
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
         ]);
-        $this->assertEquals(
-            '<success>Deployment TestDeployment</success>
+        $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
 
@@ -225,9 +224,7 @@ Applications:
       cleanup:
         tasks:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application TYPO3 CMS)
-',
-            $commandTester->getDisplay()
-        );
+', $commandTester->getDisplay());
     }
 
     /**
@@ -244,8 +241,7 @@ Applications:
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
         ]);
-        $this->assertEquals(
-            '<success>Deployment TestDeployment</success>
+        $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
 
@@ -303,8 +299,6 @@ Applications:
       cleanup:
         tasks:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application Neos)
-',
-            $commandTester->getDisplay()
-        );
+', $commandTester->getDisplay());
     }
 }
