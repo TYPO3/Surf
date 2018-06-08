@@ -36,7 +36,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
      * @throws TaskExecutionException
      * @throws InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $configurationFileExtension = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'yaml';
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
@@ -44,12 +44,12 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
         if (!is_dir($configurationPath)) {
             return;
         }
-        $commands = array();
+        $commands = [];
         $configurationFiles = Files::readDirectoryRecursively($configurationPath, $configurationFileExtension);
         foreach ($configurationFiles as $configuration) {
             $targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
             $escapedSourcePath = escapeshellarg($configuration);
-            $escapedTargetPath = escapeshellarg(Files::concatenatePaths(array($targetReleasePath, 'Configuration', $targetConfigurationPath)) . '/');
+            $escapedTargetPath = escapeshellarg(Files::concatenatePaths([$targetReleasePath, 'Configuration', $targetConfigurationPath]) . '/');
             if ($node->isLocalhost()) {
                 $commands[] = 'mkdir -p ' . $escapedTargetPath;
                 $commands[] = 'cp ' . $escapedSourcePath . ' ' . $escapedTargetPath;
@@ -62,11 +62,11 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
                 $sshOptions = '';
                 $expect = '';
                 if ($node->hasOption('password')) {
-                    $sshOptions .= "-o PubkeyAuthentication=no ";
-                    $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array(dirname(dirname(dirname(dirname(__DIR__)))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect'));
+                    $sshOptions .= '-o PubkeyAuthentication=no ';
+                    $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(dirname(__DIR__)))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
                     if (Phar::running() !== '') {
                         $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
-                        $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths(array($deployment->getTemporaryPath(), 'PasswordSshLogin.expect'));
+                        $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([$deployment->getTemporaryPath(), 'PasswordSshLogin.expect']);
                         file_put_contents($passwordSshLoginScriptPathAndFilename, $passwordSshLoginScriptContents);
                     }
                     $expect = sprintf('expect %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')));
@@ -90,9 +90,8 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

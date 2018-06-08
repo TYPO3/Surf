@@ -8,18 +8,18 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\ErrorMessageFactory;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for uploading to sourceforge
- *
+ * @deprecated
  */
 class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -32,11 +32,10 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForSourceforgeUploadTask());
+        $deployment->getLogger()->warning(DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__));
         $this->checkOptionsForValidity($options);
         $projectName = $options['sourceforgeProjectName'];
 
@@ -55,9 +54,8 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -66,7 +64,6 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
      * Check if all required options are given
      *
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function checkOptionsForValidity(array $options)

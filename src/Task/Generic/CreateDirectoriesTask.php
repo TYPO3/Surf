@@ -29,19 +29,18 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['directories']) || !is_array($options['directories']) || $options['directories'] === array()) {
+        if (!isset($options['directories']) || !is_array($options['directories']) || $options['directories'] === []) {
             return;
         }
 
         $baseDirectory = isset($options['baseDirectory']) ? $options['baseDirectory'] : $deployment->getApplicationReleasePath($application);
 
-        $commands = array(
+        $commands = [
             'cd ' . $baseDirectory
-        );
+        ];
         foreach ($options['directories'] as $path) {
             $commands[] = 'mkdir -p ' . $path;
         }
@@ -56,9 +55,8 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

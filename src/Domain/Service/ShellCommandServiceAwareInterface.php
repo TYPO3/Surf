@@ -14,7 +14,6 @@ interface ShellCommandServiceAwareInterface
 {
     /**
      * @param ShellCommandService $shellCommandService
-     * @return null
      */
     public function setShellCommandService(ShellCommandService $shellCommandService);
 }

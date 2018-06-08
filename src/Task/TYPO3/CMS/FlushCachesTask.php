@@ -9,10 +9,10 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  */
 
 use TYPO3\Surf\Application\TYPO3\CMS;
+use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
-use TYPO3\Surf\ErrorMessageFactory;
 
 /**
  * Clear TYPO3 caches
@@ -27,14 +27,13 @@ class FlushCachesTask extends AbstractCliTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->ensureApplicationIsTypo3Cms($application);
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
-            $deployment->getLogger()->warning('Neither Extension "typo3_console" nor "coreapi" was not found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            $deployment->getLogger()->warning('Neither Extension "typo3_console" nor "coreapi" was found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
             return;
         }
         $this->executeCliCommand(
@@ -53,16 +52,16 @@ class FlushCachesTask extends AbstractCliTask
      * @param array $options
      * @return array
      */
-    protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = array())
+    protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
             case 'typo3_console':
-                return array($this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush', '--force');
+                return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush', '--force'];
             case 'coreapi':
-                $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForCoreApiUsage());
-                return array('typo3/cli_dispatch.phpsh', 'extbase', 'cacheapi:clearallcaches');
+                $deployment->getLogger()->warning(DeprecationMessageFactory::createDeprecationWarningForCoreApiUsage());
+                return [$this->getCliDispatchScriptFileName($options), 'extbase', 'cacheapi:clearallcaches'];
             default:
-                return array();
+                return [];
         }
     }
 }

@@ -33,10 +33,9 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $deploymentPath = $application->getDeploymentPath();
         $sharedPath = $application->getSharedPath();
@@ -47,12 +46,12 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
         if ($result === false) {
             throw new TaskExecutionException('Deployment directory "' . $deploymentPath . '" does not exist on node ' . $node->getName(), 1311003253);
         }
-        $commands = array(
+        $commands = [
             'mkdir -p ' . $releasesPath,
             'mkdir -p ' . $sharedPath,
             'mkdir -p ' . $releasePath,
             'cd ' . $releasesPath . ';ln -snf ./' . $releaseIdentifier . ' next'
-        );
+        ];
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
@@ -63,9 +62,8 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -77,17 +75,16 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @todo Make the removal of a failed release configurable, sometimes it's necessary to inspect a failed release
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasesPath = $application->getReleasesPath();
         $releasePath = $deployment->getApplicationReleasePath($application);
-        $commands = array(
+        $commands = [
             'rm ' . $releasesPath . '/next',
             'rm -rf ' . $releasePath
-        );
+        ];
         $this->shell->execute($commands, $node, $deployment, true);
     }
 }

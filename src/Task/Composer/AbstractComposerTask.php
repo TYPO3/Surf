@@ -37,14 +37,14 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      *
      * @var array
      */
-    protected $arguments = array();
+    protected $arguments = [];
 
     /**
      * Suffix for the command
      *
      * @var array
      */
-    protected $suffix = array('2>&1');
+    protected $suffix = ['2>&1'];
 
     /**
      * @param \TYPO3\Surf\Domain\Model\Node $node
@@ -54,7 +54,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (isset($options['useApplicationWorkspace']) && $options['useApplicationWorkspace'] === true) {
             $composerRootPath = $deployment->getWorkspacePath($application);
@@ -82,11 +82,10 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -105,24 +104,23 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
             throw new TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
         }
 
-        if (isset($options['additionalArguments'])){
-            $additionalArguments = is_array($options['additionalArguments']) ? $options['additionalArguments'] : array($options['additionalArguments']);
-        } else {
-            $additionalArguments = array();
+        $additionalArguments = [];
+        if (isset($options['additionalArguments'])) {
+            $additionalArguments = (array)$options['additionalArguments'];
         }
 
         $arguments = array_merge(
-            array(escapeshellcmd($options['composerCommandPath']), $this->command),
+            [escapeshellcmd($options['composerCommandPath']), $this->command],
             $this->arguments,
             array_map('escapeshellarg', $additionalArguments),
             $this->suffix
         );
         $script = implode(' ', $arguments);
 
-        return array(
+        return [
             'cd ' . escapeshellarg($manifestPath),
             $script,
-        );
+        ];
     }
 
     /**
@@ -141,7 +139,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         if ($deployment->isDryRun()) {
             return false;
         }
-        $composerJsonPath = Files::concatenatePaths(array($path, 'composer.json'));
+        $composerJsonPath = Files::concatenatePaths([$path, 'composer.json']);
         $composerJsonExists = $this->shell->executeOrSimulate('test -f ' . escapeshellarg($composerJsonPath), $node, $deployment, true);
         if ($composerJsonExists === false) {
             $deployment->getLogger()->debug('No composer.json found in path "' . $composerJsonPath . '"');

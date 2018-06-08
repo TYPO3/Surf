@@ -31,9 +31,9 @@ class InstallTaskTest extends BaseTaskTest
      */
     public function executeUserConfiguredComposerCommand()
     {
-        $options = array(
+        $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-        );
+        ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative 2>&1$/');
@@ -44,13 +44,27 @@ class InstallTaskTest extends BaseTaskTest
      */
     public function executeUserConfiguredComposerCommandWithAdditionalArguments()
     {
-        $options = array(
+        $options = [
             'composerCommandPath' => 'composer',
-            'additionalArguments' => array('--ignore-platform-reqs', '--no-scripts'),
-        );
+            'additionalArguments' => ['--ignore-platform-reqs', '--no-scripts'],
+        ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted('/^composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative \'--ignore-platform-reqs\' \'--no-scripts\' 2>&1$/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeUserConfiguredComposerCommandWithAdditionalArgumentsAsString()
+    {
+        $options = [
+            'composerCommandPath' => 'composer',
+            'additionalArguments' => '--ignore-platform-reqs',
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted('/^composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative \'--ignore-platform-reqs\' 2>&1$/');
     }
 
     /**

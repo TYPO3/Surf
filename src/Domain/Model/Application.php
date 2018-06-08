@@ -12,7 +12,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A generic application without any tasks
- *
  */
 class Application
 {
@@ -33,7 +32,7 @@ class Application
      * The nodes for this application
      * @var array
      */
-    protected $nodes = array();
+    protected $nodes = [];
 
     /**
      * The deployment path for this application on a node
@@ -51,7 +50,7 @@ class Application
      * The options
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Constructor
@@ -71,11 +70,10 @@ class Application
      *
      * Example:
      *
-     *   $workflow->addTask('TYPO3\\Surf\\Task\\CreateDirectoriesTask', 'initialize', $this);
+     *   $workflow->addTask(CreateDirectoriesTask::class, 'initialize', $this);
      *
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
@@ -201,8 +199,10 @@ class Application
             $sharedPath = $this->getOption('sharedDirectory');
             if (preg_match('/(^|\/)\.\.(\/|$)/', $sharedPath)) {
                 throw new InvalidConfigurationException(
-                    sprintf('Relative constructs as "../" are not allowed in option "sharedDirectory". Given option: "%s"',
-                        $sharedPath),
+                    sprintf(
+                        'Relative constructs as "../" are not allowed in option "sharedDirectory". Given option: "%s"',
+                        $sharedPath
+                    ),
                     1490107183141
                 );
             }
@@ -271,11 +271,11 @@ class Application
      */
     public function getOptions()
     {
-        return array_merge($this->options, array(
+        return array_merge($this->options, [
             'deploymentPath' => $this->getDeploymentPath(),
             'releasesPath' => $this->getReleasesPath(),
             'sharedPath' => $this->getSharedPath()
-        ));
+        ]);
     }
 
     /**

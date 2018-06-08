@@ -51,11 +51,11 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
      */
     public function __construct(RandomBytesGeneratorInterface $randomBytesGenerator = null, FilesystemInterface $filesystem = null)
     {
-        if ( ! $randomBytesGenerator instanceof RandomBytesGeneratorInterface) {
+        if (! $randomBytesGenerator instanceof RandomBytesGeneratorInterface) {
             $randomBytesGenerator = new RandomBytesGenerator();
         }
 
-        if ( ! $filesystem instanceof FilesystemInterface) {
+        if (! $filesystem instanceof FilesystemInterface) {
             $filesystem = new Filesystem();
         }
 
@@ -71,18 +71,17 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
      * @param Deployment $deployment
      * @param array $options Supported options: "scriptBasePath" and "scriptIdentifier"
      *
-     * @return void
      * @throws TaskExecutionException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $workspacePath = $deployment->getWorkspacePath($application);
-        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : Files::concatenatePaths(array($workspacePath, 'Web'));
+        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : Files::concatenatePaths([$workspacePath, 'Web']);
 
-        if ( ! isset($options['scriptIdentifier'])) {
+        if (! isset($options['scriptIdentifier'])) {
             // Store the script identifier as an application option
             $scriptIdentifier = bin2hex($this->randomBytesGenerator->generate(32));
-            $application->setOption('TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask[scriptIdentifier]', $scriptIdentifier);
+            $application->setOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]', $scriptIdentifier);
         } else {
             $scriptIdentifier = $options['scriptIdentifier'];
         }
@@ -90,14 +89,14 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         $localhost = new Node('localhost');
         $localhost->setHostname('localhost');
 
-        $commands = array(
-            'cd '.escapeshellarg($scriptBasePath),
+        $commands = [
+            'cd ' . escapeshellarg($scriptBasePath),
             'rm -f surf-opcache-reset-*',
-        );
+        ];
 
         $this->shell->executeOrSimulate($commands, $localhost, $deployment);
 
-        if ( ! $deployment->isDryRun()) {
+        if (! $deployment->isDryRun()) {
             $scriptFilename = sprintf('%s/surf-opcache-reset-%s.php', $scriptBasePath, $scriptIdentifier);
             $result = $this->filesystem->put($scriptFilename, '<?php
                 if (function_exists("opcache_reset")) {
@@ -108,7 +107,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
             ');
 
             if ($result === false) {
-                throw new TaskExecutionException('Could not write file "'.$scriptFilename.'"', 1421932414);
+                throw new TaskExecutionException('Could not write file "' . $scriptFilename . '"', 1421932414);
             }
         }
     }

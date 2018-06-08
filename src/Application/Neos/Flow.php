@@ -11,6 +11,13 @@ namespace TYPO3\Surf\Application\Neos;
 use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Task\Composer\InstallTask;
+use TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask;
+use TYPO3\Surf\Task\Neos\Flow\CreateDirectoriesTask;
+use TYPO3\Surf\Task\Neos\Flow\MigrateTask;
+use TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask;
+use TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask;
+use TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask;
 
 /**
  * A Neos Flow application template
@@ -36,9 +43,9 @@ class Flow extends BaseApplication
     public function __construct($name = 'Neos Flow')
     {
         parent::__construct($name);
-        $this->options = array_merge($this->options, array(
+        $this->options = array_merge($this->options, [
             'updateMethod' => 'composer'
-        ));
+        ]);
     }
 
     /**
@@ -46,21 +53,20 @@ class Flow extends BaseApplication
      *
      * @param Workflow $workflow
      * @param Deployment $deployment
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
         parent::registerTasks($workflow, $deployment);
 
         $workflow
-            ->addTask('TYPO3\\Surf\\Task\\Neos\\Flow\\CreateDirectoriesTask', 'initialize', $this)
-            ->afterStage('update', array(
-                'TYPO3\\Surf\\Task\\Neos\\Flow\\SymlinkDataTask',
-                'TYPO3\\Surf\\Task\\Neos\\Flow\\SymlinkConfigurationTask',
-                'TYPO3\\Surf\\Task\\Neos\\Flow\\CopyConfigurationTask'
-            ), $this)
-            ->addTask('TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask', 'migrate', $this)
-            ->addTask('TYPO3\\Surf\\Task\\Neos\\Flow\\PublishResourcesTask', 'finalize', $this);
+            ->addTask(CreateDirectoriesTask::class, 'initialize', $this)
+            ->afterStage('update', [
+                SymlinkDataTask::class,
+                SymlinkConfigurationTask::class,
+                CopyConfigurationTask::class
+            ], $this)
+            ->addTask(MigrateTask::class, 'migrate', $this)
+            ->addTask(PublishResourcesTask::class, 'finalize', $this);
     }
 
     /**
@@ -68,16 +74,15 @@ class Flow extends BaseApplication
      *
      * @param Workflow $workflow
      * @param string $packageMethod
-     * @return void
      */
     protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod)
     {
         parent::registerTasksForPackageMethod($workflow, $packageMethod);
 
-        $workflow->defineTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', 'TYPO3\\Surf\\Task\\Composer\\InstallTask', array(
+        $workflow->defineTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', InstallTask::class, [
             'nodeName' => 'localhost',
             'useApplicationWorkspace' => true
-        ));
+        ]);
 
         if ($packageMethod === 'git') {
             $workflow->afterStage('package', 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', $this);
@@ -89,13 +94,12 @@ class Flow extends BaseApplication
      *
      * @param Workflow $workflow
      * @param string $updateMethod
-     * @return void
      */
     protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod)
     {
         switch ($updateMethod) {
             case 'composer':
-                $workflow->addTask('TYPO3\\Surf\\Task\\Composer\\InstallTask', 'update', $this);
+                $workflow->addTask(InstallTask::class, 'update', $this);
                 break;
             default:
                 parent::registerTasksForUpdateMethod($workflow, $updateMethod);
@@ -200,6 +204,6 @@ class Flow extends BaseApplication
     {
         return 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $this->getContext() .
             ' ./' . $this->getFlowScriptName() . ' ' . $this->getCommandPackageKey($command) . ':' . $command . ' '
-            . join(' ', array_map('escapeshellarg', $arguments));
+            . implode(' ', array_map('escapeshellarg', $arguments));
     }
 }

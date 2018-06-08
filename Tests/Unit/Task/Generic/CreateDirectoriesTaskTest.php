@@ -43,7 +43,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
      */
     public function createsDirectoriesInReleasePath()
     {
-        $options = array('directories' => array('media'));
+        $options = ['directories' => ['media']];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
@@ -55,7 +55,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
      */
     public function createsDirectoriesInCustomPath()
     {
-        $options = array('directories' => array('media'), 'baseDirectory' => '/foo/bar');
+        $options = ['directories' => ['media'], 'baseDirectory' => '/foo/bar'];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('cd /foo/bar');

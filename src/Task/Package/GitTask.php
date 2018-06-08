@@ -29,11 +29,10 @@ class GitTask extends AbstractCheckoutTask
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['repositoryUrl'])) {
             throw new InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', $application->getName()), 1374074052);

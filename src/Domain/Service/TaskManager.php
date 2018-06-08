@@ -15,7 +15,6 @@ use TYPO3\Surf\Exception as SurfException;
 
 /**
  * A task manager
- *
  */
 class TaskManager
 {
@@ -23,7 +22,7 @@ class TaskManager
      * Task history for rollback
      * @var array
      */
-    protected $taskHistory = array();
+    protected $taskHistory = [];
 
     /**
      * Execute a task
@@ -37,7 +36,7 @@ class TaskManager
      * @param string $definedTaskName
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = array(), $definedTaskName = '')
+    public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = [], $definedTaskName = '')
     {
         $definedTaskName = $definedTaskName ?: $taskName;
         $deployment->getLogger()->info($node->getName() . ' (' . $application->getName() . ') ' . $definedTaskName);
@@ -51,20 +50,18 @@ class TaskManager
         } else {
             $task->simulate($node, $application, $deployment, $globalOptions);
         }
-        $this->taskHistory[] = array(
+        $this->taskHistory[] = [
             'task' => $task,
             'node' => $node,
             'application' => $application,
             'deployment' => $deployment,
             'stage' => $stage,
             'options' => $globalOptions
-        );
+        ];
     }
 
     /**
      * Rollback all tasks stored in the task history in reverse order
-     *
-     * @return void
      */
     public function rollback()
     {
@@ -79,12 +76,10 @@ class TaskManager
 
     /**
      * Reset the task history
-     *
-     * @return void
      */
     public function reset()
     {
-        $this->taskHistory = array();
+        $this->taskHistory = [];
     }
 
     /**
@@ -99,7 +94,7 @@ class TaskManager
      *
      * Global options for a task should be prefixed with the task name to prevent naming
      * issues between different tasks. For example passing a special option to the
-     * GitCheckoutTask could be expressed like 'TYPO3\\Surf\\Task\\GitCheckoutTask[sha1]' => '1234...'.
+     * GitCheckoutTask could be expressed like GitCheckoutTask::class . '[sha1]' => '1234...'.
      *
      * @param string $taskName
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
@@ -115,7 +110,7 @@ class TaskManager
             $node->getOptions(),
             $application->getOptions()
         );
-        $globalTaskOptions = array();
+        $globalTaskOptions = [];
         foreach ($globalOptions as $optionKey => $optionValue) {
             if (strlen($optionKey) > strlen($taskName) && strpos($optionKey, $taskName) === 0 && $optionKey[strlen($taskName)] === '[') {
                 $globalTaskOptions[substr($optionKey, strlen($taskName) + 1, -1)] = $optionValue;

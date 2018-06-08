@@ -18,7 +18,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A generic shell task
- *
  */
 class ShellTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -35,22 +34,21 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['command'])) {
             throw new InvalidConfigurationException('Missing "command" option for ShellTask', 1311168045);
         }
 
-        $replacePaths = array(
+        $replacePaths = [
             '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
             '{sharedPath}' => escapeshellarg($application->getSharedPath()),
             '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
             '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
             '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous')
-        );
+        ];
 
         $command = $options['command'];
         $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
@@ -68,9 +66,8 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -82,21 +79,20 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['rollbackCommand'])) {
             return;
         }
 
-        $replacePaths = array(
+        $replacePaths = [
             '{deploymentPath}' => $application->getDeploymentPath(),
             '{sharedPath}' => $application->getSharedPath(),
             '{releasePath}' => $deployment->getApplicationReleasePath($application),
             '{currentPath}' => $application->getReleasesPath() . '/current',
             '{previousPath}' => $application->getReleasesPath() . '/previous'
-        );
+        ];
 
         $command = $options['rollbackCommand'];
         $command = str_replace(array_keys($replacePaths), $replacePaths, $command);

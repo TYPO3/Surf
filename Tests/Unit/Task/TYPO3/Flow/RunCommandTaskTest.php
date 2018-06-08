@@ -33,10 +33,10 @@ class RunCommandTaskTest extends BaseTaskTest
      */
     public function executeWithSingleStringArgumentsEscapesFullArgument()
     {
-        $options = array(
+        $options = [
             'command' => 'example:command',
             'arguments' => 'Some longer argument needing "escaping"',
-        );
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('./flow example:command \'Some longer argument needing "escaping"\'');
@@ -47,10 +47,10 @@ class RunCommandTaskTest extends BaseTaskTest
      */
     public function executeWithArrayArgumentsEscapesIndividualArguments()
     {
-        $options = array(
+        $options = [
             'command' => 'site:prune',
-            'arguments' => array('--confirmation', 'TRUE'),
-        );
+            'arguments' => ['--confirmation', 'TRUE'],
+        ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('./flow site:prune \'--confirmation\' \'TRUE\'');

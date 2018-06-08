@@ -12,7 +12,6 @@ namespace TYPO3\Surf\Domain\Model;
  * Representing a failed deployment
  *
  * This class does nothing
- *
  */
 class FailedDeployment extends Deployment
 {

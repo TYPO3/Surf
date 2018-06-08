@@ -55,7 +55,7 @@ class DeploymentTest extends TestCase
         }, $nodes);
         sort($nodeNames);
 
-        $this->assertEquals(array('test1.example.com', 'test2.example.com'), $nodeNames);
+        $this->assertEquals(['test1.example.com', 'test2.example.com'], $nodeNames);
     }
 
     /**

@@ -26,10 +26,9 @@ class StopTask extends Task
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @return void
      * @throws \TYPO3\Surf\Exception\StopWorkflowException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         throw new StopWorkflowException('Workflow stopped explicitly');
     }
@@ -41,9 +40,8 @@ class StopTask extends Task
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

@@ -19,7 +19,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A Neos Flow task to run unit tests
- *
  */
 class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -32,10 +31,9 @@ class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!$application instanceof Flow) {
             throw new InvalidConfigurationException(sprintf('Flow application needed for UnitTestTask, got "%s"', get_class($application)), 1358866042);
@@ -52,9 +50,8 @@ class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
