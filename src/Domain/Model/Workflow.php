@@ -58,12 +58,17 @@ abstract class Workflow
      * Remove the given task from all stages and applications
      *
      * @param string $removeTask
+     * @param \TYPO3\Surf\Domain\Model\Application $application if given, task is only removed from application
      * @return \TYPO3\Surf\Domain\Model\Workflow
      */
-    public function removeTask($removeTask)
+    public function removeTask($removeTask, Application $application = null)
     {
+        $removeApplicationName = null !== $application ? $application->getName() : null;
         if (isset($this->tasks['stage'])) {
             foreach ($this->tasks['stage'] as $applicationName => $steps) {
+                if ($removeApplicationName !== null && $applicationName !== $removeApplicationName) {
+                    continue;
+                }
                 foreach ($steps as $step => $tasksByStageStep) {
                     foreach ($tasksByStageStep as $stageName => $tasks) {
                         $this->tasks['stage'][$applicationName][$step][$stageName] = array_filter($tasks, function ($task) use ($removeTask) {
@@ -73,24 +78,8 @@ abstract class Workflow
                 }
             }
         }
-        if (isset($this->tasks['after'])) {
-            foreach ($this->tasks['after'] as $applicationName => $tasksByTask) {
-                foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
-                        return $task !== $removeTask;
-                    });
-                }
-            }
-        }
-        if (isset($this->tasks['before'])) {
-            foreach ($this->tasks['before'] as $applicationName => $tasksByTask) {
-                foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
-                        return $task !== $removeTask;
-                    });
-                }
-            }
-        }
+        $this->removeTaskFromPosition($removeTask,'before',$removeApplicationName);
+        $this->removeTaskFromPosition($removeTask,'after',$removeApplicationName);
         return $this;
     }
 
@@ -339,5 +328,30 @@ abstract class Workflow
                 }
             }
         }
+    }
+
+    /**
+     * remove task from before or after position
+     *
+     * @param string $removeTask
+     * @param string $position
+     * @param string $removeApplication if given, task is removed only from application
+     * @return $this
+     */
+    protected function removeTaskFromPosition($removeTask,$position, $removeApplication = null)
+    {
+        if ( isset($this->tasks[$position]) ) {
+            foreach ($this->tasks[$position] as $applicationName => $tasksByTask) {
+                if (null !== $removeApplication && $applicationName !== $removeApplication) {
+                    continue;
+                }
+                foreach ($tasksByTask as $taskName => $tasks) {
+                    $this->tasks[$position][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
+                        return $task !== $removeTask;
+                    });
+                }
+            }
+        }
+        return $this;
     }
 }
