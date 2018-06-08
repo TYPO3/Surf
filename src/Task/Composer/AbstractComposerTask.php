@@ -104,10 +104,9 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
             throw new TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
         }
 
+        $additionalArguments = [];
         if (isset($options['additionalArguments'])) {
-            $additionalArguments = is_array($options['additionalArguments']) ? $options['additionalArguments'] : [$options['additionalArguments']];
-        } else {
-            $additionalArguments = [];
+            $additionalArguments = (array)$options['additionalArguments'];
         }
 
         $arguments = array_merge(
