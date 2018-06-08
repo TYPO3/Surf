@@ -154,7 +154,7 @@ Applications:
      */
     public function describeTypo3Cms()
     {
-        $this->setUpPredefinedApp(New \TYPO3\Surf\Application\TYPO3\CMS());
+        $this->setUpPredefinedApp(new \TYPO3\Surf\Application\TYPO3\CMS());
         $factory = $this->createMock(FactoryInterface::class);
         $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
         $command = new DescribeCommand();
@@ -225,7 +225,8 @@ Applications:
       cleanup:
         tasks:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application TYPO3 CMS)
-', $commandTester->getDisplay()
+',
+            $commandTester->getDisplay()
         );
     }
 
@@ -234,7 +235,7 @@ Applications:
      */
     public function describeNeosNeos()
     {
-        $this->setUpPredefinedApp(New \TYPO3\Surf\Application\Neos\Neos());
+        $this->setUpPredefinedApp(new \TYPO3\Surf\Application\Neos\Neos());
         $factory = $this->createMock(FactoryInterface::class);
         $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
         $command = new DescribeCommand();
@@ -302,7 +303,8 @@ Applications:
       cleanup:
         tasks:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application Neos)
-', $commandTester->getDisplay()
+',
+            $commandTester->getDisplay()
         );
     }
 }
