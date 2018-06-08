@@ -8,17 +8,18 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\ErrorMessageFactory;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for uploading to sourceforge
+ * @deprecated
  */
 class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -34,7 +35,7 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $deployment->getLogger()->warning(ErrorMessageFactory::createDeprecationWarningForSourceforgeUploadTask());
+        $deployment->getLogger()->warning(DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__));
         $this->checkOptionsForValidity($options);
         $projectName = $options['sourceforgeProjectName'];
 

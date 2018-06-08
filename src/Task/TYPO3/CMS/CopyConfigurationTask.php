@@ -8,12 +8,14 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
  * A task to copy host/context specific configuration
+ * @deprecated
  */
 class CopyConfigurationTask extends \TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask
 {
@@ -29,6 +31,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Task\Neos\Flow\CopyConfiguration
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        $deployment->getLogger()->warning(DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__));
         $options['configurationFileExtension'] = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'php';
         parent::execute($node, $application, $deployment, $options);
     }
