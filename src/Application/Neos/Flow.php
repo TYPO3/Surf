@@ -70,26 +70,6 @@ class Flow extends BaseApplication
     }
 
     /**
-     * Register local composer install task for packageMethod "git" after stage "package"
-     *
-     * @param Workflow $workflow
-     * @param string $packageMethod
-     */
-    protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod)
-    {
-        parent::registerTasksForPackageMethod($workflow, $packageMethod);
-
-        $workflow->defineTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', InstallTask::class, [
-            'nodeName' => 'localhost',
-            'useApplicationWorkspace' => true
-        ]);
-
-        if ($packageMethod === 'git') {
-            $workflow->afterStage('package', 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', $this);
-        }
-    }
-
-    /**
      * Add support for updateMethod "composer"
      *
      * @param Workflow $workflow
