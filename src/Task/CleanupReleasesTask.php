@@ -34,7 +34,6 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
  * Note: There is no rollback for this cleanup, so we have to be sure not to delete any
  *       live or referenced releases.
- *
  */
 class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterface
 {

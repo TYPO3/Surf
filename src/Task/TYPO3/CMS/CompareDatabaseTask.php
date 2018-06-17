@@ -15,7 +15,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
- * This task create new tables or add new fields to them. 
+ * This task create new tables or add new fields to them.
  * This task requires the extensions `coreapi` or `typo3_console`.
  *
  * It takes the following options:
