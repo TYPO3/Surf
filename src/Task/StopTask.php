@@ -15,7 +15,11 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\StopWorkflowException;
 
 /**
- * A stop task that will stop execution inside a workflow (for testing purposes)
+ * A task that will stop execution inside a workflow (for testing purposes).
+ *
+ * It doesn't take any options.
+ *
+ * Example:
  */
 class StopTask extends Task
 {

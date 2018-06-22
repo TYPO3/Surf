@@ -17,10 +17,16 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
- * A task to create initial directories and the release directory for the current release
+ * A task to create initial directories and the release directory for the current release.
  *
  * This task will automatically create needed directories and create a symlink to the upcoming
  * release, called "next".
+ *
+ * It doesn't take any options, you have to configure the application.
+ *
+ * Example:
+ *  $application
+ *      ->setOption('deploymentPath', '/var/www/outerspace');
  */
 class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInterface
 {

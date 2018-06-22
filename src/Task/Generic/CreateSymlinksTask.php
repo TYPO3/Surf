@@ -16,23 +16,25 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * A task to create symlinks on target node.
+ * Creates symlinks on target node.
  *
- * The symlink option contains an array of symlink definitions. The array index is the link to be created (relative to
- * the current application release path. The value is the path to the existing file/directory (absolute or relative to the link)
+ * It takes the following options:
+ *
+ * * symlinks - An array of symlinks to create. The array index is the link to be created (relative to the current application
+ *   release path). The value is the path to the existing file/directory (absolute or relative to the link).
  *
  * Example:
- * $options['symlinks'] = array(
- *   'Web/foobar' => '/tmp/foobar',           # absolute link
- *   'Web/foobaz' => '../../../shared/Data/foobaz', # relative link into the shared folder
- * );
+ *  $options['symlinks'] = array(
+ *      'Web/foobar' => '/tmp/foobar', # An absolute link
+ *      'Web/foobaz' => '../../../shared/Data/foobaz', # A relative link into the shared folder
+ *  );
  */
 class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
     /**
-     * Executes this task
+     * Execute this task
      *
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application

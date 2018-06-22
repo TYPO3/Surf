@@ -18,7 +18,32 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * This task dumps a complete database from a source system to a target system
+ * This task dumps a complete database from a source system to a target system.
+ *
+ * It takes the following options:
+ *
+ * * sourceHost - The host on which the source database is located.
+ * * sourceUser - The database user of the source database.
+ * * sourcePassword - The password of the source user.
+ * * sourceDatabase - The source database.
+ * * targetHost - The host on which the target database is located.
+ * * targetUser - The database user og the target database.
+ * * targetPassword - The password of the target user.
+ * * targetDatabase - The target database.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\DumpDatabaseTask', [
+ *              sourceHost => 'from.outerspace.all',
+ *              sourceUser => 'e_t',
+ *              sourcePassword => 'phoneHome',
+ *              sourceDatabase => 'spaceship',
+ *              targetHost => 'localhost',
+ *              targetUser => 'elliot',
+ *              targetPassword => 'human',
+ *              targetDatabase => 'house'
+ *          ]
+ *      );
  */
 class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
 {
