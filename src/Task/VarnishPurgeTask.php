@@ -20,9 +20,18 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
  *
  * It takes the following options:
  *
- * * secretFile - path to the secret file, defaults to "/etc/varnish/secret"
- * * purgeUrl - URL (pattern) to purge, defaults to "."
- * * varnishadm - path to the varnishadm utility, defaults to "/usr/bin/varnishadm"
+ * * secretFile (optional) - Path to the secret file, defaults to "/etc/varnish/secret".
+ * * purgeUrl (optional) - URL (pattern) to purge, defaults to ".".
+ * * varnishadm (optional) - Path to the varnishadm utility, defaults to "/usr/bin/varnishadm".
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\VarnishPurgeTask', [
+ *              'secretFile' => '/etc/varnish/secret',
+ *              'purgeUrl' => '.',
+ *              'varnishadm' => '/usr/bin/varnishadm'
+ *          ]
+ *      );
  */
 class VarnishPurgeTask extends Task implements ShellCommandServiceAwareInterface
 {
