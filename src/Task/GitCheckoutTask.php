@@ -16,7 +16,15 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
 
 /**
- * A Git checkout task
+ * A Git checkout task.
+ *
+ * It takes the following options:
+ *
+ * * repositoryUrl - The repository to check out.
+ * * hardClean (optional) - If true, the task performs a hard clean. Default is true.
+ *
+ * Example:
+ *  $application->setOption('repositoryUrl', 'git@github.com:TYPO3/Surf.git');
  */
 class GitCheckoutTask extends AbstractCheckoutTask
 {

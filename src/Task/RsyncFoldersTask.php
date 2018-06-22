@@ -17,18 +17,33 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A generic shell task
+ * A task to synchronize folders from the machine that runs Surf to a remote host by using Rsync.
+ *
+ * It takes the following options:
+ *
+ * * folders - An array with folders to synchronize. The key holds the source folder, the value holds the target folder.
+ *   The target folder must have an absolute path.
+ * * username (optional) - The username to log in on the remote host.
+ * * ignoreErrors (optional) - If true, ignore errors during execution. Default is true.
+ * * logOutput (optional) - If true, output the log. Default is false.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\RsyncFoldersTask', [
+ *              'folders' => [
+ *                  'uploads/spaceship' => '/var/www/outerspace/uploads/spaceship',
+ *                  'uploads/freighter' => '/var/www/outerspace/uploads/freighter',
+ *                  '/tmp/outerspace/lonely_planet' => '/var/www/outerspace/uploads/lonely_planet'
+ *              ]
+ *          ]
+ *      );
  */
 class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
     /**
-     * Executes this task
-     *
-     * Options:
-     *   command: The command to execute
-     *   rollbackCommand: The command to execute as a rollback (optional)
+     * Execute this task
      *
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application
