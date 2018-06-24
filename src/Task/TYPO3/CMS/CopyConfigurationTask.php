@@ -14,8 +14,19 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
- * A task to copy host/context specific configuration
+ * A task to copy host/context specific configuration.
  * @deprecated
+ *
+ * It takes the following options:
+ *
+ * * configurationFileExtension (optional) - Sets the file extension of the configuration file. Default is `php`.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask', [
+ *              'configurationFileExtension' => 'json'
+ *          ]
+ *      );
  */
 class CopyConfigurationTask extends \TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask
 {

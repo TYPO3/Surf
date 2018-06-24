@@ -16,6 +16,18 @@ use TYPO3\Surf\Domain\Model\Node;
 
 /**
  * This task create new tables or add new fields to them.
+ * This task requires the extensions `coreapi` or `typo3_console`.
+ *
+ * It takes the following options:
+ *
+ * * databaseCompareMode (optional) - The mode in which the database should be compared. For `coreapi`, `2,4` is the
+ *  default value. For `typo3_console`, `*.add,*.change` is the default value.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\Composer\CompareDatabaseTask'
+ *          'databaseCompareMode' => '2'
+ *      );
  */
 class CompareDatabaseTask extends AbstractCliTask
 {

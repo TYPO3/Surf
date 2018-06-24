@@ -19,23 +19,37 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task for creating an zip / tar.gz / tar.bz2 archive.
+ *
  * Needs the following options:
  *
- * - sourceDirectory -- directory which should be compressed
- * - targetFile -- target file. The file ending defines the format. Supported are .zip, .tar.gz, .tar.bz2
- * - baseDirectory -- base directory in the compressed archive in which all files should reside in.
- * - exclude -- an array of exclude patterns, as being understood by tar.
+ * * sourceDirectory - The directory which should be compressed.
+ * * targetFile - The target file. The file ending defines the format. Supported are .zip, .tar.gz, .tar.bz2.
+ * * baseDirectory - The base directory in the compressed archive in which all files should reside in.
+ * * exclude - An array of exclude patterns, as being understood by tar (optional)
  *
  * This task needs the following unix command line tools:
- * - tar / gnutar
- * - zip
+ *
+ * * tar / gnutar
+ * * zip
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions('TYPO3\Surf\Task\CreateArchiveTask', [
+ *              'sourceDirectory' => '/var/www/outerspace',
+ *              'targetFile' => '/var/www/outerspace.zip',
+ *              'baseDirectory' => 'compressedSpace',
+ *              'exclude' => [
+ *                  '*.bak'
+ *              ]
+ *          ]
+ *      );
  */
 class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
     /**
-     * Executes this task
+     * Execute this task
      *
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application
