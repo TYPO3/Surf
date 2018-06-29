@@ -37,9 +37,8 @@ Source composer installation
 
 To install Surf via composer, run the following commands::
 
-    # Until stable release, you need to set minimum-stability to beta
-    composer global config minimum-stability beta
-    composer global require typo3/surf:^2.0.0
+    # Until stable release, you need to add stability-flag @beta
+    composer global require typo3/surf:^2.0.0@beta
 
 This way, you can add `~/.composer/vendor/typo3/surf` to `PHP Include Paths` of your IDE.
 
