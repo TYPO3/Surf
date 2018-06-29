@@ -3,4 +3,8 @@ phpunit.xml
 vendor/
 .php_cs.cache
 .php_cs
+# The Api reference is auto generated and should not be part of the repository
 /Documentation-GENERATED-temp
+/Documentation/ApiReference/*
+!/Documentation/ApiReference/.gitkeep
+sphpdox.phar
