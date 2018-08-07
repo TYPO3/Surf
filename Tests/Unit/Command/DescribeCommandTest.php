@@ -138,7 +138,7 @@ Applications:
     }
 
     /**
-     *  Set up TYPO3 CMS
+     *  Set up predefined Application
      * @param $application
      * @throws \TYPO3\Surf\Exception
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
