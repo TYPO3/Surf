@@ -432,4 +432,67 @@ Applications:
 ', $this->getDescriptionOfPredefinedApplication(New BaseApplication('My App'), array('lockDeployment' => false)));
         $this->assertEquals(false, $this->application->getOption('lockDeployment'));
     }
+
+    /**
+     * @test
+     */
+    public function describeBaseApplicationWithForceParameter()
+    {
+        $this->deployment->setForceRun(true);
+        $this->assertEquals('<success>Deployment TestDeployment</success>
+
+Workflow: <success>Simple workflow</success>
+
+Nodes:
+
+  <success>TestNode</success> (hostname)
+
+Applications:
+
+  <success>My App:</success>
+    Deployment path: <success></success>
+    Options: 
+      packageMethod => <success>git</success>
+      transferMethod => <success>rsync</success>
+      updateMethod => <success>NULL</success>
+      lockDeployment => <success>1</success>
+      TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
+      TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
+      deploymentPath => <success>NULL</success>
+      releasesPath => <success>/releases</success>
+      sharedPath => <success>/shared</success>
+    Nodes: <success>TestNode</success>
+    Detailed workflow: 
+      initialize:
+        tasks:
+          <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application My App)
+          <success>Task TYPO3\Surf\Task\Generic\CreateDirectoriesTask after TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application My App)
+      lock:
+        tasks:
+          <success>Task TYPO3\Surf\Task\UnlockDeploymentTask before TYPO3\Surf\Task\LockDeploymentTask</success> (for application My App)
+          <success>TYPO3\Surf\Task\LockDeploymentTask</success> (for application My App)
+      package:
+        tasks:
+          <success>TYPO3\Surf\Task\Package\GitTask</success> (for application My App)
+          <success>Task TYPO3\Surf\DefinedTask\Composer\LocalInstallTask after TYPO3\Surf\Task\Package\GitTask</success> (for application My App)
+      transfer:
+        tasks:
+          <success>TYPO3\Surf\Task\Transfer\RsyncTask</success> (for application My App)
+        after:
+          <success>TYPO3\Surf\Task\Generic\CreateSymlinksTask</success> (for application My App)
+      update:
+      migrate:
+      finalize:
+      test:
+      switch:
+        tasks:
+          <success>TYPO3\Surf\Task\SymlinkReleaseTask</success> (for application My App)
+      cleanup:
+        tasks:
+          <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application My App)
+      unlock:
+        tasks:
+          <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application My App)
+', $this->getDescriptionOfPredefinedApplication(New BaseApplication('My App')));
+    }
 }
