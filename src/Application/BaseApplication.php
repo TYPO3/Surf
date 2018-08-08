@@ -118,7 +118,7 @@ class BaseApplication extends Application
             ->addTask(SymlinkReleaseTask::class, 'switch', $this)
             ->addTask(CleanupReleasesTask::class, 'cleanup', $this);
 
-        if ($this->hasOption('lockDeployment')) {
+        if ($this->hasOption('lockDeployment') && $this->getOption('lockDeployment') === true) {
             $workflow->addTask(LockDeploymentTask::class, 'lock', $this);
             $workflow->addTask(UnlockDeploymentTask::class, 'unlock', $this);
         }
