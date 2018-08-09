@@ -146,7 +146,7 @@ Applications:
      * @return string
      * @throws \TYPO3\Surf\Exception
      */
-    protected function getDescriptionOfPredefinedApplication($application, $options = array())
+    protected function getDescriptionOfPredefinedApplication($application, $options = [])
     {
         $this->application = $application;
         $this->application->addNode($this->node);
@@ -238,7 +238,7 @@ Applications:
       unlock:
         tasks:
           <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application TYPO3 CMS)
-', $this->getDescriptionOfPredefinedApplication(New CMS()));
+', $this->getDescriptionOfPredefinedApplication(new CMS()));
     }
 
     /**
@@ -311,7 +311,7 @@ Applications:
       unlock:
         tasks:
           <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application Neos)
-', $this->getDescriptionOfPredefinedApplication(New Neos()));
+', $this->getDescriptionOfPredefinedApplication(new Neos()));
     }
 
     /**
@@ -372,7 +372,7 @@ Applications:
       unlock:
         tasks:
           <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application My App)
-', $this->getDescriptionOfPredefinedApplication(New BaseApplication('My App')));
+', $this->getDescriptionOfPredefinedApplication(new BaseApplication('My App')));
     }
 
     /**
@@ -429,7 +429,7 @@ Applications:
         tasks:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application My App)
       unlock:
-', $this->getDescriptionOfPredefinedApplication(New BaseApplication('My App'), array('lockDeployment' => false)));
+', $this->getDescriptionOfPredefinedApplication(new BaseApplication('My App'), ['lockDeployment' => false]));
         $this->assertEquals(false, $this->application->getOption('lockDeployment'));
     }
 
@@ -493,6 +493,6 @@ Applications:
       unlock:
         tasks:
           <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application My App)
-', $this->getDescriptionOfPredefinedApplication(New BaseApplication('My App')));
+', $this->getDescriptionOfPredefinedApplication(new BaseApplication('My App')));
     }
 }
