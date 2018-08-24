@@ -28,6 +28,7 @@ class ShowCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('show')
+            ->setDescription('Shows all the deployments depending on the directory configuration')
             ->addOption(
                 'configurationPath',
                 null,

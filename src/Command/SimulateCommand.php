@@ -29,6 +29,7 @@ class SimulateCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('simulate')
+            ->setDescription('Simulates the deployment for the given name')
             ->addArgument(
                 'deploymentName',
                 InputArgument::OPTIONAL,
