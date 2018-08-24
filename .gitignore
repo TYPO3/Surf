@@ -8,3 +8,4 @@ vendor/
 /Documentation/ApiReference/*
 !/Documentation/ApiReference/.gitkeep
 sphpdox.phar
+_Output/
