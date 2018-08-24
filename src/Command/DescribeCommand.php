@@ -44,6 +44,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('describe')
+             ->setDescription('Describes the flow for the given name')
              ->addArgument(
                  'deploymentName',
                  InputArgument::REQUIRED,

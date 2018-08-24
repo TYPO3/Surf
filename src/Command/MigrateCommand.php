@@ -29,6 +29,7 @@ class MigrateCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('migrate')
+            ->setDescription('Migrates old deployment definitions to new Surf version')
             ->addArgument(
                 'deploymentName',
                 InputArgument::REQUIRED,
