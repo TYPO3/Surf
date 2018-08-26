@@ -78,9 +78,9 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             $output->writeln('');
             $output->writeln('Workflow: <success>' . $workflow->getName() . '</success>');
 
-            if($workflow instanceof SimpleWorkflow) {
+            if ($workflow instanceof SimpleWorkflow) {
                 $value = $workflow->isEnableRollback() ? 'true' : 'false';
-                $output->writeln('    <comment>Rollback enabled:</comment> <info>' .$value. '</info>');
+                $output->writeln('    <comment>Rollback enabled:</comment> <info>' . $value . '</info>');
             }
 
             $output->writeln('');

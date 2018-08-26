@@ -239,7 +239,7 @@ Applications:
         $factory = $this->createMock(FactoryInterface::class);
 
         $workflow = $this->deployment->getWorkflow();
-        if($workflow instanceof SimpleWorkflow) {
+        if ($workflow instanceof SimpleWorkflow) {
             $workflow->setEnableRollback(false);
         }
 
