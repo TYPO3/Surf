@@ -15,6 +15,7 @@ use TYPO3\Surf\Command\DescribeCommand;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Integration\FactoryInterface;
 use TYPO3\Surf\Task\LocalShellTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
@@ -96,6 +97,7 @@ class DescribeCommandTest extends TestCase
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
 
 Nodes:
 
@@ -166,6 +168,7 @@ Applications:
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
 
 Nodes:
 
@@ -234,6 +237,12 @@ Applications:
     {
         $this->setUpPredefinedApp(new \TYPO3\Surf\Application\Neos\Neos());
         $factory = $this->createMock(FactoryInterface::class);
+
+        $workflow = $this->deployment->getWorkflow();
+        if ($workflow instanceof SimpleWorkflow) {
+            $workflow->setEnableRollback(false);
+        }
+
         $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
         $command = new DescribeCommand();
         $command->setFactory($factory);
@@ -241,9 +250,11 @@ Applications:
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
         ]);
+
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: false
 
 Nodes:
 

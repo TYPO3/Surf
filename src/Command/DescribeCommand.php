@@ -71,11 +71,19 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');
         $deployment = $this->factory->getDeployment($deploymentName, $configurationPath);
+        $workflow = $deployment->getWorkflow();
 
         if (! $deployment instanceof FailedDeployment) {
             $output->writeln('<success>Deployment ' . $deployment->getName() . '</success>');
             $output->writeln('');
-            $output->writeln('Workflow: <success>' . $deployment->getWorkflow()->getName() . '</success>' . PHP_EOL);
+            $output->writeln('Workflow: <success>' . $workflow->getName() . '</success>');
+
+            if ($workflow instanceof SimpleWorkflow) {
+                $value = $workflow->isEnableRollback() ? 'true' : 'false';
+                $output->writeln('    <comment>Rollback enabled:</comment> <info>' . $value . '</info>');
+            }
+
+            $output->writeln('');
 
             $this->printNodes($deployment->getNodes());
 
