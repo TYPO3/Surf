@@ -48,6 +48,7 @@ TYPO3 Surf |version| documentation
      Installation/Index
      Configuration/Index
      DeploymentFlow/Index
+     Tasks/Index
      CliUsage/Index
      Applications/Index
      ApiReference/index
