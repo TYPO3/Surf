@@ -64,6 +64,8 @@ If everything looks right, you can run the deployment::
 
     $ surf deploy MyDeployment
 
+.. _cli-usage-configuration-path-section:
+
 Using a different configuration path
 ------------------------------------
 

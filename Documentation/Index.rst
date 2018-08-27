@@ -16,7 +16,7 @@ TYPO3 Surf |version| documentation
       en
 
    :Keywords:
-      surf
+      Surf, Deployment, TYPO3, Flow, Neos
 
    :Copyright:
       2018
