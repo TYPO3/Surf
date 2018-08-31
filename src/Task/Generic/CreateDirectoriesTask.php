@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Generic;
 
 /*
@@ -8,6 +9,8 @@ namespace TYPO3\Surf\Task\Generic;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -49,18 +52,23 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['directories']) || !is_array($options['directories']) || $options['directories'] === []) {
+        try {
+            $options = $this->configureOptions($options);
+        } catch (ExceptionInterface $e) {
             return;
         }
 
-        $baseDirectory = isset($options['baseDirectory']) ? $options['baseDirectory'] : $deployment->getApplicationReleasePath($application);
-
-        $commands = [
-            'cd ' . $baseDirectory
-        ];
-        foreach ($options['directories'] as $path) {
-            $commands[] = 'mkdir -p ' . $path;
+        if (empty($options['directories'])) {
+            return;
         }
+
+        $baseDirectory = $options['baseDirectory'] ?: $deployment->getApplicationReleasePath($application);
+
+        $commands = array_map(function ($directory) {
+            return sprintf('mkdir -p %s', $directory);
+        }, $options['directories']);
+
+        array_unshift($commands, sprintf('cd %s', $baseDirectory));
 
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
@@ -76,5 +84,17 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     *
+     * @throws \Exception
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('directories');
+        $resolver->setDefault('baseDirectory', null);
+        $resolver->setAllowedTypes('directories', 'array');
     }
 }

@@ -51,3 +51,14 @@ TYPO3\\Surf\\Task\\LockDeploymentTask
         :param $deployment:
         :type $options: array
         :param $options:
+
+    .. php:method:: configureOptions($options = [])
+
+        :type $options: array
+        :param $options:
+        :returns: array
+
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:

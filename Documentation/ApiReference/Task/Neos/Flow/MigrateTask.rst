@@ -57,3 +57,14 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask
 
         :type $shellCommandService: ShellCommandService
         :param $shellCommandService:
+
+    .. php:method:: configureOptions($options = [])
+
+        :type $options: array
+        :param $options:
+        :returns: array
+
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:

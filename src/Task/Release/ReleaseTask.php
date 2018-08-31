@@ -28,7 +28,8 @@ class ReleaseTask extends PrepareReleaseTask
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $this->checkOptionsForValidity($options);
+        $options = $this->configureOptions($options);
+
         $host = $options['releaseHost'];
         $login = $options['releaseHostLogin'];
         $changeLogUri = $options['changeLogUri'];
