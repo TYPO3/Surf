@@ -41,9 +41,9 @@ Since a deployment configuration is just a plain PHP file you can create custom 
 
 In this case we create a task to install the npm dependencies locally.
 The example shows some simple things to be aware of.
-First of all you see the string **{workspacePath}**. This placeholder gets replace by the full workspace path for the current application.
+First of all you see the string **{workspacePath}**. This placeholder gets replaced by the full workspace path for the current application.
 
-We will see later that for the remote shell tasks, we have more of these placeholders.
+We will see later that for the remote shell tasks, we have more of these placeholders (:ref:`tasks-placeholders`).
 Secondly we see that the task defines a default command if none is specified. If you like you can override this option in your deployment configuration.
 This is valid for all the delivered tasks shipped with Surf.
 
@@ -77,6 +77,11 @@ We will show you another convenient and often used way to customize the deployme
 In this case we create a task dynamically based on the ShellTask. The ShellTask execute one or more provided commands on the target machine.
 As you can see, we have used some other placeholders compared to the LocalShellTask above.
 For the remote ShellTask the following placeholders are available:
+
+.. _tasks-placeholders:
+
+Placeholders
+------------
 
 * **workspacePath**: The path to the local workspace directory
 * **deploymentPath**: The path to the deployment base directory
@@ -166,4 +171,4 @@ In order to customize options of existing tasks you can do it the following ways
    ]);
 
 
-The **order is important** than application options override node options and node options override deployment options.
+The **order is important** because application options override node options and node options override deployment options.
