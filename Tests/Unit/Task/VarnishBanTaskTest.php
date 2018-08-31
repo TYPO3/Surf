@@ -68,7 +68,7 @@ class VarnishBanTaskTest extends BaseTaskTest
             'banUrl' => 'banUrl',
         ];
         $this->task->simulate($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted("/varnishadm -S secretFile -T 127.0.0.1:6082 status/");
+        $this->assertCommandExecuted('/varnishadm -S secretFile -T 127.0.0.1:6082 status/');
     }
 
     /**

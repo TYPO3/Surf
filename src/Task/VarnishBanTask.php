@@ -75,6 +75,4 @@ class VarnishBanTask extends Task implements ShellCommandServiceAwareInterface
         $resolver->setDefault('varnishadm', '/usr/bin/varnishadm');
         $resolver->setDefault('banUrl', '.*');
     }
-
-
 }
