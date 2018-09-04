@@ -17,13 +17,14 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * A symlink task for linking a shared Production configuration
+ * This task takes care of symlinking the shared Production Configuration
  *
  * Note: this might cause problems with concurrent access due to the cached configuration
  * inside this directory.
  *
+ * It takes no options
  *
- * TODO Fix problem with include cached configuration
+ * @todo Fix problem with include cached configuration
  */
 class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareInterface
 {

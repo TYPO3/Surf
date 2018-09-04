@@ -18,7 +18,21 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * Task for importing content into Neos
+ * This task imports a given site into a neos project by running site:import
+ *
+ * This command expects a Sites.xml file to be located in the private resources directory of the given package
+ * (Resources/Private/Content/Sites.xml)
+ *
+ * It takes the following arguments:
+ *
+ * * sitePackageKey (required)
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions(\TYPO3\Surf\Task\TYPO3\CMS\ImportSiteTask::class, [
+ *              'sitePackageKey' => 'Neos.ExampleSite'
+ *          ]
+ *      );
  */
 class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
 {

@@ -18,7 +18,9 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A Neos Flow task to run unit tests
+ * This Task runs unit tests for a flow application
+ *
+ * It takes no options
  */
 class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
 {
