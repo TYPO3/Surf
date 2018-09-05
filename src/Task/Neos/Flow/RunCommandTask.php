@@ -18,7 +18,24 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * Task for running arbitrary Neos Flow commands
+ * This task runs Neos Flow commands
+ *
+ * It takes the following options:
+ *
+ * * command (required)
+ * * arguments
+ * * ignoreErrors (optional)
+ * * logOutput (optional)
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions(\TYPO3\Surf\Task\TYPO3\CMS\RunCommandTask::class, [
+ *              'command' => 'flow:help',
+ *              'arguments => [],
+ *              'ignoreErrors' => false,
+ *              'logOutput' => true,
+ *          ]
+ *      );
  */
 class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
 {

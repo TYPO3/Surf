@@ -16,7 +16,9 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * A symlink task for linking the shared data directory
+ * This task takes care of symlinking the shared Data
+ *
+ * It takes no options
  */
 class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
 {

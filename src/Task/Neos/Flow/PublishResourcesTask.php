@@ -18,7 +18,9 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A Neos Flow publish resources task
+ * This task publishes static and non static resources utilizing the resource:publish command
+ *
+ * It takes no options
  */
 class PublishResourcesTask extends Task implements ShellCommandServiceAwareInterface
 {

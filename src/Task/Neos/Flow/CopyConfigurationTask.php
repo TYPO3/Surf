@@ -21,6 +21,17 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task for copying local configuration to the application
+ *
+ * It takes the following options:
+ *
+ * * configurationFileExtension (optional) - yaml or something differrent
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions(\TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask::class, [
+ *              'configurationFileExtension' => 'yaml'
+ *          ]
+ *      );
  */
 class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInterface
 {

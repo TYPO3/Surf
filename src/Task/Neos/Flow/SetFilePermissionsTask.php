@@ -18,7 +18,22 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * Task for setting file permissions for the Neos Flow application
+ * This tasks sets the file permissions for the Neos Flow application
+ *
+ * It takes the following options:
+ *
+ * * shellUsername (optional)
+ * * webserverUsername (optional)
+ * * webserverGroupname (optional)
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions(\TYPO3\Surf\Task\TYPO3\CMS\SetFilePermissionsTask::class, [
+ *              'shellUsername' => 'root',
+ *              'webserverUsername' => 'www-data',
+ *              'webserverGroupname' => 'www-data',
+ *          ]
+ *      );
  */
 class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInterface
 {

@@ -18,7 +18,9 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A Neos Flow migration task
+ * This tasks runs the doctrine:migrate command
+ *
+ * It takes no options
  */
 class MigrateTask extends Task implements ShellCommandServiceAwareInterface
 {
