@@ -18,13 +18,22 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A task to clear a list of Flow Framework cache
+ * This tasks clears the list of Flow Framework cache
  *
- * You can configure the list of cache identifiers in the task option ```flushCacheList```, like::
+ * It takes the following options:
  *
- *     $workflow->setTaskOptions(FlushCacheListTask::class, [
- *         'flushCacheList' => 'Neos_Fusion_Content, Flow_Session_MetaData, Flow_Session_Storage'
- *     ])
+ * * flushCacheList (required) - An array with extension keys to install.
+ *
+ * Example:
+ *  $workflow
+ *      ->setTaskOptions(\TYPO3\Surf\Task\TYPO3\CMS\FlushCacheListTask::class, [
+ *              'flushCacheList' => [
+ *                  'Neos_Fusion_Content',
+ *                  'Flow_Session_MetaData',
+ *                  'Flow_Session_Storage'
+ *              ]
+ *          ]
+ *      );
  */
 class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterface
 {

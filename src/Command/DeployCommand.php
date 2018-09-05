@@ -1,5 +1,4 @@
 <?php
-
 namespace TYPO3\Surf\Command;
 
 /*
@@ -30,6 +29,7 @@ class DeployCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('deploy')
+             ->setDescription('Describes the flow for the given name')
              ->addArgument(
                  'deploymentName',
                  InputArgument::OPTIONAL,

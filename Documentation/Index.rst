@@ -16,7 +16,7 @@ TYPO3 Surf |version| documentation
       en
 
    :Keywords:
-      surf
+      Surf, Deployment, TYPO3, Flow, Neos
 
    :Copyright:
       2018
@@ -47,8 +47,11 @@ TYPO3 Surf |version| documentation
      GettingStarted/Index
      Installation/Index
      Configuration/Index
+     DeploymentFlow/Index
+     Tasks/Index
      CliUsage/Index
-     ApiReference/Index
+     Applications/Index
+     ApiReference/index
      Examples/Index
      Migration/Index
 

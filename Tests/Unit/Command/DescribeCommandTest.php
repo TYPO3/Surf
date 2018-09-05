@@ -99,6 +99,7 @@ class DescribeCommandTest extends TestCase
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
 
 Nodes:
 
@@ -173,6 +174,7 @@ Applications:
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
 
 Nodes:
 
@@ -249,6 +251,7 @@ Applications:
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
 
 Nodes:
 
@@ -322,6 +325,7 @@ Applications:
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
 
 Nodes:
 
@@ -383,6 +387,7 @@ Applications:
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
 
 Nodes:
 
@@ -442,6 +447,7 @@ Applications:
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
 
 Nodes:
 

@@ -14,6 +14,8 @@ use TYPO3\Surf\Domain\Model\Node;
 
 /**
  * A task to create Neos Flow specific directories
+ *
+ * It takes no options
  */
 class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTask
 {

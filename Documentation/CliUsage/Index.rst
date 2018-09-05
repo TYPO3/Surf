@@ -26,13 +26,13 @@ To get list of all available tasks run the ``surf`` command::
       -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
     Available commands:
-      deploy
-      describe
+      deploy    Deploys the given name
+      describe  Describes the flow for the given name
       help      Displays help for a command
       list      Lists commands
-      migrate
-      show
-      simulate
+      migrate   Migrates old deployment definitions to new Surf version
+      show      Shows all the deployments depending on the directory configuration
+      simulate  Simulates the deployment for the given name
 
 
 List available deployments
@@ -63,6 +63,8 @@ Run a deployment
 If everything looks right, you can run the deployment::
 
     $ surf deploy MyDeployment
+
+.. _cli-usage-configuration-path-section:
 
 Using a different configuration path
 ------------------------------------
