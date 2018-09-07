@@ -26,7 +26,7 @@ final class LockDeploymentTaskTest extends BaseTaskTest
      */
     public function lockSuccessfully()
     {
-        $testIfDeploymentLockFileExists = sprintf('test -f %s/.surf/deploy.lock', escapeshellarg($this->application->getDeploymentPath()));
+        $testIfDeploymentLockFileExists = sprintf('if [ -f %s/.surf/deploy.lock ]; then echo 1; else echo 0; fi', escapeshellarg($this->application->getDeploymentPath()));
         $this->responses = [
             $testIfDeploymentLockFileExists => false,
         ];
@@ -40,7 +40,7 @@ final class LockDeploymentTaskTest extends BaseTaskTest
      */
     public function deploymentIsLockedThrowsException()
     {
-        $testIfDeploymentLockFileExists = sprintf('test -f %s/.surf/deploy.lock', escapeshellarg($this->application->getDeploymentPath()));
+        $testIfDeploymentLockFileExists = sprintf('if [ -f %s/.surf/deploy.lock ]; then echo 1; else echo 0; fi', escapeshellarg($this->application->getDeploymentPath()));
         $this->responses = [
             $testIfDeploymentLockFileExists => true,
         ];
