@@ -36,7 +36,7 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $deploymentLockFile = sprintf('%s/.surf/%s', escapeshellarg($application->getDeploymentPath()), self::LOCK_FILE_NAME);
-        $locked = $this->shell->execute(sprintf('test -f %s', $deploymentLockFile), $node, $deployment, true);
+        $locked = (bool)$this->shell->execute(sprintf('if [ -f %s ]; then echo 1; else echo 0; fi', $deploymentLockFile), $node, $deployment);
         if ($locked) {
             $currentDeploymentLockIdentifier = $this->shell->execute(sprintf('cat %s', $deploymentLockFile), $node, $deployment, true);
             throw DeploymentLockedException::deploymentLockedBy($deployment, $currentDeploymentLockIdentifier);
