@@ -5,12 +5,14 @@
 Deployment Flow
 ===============
 
-If your deployment configuration is not overriding the workflow option, then you are using the default SimpleWorkflow class shipped with Surf.
+If your deployment configuration is not overriding the workflow option, then you are using the default **SimpleWorkflow** class shipped with Surf.
 
 The SimpleWorkflow class defines 9 stages of the deployment process which are sequentially called.
 Each stage can consists of none, one or multiple tasks running one after another.
 
 You can add your own tasks for each stage. If you like, you can also specify if your custom task is running before or after a task already defined for this stage.
+
+.. seealso:: :doc:`How to create and add tasks <../Tasks/Index>`.
 
 In the list below you can see all the 9 steps defined by the SimpleWorkflow:
 
@@ -93,4 +95,3 @@ If you like to remove certain tasks from the flow, just do it like that::
    // Only remove the task for a specific application
    $workflow->removeTask(FlushCachesTask::class, $application);
 
-.. seealso:: How to create and add tasks
