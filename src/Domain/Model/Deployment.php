@@ -116,8 +116,6 @@ class Deployment implements LoggerAwareInterface
      */
     private $deploymentLockIdentifier;
 
-    const DEFAULT_DEPLOYMENT_LOCK_IDENTIFIER = 'environment variable SURF_LOCK_IDENTIFIER not set on deploying instance';
-
     /**
      * Constructor
      *
@@ -127,9 +125,9 @@ class Deployment implements LoggerAwareInterface
     public function __construct($name, $deploymentLockIdentifier = null)
     {
         $this->name = $name;
+        $this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
 
         $this->setDeploymentLockIdentifier($deploymentLockIdentifier);
-        $this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
     }
 
     /**
@@ -564,7 +562,7 @@ class Deployment implements LoggerAwareInterface
     private function setDeploymentLockIdentifier($deploymentLockIdentifier = null)
     {
         if (! is_string($deploymentLockIdentifier) || $deploymentLockIdentifier === '') {
-            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') : self::DEFAULT_DEPLOYMENT_LOCK_IDENTIFIER;
+            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') : $this->releaseIdentifier;
         }
         $this->deploymentLockIdentifier = $deploymentLockIdentifier;
     }

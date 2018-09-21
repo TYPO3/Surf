@@ -94,7 +94,7 @@ class DeploymentTest extends TestCase
     {
         $deployment = new Deployment('Some name', $deploymentLockIdentifier);
 
-        $this->assertEquals(Deployment::DEFAULT_DEPLOYMENT_LOCK_IDENTIFIER, $deployment->getDeploymentLockIdentifier());
+        $this->assertEquals($deployment->getReleaseIdentifier(), $deployment->getDeploymentLockIdentifier());
     }
 
     /**

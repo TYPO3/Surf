@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
-use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Exception\DeploymentLockedException;
 use TYPO3\Surf\Task\LockDeploymentTask;
 
@@ -32,7 +31,6 @@ final class LockDeploymentTaskTest extends BaseTaskTest
         ];
         $this->task->execute($this->node, $this->application, $this->deployment);
         $this->assertCommandExecuted($testIfDeploymentLockFileExists);
-        $this->assertCommandExecuted(sprintf('echo "%s" > %s/.surf/deploy.lock', Deployment::DEFAULT_DEPLOYMENT_LOCK_IDENTIFIER, escapeshellarg($this->application->getDeploymentPath())));
     }
 
     /**
