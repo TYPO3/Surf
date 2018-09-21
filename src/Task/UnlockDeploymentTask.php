@@ -29,7 +29,22 @@ final class UnlockDeploymentTask extends Task implements ShellCommandServiceAwar
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $deploymentLockFile = sprintf('%s/.surf/%s', escapeshellarg($application->getDeploymentPath()), LockDeploymentTask::LOCK_FILE_NAME);
-        $this->shell->execute(sprintf('rm -f %s', $deploymentLockFile), $node, $deployment, true);
+        $deploymentLockFile = escapeshellarg(sprintf('%s/.surf/%s', $application->getDeploymentPath(), LockDeploymentTask::LOCK_FILE_NAME));
+        if (!$deployment->isDryRun()) {
+            $this->shell->execute(sprintf('rm -f %s', $deploymentLockFile), $node, $deployment, true);
+        } else {
+            $deployment->getLogger()->info(sprintf('Would remove lock file %s', $deploymentLockFile));
+        }
+    }
+
+    /**
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
+     * @param array $options
+     */
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    {
+        $this->execute($node, $application, $deployment, $options);
     }
 }

@@ -25,7 +25,7 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
     public function unlockSuccessfully()
     {
         $this->task->execute($this->node, $this->application, $this->deployment);
-        $this->assertCommandExecuted(sprintf('rm -f %s/.surf/deploy.lock', escapeshellarg($this->application->getDeploymentPath())));
+        $this->assertCommandExecuted(sprintf('rm -f %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock')));
     }
 
     /**

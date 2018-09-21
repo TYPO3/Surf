@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Command;
 
 /*
@@ -29,18 +30,24 @@ class SimulateCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('simulate')
-            ->setDescription('Simulates the deployment for the given name')
-            ->addArgument(
-                'deploymentName',
-                InputArgument::OPTIONAL,
-                'The deployment name'
-            )
-            ->addOption(
-                'configurationPath',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Path for deployment configuration files'
-            );
+             ->setDescription('Simulates the deployment for the given name')
+             ->addArgument(
+                 'deploymentName',
+                 InputArgument::OPTIONAL,
+                 'The deployment name'
+             )
+             ->addOption(
+                 'configurationPath',
+                 null,
+                 InputOption::VALUE_OPTIONAL,
+                 'Path for deployment configuration files'
+             )
+             ->addOption(
+                 'force',
+                 null,
+                 InputOption::VALUE_NONE,
+                 'Force deployment will execute unlock task in simple workflow'
+             );
     }
 
     /**
@@ -48,13 +55,14 @@ class SimulateCommand extends Command implements FactoryAwareInterface
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');
-        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath);
+        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath, true, $input->getOption('force'));
         $deployment->simulate();
 
         return $deployment->getStatus();

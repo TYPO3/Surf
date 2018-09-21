@@ -35,13 +35,36 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $deploymentLockFile = sprintf('%s/.surf/%s', escapeshellarg($application->getDeploymentPath()), self::LOCK_FILE_NAME);
+        if (! $deployment->isDryRun()) {
+            // Create .surf directory if not exists
+            $lockDirectory = escapeshellarg($application->getDeploymentPath() . '/.surf');
+            $this->shell->execute(sprintf('[ -d %1$s ] || mkdir %1$s', $lockDirectory), $node, $deployment, true);
+        }
+
+        $deploymentLockFile = escapeshellarg(sprintf('%s/.surf/%s', $application->getDeploymentPath(), self::LOCK_FILE_NAME));
         $locked = (bool)$this->shell->execute(sprintf('if [ -f %s ]; then echo 1; else echo 0; fi', $deploymentLockFile), $node, $deployment);
         if ($locked) {
             $currentDeploymentLockIdentifier = $this->shell->execute(sprintf('cat %s', $deploymentLockFile), $node, $deployment, true);
             throw DeploymentLockedException::deploymentLockedBy($deployment, $currentDeploymentLockIdentifier);
         }
 
-        $this->shell->execute(sprintf('echo "%s" > %s', $deployment->getDeploymentLockIdentifier(), $deploymentLockFile), $node, $deployment, true);
+        if (! $deployment->isDryRun()) {
+            $this->shell->execute(sprintf('echo "%s" > %s', escapeshellarg($deployment->getDeploymentLockIdentifier()), $deploymentLockFile), $node, $deployment, true);
+        } else {
+            $deployment->getLogger()->info(sprintf('Create lock file %s with identifier %s', $deploymentLockFile, $deployment->getDeploymentLockIdentifier()));
+        }
+    }
+
+    /**
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
+     * @param array $options
+     *
+     * @throws DeploymentLockedException
+     */
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    {
+        $this->execute($node, $application, $deployment, $options);
     }
 }

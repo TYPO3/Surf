@@ -37,10 +37,8 @@ class FailedDeployment extends Deployment
     /**
      * Run this deployment
      * noop
-     *
-     * @param bool $force
      */
-    public function deploy($force = false)
+    public function deploy()
     {
     }
 

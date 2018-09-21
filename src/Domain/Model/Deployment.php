@@ -176,11 +176,10 @@ class Deployment implements LoggerAwareInterface
     /**
      * Run this deployment
      *
-     * @param bool $force
+     * @throws SurfException
      */
-    public function deploy($force = false)
+    public function deploy()
     {
-        $this->setForceRun($force);
         $this->logger->notice('Deploying ' . $this->name . ' (' . $this->releaseIdentifier . ')');
         $this->workflow->run($this);
     }
@@ -537,7 +536,7 @@ class Deployment implements LoggerAwareInterface
      */
     public function setForceRun($force)
     {
-        $this->forceRun = $force;
+        $this->forceRun = (bool)$force;
     }
 
     /**

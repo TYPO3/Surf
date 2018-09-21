@@ -66,6 +66,7 @@ final class DeployCommandTest extends TestCase
             'deploymentName' => $this->deployment->getName(),
             '--force' => true,
         ]);
+        $this->deployment->setForceRun(true);
         $this->assertEquals($this->deployment->getStatus(), Deployment::STATUS_SUCCESS);
         $this->assertTrue($this->deployment->getForceRun());
     }
