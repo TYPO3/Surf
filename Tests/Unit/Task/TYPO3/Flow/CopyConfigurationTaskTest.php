@@ -36,7 +36,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
-        $this->node->setHostname('localhost');
+        $this->node->onLocalhost();
 
         $this->task->execute($this->node, $this->application, $this->deployment, []);
 
@@ -57,7 +57,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
-        $this->node->setHostname('localhost');
+        $this->node->onLocalhost();
         $options = [
             'configurationFileExtension' => 'php',
         ];
