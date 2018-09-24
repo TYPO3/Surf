@@ -6,7 +6,7 @@ setup_git() {
 }
 
 compile() {
-    ./../render_phpdocs.sh
+    ./.././render_phpdocs.sh
 }
 
 commit_website_files() {
@@ -16,7 +16,7 @@ commit_website_files() {
 }
 
 upload_files() {
-  git remote add origin https://${GH_TOKEN}@github.com/TYPO3/Surf.git > /dev/null 2>&1
+  git remote add origin https://${SURF_TOKEN}@github.com/TYPO3/Surf.git > /dev/null 2>&1
   git push --quiet --set-upstream origin documentation
 }
 
