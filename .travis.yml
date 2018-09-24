@@ -16,7 +16,7 @@ notifications:
 
 env:
   global:
-    secure: efbdf099815088a6070a3bfc7e3fbed57a2faeb7
+    secure:
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -63,5 +63,5 @@ jobs:
     - php: 7.2
       env: PHPUnit=latest
 
-after_success:
-  - .travis/push-documentation.sh
+#after_success:
+#  - .travis/push-documentation.sh
