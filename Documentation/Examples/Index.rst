@@ -1,9 +1,9 @@
 .. -*- coding: utf-8 -*- with BOM.
 .. include:: ../Includes.txt
 
-============================================================
-How to quickly setup deployments for different kinds of apps
-============================================================
+==================
+Deployment Recipes
+==================
 
 .. toctree::
    :maxdepth: 5

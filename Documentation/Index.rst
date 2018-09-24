@@ -46,12 +46,12 @@ TYPO3 Surf |version| documentation
 
      GettingStarted/Index
      Installation/Index
-     Configuration/Index
+     Architecture/Index
      DeploymentFlow/Index
+     Applications/Index
+     Nodes/Index
      Tasks/Index
      CliUsage/Index
-     Applications/Index
      ApiReference/index
-     Examples/Index
      Migration/Index
 
