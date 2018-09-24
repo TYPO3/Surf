@@ -9,8 +9,8 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
  * file that was distributed with this source code.
  */
 
-use TYPO3\Surf\Domain\Model\Node;
 use PHPUnit\Framework\TestCase;
+use TYPO3\Surf\Domain\Model\Node;
 
 class NodeTest extends TestCase
 {
@@ -44,7 +44,4 @@ class NodeTest extends TestCase
         $node->setUsername('username');
         $this->assertEquals('username', $node->getUsername());
     }
-
 }
-
-

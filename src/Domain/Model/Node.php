@@ -148,7 +148,7 @@ class Node
      */
     public function getRemoteCommandExecutionHandler()
     {
-        if($this->hasOption('remoteCommandExecutionHandler')) {
+        if ($this->hasOption('remoteCommandExecutionHandler')) {
             return $this->getOption('remoteCommandExecutionHandler');
         }
         return null;
@@ -170,7 +170,7 @@ class Node
      */
     public function getUsername()
     {
-        if($this->hasOption('username')) {
+        if ($this->hasOption('username')) {
             return $this->getOption('username');
         }
         return null;
@@ -181,7 +181,7 @@ class Node
      */
     public function getPort()
     {
-        if($this->hasOption('port')) {
+        if ($this->hasOption('port')) {
             return $this->getOption('port');
         }
 
