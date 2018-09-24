@@ -237,7 +237,7 @@ class Deployment implements LoggerAwareInterface
     {
         if ($name === 'localhost') {
             $node = new Node('localhost');
-            $node->setHostname('localhost');
+            $node->onLocalhost();
             return $node;
         }
         $nodes = $this->getNodes();

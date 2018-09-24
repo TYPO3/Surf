@@ -118,7 +118,7 @@ class ShellCommandServiceTest extends TestCase
         $node->setHostname('asdf');
         $arguments = [];
 
-        $node->setOption('remoteCommandExecutionHandler', function (ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput) use (&$arguments) {
+        $node->setRemoteCommandExecutionHandler(function (ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput) use (&$arguments) {
             $arguments = func_get_args();
             return [0, 'Hello World'];
         });
@@ -174,7 +174,7 @@ class ShellCommandServiceTest extends TestCase
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
-        $node->setHostname('localhost');
+        $node->onLocalhost();
 
         $deployment = new Deployment('TestDeployment');
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */

@@ -50,18 +50,6 @@ class Node
     }
 
     /**
-     * Sets this Node's name
-     *
-     * @param string $name The Node's name
-     * @return \TYPO3\Surf\Domain\Model\Node
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
      * Get the Node's hostname
      *
      * @return string The Node's hostname
@@ -75,7 +63,7 @@ class Node
      * Sets this Node's hostname
      *
      * @param string $hostname The Node's hostname
-     * @return \TYPO3\Surf\Domain\Model\Node
+     * @return Node
      */
     public function setHostname($hostname)
     {
@@ -96,7 +84,7 @@ class Node
      * Sets this Node's options
      *
      * @param array $options The Node's options
-     * @return \TYPO3\Surf\Domain\Model\Node
+     * @return Node
      */
     public function setOptions(array $options)
     {
@@ -116,7 +104,7 @@ class Node
     /**
      * @param string $key
      * @param mixed $value
-     * @return \TYPO3\Surf\Domain\Model\Node
+     * @return Node
      */
     public function setOption($key, $value)
     {
@@ -134,11 +122,87 @@ class Node
     }
 
     /**
+     * @param string $port
+     *
+     * @return Node
+     */
+    public function setPort($port)
+    {
+        $this->setOption('port', $port);
+        return $this;
+    }
+
+    /**
+     * @param callable $remoteCommandExecutionHandler
+     *
+     * @return Node
+     */
+    public function setRemoteCommandExecutionHandler(callable $remoteCommandExecutionHandler)
+    {
+        $this->setOption('remoteCommandExecutionHandler', $remoteCommandExecutionHandler);
+        return $this;
+    }
+
+    /**
+     * @return callable|null
+     */
+    public function getRemoteCommandExecutionHandler()
+    {
+        if ($this->hasOption('remoteCommandExecutionHandler')) {
+            return $this->getOption('remoteCommandExecutionHandler');
+        }
+        return null;
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return Node
+     */
+    public function setUsername($username)
+    {
+        $this->setOption('username', $username);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUsername()
+    {
+        if ($this->hasOption('username')) {
+            return $this->getOption('username');
+        }
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPort()
+    {
+        if ($this->hasOption('port')) {
+            return $this->getOption('port');
+        }
+
+        return null;
+    }
+
+    /**
      * @return bool TRUE if this node is the localhost
      */
     public function isLocalhost()
     {
         return $this->getOption('hostname') === 'localhost';
+    }
+
+    /**
+     * @return Node
+     */
+    public function onLocalhost()
+    {
+        $this->setOption('hostname', 'localhost');
+        return $this;
     }
 
     /**

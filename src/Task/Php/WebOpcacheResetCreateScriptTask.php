@@ -100,7 +100,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         }
 
         $localhost = new Node('localhost');
-        $localhost->setHostname('localhost');
+        $localhost->onLocalhost();
 
         $commands = [
             'cd ' . escapeshellarg($scriptBasePath),
