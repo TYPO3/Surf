@@ -29,6 +29,16 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
     }
 
     /**
+     * @test
+     */
+    public function unlockSuccessfullyForForceRun()
+    {
+        $this->deployment->setForceRun(true);
+        $this->task->execute($this->node, $this->application, $this->deployment);
+        $this->assertCommandExecuted(sprintf('rm -f %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock')));
+    }
+
+    /**
      * @return \TYPO3\Surf\Domain\Model\Task|UnlockDeploymentTask
      */
     protected function createTask()
