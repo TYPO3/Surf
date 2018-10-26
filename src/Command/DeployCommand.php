@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Command;
 
 /*
@@ -29,18 +30,24 @@ class DeployCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('deploy')
-            ->setDescription('Deploys the given name')
-            ->addArgument(
-                'deploymentName',
-                InputArgument::OPTIONAL,
-                'The deployment name'
-            )
-            ->addOption(
-                'configurationPath',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Path for deployment configuration files'
-            );
+             ->setDescription('Describes the flow for the given name')
+             ->addArgument(
+                 'deploymentName',
+                 InputArgument::OPTIONAL,
+                 'The deployment name'
+             )
+             ->addOption(
+                 'configurationPath',
+                 null,
+                 InputOption::VALUE_OPTIONAL,
+                 'Path for deployment configuration files'
+             )
+             ->addOption(
+                 'force',
+                 null,
+                 InputOption::VALUE_NONE,
+                 'Force deployment will execute unlock task in simple workflow'
+             );
     }
 
     /**
@@ -55,7 +62,7 @@ class DeployCommand extends Command implements FactoryAwareInterface
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');
-        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath, false);
+        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath, false, $input->getOption('force'));
         $deployment->deploy();
 
         return $deployment->getStatus();

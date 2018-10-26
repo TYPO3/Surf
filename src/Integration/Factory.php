@@ -91,13 +91,13 @@ class Factory implements FactoryInterface
      * @param string $deploymentName
      * @param string $configurationPath
      * @param bool $simulateDeployment
+     * @param bool $forceDeployment
+     *
      * @return Deployment
-     * @throws \Exception If a missing directory is not buildable
-     * @throws \InvalidArgumentException If stream is not a resource or string
+     * @throws InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true)
+    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true, $forceDeployment = false)
     {
         $deployment = $this->createDeployment($deploymentName, $configurationPath);
         if ($deployment->getLogger() === null) {
@@ -108,6 +108,7 @@ class Factory implements FactoryInterface
             }
             $deployment->setLogger($logger);
         }
+        $deployment->setForceRun($forceDeployment);
         $deployment->initialize();
 
         return $deployment;

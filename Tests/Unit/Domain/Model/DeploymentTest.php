@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 
 /*
@@ -81,5 +82,63 @@ class DeploymentTest extends TestCase
         $deployment->initialize();
 
         $deployment->initialize();
+    }
+
+    /**
+     * @test
+     * @dataProvider wrongDeploymentLockIdentifiersProvided
+     *
+     * @param mixed $deploymentLockIdentifier
+     */
+    public function deploymentHasDefaultLockIdentifierIfNoIdentifierIsGiven($deploymentLockIdentifier)
+    {
+        $deployment = new Deployment('Some name', $deploymentLockIdentifier);
+
+        $this->assertEquals($deployment->getReleaseIdentifier(), $deployment->getDeploymentLockIdentifier());
+    }
+
+    /**
+     * @test
+     */
+    public function deploymentHasDefinedLockIdentifier()
+    {
+        $deploymentLockIdentifier = 'Deployment lock identifier';
+        $deployment = new Deployment('Some name', $deploymentLockIdentifier);
+
+        $this->assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
+    }
+
+    /**
+     * @test
+     */
+    public function deploymentHasLockIdentifierDefinedByEnvironmentVariable()
+    {
+        $deploymentLockIdentifier = 'Deployment lock identifier';
+        putenv(sprintf('SURF_DEPLOYMENT_LOCK_IDENTIFIER=%s', $deploymentLockIdentifier));
+        $deployment = new Deployment('Some name');
+        $this->assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
+    }
+
+    /**
+     * @return array
+     */
+    public function wrongDeploymentLockIdentifiersProvided()
+    {
+        return [
+            [null],
+            [
+                ['some array'],
+            ],
+            [''],
+            [new \stdClass()],
+        ];
+    }
+
+    /**
+     * Reset global state
+     */
+    protected function tearDown()
+    {
+        putenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER');
     }
 }

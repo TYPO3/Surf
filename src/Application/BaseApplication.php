@@ -18,9 +18,11 @@ use TYPO3\Surf\Task\CreateDirectoriesTask;
 use TYPO3\Surf\Task\Generic\CreateDirectoriesTask as GenericCreateDirectoriesTask;
 use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
 use TYPO3\Surf\Task\GitCheckoutTask;
+use TYPO3\Surf\Task\LockDeploymentTask;
 use TYPO3\Surf\Task\Package\GitTask;
 use TYPO3\Surf\Task\SymlinkReleaseTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
+use TYPO3\Surf\Task\UnlockDeploymentTask;
 
 /**
  * A base application with Git checkout and basic release directory structure
@@ -58,12 +60,15 @@ class BaseApplication extends Application
      *
      *   updateMethod: How to prepare and update the application assets on the node after transfer
      *
+     *   lockDeployment: Locked deployments can only run once at a time
+     *
      * @var array
      */
     protected $options = [
         'packageMethod' => 'git',
         'transferMethod' => 'rsync',
         'updateMethod' => null,
+        'lockDeployment' => true,
     ];
 
     /**
@@ -112,6 +117,15 @@ class BaseApplication extends Application
             ->afterTask(CreateDirectoriesTask::class, GenericCreateDirectoriesTask::class, $this)
             ->addTask(SymlinkReleaseTask::class, 'switch', $this)
             ->addTask(CleanupReleasesTask::class, 'cleanup', $this);
+
+        if ($this->hasOption('lockDeployment') && $this->getOption('lockDeployment') === true) {
+            $workflow->addTask(LockDeploymentTask::class, 'lock', $this);
+            $workflow->addTask(UnlockDeploymentTask::class, 'unlock', $this);
+        }
+
+        if ($deployment->getForceRun()) {
+            $workflow->beforeTask(LockDeploymentTask::class, UnlockDeploymentTask::class, $this);
+        }
     }
 
     /**
