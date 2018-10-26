@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # This script is for rendering the Surf PHP Api Docs
 
-API_REFERENCE_PATH=Documentation/APIReference
+API_REFERENCE_PATH=Documentation/ApiReference
 EXCLUDED_NAMESPACES="TYPO3\\Surf\\Cli;TYPO3\\Surf\\Integration;TYPO3\\Surf\\Command"
 
 if [ ! -f sphpdox.phar ]

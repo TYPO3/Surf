@@ -9,3 +9,4 @@ vendor/
 !/Documentation/ApiReference/.gitkeep
 sphpdox.phar
 _Output/
+Documentation/.doctrees

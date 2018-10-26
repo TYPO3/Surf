@@ -28,7 +28,12 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  *  $workflow
  *      ->setTaskOptions('TYPO3\Surf\Task\Php\WebOpcacheResetExecuteTask', [
  *              'baseUrl' => '/var/www/outerspace',
- *              'scriptIdentifier' => 'eraseAllHumans'
+ *              'scriptIdentifier' => 'eraseAllHumans',
+ *              'stream_context' => [
+ *                     'http' => [
+ *                          'header' => 'Authorization: Basic '.base64_encode("username:password"),
+ *                     ],
+ *              ],
  *          ]
  *      );
  */
