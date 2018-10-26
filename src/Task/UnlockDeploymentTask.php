@@ -31,7 +31,7 @@ final class UnlockDeploymentTask extends Task implements ShellCommandServiceAwar
     {
         $deploymentLockFile = escapeshellarg(sprintf('%s/.surf/%s', $application->getDeploymentPath(), LockDeploymentTask::LOCK_FILE_NAME));
         if (!$deployment->isDryRun()) {
-            $this->shell->execute(sprintf('rm -f %s', $deploymentLockFile), $node, $deployment, true);
+            $this->shell->execute(sprintf('rm %s', $deploymentLockFile), $node, $deployment);
         } else {
             $deployment->getLogger()->info(sprintf('Would remove lock file %s', $deploymentLockFile));
         }

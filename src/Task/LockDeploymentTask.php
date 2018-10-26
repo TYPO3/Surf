@@ -35,21 +35,21 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (! $deployment->isDryRun()) {
+        if (!$deployment->isDryRun()) {
             // Create .surf directory if not exists
             $lockDirectory = escapeshellarg($application->getDeploymentPath() . '/.surf');
-            $this->shell->execute(sprintf('[ -d %1$s ] || mkdir %1$s', $lockDirectory), $node, $deployment, true);
+            $this->shell->execute(sprintf('[ -d %1$s ] || mkdir %1$s', $lockDirectory), $node, $deployment);
         }
 
         $deploymentLockFile = escapeshellarg(sprintf('%s/.surf/%s', $application->getDeploymentPath(), self::LOCK_FILE_NAME));
         $locked = (bool)$this->shell->execute(sprintf('if [ -f %s ]; then echo 1; else echo 0; fi', $deploymentLockFile), $node, $deployment);
         if ($locked) {
-            $currentDeploymentLockIdentifier = $this->shell->execute(sprintf('cat %s', $deploymentLockFile), $node, $deployment, true);
+            $currentDeploymentLockIdentifier = $this->shell->execute(sprintf('cat %s', $deploymentLockFile), $node, $deployment);
             throw DeploymentLockedException::deploymentLockedBy($deployment, $currentDeploymentLockIdentifier);
         }
 
-        if (! $deployment->isDryRun()) {
-            $this->shell->execute(sprintf('echo "%s" > %s', escapeshellarg($deployment->getDeploymentLockIdentifier()), $deploymentLockFile), $node, $deployment, true);
+        if (!$deployment->isDryRun()) {
+            $this->shell->execute(sprintf('echo "%s" > %s', escapeshellarg($deployment->getDeploymentLockIdentifier()), $deploymentLockFile), $node, $deployment);
         } else {
             $deployment->getLogger()->info(sprintf('Create lock file %s with identifier %s', $deploymentLockFile, $deployment->getDeploymentLockIdentifier()));
         }
