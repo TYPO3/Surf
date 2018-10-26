@@ -1,6 +1,5 @@
 <?php
 
-
 namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
 /*
