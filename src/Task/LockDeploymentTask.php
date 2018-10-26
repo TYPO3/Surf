@@ -49,7 +49,7 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
         }
 
         if (!$deployment->isDryRun()) {
-            $this->shell->execute(sprintf('echo "%s" > %s', escapeshellarg($deployment->getDeploymentLockIdentifier()), $deploymentLockFile), $node, $deployment);
+            $this->shell->execute(sprintf('echo %s > %s', escapeshellarg($deployment->getDeploymentLockIdentifier()), $deploymentLockFile), $node, $deployment);
         } else {
             $deployment->getLogger()->info(sprintf('Create lock file %s with identifier %s', $deploymentLockFile, $deployment->getDeploymentLockIdentifier()));
         }
