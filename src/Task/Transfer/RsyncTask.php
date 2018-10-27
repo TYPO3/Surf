@@ -72,7 +72,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         }
 
         $localhost = new Node('localhost');
-        $localhost->setHostname('localhost');
+        $localhost->onLocalhost();
         $this->shell->executeOrSimulate($command, $localhost, $deployment);
 
         if (isset($passwordSshLoginScriptPathAndFilename) && Phar::running() !== '') {

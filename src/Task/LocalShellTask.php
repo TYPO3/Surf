@@ -62,7 +62,7 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
         $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
 
         $localhost = new Node('localhost');
-        $localhost->setHostname('localhost');
+        $localhost->onLocalhost();
 
         $this->shell->executeOrSimulate($command, $localhost, $deployment, $ignoreErrors, $logOutput);
     }
@@ -100,7 +100,7 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
         $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
 
         $localhost = new Node('localhost');
-        $localhost->setHostname('localhost');
+        $localhost->onLocalhost();
 
         $this->shell->execute($command, $localhost, $deployment, true);
     }

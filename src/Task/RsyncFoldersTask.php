@@ -87,7 +87,7 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
         $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
 
         $localhost = new Node('localhost');
-        $localhost->setHostname('localhost');
+        $localhost->onLocalhost();
 
         $this->shell->executeOrSimulate($commands, $localhost, $deployment, $ignoreErrors, $logOutput);
     }
