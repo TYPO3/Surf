@@ -8,7 +8,4 @@ vendor/
 sphpdox.phar
 _Output/
 Documentation/.doctrees
-bin/surf.phar
-bin/surf-old.phar
-bin/surf-phar-private.pem
-bin/surf.phar.pubkey
+bin/
