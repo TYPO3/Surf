@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Integration;
 
 /*
@@ -102,7 +103,7 @@ class Factory implements FactoryInterface
         $deployment = $this->createDeployment($deploymentName, $configurationPath);
         if ($deployment->getLogger() === null) {
             $logger = $this->createLogger();
-            if (!$simulateDeployment) {
+            if (! $simulateDeployment) {
                 $logFilePath = Files::concatenatePaths([$this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log']);
                 $logger->pushHandler(new StreamHandler($logFilePath));
             }
@@ -120,12 +121,14 @@ class Factory implements FactoryInterface
      * Will look up all .php files in the directory ./.surf/ or the given path if specified.
      *
      * @param string $path
+     *
      * @return array
      */
     public function getDeploymentNames($path = null)
     {
         $path = $this->getDeploymentsBasePath($path);
         $files = glob(Files::concatenatePaths([$path, '*.php']));
+
         return array_map(function ($file) use ($path) {
             return substr($file, strlen($path) + 1, -4);
         }, $files);
@@ -137,6 +140,7 @@ class Factory implements FactoryInterface
      * This defaults to ./.surf if a NULL path is given.
      *
      * @param string $path An absolute path (optional)
+     *
      * @return string The configuration root path without a trailing slash.
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
@@ -144,11 +148,12 @@ class Factory implements FactoryInterface
     public function getDeploymentsBasePath($path = null)
     {
         $localDeploymentDescription = @realpath('./.surf');
-        if (!$path && is_dir($localDeploymentDescription)) {
+        if (! $path && is_dir($localDeploymentDescription)) {
             $path = $localDeploymentDescription;
         }
         $path = $path ?: Files::concatenatePaths([$this->getHomeDir(), 'deployments']);
         $this->ensureDirectoryExists($path);
+
         return $path;
     }
 
@@ -156,6 +161,7 @@ class Factory implements FactoryInterface
      * Get the base path to local workspaces
      *
      * @param string $path An absolute path (optional)
+     *
      * @return string The workspaces base path without a trailing slash.
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
@@ -163,7 +169,7 @@ class Factory implements FactoryInterface
     public function getWorkspacesBasePath($path = null)
     {
         $workspacesBasePath = getenv('SURF_WORKSPACE');
-        if (!$workspacesBasePath) {
+        if (! $workspacesBasePath) {
             $path = $path ?: $this->getHomeDir();
             if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
                 if ($workspacesBasePath = getenv('LOCALAPPDATA')) {
@@ -176,6 +182,7 @@ class Factory implements FactoryInterface
             }
         }
         $this->ensureDirectoryExists($workspacesBasePath);
+
         return $workspacesBasePath;
     }
 
@@ -189,6 +196,7 @@ class Factory implements FactoryInterface
      *
      * @param string $deploymentName
      * @param string $path
+     *
      * @return Deployment
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
@@ -219,6 +227,7 @@ class Factory implements FactoryInterface
             $this->createLogger()->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
             $deployment = new FailedDeployment();
         }
+
         return $deployment;
     }
 
@@ -232,20 +241,21 @@ class Factory implements FactoryInterface
     protected function getHomeDir()
     {
         $home = getenv('SURF_HOME');
-        if (!$home) {
+        if (! $home) {
             if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-                if (!getenv('APPDATA')) {
+                if (! getenv('APPDATA')) {
                     throw new \RuntimeException('The APPDATA or SURF_HOME environment variable must be set for composer to run correctly');
                 }
                 $home = Files::concatenatePaths([getenv('APPDATA'), 'Surf']);
             } else {
-                if (!getenv('HOME')) {
+                if (! getenv('HOME')) {
                     throw new \RuntimeException('The HOME or SURF_HOME environment variable must be set for composer to run correctly');
                 }
                 $home = Files::concatenatePaths([getenv('HOME'), '.surf']);
             }
         }
         $this->ensureDirectoryExists($home);
+
         return $home;
     }
 
@@ -260,6 +270,7 @@ class Factory implements FactoryInterface
             $consoleHandler = new ConsoleHandler($this->createOutput());
             $this->logger = new Logger('TYPO3 Surf', [$consoleHandler]);
         }
+
         return $this->logger;
     }
 
@@ -267,11 +278,12 @@ class Factory implements FactoryInterface
      * Check that the directory exists
      *
      * @param string $dir
+     *
      * @throws InvalidConfigurationException
      */
     protected function ensureDirectoryExists($dir)
     {
-        if (!file_exists($dir) && !@mkdir($dir, 0777, true) && !is_dir($dir)) {
+        if (! file_exists($dir) && ! @mkdir($dir, 0777, true) && ! is_dir($dir)) {
             throw new InvalidConfigurationException(sprintf('Directory "%s" cannot be created!', $dir), 1451862775);
         }
     }

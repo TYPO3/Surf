@@ -1,0 +1,17 @@
+{
+  "output": "bin/surf.phar",
+  "main": "surf",
+  "chmod": "0755",
+  "files": [
+    "LICENSE.txt"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": ["Test", "test", "Tests", "tests"],
+      "in": ["src", "vendor"]
+    }
+  ],
+  "git-commit": "git-commit",
+  "stub": true
+}

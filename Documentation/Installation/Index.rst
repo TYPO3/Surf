@@ -51,11 +51,11 @@ This way, you can add `~/.composer/vendor/typo3/surf` to `PHP Include Paths` of 
 Building a Surf phar from source
 --------------------------------
 
-Surf is built using `clue/phar-composer <https://github.com/clue/phar-composer/>`_ and the process is simple:
+Surf is built using the `box project <https://box-project.github.io/box2/>`_ and the process is simple:
 
-Download the latest phar-composer.phar
+* Download the latest `box.phar` and put in an executable directory
+* `cd your/surf/clone`
+* `php box build`
 
-* cd your/surf/clone
-* php phar-composer.phar build .
-* The generated surf.phar should work as expectd.
+The generated `surf.phar` should work as expected.
 
