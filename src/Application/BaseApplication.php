@@ -22,8 +22,8 @@ use TYPO3\Surf\Task\LockDeploymentTask;
 use TYPO3\Surf\Task\Package\GitTask;
 use TYPO3\Surf\Task\SymlinkReleaseTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
-use TYPO3\Surf\Task\UnlockDeploymentTask;
 use TYPO3\Surf\Task\Transfer\ScpTask;
+use TYPO3\Surf\Task\UnlockDeploymentTask;
 
 /**
  * A base application with Git checkout and basic release directory structure
