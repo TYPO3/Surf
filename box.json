@@ -9,7 +9,7 @@
     {
       "name": "*.php",
       "exclude": ["Test", "test", "Tests", "tests"],
-      "in": ["src", "vendor"]
+      "in": ["src", "vendor", "Migrations", "Resources"]
     }
   ],
   "git-commit": "git-commit",
