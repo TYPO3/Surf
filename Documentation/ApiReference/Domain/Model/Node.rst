@@ -36,14 +36,6 @@ TYPO3\\Surf\\Domain\\Model\\Node
 
         :returns: string The Node's name
 
-    .. php:method:: setName($name)
-
-        Sets this Node's name
-
-        :type $name: string
-        :param $name: The Node's name
-        :returns: \TYPO3\Surf\Domain\Model\Node
-
     .. php:method:: getHostname()
 
         Get the Node's hostname
@@ -56,7 +48,7 @@ TYPO3\\Surf\\Domain\\Model\\Node
 
         :type $hostname: string
         :param $hostname: The Node's hostname
-        :returns: \TYPO3\Surf\Domain\Model\Node
+        :returns: Node
 
     .. php:method:: getOptions()
 
@@ -70,7 +62,7 @@ TYPO3\\Surf\\Domain\\Model\\Node
 
         :type $options: array
         :param $options: The Node's options
-        :returns: \TYPO3\Surf\Domain\Model\Node
+        :returns: Node
 
     .. php:method:: getOption($key)
 
@@ -84,7 +76,7 @@ TYPO3\\Surf\\Domain\\Model\\Node
         :param $key:
         :type $value: mixed
         :param $value:
-        :returns: \TYPO3\Surf\Domain\Model\Node
+        :returns: Node
 
     .. php:method:: hasOption($key)
 
@@ -92,9 +84,43 @@ TYPO3\\Surf\\Domain\\Model\\Node
         :param $key:
         :returns: bool
 
+    .. php:method:: setPort($port)
+
+        :type $port: string
+        :param $port:
+        :returns: Node
+
+    .. php:method:: setRemoteCommandExecutionHandler($remoteCommandExecutionHandler)
+
+        :type $remoteCommandExecutionHandler: callable
+        :param $remoteCommandExecutionHandler:
+        :returns: Node
+
+    .. php:method:: getRemoteCommandExecutionHandler()
+
+        :returns: callable|null
+
+    .. php:method:: setUsername($username)
+
+        :type $username: string
+        :param $username:
+        :returns: Node
+
+    .. php:method:: getUsername()
+
+        :returns: string|null
+
+    .. php:method:: getPort()
+
+        :returns: string|null
+
     .. php:method:: isLocalhost()
 
         :returns: bool TRUE if this node is the localhost
+
+    .. php:method:: onLocalhost()
+
+        :returns: Node
 
     .. php:method:: __toString()
 

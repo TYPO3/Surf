@@ -9,6 +9,6 @@ foreach ([__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', 
     }
 }
 
-$app = new \TYPO3\Surf\Cli\Symfony\ConsoleApplication('TYPO3 Surf', '2.0.0-beta7');
+$app = new \TYPO3\Surf\Cli\Symfony\ConsoleApplication('TYPO3 Surf', '2.0.0-beta8');
 $app->setFactory(new \TYPO3\Surf\Integration\Factory());
 $app->run();
