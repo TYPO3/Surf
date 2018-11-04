@@ -23,6 +23,19 @@ TYPO3\\Surf\\Task\\LockDeploymentTask
         :type $options: array
         :param $options:
 
+    .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
+
+        Removes lock file on failed deployment
+
+        :type $node: Node
+        :param $node:
+        :type $application: Application
+        :param $application:
+        :type $deployment: Deployment
+        :param $deployment:
+        :type $options: array
+        :param $options:
+
     .. php:method:: simulate(Node $node, Application $application, Deployment $deployment, $options = [])
 
         :type $node: Node
@@ -38,19 +51,6 @@ TYPO3\\Surf\\Task\\LockDeploymentTask
 
         :type $shellCommandService: ShellCommandService
         :param $shellCommandService:
-
-    .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
-
-        Rollback this task
-
-        :type $node: Node
-        :param $node:
-        :type $application: Application
-        :param $application:
-        :type $deployment: Deployment
-        :param $deployment:
-        :type $options: array
-        :param $options:
 
     .. php:method:: configureOptions($options = [])
 
