@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a9c997b7526cfc281568135b5e9e858",
+    "content-hash": "07e831e210cf166c1a576ecf0fbf3270",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -554,6 +554,53 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "andrewsville/php-token-reflection",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Andrewsville/PHP-Token-Reflection.git",
+                "reference": "e6d0ac2baf66cdf154be34c3d2a2aa1bd4b426ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Andrewsville/PHP-Token-Reflection/zipball/e6d0ac2baf66cdf154be34c3d2a2aa1bd4b426ee",
+                "reference": "e6d0ac2baf66cdf154be34c3d2a2aa1bd4b426ee",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "TokenReflection": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3"
+            ],
+            "authors": [
+                {
+                    "name": "Ondřej Nešpor",
+                    "homepage": "https://github.com/andrewsville"
+                },
+                {
+                    "name": "Jaroslav Hanslík",
+                    "homepage": "https://github.com/kukulich"
+                }
+            ],
+            "description": "Library emulating the PHP internal reflection using just the tokenized source code.",
+            "homepage": "http://andrewsville.github.com/PHP-Token-Reflection/",
+            "keywords": [
+                "library",
+                "reflection",
+                "tokenizer"
+            ],
+            "time": "2014-08-06T16:37:08+00:00"
+        },
         {
             "name": "composer/semver",
             "version": "1.4.0",
@@ -2300,6 +2347,59 @@
             "time": "2016-10-03T07:35:21+00:00"
         },
         {
+            "name": "sphpdox/sphpdox",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/varspool/sphpdox.git",
+                "reference": "bc149dd0a0e3ec1f3e0d24d752552f54bfa17a53"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/varspool/sphpdox/zipball/bc149dd0a0e3ec1f3e0d24d752552f54bfa17a53",
+                "reference": "bc149dd0a0e3ec1f3e0d24d752552f54bfa17a53",
+                "shasum": ""
+            },
+            "require": {
+                "andrewsville/php-token-reflection": "1.4.0",
+                "php": ">=5.5.9",
+                "symfony/console": "^3.0 || ^4.0",
+                "symfony/process": "^3.0 || ^4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7 || ^6.5"
+            },
+            "bin": [
+                "composer/bin/sphpdox"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Sphpdox": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Dominic Scheirlinck",
+                    "email": "dominic@varspool.com",
+                    "homepage": "http://www.somethingemporium.com/"
+                }
+            ],
+            "description": "PHPDoc to Sphinx phpdomain tool",
+            "homepage": "http://github.com/varspool/sphpdox",
+            "keywords": [
+                "documentation",
+                "phpdoc",
+                "rst",
+                "sphinx"
+            ],
+            "time": "2018-07-21T21:38:11+00:00"
+        },
+        {
             "name": "symfony/event-dispatcher",
             "version": "v3.0.0",
             "source": {
@@ -2767,9 +2867,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "sphpdox/sphpdox": 20
+    },
     "prefer-stable": false,
-    "prefer-lowest": true,
+    "prefer-lowest": false,
     "platform": {
         "php": "^5.6 || >=7.0 <7.3"
     },
