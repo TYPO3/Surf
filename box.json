@@ -3,7 +3,8 @@
   "main": "surf",
   "chmod": "0755",
   "files": [
-    "LICENSE.txt"
+    "LICENSE.txt",
+    "Resources/Private/Scripts/PasswordSshLogin.expect"
   ],
   "finder": [
     {
