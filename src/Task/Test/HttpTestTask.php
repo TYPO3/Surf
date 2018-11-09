@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Test;
 
 /*
@@ -8,8 +9,12 @@ namespace TYPO3\Surf\Task\Test;
  * file that was distributed with this source code.
  */
 
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
+use TYPO3\Surf\Domain\Model\HttpResponse;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
@@ -28,126 +33,130 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     use ShellCommandServiceAwareTrait;
 
     /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
+     * HttpTestTask constructor.
+     *
+     * @param ClientInterface|null $client
+     */
+    public function __construct(ClientInterface $client = null)
+    {
+        if (! $client instanceof ClientInterface) {
+            $client = new Client();
+        }
+        $this->client = $client;
+    }
+
+    /**
+     * @param ClientInterface $client
+     */
+    public function setClient(ClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
      * Execute this task
      *
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     *
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['url'])) {
+        if (! isset($options['url'])) {
             throw new InvalidConfigurationException('No url option provided for HttpTestTask', 1319534939);
         }
 
-        // $this->logRequest($node, $application, $deployment, $options);
+        $deployment->getLogger()->debug(sprintf('Requesting Url %s', $options['url']));
 
-        if (isset($options['remote']) && $options['remote'] === true) {
-            $result = $this->executeRemoteCurlRequest(
+        if (isset($options['remote']) && (bool)$options['remote']) {
+            $response = $this->executeRemoteCurlRequest(
                 $options['url'],
                 $node,
                 $deployment,
                 isset($options['additionalCurlParameters']) ? $options['additionalCurlParameters'] : ''
             );
         } else {
-            $deployment->getLogger()->debug('Requesting URL "' . $options['url'] . '"');
-            $result = $this->executeLocalCurlRequest(
-                $options['url'],
-                isset($options['timeout']) ? $options['timeout'] : null,
-                isset($options['port']) ? $options['port'] : null,
-                isset($options['method']) ? $options['method'] : null,
-                isset($options['username']) ? $options['username'] : null,
-                isset($options['password']) ? $options['password'] : null,
-                isset($options['data']) ? $options['data'] : null,
-                isset($options['proxy']) ? $options['proxy'] : null,
-                isset($options['proxyPort']) ? $options['proxyPort'] : null
-            );
+            $response = $this->executeLocalCurlRequest($options['url'], $options);
         }
 
-        $this->assertExpectedStatus($options, $result);
-        $this->assertExpectedHeaders($options, $result);
-        $this->assertExpectedRegexp($options, $result);
-    }
-
-    /**
-     * @param array $options
-     * @param array $result
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
-     */
-    protected function assertExpectedStatus(array $options, array $result)
-    {
-        if (!isset($options['expectedStatus'])) {
-            return;
+        if (isset($options['expectedStatus'])) {
+            $this->assertExpectedStatus($options['expectedStatus'], $response->getStatusCode());
         }
-
-        if ((int)$result['info']['http_code'] !== (int)$options['expectedStatus']) {
-            throw new TaskExecutionException('Expected status code ' . $options['expectedStatus'] . ' but got ' . $result['info']['http_code'], 1319536619);
+        if (isset($options['expectedHeaders'])) {
+            $this->assertExpectedHeaders($this->extractHeadersFromMultiLineString($options['expectedHeaders']), $response->getHeaders());
+        }
+        if (isset($options['expectedRegexp'])) {
+            $this->assertExpectedRegexp(explode(chr(10), $options['expectedRegexp']), $response->getBody());
         }
     }
 
     /**
-     * @param array $options
-     * @param array $result
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @param int $expected
+     * @param int $actual
+     *
+     * @throws TaskExecutionException
      */
-    protected function assertExpectedHeaders(array $options, array $result)
+    protected function assertExpectedStatus($expected, $actual)
     {
-        if (!isset($options['expectedHeaders'])) {
-            return;
+        if ((int)$actual !== (int)$expected) {
+            throw new TaskExecutionException(sprintf('Expected status code %d but got %d', $expected, $actual), 1319536619);
         }
+    }
 
-        $expectedHeaders = [];
-        $expectedHeadersConfiguration = $options['expectedHeaders'];
-        if ($expectedHeadersConfiguration) {
-            $configurationLines = explode(chr(10), $expectedHeadersConfiguration);
-            foreach ($configurationLines as $configurationLine) {
-                list($headerName, $headerValue) = explode(':', $configurationLine, 2);
-                $headerName = trim($headerName);
-                $headerValue = trim($headerValue);
-                if ($headerName && $headerValue) {
-                    $expectedHeaders[$headerName] = $headerValue;
-                }
-            }
-        }
-
-        if (count($expectedHeaders) > 0) {
-            foreach ($expectedHeaders as $headerName => $expectedValue) {
-                if (!isset($result['headers'][$headerName])) {
+    /**
+     * @param array $expected
+     * @param array $actual
+     *
+     * @throws TaskExecutionException
+     */
+    protected function assertExpectedHeaders(array $expected, array $actual)
+    {
+        if (count($expected) > 0) {
+            foreach ($expected as $headerName => $expectedValue) {
+                if (! isset($actual[$headerName])) {
                     throw new TaskExecutionException('Expected header "' . $headerName . '" not present', 1319535441);
                 }
-                $headerValue = $result['headers'][$headerName];
+                $headerValue = $actual[$headerName];
+
+                if (is_array($headerValue)) {
+                    $headerValue = array_shift($headerValue);
+                }
+
+                if (is_array($expectedValue)) {
+                    $expectedValue = array_shift($expectedValue);
+                }
+
                 $partialSuccess = $this->testSingleHeader($headerValue, $expectedValue);
-                if (!$partialSuccess) {
-                    throw new TaskExecutionException('Expected header value for "' . $headerName . '" did not match "' . $expectedValue . '": "' . $headerValue . '"', 1319535733);
+                if (! $partialSuccess) {
+                    throw new TaskExecutionException(sprintf('Expected header value for "%s" did not match "%s": "%s"', $headerName, $expectedValue, $headerValue), 1319535733);
                 }
             }
         }
     }
 
     /**
-     * @param array $options
-     * @param array $result
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @param array $expectedRegexp
+     * @param string $responseBody
+     *
+     * @throws TaskExecutionException
      */
-    protected function assertExpectedRegexp(array $options, array $result)
+    protected function assertExpectedRegexp(array $expectedRegexp, $responseBody)
     {
-        if (!isset($options['expectedRegexp'])) {
-            return;
-        }
-
-        $expectedRegexp = [];
-        $expectedRegexpConfiguration = $options['expectedRegexp'];
-        if ($expectedRegexpConfiguration) {
-            $expectedRegexp = explode(chr(10), $expectedRegexpConfiguration);
-        }
-
         if (count($expectedRegexp) > 0) {
             foreach ($expectedRegexp as $regexp) {
                 $regexp = trim($regexp);
-                if ($regexp !== '' && !preg_match($regexp, $result['body'])) {
-                    throw new TaskExecutionException('Body did not match expected regular expression "' . $regexp . '": ' . substr($result['body'], 0, 200) . (strlen($result['body']) > 200 ? '...' : ''), 1319536046);
+                if ($regexp !== '' && ! preg_match($regexp, $responseBody)) {
+                    throw new TaskExecutionException('Body did not match expected regular expression "' . $regexp . '": ' . substr($responseBody, 0, 200) . (strlen($responseBody) > 200 ? '...' : ''), 1319536046);
                 }
             }
         }
@@ -158,27 +167,25 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      *
      * @param string $headerValue
      * @param string $expectedValue
+     *
      * @return bool
      */
     protected function testSingleHeader($headerValue, $expectedValue)
     {
-        if (!$headerValue || strlen(trim($headerValue)) === 0) {
+        if (! $headerValue || trim($headerValue) === '') {
             return false;
         }
 
         // = Value equals
         if (strpos($expectedValue, '=') === 0) {
             $result = $headerValue === trim(substr($expectedValue, 1));
-        }
-        // < Intval smaller than
+        } // < Intval smaller than
         elseif (strpos($expectedValue, '<') === 0) {
-            $result = intval($headerValue) < intval(substr($expectedValue, 1));
-        }
-        // > Intval bigger than
+            $result = (int)$headerValue < (int)substr($expectedValue, 1);
+        } // > Intval bigger than
         elseif (strpos($expectedValue, '>') === 0) {
-            $result = intval($headerValue) > intval(substr($expectedValue, 1));
-        }
-        // Default
+            $result = (int)$headerValue > (int)substr($expectedValue, 1);
+        } // Default
         else {
             $result = $headerValue === $expectedValue;
         }
@@ -187,89 +194,55 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
-    {
-        // $this->logRequest($node, $application, $deployment, $options);
-    }
-
-    /**
      * @param string $url Request URL
-     * @param int $timeout Request HTTP timeout, defaults to 0 (no timeout)
-     * @param int $port Request HTTP port
-     * @param string $method Request method, defaults to GET. POST, PUT and DELETE are also supported.
-     * @param string $username Optional username for HTTP authentication
-     * @param string $password Optional password for HTTP authentication
-     * @param string $data
-     * @param string $proxy
-     * @param int $proxyPort
-     * @return array time in seconds and status information im associative arrays
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @param array $options
+     *
+     * @return HttpResponse
+     * @throws TaskExecutionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function executeLocalCurlRequest($url, $timeout = null, $port = null, $method = 'GET', $username = null, $password = null, $data = '', $proxy = null, $proxyPort = null)
+    protected function executeLocalCurlRequest($url, array $options = [])
     {
-        $curl = curl_init();
+        $timeout = isset($options['timeout']) ? $options['timeout'] : null;
+        $port = isset($options['port']) ? $options['port'] : null;
+        $method = isset($options['method']) ? $options['method'] : 'GET';
+        $username = isset($options['username']) ? $options['username'] : null;
+        $password = isset($options['password']) ? $options['password'] : null;
+        $data = isset($options['data']) ? $options['data'] : '';
+        $proxy = isset($options['proxy']) ? $options['proxy'] : null;
+        $proxyPort = isset($options['proxyPort']) ? $options['proxyPort'] : null;
 
-        curl_setopt($curl, CURLOPT_URL, $url);
-        if ($timeout !== null) {
-            curl_setopt($curl, CURLOPT_TIMEOUT, (int)ceil($timeout / 1000));
-        }
+        $guzzleOptions = [];
 
         if ($username !== null && $password !== null) {
-            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-            curl_setopt($curl, CURLOPT_USERPWD, $username . ':' . $password);
+            $guzzleOptions['auth'] = [$username, $password];
+        }
+
+        if ($timeout !== null) {
+            $guzzleOptions['timeout'] = (int)ceil($timeout / 1000);
         }
 
         if ($port !== null) {
-            curl_setopt($curl, CURLOPT_PORT, (int)$port);
+            $guzzleOptions['port'] = (int)$port;
         }
 
         if ($proxy !== null && $proxyPort !== null) {
-            curl_setopt($curl, CURLOPT_PROXY, $proxy);
-            curl_setopt($curl, CURLOPT_PROXYPORT, (int)$proxyPort);
+            $guzzleOptions['proxy'] = sprintf('%s:%d', $proxy, $proxyPort);
         }
 
-        switch ($method) {
-            case 'POST':
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-                curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Length: ' . strlen($data)]);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                break;
-            case 'PUT':
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
-                curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Length: ' . strlen($data)]);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                break;
-            case 'DELETE':
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-                break;
+        if ($data !== null && $data !== '') {
+            $guzzleOptions['body'] = $data;
+            $guzzleOptions['headers'] = [
+                'Content-Length' => strlen($data),
+            ];
         }
 
-        curl_setopt($curl, CURLOPT_HEADER, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($curl);
-        $info = curl_getinfo($curl);
-        curl_close($curl);
-
-        if ($response === false) {
+        try {
+            $response = $this->client->request($method, $url, $guzzleOptions);
+            return new HttpResponse($response->getBody()->getContents(), $response->getHeaders(), $response->getStatusCode());
+        } catch (RequestException $e) {
             throw new TaskExecutionException('HTTP request did not return a response', 1334347427);
         }
-
-        list($headerText, $body) = preg_split('/\n[\s]*\n/', $response, 2);
-        $headers = $this->extractResponseHeaders($headerText);
-
-        return [
-            'headers' => $headers,
-            'body' => $body,
-            'info' => $info
-        ];
     }
 
     /**
@@ -277,55 +250,33 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Node $node
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param string $additionalCurlParameters
-     * @return array time in seconds and status information im associative arrays
+     *
+     * @return HttpResponse
+     * @throws TaskExecutionException
      */
     protected function executeRemoteCurlRequest($url, Node $node, Deployment $deployment, $additionalCurlParameters = '')
     {
-        $command = 'curl -s -I  ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
+        $command = 'curl -s -I ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
         $head = $this->shell->execute($command, $node, $deployment, false, false);
 
         $command = 'curl -s ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
         $body = $this->shell->execute($command, $node, $deployment, false, false);
-
         list($status, $headersString) = explode(chr(10), $head, 2);
         $statusParts = explode(' ', $status);
-        $statusCode = $statusParts[1];
-        $info = [
-            'http_code' => $statusCode
-        ];
-        $headers = $this->extractResponseHeaders(trim($headersString));
+        $headers = $this->extractHeadersFromMultiLineString(trim($headersString));
 
-        return [
-            'headers' => $headers,
-            'body' => $body,
-            'info' => $info
-        ];
+        return new HttpResponse($body, $headers, $statusParts[1]);
     }
 
     /**
      * Split response into headers and body part
      *
      * @param string $headerText
+     *
      * @return array Extracted response headers as associative array
      */
-    protected function extractResponseHeaders($headerText)
+    protected function extractHeadersFromMultiLineString($headerText)
     {
-        $headers = [];
-        if ($headerText) {
-            $headerLines = explode(chr(10), $headerText);
-            foreach ($headerLines as $headerLine) {
-                $headerParts = explode(':', $headerLine, 2);
-                if (count($headerParts) < 2) {
-                    continue;
-                }
-
-                $headerName = trim($headerParts[0]);
-                $headerValue = trim($headerParts[1]);
-                if ($headerName && $headerValue) {
-                    $headers[$headerName] = $headerValue;
-                }
-            }
-        }
-        return $headers;
+        return $headerText ? \GuzzleHttp\headers_from_lines(explode(chr(10), $headerText)) : [];
     }
 }
