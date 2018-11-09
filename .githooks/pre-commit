@@ -24,26 +24,30 @@ echo "php-cs-fixer pre commit hook finish"
 
 echo "sphpdox pre commit hook start"
 
+SPHPDOX="vendor/bin/sphpdox"
+HAS_SPHPDOX=false
 API_REFERENCE_PATH=Documentation/ApiReference
 EXCLUDED_NAMESPACES="TYPO3\\Surf\\Cli;TYPO3\\Surf\\Integration;TYPO3\\Surf\\Command"
 
-if [ ! -f sphpdox.phar ]
-then
-    echo "* Downloading sphpdox api doc renderer"
-    wget https://github.com/Sebobo/sphpdox/releases/download/0.0.1-alpha/sphpdox.phar
-    chmod a+x sphpdox.phar
+if [ -x ./vendor/bin/sphpdox ]; then
+    HAS_SPHPDOX=true
 fi
 
-echo "* Deleting old api docs"
-rm -rf $API_REFERENCE_PATH/*
-
-echo "* Rendering new api docs"
-./sphpdox.phar process 'TYPO3\Surf' src --output $API_REFERENCE_PATH --exclude $EXCLUDED_NAMESPACES --title "ApiReference"
-
-echo "* Cleaning up generated doc folders"
-mv $API_REFERENCE_PATH/TYPO3/Surf/* $API_REFERENCE_PATH
-rm -rf $API_REFERENCE_PATH/TYPO3
-
-echo "* Done"
+if $HAS_SPHPDOX; then
+    echo "* Deleting old api docs"
+    rm -rf $API_REFERENCE_PATH/*
+    echo "* Rendering new api docs"
+    ./vendor/bin/sphpdox process 'TYPO3\Surf' src --output $API_REFERENCE_PATH --exclude $EXCLUDED_NAMESPACES --title "ApiReference"
+    echo "* Cleaning up generated doc folders"
+    mv $API_REFERENCE_PATH/TYPO3/Surf/* $API_REFERENCE_PATH
+    rm -rf $API_REFERENCE_PATH/TYPO3
+    echo "* Done"
+else
+    echo ""
+    echo "Please install sphpdox, e.g.:"
+    echo ""
+    echo "  composer require --dev sphpdox/sphpdox:dev-master"
+    echo ""
+fi
 
 echo "sphpdox pre commit hook finish"
