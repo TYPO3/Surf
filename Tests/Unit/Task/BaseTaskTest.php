@@ -55,6 +55,11 @@ abstract class BaseTaskTest extends TestCase
     protected $deployment;
 
     /**
+     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mockLogger;
+
+    /**
      * Set up test dependencies
      *
      * This sets up a stubbed shell command service to record command executions
@@ -100,8 +105,8 @@ abstract class BaseTaskTest extends TestCase
         $this->node->setHostname('hostname');
         $this->deployment = new Deployment('TestDeployment');
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
-        $mockLogger = $this->createMock(LoggerInterface::class);
-        $this->deployment->setLogger($mockLogger);
+        $this->mockLogger = $this->createMock(LoggerInterface::class);
+        $this->deployment->setLogger($this->mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
         $this->application = new Application('TestApplication');
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -14,6 +15,8 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use function TYPO3\Surf\findAllReleases;
+use function TYPO3\Surf\findPreviousReleaseIdentifier;
 
 /**
  * A cleanup task to delete old (unused) releases.
@@ -31,7 +34,6 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
  *
  * Example configuration:
  *     $application->setOption('keepReleases', 2);
-
  * Note: There is no rollback for this cleanup, so we have to be sure not to delete any
  *       live or referenced releases.
  */
@@ -49,26 +51,23 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['keepReleases'])) {
+        if (! isset($options['keepReleases'])) {
             $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"');
+
             return;
         }
 
         $keepReleases = $options['keepReleases'];
         $releasesPath = $application->getReleasesPath();
         $currentReleaseIdentifier = $deployment->getReleaseIdentifier();
-        $previousReleasePath = $application->getReleasesPath() . '/previous';
-        $previousReleaseIdentifier = trim($this->shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment));
 
-        $allReleasesList = $this->shell->execute("if [ -d $releasesPath/. ]; then find $releasesPath/. -maxdepth 1 -type d -exec basename {} \; ; fi", $node, $deployment);
-        $allReleases = preg_split('/\s+/', $allReleasesList, -1, PREG_SPLIT_NO_EMPTY);
+        $previousReleaseIdentifier = findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
+        $allReleases = findAllReleases($deployment, $node, $application, $this->shell);
 
-        $removableReleases = [];
-        foreach ($allReleases as $release) {
-            if ($release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous') {
-                $removableReleases[] = trim($release);
-            }
-        }
+        $removableReleases = array_map('trim', array_filter($allReleases, function ($release) use ($currentReleaseIdentifier, $previousReleaseIdentifier) {
+            return $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous';
+        }));
+
         sort($removableReleases);
 
         $removeReleases = array_slice($removableReleases, 0, count($removableReleases) - $keepReleases);

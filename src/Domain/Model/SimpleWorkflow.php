@@ -70,12 +70,12 @@ class SimpleWorkflow extends Workflow
 
         $applications = $deployment->getApplications();
         if (count($applications) === 0) {
-            throw new InvalidConfigurationException('No application configured for deployment', 1334652420);
+            throw InvalidConfigurationException::createNoApplicationConfigured();
         }
 
         $nodes = $deployment->getNodes();
         if (count($nodes) === 0) {
-            throw new InvalidConfigurationException('No nodes configured for application', 1334652427);
+            throw InvalidConfigurationException::createNoNodesConfigured();
         }
 
         foreach ($this->stages as $stage) {

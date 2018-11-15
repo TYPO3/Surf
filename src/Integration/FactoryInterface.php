@@ -30,11 +30,12 @@ interface FactoryInterface
      * @param string $deploymentName
      * @param string|null $configurationPath
      * @param bool $simulateDeployment
+     * @param bool $initialize
      * @param bool $forceDeployment
      *
      * @return Deployment
      */
-    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true, $forceDeployment = false);
+    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true, $initialize = true, $forceDeployment = false);
 
     /**
      * Get available deployment names
