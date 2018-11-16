@@ -27,6 +27,7 @@ class RollbackCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('rollback')
+            ->setDescription('Rollback current to previous release and remove current folder')
              ->addArgument(
                  'deploymentName',
                  InputArgument::OPTIONAL,
@@ -50,6 +51,8 @@ class RollbackCommand extends Command implements FactoryAwareInterface
      * @param OutputInterface $output
      *
      * @return int|null
+     * @throws \TYPO3\Surf\Exception
+     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

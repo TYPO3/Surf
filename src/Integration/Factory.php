@@ -113,10 +113,12 @@ class Factory implements FactoryInterface
             $deployment->setLogger($logger);
         }
 
+        $deployment->setForceRun($forceDeployment);
+
         if ($initialize) {
             $deployment->initialize();
         }
-        $deployment->setForceRun($forceDeployment);
+
         $deployment->setDryRun($simulateDeployment);
 
         return $deployment;
