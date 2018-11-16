@@ -13,3 +13,4 @@ TYPO3\\Surf\\Domain\\Model
    Deployment
    FailedDeployment
    SimpleWorkflow
+   RollbackWorkflow

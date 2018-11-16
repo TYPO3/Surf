@@ -15,8 +15,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use function TYPO3\Surf\findAllReleases;
-use function TYPO3\Surf\findPreviousReleaseIdentifier;
 
 /**
  * A cleanup task to delete old (unused) releases.
@@ -61,8 +59,8 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         $releasesPath = $application->getReleasesPath();
         $currentReleaseIdentifier = $deployment->getReleaseIdentifier();
 
-        $previousReleaseIdentifier = findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
-        $allReleases = findAllReleases($deployment, $node, $application, $this->shell);
+        $previousReleaseIdentifier = \TYPO3\Surf\findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
+        $allReleases = \TYPO3\Surf\findAllReleases($deployment, $node, $application, $this->shell);
 
         $removableReleases = array_map('trim', array_filter($allReleases, function ($release) use ($currentReleaseIdentifier, $previousReleaseIdentifier) {
             return $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous';

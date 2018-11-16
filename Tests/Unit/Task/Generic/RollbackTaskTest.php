@@ -36,7 +36,7 @@ previous',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment);
 
-        $symlinkCommand = sprintf('cd %1$s && ln -s ./%2$s current', $releasesPath, '20180430130050');
+        $symlinkCommand = sprintf('cd %1$s && ln -sfn ./%2$s current', $releasesPath, '20180430130050');
         $removeCommand = sprintf('rm -rf %1$s/%2$s; rm -rf %1$s/%2$sREVISION;', $releasesPath, '20180430154032');
         $this->assertCommandExecuted($symlinkCommand);
         $this->assertCommandExecuted($removeCommand);
