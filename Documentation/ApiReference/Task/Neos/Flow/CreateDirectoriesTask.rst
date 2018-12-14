@@ -40,6 +40,11 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\CreateDirectoriesTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
@@ -57,3 +62,9 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\CreateDirectoriesTask
         :param $deployment:
         :type $options: array
         :param $options:
+
+    .. php:method:: configureOptions($options = [])
+
+        :type $options: array
+        :param $options:
+        :returns: array
