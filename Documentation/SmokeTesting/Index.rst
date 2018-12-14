@@ -52,20 +52,3 @@ Further options:
 * additionalCurlParameters (only if remote=TRUE): list of parameters which
   is directly passed to CURL. Especially useful to e.g. disable SSL certificate
   check (with --insecure)
-
-## Common Problems
-
-### Some providers may have SSH rate limits
-
-Source and details: https://karsten.dambekalns.de/blog/using-ssh-controlmaster-with-typo3-surf.html
-
-> SSH provides a way to reuse an existing SSH connection for subsequent connection attempts to the same host.
-
-Add something like this to `~/.ssh/config` to reuse existing SSH connections:
-
-```
-Host myhost.uberspace.de
-ControlMaster auto
-ControlPath /tmp/ssh_mux_%h_%p_%r
-ControlPersist 600
-```
