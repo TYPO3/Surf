@@ -52,6 +52,7 @@ TYPO3 Surf |version| documentation
      Nodes/Index
      Tasks/Index
      CliUsage/Index
+     SmokeTesting/Index
      ApiReference/index
      Migration/Index
 

@@ -14,7 +14,7 @@ We recommend to keep the deployment configuration as simple as possible and do i
 
 Per default Surf expects the deployment configuration files within the .surf directory in your project.
 
-If you like you can specify the configuration directory with the command option --configurationPath. (:ref:`cli-usage-configuration-path-section`)
+If you like you can specify the configuration directory with the command option --configurationPath (:ref:`cli-usage-configuration-path-section`) or you could add an environment variable called SURF_WORKSPACE.
 
 But for now we are going to place our deployment configuration files in the .surf directory.
 
