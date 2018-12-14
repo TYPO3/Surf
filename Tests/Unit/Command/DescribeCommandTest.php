@@ -300,7 +300,6 @@ Applications:
       migrate:
         tasks:
           <success>TYPO3\Surf\Task\Neos\Flow\MigrateTask</success> (for application Neos)
-          <success>TYPO3\Surf\Task\Neos\Neos\ImportSiteTask</success> (for application Neos)
       finalize:
         tasks:
           <success>TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask</success> (for application Neos)

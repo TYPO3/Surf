@@ -8,10 +8,6 @@ namespace TYPO3\Surf\Application\Neos;
  * file that was distributed with this source code.
  */
 
-use TYPO3\Surf\Domain\Model\Deployment;
-use TYPO3\Surf\Domain\Model\Workflow;
-use TYPO3\Surf\Task\Neos\Neos\ImportSiteTask;
-
 /**
  * A Neos application template
  */
@@ -82,18 +78,5 @@ class Neos extends Flow
             return $this->isNeosCommand($command) ? 'typo3.neos' : 'typo3.flow';
         }
         return $this->isNeosCommand($command) ? 'neos.neos' : 'neos.flow';
-    }
-
-    /**
-     * Register tasks for this application
-     *
-     * @param Workflow $workflow
-     * @param Deployment $deployment
-     */
-    public function registerTasks(Workflow $workflow, Deployment $deployment)
-    {
-        parent::registerTasks($workflow, $deployment);
-
-        $workflow->addTask(ImportSiteTask::class, 'migrate', $this);
     }
 }
