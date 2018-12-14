@@ -9,7 +9,5 @@ Deployment Recipes
    :maxdepth: 5
    :titlesonly:
 
-   TYPO3/Index
    Neos/Index
-   Flow/Index
-   Other/Index
+   TYPO3/Index
