@@ -8,6 +8,7 @@ TYPO3\\Surf\\Domain\\Model
 
    Application
    Task
+   HttpResponse
    Node
    Workflow
    Deployment
