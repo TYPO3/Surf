@@ -9,8 +9,8 @@ How to deploy Flow Apps
 
 The Flow version used in a project can be set using:
 
-	$application = new \TYPO3\Surf\Application\Neos\Flow();
-	$application->setVersion('4.0');
+   $application = new \TYPO3\Surf\Application\Neos\Flow();
+   $application->setVersion('4.0');
 
 It defaults to 4.0, so if using older Flow version, you need to set the version as `x.y`.
 This switches Surf behavior to call Flow commands correctly.
