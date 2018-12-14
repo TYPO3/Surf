@@ -97,6 +97,4 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
         $resolver->setDefault('baseDirectory', null);
         $resolver->setAllowedTypes('directories', 'array');
     }
-
-
 }
