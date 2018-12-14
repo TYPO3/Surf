@@ -118,8 +118,9 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             foreach ($application->getOptions() as $key => $value) {
                 if (is_array($value)) {
                     $this->output->writeln('      ' . $key . ' =>');
-                    foreach ($value as $item) {
-                        $this->output->writeln(sprintf('        <success>%s</success>', $item));
+                    foreach ($value as $itemKey => $itemValue) {
+                        $itemOutput = is_string($itemKey) ? sprintf('%s => %s', $itemKey, $itemValue) : $itemValue;
+                        $this->output->writeln(sprintf('        <success>%s</success>', $itemOutput));
                     }
                 } else {
                     $printableValue = is_scalar($value) ? $value : gettype($value);
