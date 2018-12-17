@@ -32,7 +32,7 @@ class DescribeCommandTest extends TestCase
     protected $deployment;
 
     /**
-     * @var Application
+     * @var Application|BaseApplication
      */
     protected $application;
 
@@ -171,6 +171,11 @@ Applications:
      */
     public function describeTypo3Cms()
     {
+        $application = new CMS();
+        $application->addSymlink(
+            'public/typo3conf/LocalConfiguration.php',
+            '../../../../shared/Configuration/LocalConfiguration.php'
+        );
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
@@ -198,6 +203,7 @@ Applications:
         <success>web/uploads</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
+        <success>public/typo3conf/LocalConfiguration.php => ../../../../shared/Configuration/LocalConfiguration.php</success>
       deploymentPath => <success>NULL</success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
@@ -240,7 +246,7 @@ Applications:
       unlock:
         tasks:
           <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application TYPO3 CMS)
-', $this->getDescriptionOfPredefinedApplication(new CMS()));
+', $this->getDescriptionOfPredefinedApplication($application));
     }
 
     /**
