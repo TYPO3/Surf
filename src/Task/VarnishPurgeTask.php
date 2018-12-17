@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -8,6 +9,7 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -47,11 +49,8 @@ class VarnishPurgeTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $secretFile = (isset($options['secretFile']) ? $options['secretFile'] : '/etc/varnish/secret');
-        $purgeUrl = (isset($options['purgeUrl']) ? $options['purgeUrl'] : '.');
-        $varnishadm = (isset($options['varnishadm']) ? $options['varnishadm'] : '/usr/bin/varnishadm');
-
-        $this->shell->executeOrSimulate($varnishadm . ' -S ' . $secretFile . ' -T 127.0.0.1:6082 url.purge ' . $purgeUrl, $node, $deployment);
+        $options = $this->configureOptions($options);
+        $this->shell->executeOrSimulate(sprintf('%s -S %s -T 127.0.0.1:6082 url.purge %s', $options['varnishadm'], $options['secretFile'], $options['purgeUrl']), $node, $deployment);
     }
 
     /**
@@ -64,9 +63,17 @@ class VarnishPurgeTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $secretFile = (isset($options['secretFile']) ? $options['secretFile'] : '/etc/varnish/secret');
-        $varnishadm = (isset($options['varnishadm']) ? $options['varnishadm'] : '/usr/bin/varnishadm');
+        $options = $this->configureOptions($options);
+        $this->shell->executeOrSimulate(sprintf('%s -S %s -T 127.0.0.1:6082 status', $options['varnishadm'], $options['secretFile']), $node, $deployment);
+    }
 
-        $this->shell->executeOrSimulate($varnishadm . ' -S ' . $secretFile . ' -T 127.0.0.1:6082 status', $node, $deployment);
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('secretFile', '/etc/varnish/secret');
+        $resolver->setDefault('varnishadm', '/usr/bin/varnishadm');
+        $resolver->setDefault('purgeUrl', '.');
     }
 }
