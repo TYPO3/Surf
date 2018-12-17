@@ -76,7 +76,7 @@ abstract class Task
             $this->resolveOptions($resolver);
             return $resolver->resolve($options);
         } catch (MissingOptionsException $e) {
-            throw new InvalidOptionsException($e->getMessage(), $e->getCode());
+            throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
         } catch (InvalidOptionsException $e) {
             throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
         } catch (NoConfigurationException $e) {
