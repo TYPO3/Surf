@@ -13,6 +13,7 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\DeploymentLockedException;
@@ -34,7 +35,7 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!$deployment->isDryRun()) {
+        if (! $deployment->isDryRun()) {
             // Create .surf directory if not exists
             $lockDirectory = escapeshellarg($application->getDeploymentPath() . '/.surf');
             $this->shell->execute(sprintf('[ -d %1$s ] || mkdir %1$s', $lockDirectory), $node, $deployment);
@@ -47,11 +48,26 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
             throw DeploymentLockedException::deploymentLockedBy($deployment, $currentDeploymentLockIdentifier);
         }
 
-        if (!$deployment->isDryRun()) {
+        if (! $deployment->isDryRun()) {
             $this->shell->execute(sprintf('echo %s > %s', escapeshellarg($deployment->getDeploymentLockIdentifier()), $deploymentLockFile), $node, $deployment);
         } else {
             $deployment->getLogger()->info(sprintf('Create lock file %s with identifier %s', $deploymentLockFile, $deployment->getDeploymentLockIdentifier()));
         }
+    }
+
+    /**
+     * Removes lock file on failed deployment
+     *
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
+     * @param array $options
+     */
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    {
+        $unLockDeployment = new UnlockDeploymentTask();
+        $unLockDeployment->setShellCommandService(new ShellCommandService());
+        $unLockDeployment->execute($node, $application, $deployment, $options);
     }
 
     /**

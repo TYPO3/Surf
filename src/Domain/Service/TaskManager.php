@@ -45,11 +45,6 @@ class TaskManager
 
         $globalOptions = $this->overrideOptions($definedTaskName, $deployment, $node, $application, $options);
 
-        if (!$deployment->isDryRun()) {
-            $task->execute($node, $application, $deployment, $globalOptions);
-        } else {
-            $task->simulate($node, $application, $deployment, $globalOptions);
-        }
         $this->taskHistory[] = [
             'task' => $task,
             'node' => $node,
@@ -58,6 +53,12 @@ class TaskManager
             'stage' => $stage,
             'options' => $globalOptions
         ];
+
+        if (!$deployment->isDryRun()) {
+            $task->execute($node, $application, $deployment, $globalOptions);
+        } else {
+            $task->simulate($node, $application, $deployment, $globalOptions);
+        }
     }
 
     /**
