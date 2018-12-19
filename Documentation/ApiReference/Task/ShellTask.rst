@@ -66,6 +66,21 @@ TYPO3\\Surf\\Task\\ShellTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
+    .. php:method:: replacePaths(Application $application, Deployment $deployment, $command)
+
+        :type $application: Application
+        :param $application:
+        :type $deployment: Deployment
+        :param $deployment:
+        :type $command: string
+        :param $command:
+        :returns: mixed
+
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
@@ -76,8 +91,3 @@ TYPO3\\Surf\\Task\\ShellTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:
