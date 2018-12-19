@@ -9,7 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Release;
  * file that was distributed with this source code.
  */
 
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Release\ReleaseTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -21,7 +21,7 @@ class PrepareReleaseTaskTest extends BaseTaskTest
      */
     public function requiredReleaseHostOptionIsMissing()
     {
-        $this->expectException(InvalidOptionsException::class);
+        $this->expectException(InvalidConfigurationException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
     }
 
