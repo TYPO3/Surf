@@ -19,11 +19,6 @@
         "friendsofphp/php-cs-fixer": "^2.13",
         "sphpdox/sphpdox": "dev-master"
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.x-dev"
-        }
-    },
     "autoload": {
         "psr-4": {
             "TYPO3\\Surf\\": "src"
