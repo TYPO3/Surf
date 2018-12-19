@@ -19,6 +19,10 @@ If you would like to deploy a Neos Application a good starting point is to use N
       ->setOption('branch', 'master')
       ->setOption('updateMethod', null)
       ->setOption('baseUrl', 'https://my.node.com')
+      ->setOption('flushCacheList', [
+          'Neos_Fusion_Content',
+          'Neos_Neos_Fusion'
+      ])
       ->setDeploymentPath('/var/www/vhosts/my.node.com')
       ->addNode($node);
    /** @var $deployment TYPO3\Surf\Domain\Model\Deployment "injected" into this script from Surf */
@@ -29,19 +33,6 @@ If you would like to deploy a Neos Application a good starting point is to use N
                $deployment->getWorkflow()
                   ->beforeStage('transfer', TYPO3\Surf\Task\Php\WebOpcacheResetCreateScriptTask::class)
                   ->afterStage('switch', TYPO3\Surf\Task\Php\WebOpcacheResetExecuteTask::class)
-                  ->defineTask(
-                     'Task:FlushFusionContentCache',
-                     TYPO3\Surf\Task\Neos\Flow\RunCommandTask::class,
-                     [
-                           'command' => 'flow:cache:flushone --identifier Neos_Fusion_Content'
-                     ]
-                  )->forStage('switch', 'Task:FlushFusionContentCache')
-                  ->defineTask(
-                     'Task:FlushFusionCache',
-                     TYPO3\Surf\Task\Neos\Flow\RunCommandTask::class,
-                     [
-                           'command' => 'flow:cache:flushone --identifier Neos_Neos_Fusion'
-                     ]
-                  )->forStage('switch', 'Task:FlushFusionCache');
+                  ->afterStage('switch', TYPO3\Surf\Task\Neos\Flow\FlushCacheListTask::class);
          }
       );
