@@ -9,7 +9,7 @@ foreach ([__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', 
     }
 }
 
-$app = new \Symfony\Component\Console\Application('TYPO3 Surf', '1.0.0');
+$app = new \Symfony\Component\Console\Application('TYPO3 Surf', '2.0.0');
 $app->add(new \TYPO3\Surf\Command\ReleaseCommand());
 $app->setDefaultCommand('release');
 $app->run();
