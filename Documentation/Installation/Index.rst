@@ -55,7 +55,7 @@ Surf is built using the `box project <https://box-project.github.io/box2/>`_ and
 
 * Download the latest `box.phar` and put in an executable directory
 * `cd your/surf/clone`
-* `php box build`
+* `composer install --no-dev && php box.phar build`
 
 The generated `surf.phar` should work as expected.
 
