@@ -74,8 +74,7 @@ class SelfUpdateCommand extends Command
 
         $stability = $input->getOption('stability');
         if (empty($stability)) {
-            // Unstable by default. Should be removed once we have a 2.0.0 final
-            $stability = GithubStrategy::UNSTABLE;
+            $stability = GithubStrategy::STABLE;
         }
         /** @var GithubStrategy $strategy */
         $strategy = $updater->getStrategy();
