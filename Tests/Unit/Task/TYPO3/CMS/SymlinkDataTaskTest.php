@@ -42,7 +42,11 @@ class SymlinkDataTaskTest extends BaseTaskTest
      */
     public function withoutOptionsCreatesCorrectLinks()
     {
-        $options = [];
+        $options = [
+            'webDirectory' => '',
+        ];
+
+        $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
@@ -57,11 +61,35 @@ class SymlinkDataTaskTest extends BaseTaskTest
     /**
      * @test
      */
+    public function disableCreationOfUploadsFolder()
+    {
+        $options = [
+            'webDirectory' => '',
+            'symlinkDataFolders' => ['fileadmin']
+        ];
+        $options = $this->mergeOptions($options);
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $dataPath = '../../shared/Data';
+        $this->assertNotContains("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }", $this->commands['executed']);
+        $this->assertNotContains("ln -sf {$dataPath}/uploads '{$releasePath}'/uploads", $this->commands['executed']);
+
+        $this->assertCommandExecuted("cd '{$releasePath}'");
+        $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
+        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin '{$releasePath}'/fileadmin");
+    }
+
+    /**
+     * @test
+     */
     public function withAdditionalDirectoriesCreatesCorrectLinks()
     {
         $options = [
             'directories' => ['pictures', 'test/assets'],
+            'webDirectory' => '',
         ];
+        $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
@@ -85,6 +113,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $options = [
             'webDirectory' => 'web/'
         ];
+        $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
@@ -105,6 +134,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
             'webDirectory' => 'web/',
             'directories' => ['pictures', 'test/assets', '/withSlashes/'],
         ];
+        $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
@@ -120,5 +150,17 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("ln -sf '{$dataPath}/withSlashes' 'withSlashes'");
         $this->assertCommandExecuted("{ [ -d '{$dataPath}/test/assets' ] || mkdir -p '{$dataPath}/test/assets' ; }");
         $this->assertCommandExecuted("ln -sf '../{$dataPath}/test/assets' 'test/assets'");
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return array
+     */
+    private function mergeOptions(array $options)
+    {
+        $options = array_merge($this->application->getOptions(), $options);
+
+        return $options;
     }
 }

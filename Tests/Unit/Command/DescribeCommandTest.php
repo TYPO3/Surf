@@ -197,6 +197,9 @@ Applications:
       context => <success>Production</success>
       scriptFileName => <success>vendor/bin/typo3cms</success>
       webDirectory => <success>web</success>
+      symlinkDataFolders =>
+        <success>fileadmin</success>
+        <success>uploads</success>
       rsyncExcludes =>
         <success>.git</success>
         <success>web/fileadmin</success>
