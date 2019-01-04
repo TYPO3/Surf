@@ -1,11 +1,9 @@
 .. -*- coding: utf-8 -*- with BOM.
 .. include:: ../Includes.txt
 
-===============
-Getting Started
-===============
-
-First of all you have to :doc:`install Surf <../Installation/Index>`.
+=====
+Usage
+=====
 
 After installing Surf you have to create one or more deployment configuration files for your project.
 The deployment configuration files are at the moment just plain php files.

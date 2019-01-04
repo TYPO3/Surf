@@ -44,8 +44,8 @@ TYPO3 Surf |version| documentation
      :titlesonly:
      :glob:
 
-     GettingStarted/Index
      Installation/Index
+     Usage/Index
      Architecture/Index
      DeploymentFlow/Index
      Applications/Index
