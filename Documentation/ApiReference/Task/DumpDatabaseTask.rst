@@ -33,10 +33,6 @@ TYPO3\\Surf\\Task\\DumpDatabaseTask
              ]
          );
 
-    .. php:attr:: requiredOptions
-
-        protected array
-
     .. php:attr:: shell
 
         protected ShellCommandService
@@ -67,10 +63,10 @@ TYPO3\\Surf\\Task\\DumpDatabaseTask
         :type $options: array
         :param $options:
 
-    .. php:method:: assertRequiredOptionsExist($options)
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
 
-        :type $options: array
-        :param $options:
+        :type $resolver: OptionsResolver
+        :param $resolver:
 
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
@@ -95,8 +91,3 @@ TYPO3\\Surf\\Task\\DumpDatabaseTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:

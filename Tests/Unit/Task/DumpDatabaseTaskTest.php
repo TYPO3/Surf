@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\DumpDatabaseTask;
 
 /**
@@ -23,6 +24,15 @@ class DumpDatabaseTaskTest extends BaseTaskTest
         parent::setUp();
 
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    /**
+     * @test
+     */
+    public function missingOptionThrowsInvalidArgumentException()
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
     }
 
     /**
