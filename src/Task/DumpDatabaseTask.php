@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Process\Process;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -15,7 +16,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * This task dumps a complete database from a source system to a target system.
@@ -50,11 +50,6 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
     use ShellCommandServiceAwareTrait;
 
     /**
-     * @var array
-     */
-    protected $requiredOptions = ['sourceHost', 'sourceUser', 'sourcePassword', 'sourceDatabase', 'targetHost', 'targetUser', 'targetPassword', 'targetDatabase'];
-
-    /**
      * Execute this task
      *
      * @param \TYPO3\Surf\Domain\Model\Node $node
@@ -65,7 +60,7 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $this->assertRequiredOptionsExist($options);
+        $options = $this->configureOptions($options);
 
         $dumpCommand = new Process([
             'mysqldump',
@@ -123,15 +118,10 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @param OptionsResolver $resolver
      */
-    protected function assertRequiredOptionsExist(array $options)
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        foreach ($this->requiredOptions as $optionName) {
-            if (!isset($options[$optionName])) {
-                throw new InvalidConfigurationException(sprintf('Required option "%s" is not set!', $optionName), 1405592631);
-            }
-        }
+        $resolver->setRequired(['sourceHost', 'sourceUser', 'sourcePassword', 'sourceDatabase', 'targetHost', 'targetUser', 'targetPassword', 'targetDatabase']);
     }
 }
