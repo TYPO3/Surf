@@ -59,8 +59,8 @@ class CMS extends BaseApplication
             'webDirectory' => 'web',
             'rsyncExcludes' => [
                 '.git',
-                'web/fileadmin',
-                'web/uploads'
+                '{webDirectory}/fileadmin',
+                '{webDirectory}/uploads'
             ]
         ]);
     }

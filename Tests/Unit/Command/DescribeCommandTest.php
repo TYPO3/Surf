@@ -199,8 +199,8 @@ Applications:
       webDirectory => <success>web</success>
       rsyncExcludes =>
         <success>.git</success>
-        <success>web/fileadmin</success>
-        <success>web/uploads</success>
+        <success>{webDirectory}/fileadmin</success>
+        <success>{webDirectory}/uploads</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
         <success>public/typo3conf/LocalConfiguration.php => ../../../../shared/Configuration/LocalConfiguration.php</success>
