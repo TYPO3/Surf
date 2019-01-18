@@ -273,7 +273,7 @@ Applications:
     Options: 
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
-      updateMethod => <success>composer</success>
+      updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
@@ -300,8 +300,6 @@ Applications:
         after:
           <success>TYPO3\Surf\Task\Generic\CreateSymlinksTask</success> (for application Neos)
       update:
-        tasks:
-          <success>TYPO3\Surf\Task\Composer\InstallTask</success> (for application Neos)
         after:
           <success>TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask</success> (for application Neos)
           <success>TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask</success> (for application Neos)
