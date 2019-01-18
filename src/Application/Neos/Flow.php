@@ -43,9 +43,6 @@ class Flow extends BaseApplication
     public function __construct($name = 'Neos Flow')
     {
         parent::__construct($name);
-        $this->options = array_merge($this->options, [
-            'updateMethod' => 'composer'
-        ]);
     }
 
     /**
