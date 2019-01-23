@@ -76,3 +76,28 @@ AdditionalConfiguration.php::
 	RewriteCond %{HTTP_HOST} ^next\.example\.com$
 	RewriteRule .? - [E=TYPO3_CONTEXT:Testing]
 
+
+If you are not able to set environment variables via .htaccess, you can use composer autoloading and a PHP file.
+Thanks to the team of jweiland.net for this solution.
+
+Root composer.json::
+
+	{
+		"autoload": {
+			"files": ["scripts/typo3context.php"]
+		}
+	}
+
+typo3context.php::
+
+	<?php
+	// Set the application context in this file because it is not possible to set environment variables
+	// via .htaccess e.g. on domainFACTORY/jweiland.net servers
+	$context = 'Production';
+	// detect application context by domain
+	if (array_key_exists('HTTP_HOST', $_SERVER)) {
+		if (0 === strpos($_SERVER['HTTP_HOST'], 'next.')) {
+			$context = 'Testing';
+		}
+	}
+	putenv('TYPO3_CONTEXT=' . $context);
