@@ -32,10 +32,9 @@ If you would like to deploy a TYPO3 Website a good starting point is to use TYPO
    ];
 
    $app = new \TYPO3\Surf\Application\TYPO3\CMS();
-   $app->setNodes($nodes);
-   $app->addSymlink(
-      'public/typo3conf/LocalConfiguration.php', '../../../../shared/Configuration/LocalConfiguration.php'
-   );
+   $app->setNodes($nodes)
+      ->setDeploymentPath('/html')
+      ->addSymlink('public/typo3conf/LocalConfiguration.php', '../../../../shared/Configuration/LocalConfiguration.php');
 
    $app->setOptions(array_merge($app->getOptions(), $appOptions));
 
