@@ -57,6 +57,9 @@ class CMS extends BaseApplication
             'context' => 'Production',
             'scriptFileName' => 'vendor/bin/typo3cms',
             'webDirectory' => 'web',
+            'symlinkDataFolders' => [
+                'fileadmin', 'uploads'
+            ],
             'rsyncExcludes' => [
                 '.git',
                 'web/fileadmin',
