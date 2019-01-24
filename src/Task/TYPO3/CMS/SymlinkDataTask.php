@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 /*
@@ -8,6 +9,8 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -34,27 +37,27 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        $options = $this->configureOptions($options);
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
-        $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
+        $webDirectory = $options['webDirectory'];
         $relativeDataPath = $relativeDataPathFromWeb = '../../shared/Data';
         if ($webDirectory !== '') {
             $relativeDataPathFromWeb = str_repeat('../', substr_count(trim($webDirectory, '/'), '/') + 1) . $relativeDataPath;
         }
-        $absoluteWebDirectory = escapeshellarg(rtrim("$targetReleasePath/$webDirectory", '/'));
-        $commands = [
-            'cd ' . escapeshellarg($targetReleasePath),
-            "{ [ -d {$relativeDataPath}/fileadmin ] || mkdir -p {$relativeDataPath}/fileadmin ; }",
-            "{ [ -d {$relativeDataPath}/uploads ] || mkdir -p {$relativeDataPath}/uploads ; }",
-            "ln -sf {$relativeDataPathFromWeb}/fileadmin {$absoluteWebDirectory}/fileadmin",
-            "ln -sf {$relativeDataPathFromWeb}/uploads {$absoluteWebDirectory}/uploads"
-        ];
-        if (isset($options['directories']) && is_array($options['directories'])) {
-            foreach ($options['directories'] as $directory) {
-                $directory = trim($directory, '\\/');
-                $targetDirectory = Files::concatenatePaths([$relativeDataPath, $directory]);
-                $commands[] = '{ [ -d ' . escapeshellarg($targetDirectory) . ' ] || mkdir -p ' . escapeshellarg($targetDirectory) . ' ; }';
-                $commands[] = 'ln -sf ' . escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . $targetDirectory) . ' ' . escapeshellarg($directory);
-            }
+        $absoluteWebDirectory = rtrim("$targetReleasePath/$webDirectory", '/');
+
+        $commands[] = 'cd ' . escapeshellarg($targetReleasePath);
+
+        foreach ($options['symlinkDataFolders'] as $directory) {
+            $commands[] = sprintf('{ [ -d %1$s ] || mkdir -p %1$s; }', escapeshellarg($relativeDataPath . '/' . $directory));
+            $commands[] = sprintf('ln -sf %1$s %2$s', escapeshellarg($relativeDataPathFromWeb . '/' . $directory), escapeshellarg($absoluteWebDirectory . '/' . $directory));
+        }
+
+        foreach ($options['directories'] as $directory) {
+            $directory = trim($directory, '\\/');
+            $targetDirectory = Files::concatenatePaths([$relativeDataPath, $directory]);
+            $commands[] = sprintf('{ [ -d %1$s ] || mkdir -p %1$s; }', escapeshellarg($targetDirectory));
+            $commands[] = sprintf('ln -sf %1$s %2$s', escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . $targetDirectory), escapeshellarg($directory));
         }
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
@@ -70,5 +73,27 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('webDirectory', '');
+        $resolver->setDefault('directories', []);
+        $resolver->setDefault('symlinkDataFolders', []);
+        $resolver->setAllowedTypes('symlinkDataFolders', 'array');
+        $resolver->setNormalizer('directories', function (Options $options, $value) {
+            if (is_array($value)) {
+                return $value;
+            }
+
+            return [];
+        });
+
+        $resolver->setNormalizer('webDirectory', function (Options $options, $value) {
+            return trim($value, '\\/');
+        });
     }
 }
