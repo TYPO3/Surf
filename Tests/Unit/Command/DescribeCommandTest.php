@@ -201,6 +201,7 @@ Applications:
         <success>fileadmin</success>
         <success>uploads</success>
       rsyncExcludes =>
+        <success>.ddev</success>
         <success>.git</success>
         <success>web/fileadmin</success>
         <success>web/uploads</success>
