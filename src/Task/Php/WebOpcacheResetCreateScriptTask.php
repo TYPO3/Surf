@@ -89,7 +89,8 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $workspacePath = $deployment->getWorkspacePath($application);
-        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : Files::concatenatePaths([$workspacePath, 'Web']);
+        $webDirectory = $application->hasOption('webDirectory') ? $application->getOption('webDirectory') : 'Web';
+        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : Files::concatenatePaths([$workspacePath, $webDirectory]);
 
         if (! isset($options['scriptIdentifier'])) {
             // Store the script identifier as an application option
