@@ -69,6 +69,7 @@ class BaseApplication extends Application
         'transferMethod' => 'rsync',
         'updateMethod' => null,
         'lockDeployment' => true,
+        'phpBinary' => '',
     ];
 
     /**

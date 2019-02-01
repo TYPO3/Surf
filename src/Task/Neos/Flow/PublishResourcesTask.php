@@ -43,7 +43,12 @@ class PublishResourcesTask extends Task implements ShellCommandServiceAwareInter
 
         if ($application->getVersion() >= '3.0') {
             $targetPath = $deployment->getApplicationReleasePath($application);
-            $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'resource:publish'), $node, $deployment);
+            $command = 'resource:publish';
+            $this->shell->executeOrSimulate(
+                $application->buildCommand($targetPath, $application->getApplicationCommand($command)),
+                $node,
+                $deployment
+            );
         }
     }
 

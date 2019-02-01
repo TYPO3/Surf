@@ -42,7 +42,12 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
         }
 
         $targetPath = $deployment->getApplicationReleasePath($application);
-        $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'doctrine:migrate'), $node, $deployment);
+        $command = 'doctrine:migrate';
+        $this->shell->executeOrSimulate(
+            $application->buildCommand($targetPath, $application->getApplicationCommand('doctrine:migrate')),
+            $node,
+            $deployment
+        );
     }
 
     /**

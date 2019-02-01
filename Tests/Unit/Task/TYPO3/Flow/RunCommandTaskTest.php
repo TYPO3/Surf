@@ -64,3 +64,4 @@ class RunCommandTaskTest extends BaseTaskTest
         return new RunCommandTask();
     }
 }
+//'cd /home/jdoe/app/releases/20190201165619 && FLOW_CONTEXT=Production  ./flow neos.flow:example:command 'Some longer argument needing "escaping"'

@@ -61,7 +61,16 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
             '--package-key',
             $options['sitePackageKey']
         ];
-        $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'site:import', $arguments), $node, $deployment);
+        $command = 'site:import';
+        $this->shell->executeOrSimulate(
+            $application->buildCommand(
+                $targetPath,
+                $application->getCommandPackageKey($command) . ':' . $command,
+                $arguments
+            ),
+            $node,
+            $deployment
+        );
     }
 
     /**

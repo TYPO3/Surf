@@ -57,7 +57,7 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
             'cd ' . $baseDirectory
         ];
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
-            $commands[] = 'ln -s ' . $sourcePath . ' ' . $linkPath;
+            $commands[] = '[ -e ' . $linkPath . ' ] && rm ' . $linkPath . ' && ln -s ' . $sourcePath . ' ' . $linkPath;
         }
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }

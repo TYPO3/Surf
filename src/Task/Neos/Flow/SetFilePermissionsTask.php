@@ -65,9 +65,10 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
             isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data'
         ];
 
+        $command = 'core:setfilepermissions';
         $this->shell->executeOrSimulate($application->buildCommand(
             $targetPath,
-            'core:setfilepermissions',
+            $application->getApplicationCommand($command),
             $arguments
         ), $node, $deployment);
     }

@@ -194,6 +194,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      phpBinary => <success></success>
       context => <success>Production</success>
       scriptFileName => <success>vendor/bin/typo3cms</success>
       webDirectory => <success>web</success>
@@ -276,6 +277,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      phpBinary => <success></success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>
@@ -347,6 +349,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      phpBinary => <success></success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>
@@ -409,6 +412,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success></success>
+      phpBinary => <success></success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>
@@ -469,6 +473,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      phpBinary => <success></success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>

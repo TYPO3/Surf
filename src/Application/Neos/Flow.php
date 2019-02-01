@@ -169,6 +169,11 @@ class Flow extends BaseApplication
         return 'neos.flow';
     }
 
+    public function getApplicationCommand($command)
+    {
+        return $this->getCommandPackageKey($command) . ':' . $command;
+    }
+
     /**
      * Returns a executable flow command including the context
      *
@@ -179,8 +184,9 @@ class Flow extends BaseApplication
      */
     public function buildCommand($targetPath, $command, array $arguments = [])
     {
-        return 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $this->getContext() .
-            ' ./' . $this->getFlowScriptName() . ' ' . $this->getCommandPackageKey($command) . ':' . $command . ' '
+        return 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $this->getContext() . ' '
+            . $this->getOption('phpBinary') . ' ./' . $this->getFlowScriptName() . ' '
+            . $command . ' '
             . implode(' ', array_map('escapeshellarg', $arguments));
     }
 }

@@ -63,7 +63,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
         $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
         $targetPath = $deployment->getApplicationReleasePath($application);
         $arguments = $this->buildCommandArguments($options);
-        $command = 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $options['command'] . $arguments;
+        $command = $application->buildCommand($targetPath, $options['command'] . $arguments);
         $this->shell->executeOrSimulate($command, $node, $deployment, $ignoreErrors, $logOutput);
     }
 
@@ -105,9 +105,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
                 $options['arguments'] = [$options['arguments']];
             }
 
-            $options['arguments'] = array_map(function ($value) {
-                return escapeshellarg($value);
-            }, $options['arguments']);
+            $options['arguments'] = array_map('escapeshellarg', $options['arguments']);
 
             $arguments = ' ' . implode(' ', $options['arguments']);
         }

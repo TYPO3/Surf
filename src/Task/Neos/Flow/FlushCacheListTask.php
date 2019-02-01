@@ -72,10 +72,15 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
             $targetPath = $deployment->getApplicationReleasePath($application);
             foreach ($caches as $cache) {
                 $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
-                $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf(
-                    'flow:cache:flushone --identifier %s',
-                        $cache
-                ), $node, $deployment);
+                $command = sprintf('flow:cache:flushone --identifier %s', $cache);
+                $this->shell->executeOrSimulate(
+                    $application->buildCommand(
+                        $targetPath,
+                        $application->getApplicationCommand($command),
+                        $node,
+                        $deployment
+                    )
+                );
             }
         } else {
             throw new InvalidConfigurationException(sprintf(
