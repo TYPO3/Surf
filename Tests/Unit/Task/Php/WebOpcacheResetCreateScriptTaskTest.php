@@ -49,6 +49,23 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
     /**
      * @test
      */
+    public function createScriptInWebDirectory()
+    {
+        $this->application->setOption('webDirectory', 'public');
+        $randomBytes = random_bytes(32);
+        $expectedScriptIdentifier = bin2hex($randomBytes);
+
+        $expectedScriptIdentifierPath = sprintf('%s/surf-opcache-reset-%s.php', Files::concatenatePaths([$this->deployment->getWorkspacePath($this->application), 'public']), $expectedScriptIdentifier);
+        $this->filesystem->expects($this->once())->method('put')->with($expectedScriptIdentifierPath)->willReturn(true);
+        $this->randomBytesGenerator->expects($this->once())->method('generate')->willReturn($randomBytes);
+        $this->task->execute($this->node, $this->application, $this->deployment);
+
+        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]'));
+    }
+
+    /**
+     * @test
+     */
     public function createScriptByDefinedIdentifier()
     {
         $scriptIdentifier = '123456';
