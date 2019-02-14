@@ -41,7 +41,7 @@ If you would like to deploy a TYPO3 Website a good starting point is to use TYPO
            function () use ($deployment, $application) {
                $deployment->getWorkflow()
                    ->beforeTask(\TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask::class, \TYPO3\Surf\Task\TYPO3\CMS\CompareDatabaseTask::class, $application)
-                   ->beforeStage('transfer', TYPO3\Surf\Task\Php\WebOpcacheResetCreateScriptTask::class, $application)
+                   ->beforeStage('transfer', \TYPO3\Surf\Task\Php\WebOpcacheResetCreateScriptTask::class, $application)
                    ->afterStage('switch', \TYPO3\Surf\Task\Php\WebOpcacheResetExecuteTask::class, $application)
                    // CreatePackageStatesTask is done by post-autoload-dump script and can be removed
                    // https://github.com/TYPO3/TYPO3.CMS.BaseDistribution/blob/9.x/composer.json#L38
