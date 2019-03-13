@@ -42,16 +42,42 @@ class SymlinkDataTaskTest extends BaseTaskTest
      */
     public function withoutOptionsCreatesCorrectLinks()
     {
-        $options = [];
+        $options = [
+            'webDirectory' => '',
+        ];
+
+        $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
         $dataPath = '../../shared/Data';
         $this->assertCommandExecuted("cd '{$releasePath}'");
-        $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
-        $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin '{$releasePath}'/fileadmin");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/uploads '{$releasePath}'/uploads");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/fileadmin' ] || mkdir -p '{$dataPath}/fileadmin'; }");
+        $this->assertCommandExecuted("ln -sf '{$dataPath}/fileadmin' '{$releasePath}/fileadmin'");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/uploads' ] || mkdir -p '{$dataPath}/uploads'; }");
+        $this->assertCommandExecuted("ln -sf '{$dataPath}/uploads' '{$releasePath}/uploads'");
+    }
+
+    /**
+     * @test
+     */
+    public function disableCreationOfUploadsFolder()
+    {
+        $options = [
+            'webDirectory' => '',
+            'symlinkDataFolders' => ['fileadmin']
+        ];
+        $options = $this->mergeOptions($options);
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $dataPath = '../../shared/Data';
+        $this->assertNotContains("{ [ -d '{$dataPath}/uploads' ] || mkdir -p '{$dataPath}/uploads'; }", $this->commands['executed']);
+        $this->assertNotContains("ln -sf '{$dataPath}/uploads' '{$releasePath}/uploads'", $this->commands['executed']);
+
+        $this->assertCommandExecuted("cd '{$releasePath}'");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/fileadmin' ] || mkdir -p '{$dataPath}/fileadmin'; }");
+        $this->assertCommandExecuted("ln -sf '{$dataPath}/fileadmin' '{$releasePath}/fileadmin'");
     }
 
     /**
@@ -61,19 +87,21 @@ class SymlinkDataTaskTest extends BaseTaskTest
     {
         $options = [
             'directories' => ['pictures', 'test/assets'],
+            'webDirectory' => '',
         ];
+        $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
         $dataPath = '../../shared/Data';
         $this->assertCommandExecuted("cd '{$releasePath}'");
-        $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
-        $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/fileadmin '{$releasePath}'/fileadmin");
-        $this->assertCommandExecuted("ln -sf {$dataPath}/uploads '{$releasePath}'/uploads");
-        $this->assertCommandExecuted("{ [ -d '{$dataPath}/pictures' ] || mkdir -p '{$dataPath}/pictures' ; }");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/fileadmin' ] || mkdir -p '{$dataPath}/fileadmin'; }");
+        $this->assertCommandExecuted("ln -sf '{$dataPath}/fileadmin' '{$releasePath}/fileadmin'");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/uploads' ] || mkdir -p '{$dataPath}/uploads'; }");
+        $this->assertCommandExecuted("ln -sf '{$dataPath}/uploads' '{$releasePath}/uploads'");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/pictures' ] || mkdir -p '{$dataPath}/pictures'; }");
         $this->assertCommandExecuted("ln -sf '{$dataPath}/pictures' 'pictures'");
-        $this->assertCommandExecuted("{ [ -d '{$dataPath}/test/assets' ] || mkdir -p '{$dataPath}/test/assets' ; }");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/test/assets' ] || mkdir -p '{$dataPath}/test/assets'; }");
         $this->assertCommandExecuted("ln -sf '../{$dataPath}/test/assets' 'test/assets'");
     }
 
@@ -85,15 +113,16 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $options = [
             'webDirectory' => 'web/'
         ];
+        $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
         $dataPath = '../../shared/Data';
         $this->assertCommandExecuted("cd '{$releasePath}'");
-        $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
-        $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
-        $this->assertCommandExecuted("ln -sf ../{$dataPath}/fileadmin '{$releasePath}/web'/fileadmin");
-        $this->assertCommandExecuted("ln -sf ../{$dataPath}/uploads '{$releasePath}/web'/uploads");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/fileadmin' ] || mkdir -p '{$dataPath}/fileadmin'; }");
+        $this->assertCommandExecuted("ln -sf '../{$dataPath}/fileadmin' '{$releasePath}/web/fileadmin'");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/uploads' ] || mkdir -p '{$dataPath}/uploads'; }");
+        $this->assertCommandExecuted("ln -sf '../{$dataPath}/uploads' '{$releasePath}/web/uploads'");
     }
 
     /**
@@ -105,20 +134,33 @@ class SymlinkDataTaskTest extends BaseTaskTest
             'webDirectory' => 'web/',
             'directories' => ['pictures', 'test/assets', '/withSlashes/'],
         ];
+        $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
         $dataPath = '../../shared/Data';
         $this->assertCommandExecuted("cd '{$releasePath}'");
-        $this->assertCommandExecuted("{ [ -d {$dataPath}/fileadmin ] || mkdir -p {$dataPath}/fileadmin ; }");
-        $this->assertCommandExecuted("{ [ -d {$dataPath}/uploads ] || mkdir -p {$dataPath}/uploads ; }");
-        $this->assertCommandExecuted("ln -sf ../{$dataPath}/fileadmin '{$releasePath}/web'/fileadmin");
-        $this->assertCommandExecuted("ln -sf ../{$dataPath}/uploads '{$releasePath}/web'/uploads");
-        $this->assertCommandExecuted("{ [ -d '{$dataPath}/pictures' ] || mkdir -p '{$dataPath}/pictures' ; }");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/fileadmin' ] || mkdir -p '{$dataPath}/fileadmin'; }");
+        $this->assertCommandExecuted("ln -sf '../{$dataPath}/fileadmin' '{$releasePath}/web/fileadmin'");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/uploads' ] || mkdir -p '{$dataPath}/uploads'; }");
+        $this->assertCommandExecuted("ln -sf '../{$dataPath}/uploads' '{$releasePath}/web/uploads'");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/pictures' ] || mkdir -p '{$dataPath}/pictures'; }");
         $this->assertCommandExecuted("ln -sf '{$dataPath}/pictures' 'pictures'");
-        $this->assertCommandExecuted("{ [ -d '{$dataPath}/withSlashes' ] || mkdir -p '{$dataPath}/withSlashes' ; }");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/withSlashes' ] || mkdir -p '{$dataPath}/withSlashes'; }");
         $this->assertCommandExecuted("ln -sf '{$dataPath}/withSlashes' 'withSlashes'");
-        $this->assertCommandExecuted("{ [ -d '{$dataPath}/test/assets' ] || mkdir -p '{$dataPath}/test/assets' ; }");
+        $this->assertCommandExecuted("{ [ -d '{$dataPath}/test/assets' ] || mkdir -p '{$dataPath}/test/assets'; }");
         $this->assertCommandExecuted("ln -sf '../{$dataPath}/test/assets' 'test/assets'");
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return array
+     */
+    private function mergeOptions(array $options)
+    {
+        $options = array_merge($this->application->getOptions(), $options);
+
+        return $options;
     }
 }

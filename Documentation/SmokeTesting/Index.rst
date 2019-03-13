@@ -23,9 +23,9 @@ Then, add a test as follows to the deployment configuration::
 		'expectedStatus' => 200,
 		'expectedRegexp' => '/somethingYouExpectOnThePage/'
 	);
-	$workflow->defineTask('mycompany.mypackage:smoketest', \TYPO3\Surf\Task\Test\HttpTestTask::class, $smokeTestOptions);
+	$workflow->defineTask('MyCompany\\MyPackage\\SmokeTest', \TYPO3\Surf\Task\Test\HttpTestTask::class, $smokeTestOptions);
 
-	$workflow->addTask('mycompany.mypackage:smoketest', 'test', $application);
+	$workflow->addTask('MyCompany\\MyPackage\\SmokeTest', 'test', $application);
 
 The HTTP test has the following options:
 
@@ -52,3 +52,52 @@ Further options:
 * additionalCurlParameters (only if remote=TRUE): list of parameters which
   is directly passed to CURL. Especially useful to e.g. disable SSL certificate
   check (with --insecure)
+
+Tests in test stage and caches
+------------------------------
+
+In the test stage, the caches of the application is not flushed in order not to affect the live page.
+A possible solution is to disable caches when running smoke tests in the test stage on "next" release.
+
+TYPO3
+^^^^^
+
+AdditionalConfiguration.php::
+
+	if ($context->isTesting()){
+		foreach ($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'] as $cacheName => $cacheConfiguration) {
+			$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheName]['backend'] = \TYPO3\CMS\Core\Cache\Backend\NullBackend::class;
+		}
+	}
+
+.htaccess::
+
+	# Add Rewrite rule near https://github.com/TYPO3/TYPO3.CMS/blob/master/typo3/sysext/install/Resources/Private/FolderStructureTemplateFiles/root-htaccess#L270
+	RewriteCond %{HTTP_HOST} ^next\.example\.com$
+	RewriteRule .? - [E=TYPO3_CONTEXT:Testing]
+
+
+If you are not able to set environment variables via .htaccess, you can use composer autoloading and a PHP file.
+Thanks to the team of jweiland.net for this solution.
+
+Root composer.json::
+
+	{
+		"autoload": {
+			"files": ["scripts/typo3context.php"]
+		}
+	}
+
+typo3context.php::
+
+	<?php
+	// Set the application context in this file because it is not possible to set environment variables
+	// via .htaccess e.g. on domainFACTORY/jweiland.net servers
+	$context = 'Production';
+	// detect application context by domain
+	if (array_key_exists('HTTP_HOST', $_SERVER)) {
+		if (0 === strpos($_SERVER['HTTP_HOST'], 'next.')) {
+			$context = 'Testing';
+		}
+	}
+	putenv('TYPO3_CONTEXT=' . $context);

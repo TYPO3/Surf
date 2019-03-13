@@ -7,37 +7,45 @@ How to deploy TYPO3 websites
 
 If you would like to deploy a TYPO3 Website a good starting point is to use TYPO3\CMS Application class provided by Surf::
 
+   <?php
    /** @var \TYPO3\Surf\Domain\Model\Deployment $deployment */
 
-   $nodes['My Node'] = new \TYPO3\Surf\Domain\Model\Node('My Node');
-   $nodes['My Node']->setHostname('my.node.com')
-      ->setOption('username', 'myuser')
-      ->setOption('phpBinaryPathAndFilename', '/usr/local/bin/php_cli');
+   $node = new \TYPO3\Surf\Domain\Model\Node('my.node.com');
+   $node
+       ->setHostname($node->getName())
+       ->setOption('username', 'myuser')
+       ->setOption('phpBinaryPathAndFilename', '/usr/local/bin/php_cli');
 
-   $appOptions = [
-      'composerCommandPath' => 'composer',
-      'keepReleases' => 3,
-      'webDirectory' => 'public',
-      'repositoryUrl' =>  'file://' . dirname(__DIR__),
-      'rsyncExcludes' => [
-         '.docker*',
-         '.editorconfig',
-         '.env*',
-         '.git*',
-         '.surf',
-         'docker-compose.yml',
-         'public/fileadmin',
-         'public/uploads'
-      ]
-   ];
+   $application = new \TYPO3\Surf\Application\TYPO3\CMS();
+   $application
+       ->setDeploymentPath('/httpdocs')
+       ->setOption('baseUrl', 'https://my.node.com/')
+       ->setOption('webDirectory', 'public')
+       ->setOption('symlinkDataFolders', ['fileadmin'])
+       ->setOption('repositoryUrl', 'file://' . dirname(__DIR__))
+       ->setOption('keepReleases', 3)
+       ->setOption('composerCommandPath', 'composer')
+       ->setOption('rsyncExcludes', [
+           '.ddev',
+           '.git',
+           $application->getOption('webDirectory') . '/fileadmin',
+           'packages/**.sass'
+       ])
+       ->setOption('scriptBasePath', \TYPO3\Flow\Utility\Files::concatenatePaths([$deployment->getWorkspacePath($application), $application->getOption('webDirectory')]))
+       ->addSymlink($application->getOption('webDirectory') . '/typo3conf/LocalConfiguration.php', '../../../../shared/Configuration/LocalConfiguration.php')
+       ->addNode($node);
 
-   $app = new \TYPO3\Surf\Application\TYPO3\CMS();
-   $app->setNodes($nodes);
-   $app->addSymlink(
-      'public/typo3conf/LocalConfiguration.php', '../../../../shared/Configuration/LocalConfiguration.php'
-   );
-
-   $app->setOptions(array_merge($app->getOptions(), $appOptions));
-
-   $deployment->addApplication($app);
-
+   $deployment
+       ->addApplication($application)
+       ->onInitialize(
+           function () use ($deployment, $application) {
+               $deployment->getWorkflow()
+                   ->beforeTask(\TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask::class, \TYPO3\Surf\Task\TYPO3\CMS\CompareDatabaseTask::class, $application)
+                   ->beforeStage('transfer', \TYPO3\Surf\Task\Php\WebOpcacheResetCreateScriptTask::class, $application)
+                   ->afterStage('switch', \TYPO3\Surf\Task\Php\WebOpcacheResetExecuteTask::class, $application)
+                   // CreatePackageStatesTask is done by post-autoload-dump script and can be removed
+                   // https://github.com/TYPO3/TYPO3.CMS.BaseDistribution/blob/9.x/composer.json#L38
+                   ->removeTask(\TYPO3\Surf\Task\TYPO3\CMS\CreatePackageStatesTask::class, $application)
+                   ->removeTask(\TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask::class, $application);
+           }
+       );
