@@ -187,7 +187,7 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' --exclude \'web\/fileadmin\' --exclude \'web\/uploads\'/');
+        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'web\/fileadmin\' --exclude \'web\/uploads\'/');
     }
 
     /**
@@ -202,7 +202,7 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' --exclude \'public\/fileadmin\' --exclude \'public\/uploads\'/');
+        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'public\/fileadmin\' --exclude \'public\/uploads\'/');
     }
 
     /**
