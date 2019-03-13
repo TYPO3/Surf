@@ -31,7 +31,6 @@ If you would like to deploy a TYPO3 Website a good starting point is to use TYPO
            $application->getOption('webDirectory') . '/fileadmin',
            'packages/**.sass'
        ])
-       ->setOption('scriptBasePath', \TYPO3\Flow\Utility\Files::concatenatePaths([$deployment->getWorkspacePath($application), $application->getOption('webDirectory')]))
        ->addSymlink($application->getOption('webDirectory') . '/typo3conf/LocalConfiguration.php', '../../../../shared/Configuration/LocalConfiguration.php')
        ->addNode($node);
 
