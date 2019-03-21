@@ -59,6 +59,103 @@ class CommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
+    public function executeWithSupportedSuffixAsArray()
+    {
+        $options = [
+            'composerCommandPath' => '/my/path/to/composer.phar',
+            'command' => 'run-script',
+            'additionalArguments' => 'my-script',
+            'suffix' => ['2>&1']
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithSupportedSuffixAsString()
+    {
+        $options = [
+            'composerCommandPath' => '/my/path/to/composer.phar',
+            'command' => 'run-script',
+            'additionalArguments' => 'my-script',
+            'suffix' => '2>&1'
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/');
+    }
+
+
+    /**
+     * @test
+     */
+    public function executeWithSupportedEmptySuffixAsArray()
+    {
+        $options = [
+            'composerCommandPath' => '/my/path/to/composer.phar',
+            'command' => 'run-script',
+            'additionalArguments' => 'my-script',
+            'suffix' => [],
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithSupportedEmptySuffixAsString()
+    {
+        $options = [
+            'composerCommandPath' => '/my/path/to/composer.phar',
+            'command' => 'run-script',
+            'additionalArguments' => 'my-script',
+            'suffix' => '',
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithSupportedEmptySuffixAsNull()
+    {
+        $options = [
+            'composerCommandPath' => '/my/path/to/composer.phar',
+            'command' => 'run-script',
+            'additionalArguments' => 'my-script',
+            'suffix' => null
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithUnsupportedSuffixThrowsException()
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $options = [
+            'composerCommandPath' => '/my/path/to/composer.phar',
+            'command' => 'run-script',
+            'additionalArguments' => 'my-script',
+            'suffix' => ['&& echo \'Hello world!\'']
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+    }
+
+    /**
+     * @test
+     */
     public function executeUserConfiguredComposerUpdateCommand()
     {
         $options = [

@@ -15,6 +15,7 @@ TYPO3\\Surf\\Task\\Composer\\CommandTask
     * nodeName - The name of the node where the composer command should run.
     * arguments (optional) - Array of arguments to pass to the composer command, default `--no-ansi --no-interaction`
     * additionalArguments (optional) - Array of additional arguments to pass to composer and keep default arguments
+    * suffix (optional) - Array, string or null with the suffix command, either `['2>&1']`, `[]`, `'2>&1'`, `''` or `null`
     * useApplicationWorkspace (optional) - If true Surf uses the workspace path, else it uses the release path of the application.
 
     Example:
