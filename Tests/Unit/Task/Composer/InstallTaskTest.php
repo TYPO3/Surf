@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Composer;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -24,6 +25,18 @@ class InstallTaskTest extends BaseTaskTest
         parent::setUp();
 
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    /**
+     * @test
+     */
+    public function noComposerCommandPathGivenThrowsException()
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $options = [
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
     }
 
     /**

@@ -10,6 +10,10 @@ TYPO3\\Surf\\Task\\Transfer\\RsyncTask
 
     Copies the application assets from the application workspace to the node using rsync.
 
+    .. php:attr:: replacePaths
+
+        protected array
+
     .. php:attr:: shell
 
         protected ShellCommandService

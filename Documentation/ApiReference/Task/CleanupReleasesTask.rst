@@ -15,14 +15,23 @@ TYPO3\\Surf\\Task\\CleanupReleasesTask
     It takes the following options:
 
     * keepReleases - The number of releases to keep.
+    * onlyRemoveReleasesOlderThanXSeconds - Remove only those releases older than the defined seconds
 
     Example configuration:
         $application->setOption('keepReleases', 2);
+        $application->setOption('onlyRemoveReleasesOlderThan', '121 seconds ago')
     Note: There is no rollback for this cleanup, so we have to be sure not to delete any live or referenced releases.
 
     .. php:attr:: shell
 
         protected ShellCommandService
+
+    .. php:method:: __construct(ClockInterface $clock = null)
+
+        CleanupReleasesTask constructor.
+
+        :type $clock: ClockInterface
+        :param $clock:
 
     .. php:method:: execute(Node $node, Application $application, Deployment $deployment, $options = [])
 
@@ -36,6 +45,7 @@ TYPO3\\Surf\\Task\\CleanupReleasesTask
         :param $deployment:
         :type $options: array
         :param $options:
+        :returns: void|null
 
     .. php:method:: simulate(Node $node, Application $application, Deployment $deployment, $options = [])
 
@@ -49,6 +59,22 @@ TYPO3\\Surf\\Task\\CleanupReleasesTask
         :param $deployment:
         :type $options: array
         :param $options:
+
+    .. php:method:: removeReleasesByAge($options, $removableReleases)
+
+        :type $options: array
+        :param $options:
+        :type $removableReleases: array
+        :param $removableReleases:
+        :returns: array
+
+    .. php:method:: removeReleasesByNumber($options, $removableReleases)
+
+        :type $options: array
+        :param $options:
+        :type $removableReleases: array
+        :param $removableReleases:
+        :returns: array
 
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 

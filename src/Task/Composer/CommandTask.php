@@ -13,6 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * Runs a custom composer command
@@ -47,8 +49,8 @@ class CommandTask extends AbstractComposerTask
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -66,6 +68,7 @@ class CommandTask extends AbstractComposerTask
      */
     protected function resolveOptions(OptionsResolver $resolver)
     {
+        parent::resolveOptions($resolver);
         $resolver->setDefaults([
             'command' => null,
             'arguments' => ['--no-ansi', '--no-interaction'],
@@ -75,20 +78,20 @@ class CommandTask extends AbstractComposerTask
         $resolver
             ->setRequired('command')
             ->setAllowedTypes('command', 'string')
-            ->setNormalizer('command', function (Options $options, $value) {
+            ->setNormalizer('command', static function (Options $options, $value) {
                 return escapeshellarg($value);
             });
 
         $resolver
             ->setAllowedTypes('arguments', 'array')
-            ->setNormalizer('arguments', function (Options $options, $value) {
+            ->setNormalizer('arguments', static function (Options $options, $value) {
                 return array_map('escapeshellarg', $value);
             });
 
         $resolver
             ->setAllowedTypes('suffix', ['array', 'string', 'null'])
             ->setAllowedValues('suffix', [['2>&1'], [], '2>&1', '', null])
-            ->setNormalizer('suffix', function (Options $options, $value) {
+            ->setNormalizer('suffix', static function (Options $options, $value) {
                 $value = ($value === '') ? null : $value;
                 return (array)$value;
             });
