@@ -91,6 +91,6 @@ class CommandTask extends AbstractComposerTask
             ->setNormalizer('suffix', function (Options $options, $value) {
                 $value = ($value === '') ? null : $value;
                 return (array)$value;
-            });;
+            });
     }
 }
