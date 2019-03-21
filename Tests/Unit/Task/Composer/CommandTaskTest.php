@@ -88,7 +88,6 @@ class CommandTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/');
     }
 
-
     /**
      * @test
      */
