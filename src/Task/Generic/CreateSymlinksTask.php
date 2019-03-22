@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Generic;
 
 /*
@@ -8,6 +9,8 @@ namespace TYPO3\Surf\Task\Generic;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -43,22 +46,22 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['symlinks']) || !is_array($options['symlinks'])) {
+        $options = $this->configureOptions($options);
+
+        if (empty($options['symlinks'])) {
             return;
         }
 
-        if (isset($options['genericSymlinksBaseDir']) && !empty($options['genericSymlinksBaseDir'])) {
-            $baseDirectory = $options['genericSymlinksBaseDir'];
-        } else {
-            $baseDirectory = $deployment->getApplicationReleasePath($application);
-        }
+        $baseDirectory = $options['genericSymlinksBaseDir'] ?: $deployment->getApplicationReleasePath($application);
 
         $commands = [
-            'cd ' . $baseDirectory
+            'cd ' . $baseDirectory,
         ];
+
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
-            $commands[] = 'ln -s ' . $sourcePath . ' ' . $linkPath;
+            $commands[] = sprintf('ln -s %s %s', $sourcePath, $linkPath);
         }
+
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
@@ -73,5 +76,19 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('symlinks', []);
+        $resolver->setAllowedTypes('symlinks', 'array');
+        $resolver->setDefault('genericSymlinksBaseDir', null);
+        $resolver->setAllowedTypes('genericSymlinksBaseDir', ['string', 'null']);
+        $resolver->setNormalizer('genericSymlinksBaseDir', function (Options $options, $value) {
+            return ! empty($value) ? $value : null;
+        });
     }
 }

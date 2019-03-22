@@ -48,6 +48,11 @@ TYPO3\\Surf\\Task\\Generic\\CreateSymlinksTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
@@ -71,8 +76,3 @@ TYPO3\\Surf\\Task\\Generic\\CreateSymlinksTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:
