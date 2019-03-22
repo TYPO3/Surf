@@ -27,6 +27,13 @@ TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask
              ]
          );
 
+    .. php:method:: __construct(FilesystemInterface $filesystem = null)
+
+        WebOpcacheResetCreateScriptTask constructor.
+
+        :type $filesystem: FilesystemInterface
+        :param $filesystem:
+
     .. php:method:: execute(Node $node, Application $application, Deployment $deployment, $options = [])
 
         Execute this task
@@ -39,6 +46,11 @@ TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask
         :param $deployment:
         :type $options: array
         :param $options: Supported options: "baseUrl" (required) and "scriptIdentifier" (is passed by the create script task)
+
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
 
     .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
 
@@ -71,8 +83,3 @@ TYPO3\\Surf\\Task\\Php\\WebOpcacheResetExecuteTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:
