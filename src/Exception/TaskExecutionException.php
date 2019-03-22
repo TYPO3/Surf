@@ -17,4 +17,14 @@ use TYPO3\Surf\Exception as SurfException;
  */
 class TaskExecutionException extends SurfException
 {
+
+    /**
+     * @param string $scriptUrl
+     *
+     * @return TaskExecutionException
+     */
+    public static function webOpcacheResetExecuteTaskDidNotReturnExpectedResult($scriptUrl)
+    {
+        return new static(sprintf('WebOpcacheResetExecuteTask at "%s" did not return expected result', $scriptUrl), 1471511860);
+    }
 }

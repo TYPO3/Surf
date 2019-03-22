@@ -26,6 +26,12 @@ TYPO3\\Surf\\Exception\\TaskExecutionException
 
         protected
 
+    .. php:method:: webOpcacheResetExecuteTaskDidNotReturnExpectedResult($scriptUrl)
+
+        :type $scriptUrl: string
+        :param $scriptUrl:
+        :returns: TaskExecutionException
+
     .. php:method:: __clone()
 
     .. php:method:: __construct($message, $code, $previous)
