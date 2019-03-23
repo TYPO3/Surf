@@ -27,4 +27,14 @@ class TaskExecutionException extends SurfException
     {
         return new static(sprintf('WebOpcacheResetExecuteTask at "%s" did not return expected result', $scriptUrl), 1471511860);
     }
+
+    /**
+     * @param string $scriptFilename
+     *
+     * @return TaskExecutionException
+     */
+    public static function webOpcacheResetCreateScriptTaskCouldNotWritFile($scriptFilename)
+    {
+        return new static(sprintf('Could not write file "%s"', $scriptFilename), 1421932414);
+    }
 }

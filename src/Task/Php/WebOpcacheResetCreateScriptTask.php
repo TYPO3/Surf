@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Task\Php;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Filesystem\Filesystem;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
@@ -88,11 +89,13 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        $options = $this->configureOptions($options);
+
         $workspacePath = $deployment->getWorkspacePath($application);
         $webDirectory = $application->hasOption('webDirectory') ? $application->getOption('webDirectory') : 'Web';
-        $scriptBasePath = isset($options['scriptBasePath']) ? $options['scriptBasePath'] : Files::concatenatePaths([$workspacePath, $webDirectory]);
+        $scriptBasePath = $options['scriptBasePath'] ?: Files::concatenatePaths([$workspacePath, $webDirectory]);
 
-        if (! isset($options['scriptIdentifier'])) {
+        if ($options['scriptIdentifier'] === null) {
             // Store the script identifier as an application option
             $scriptIdentifier = bin2hex($this->randomBytesGenerator->generate(32));
             $application->setOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]', $scriptIdentifier);
@@ -112,6 +115,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
 
         if (! $deployment->isDryRun()) {
             $scriptFilename = sprintf('%s/surf-opcache-reset-%s.php', $scriptBasePath, $scriptIdentifier);
+
             $result = $this->filesystem->put($scriptFilename, '<?php
                 if (function_exists("opcache_reset")) {
                     opcache_reset();
@@ -121,8 +125,19 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
             ');
 
             if ($result === false) {
-                throw new TaskExecutionException('Could not write file "' . $scriptFilename . '"', 1421932414);
+                throw TaskExecutionException::webOpcacheResetCreateScriptTaskCouldNotWritFile($scriptFilename);
             }
         }
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     *
+     * @throws \Exception
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('scriptIdentifier', null);
+        $resolver->setDefault('scriptBasePath', null);
     }
 }

@@ -32,6 +32,12 @@ TYPO3\\Surf\\Exception\\TaskExecutionException
         :param $scriptUrl:
         :returns: TaskExecutionException
 
+    .. php:method:: webOpcacheResetCreateScriptTaskCouldNotWritFile($scriptFilename)
+
+        :type $scriptFilename: string
+        :param $scriptFilename:
+        :returns: TaskExecutionException
+
     .. php:method:: __clone()
 
     .. php:method:: __construct($message, $code, $previous)
