@@ -38,43 +38,10 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\RunCommandTask
         :type $options: array
         :param $options:
 
-    .. php:method:: simulate(Node $node, Application $application, Deployment $deployment, $options = [])
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
 
-        Simulate this task
-
-        :type $node: Node
-        :param $node:
-        :type $application: Application
-        :param $application:
-        :type $deployment: Deployment
-        :param $deployment:
-        :type $options: array
-        :param $options:
-
-    .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
-
-        Rollback the task
-
-        :type $node: Node
-        :param $node:
-        :type $application: Application
-        :param $application:
-        :type $deployment: Deployment
-        :param $deployment:
-        :type $options: array
-        :param $options:
-
-    .. php:method:: getArguments(Node $node, CMS $application, Deployment $deployment, $options = [])
-
-        :type $node: Node
-        :param $node:
-        :type $application: CMS
-        :param $application:
-        :type $deployment: Deployment
-        :param $deployment:
-        :type $options: array
-        :param $options: The command options
-        :returns: array all arguments
+        :type $resolver: OptionsResolver
+        :param $resolver:
 
     .. php:method:: executeCliCommand($cliArguments, Node $node, CMS $application, Deployment $deployment, $options = [])
 
@@ -91,6 +58,19 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\RunCommandTask
         :type $options: array
         :param $options:
         :returns: bool|mixed
+
+    .. php:method:: simulate(Node $node, Application $application, Deployment $deployment, $options = [])
+
+        Simulate this task
+
+        :type $node: Node
+        :param $node:
+        :type $application: Application
+        :param $application:
+        :type $deployment: Deployment
+        :param $deployment:
+        :type $options: array
+        :param $options:
 
     .. php:method:: determineWorkingDirectoryAndTargetNode(Node $node, Application $application, Deployment $deployment, $options = [])
 
@@ -194,13 +174,21 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\RunCommandTask
         :type $shellCommandService: ShellCommandService
         :param $shellCommandService:
 
+    .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
+
+        Rollback this task
+
+        :type $node: Node
+        :param $node:
+        :type $application: Application
+        :param $application:
+        :type $deployment: Deployment
+        :param $deployment:
+        :type $options: array
+        :param $options:
+
     .. php:method:: configureOptions($options = [])
 
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:
