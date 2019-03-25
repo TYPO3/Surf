@@ -12,6 +12,8 @@ namespace TYPO3\Surf\Task\Test;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\HttpResponse;
@@ -72,32 +74,56 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (! isset($options['url'])) {
-            throw new InvalidConfigurationException('No url option provided for HttpTestTask', 1319534939);
-        }
+        $options = $this->configureOptions($options);
 
         $deployment->getLogger()->debug(sprintf('Requesting Url %s', $options['url']));
 
-        if (isset($options['remote']) && (bool)$options['remote']) {
+        if ($options['remote']) {
             $response = $this->executeRemoteCurlRequest(
                 $options['url'],
                 $node,
                 $deployment,
-                isset($options['additionalCurlParameters']) ? $options['additionalCurlParameters'] : ''
+                $options['additionalCurlParameters']
             );
         } else {
             $response = $this->executeLocalCurlRequest($options['url'], $options);
         }
 
-        if (isset($options['expectedStatus'])) {
+        if ($options['expectedStatus'] !== null) {
             $this->assertExpectedStatus($options['expectedStatus'], $response->getStatusCode());
         }
-        if (isset($options['expectedHeaders'])) {
+        if ($options['expectedHeaders'] !== null) {
             $this->assertExpectedHeaders($this->extractHeadersFromMultiLineString($options['expectedHeaders']), $response->getHeaders());
         }
-        if (isset($options['expectedRegexp'])) {
+        if ($options['expectedRegexp'] !== null) {
             $this->assertExpectedRegexp(explode(chr(10), $options['expectedRegexp']), $response->getBody());
         }
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('url');
+        $resolver->setDefaults([
+            'remote' => false,
+            'additionalCurlParameters' => '',
+            'expectedStatus' => null,
+            'expectedHeaders' => null,
+            'expectedRegexp' => null,
+            'timeout' => null,
+            'port' => null,
+            'method' => null,
+            'username' => null,
+            'password' => null,
+            'data' => null,
+            'proxy' => null,
+            'proxyPort' => null,
+        ]);
+        $resolver->setNormalizer('remote', function (Options $options, $value) {
+            return (bool)$value;
+        });
     }
 
     /**
@@ -203,42 +229,34 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function executeLocalCurlRequest($url, array $options = [])
     {
-        $timeout = isset($options['timeout']) ? $options['timeout'] : null;
-        $port = isset($options['port']) ? $options['port'] : null;
-        $method = isset($options['method']) ? $options['method'] : 'GET';
-        $username = isset($options['username']) ? $options['username'] : null;
-        $password = isset($options['password']) ? $options['password'] : null;
-        $data = isset($options['data']) ? $options['data'] : '';
-        $proxy = isset($options['proxy']) ? $options['proxy'] : null;
-        $proxyPort = isset($options['proxyPort']) ? $options['proxyPort'] : null;
-
         $guzzleOptions = [];
 
-        if ($username !== null && $password !== null) {
-            $guzzleOptions['auth'] = [$username, $password];
+        if ($options['username'] !== null && $options['password'] !== null) {
+            $guzzleOptions['auth'] = [$options['username'], $options['password']];
         }
 
-        if ($timeout !== null) {
-            $guzzleOptions['timeout'] = (int)ceil($timeout / 1000);
+        if ($options['timeout'] !== null) {
+            $guzzleOptions['timeout'] = (int)ceil($options['timeout'] / 1000);
         }
 
-        if ($port !== null) {
-            $guzzleOptions['port'] = (int)$port;
+        if ($options['port'] !== null) {
+            $guzzleOptions['port'] = (int)$options['port'];
         }
 
-        if ($proxy !== null && $proxyPort !== null) {
-            $guzzleOptions['proxy'] = sprintf('%s:%d', $proxy, $proxyPort);
+        if ($options['proxy'] !== null && $options['proxyPort'] !== null) {
+            $guzzleOptions['proxy'] = sprintf('%s:%d', $options['proxy'], $options['proxyPort']);
         }
 
-        if ($data !== null && $data !== '') {
-            $guzzleOptions['body'] = $data;
+        if ($options['data'] !== null && $options['data'] !== '') {
+            $guzzleOptions['body'] = $options['data'];
             $guzzleOptions['headers'] = [
-                'Content-Length' => strlen($data),
+                'Content-Length' => strlen($options['data']),
             ];
         }
 
         try {
-            $response = $this->client->request($method, $url, $guzzleOptions);
+            $response = $this->client->request($options['method'], $url, $guzzleOptions);
+
             return new HttpResponse($response->getBody()->getContents(), $response->getHeaders(), $response->getStatusCode());
         } catch (RequestException $e) {
             throw new TaskExecutionException('HTTP request did not return a response', 1334347427);
