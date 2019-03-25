@@ -39,6 +39,11 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: executeCliCommand($cliArguments, Node $node, CMS $application, Deployment $deployment, $options = [])
 
         Execute this task
@@ -188,8 +193,3 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:
