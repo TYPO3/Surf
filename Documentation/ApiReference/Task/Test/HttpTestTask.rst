@@ -39,6 +39,11 @@ TYPO3\\Surf\\Task\\Test\\HttpTestTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: assertExpectedStatus($expected, $actual)
 
         :type $expected: int
@@ -134,8 +139,3 @@ TYPO3\\Surf\\Task\\Test\\HttpTestTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:
