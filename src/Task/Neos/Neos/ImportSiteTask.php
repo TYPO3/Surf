@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Task\Neos\Neos;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -52,9 +53,8 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
         if (!$application instanceof Flow) {
             throw new InvalidConfigurationException(sprintf('Flow application needed for ImportSiteTask, got "%s"', get_class($application)), 1358863473);
         }
-        if (!isset($options['sitePackageKey'])) {
-            throw new InvalidConfigurationException(sprintf('"sitePackageKey" option not set for application "%s"', $application->getName()), 1312312646);
-        }
+
+        $options = $this->configureOptions($options);
 
         $targetPath = $deployment->getApplicationReleasePath($application);
         $arguments = [
@@ -78,15 +78,10 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * Rollback the task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
+     * @param OptionsResolver $resolver
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        // TODO Implement rollback
+        $resolver->setRequired('sitePackageKey');
     }
 }
