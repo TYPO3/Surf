@@ -90,11 +90,11 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('flushCacheList');
-        $resolver->setAllowedValues('flushCacheList', function ($value) {
+        $resolver->setAllowedValues('flushCacheList', static function ($value) {
             return trim($value) !== '';
         });
 
-        $resolver->setNormalizer('flushCacheList', function (Options $options, $value) {
+        $resolver->setNormalizer('flushCacheList', static function (Options $options, $value) {
             return is_array($value) ? $value : explode(',', $value);
         });
     }
