@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -16,6 +17,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use Webmozart\Assert\Assert;
 
 /**
  * This Task runs functional tests for a flow application
@@ -30,19 +32,21 @@ class FunctionalTestTask extends Task implements ShellCommandServiceAwareInterfa
      * Execute this task
      *
      * @param Node $node
-     * @param Application $application
+     * @param Application|Flow $application
      * @param Deployment $deployment
      * @param array $options
+     *
      * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!$application instanceof Flow) {
-            throw new InvalidConfigurationException(sprintf('Flow application needed for FunctionalTestTask, got "%s"', get_class($application)), 1358865890);
-        }
+        Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for FunctionalTestTask, got "%s"', get_class($application)));
 
         $targetPath = $deployment->getApplicationReleasePath($application);
-        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && phpunit -c Build/' . $application->getBuildEssentialsDirectoryName() . '/PhpUnit/FunctionalTests.xml', $node, $deployment);
+
+        $command = sprintf('cd %s && phpunit -c Build/%s/PhpUnit/FunctionalTests.xml', $targetPath, $application->getBuildEssentialsDirectoryName());
+
+        $this->shell->executeOrSimulate($command, $node, $deployment);
     }
 
     /**
