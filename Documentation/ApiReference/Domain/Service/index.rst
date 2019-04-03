@@ -10,4 +10,3 @@ TYPO3\\Surf\\Domain\\Service
    ShellCommandService
    ShellCommandServiceAwareInterface
    TaskManager
-   GitService
