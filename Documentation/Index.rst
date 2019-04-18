@@ -55,6 +55,7 @@ Surf package is a complete automated deployment tool. It is best used but by far
      :titlesonly:
      :glob:
 
+     Introduction/Index
      Installation/Index
      Usage/Index
      Architecture/Index
