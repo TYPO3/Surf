@@ -37,7 +37,7 @@ class ShellCommandService
         } else {
             list($exitCode, $returnedOutput) = $this->executeRemoteCommand($command, $node, $deployment, $logOutput);
         }
-        if ($ignoreErrors !== true && $exitCode !== 0) {
+        if (!$ignoreErrors && $exitCode !== 0) {
             $deployment->getLogger()->warning(rtrim($returnedOutput));
             throw new TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
         }
@@ -124,7 +124,7 @@ class ShellCommandService
 
         $username = $node->hasOption('username') ? $node->getOption('username') : null;
         if (!empty($username)) {
-            $username = $username . '@';
+            $username .= '@';
         }
         $hostname = $node->getHostname();
 

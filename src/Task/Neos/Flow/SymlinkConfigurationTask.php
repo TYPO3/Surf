@@ -42,11 +42,7 @@ class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareI
     {
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
 
-        if ($application instanceof Flow) {
-            $context = $application->getContext();
-        } else {
-            $context = 'Production';
-        }
+        $context = $application instanceof Flow ? $application->getContext() : 'Production';
 
         $commands = [
             "cd {$targetReleasePath}/Configuration",
