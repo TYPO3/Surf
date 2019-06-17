@@ -18,4 +18,13 @@ interface FilesystemInterface
      * @return bool|int
      */
     public function put($filename, $content);
+
+    /**
+     * @param string $filename
+     * @param bool $includePath
+     * @param resource|null $streamContext
+     *
+     * @return false|string
+     */
+    public function get($filename, $includePath = false, $streamContext = null);
 }

@@ -4,6 +4,9 @@
 TYPO3 Surf |version| documentation
 ==================================
 
+**What is Surf**
+Surf package is a complete automated deployment tool. It is best used but by far not limited to deploy TYPO3 CMS and Flow applications. It's inspired by some features of Capistrano (thanks) concerning the Git workflow.
+
 .. only:: html
 
    :Classification:
@@ -33,9 +36,17 @@ TYPO3 Surf |version| documentation
    :Rendered:
       |today|
 
-   The content of this document is related to TYPO3,
-   a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_.
+**TYPO3**
+   The content of this document is related to TYPO3 CMS,
+   a GNU/GPL CMS/Framework available from `typo3.org
+   <https://typo3.org/>`_ .
 
+**About this manual:**
+
+   This is the official documentation to discover the main features and concepts of Surf.
+
+   If you find an error or something is missing in the documentation or in the code, please:
+   `Report a Problem <https://github.com/TYPO3/Surf/issues/new>`__
 
    **Table of Contents**
 
@@ -44,6 +55,7 @@ TYPO3 Surf |version| documentation
      :titlesonly:
      :glob:
 
+     Introduction/Index
      Installation/Index
      Usage/Index
      Architecture/Index

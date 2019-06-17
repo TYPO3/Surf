@@ -40,9 +40,14 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask
         :type $options: array
         :param $options:
 
+    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
+
+        :type $shellCommandService: ShellCommandService
+        :param $shellCommandService:
+
     .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
 
-        Rollback the task
+        Rollback this task
 
         :type $node: Node
         :param $node:
@@ -52,11 +57,6 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask
         :param $deployment:
         :type $options: array
         :param $options:
-
-    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
-
-        :type $shellCommandService: ShellCommandService
-        :param $shellCommandService:
 
     .. php:method:: configureOptions($options = [])
 

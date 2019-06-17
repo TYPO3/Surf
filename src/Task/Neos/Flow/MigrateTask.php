@@ -16,6 +16,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use Webmozart\Assert\Assert;
 
 /**
  * This tasks runs the doctrine:migrate command
@@ -30,16 +31,14 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
      * Execute this task
      *
      * @param Node $node
-     * @param Application $application
+     * @param Application|Flow $application
      * @param Deployment $deployment
      * @param array $options
      * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!$application instanceof Flow) {
-            throw new InvalidConfigurationException(sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)), 1358863288);
-        }
+        Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)));
 
         $targetPath = $deployment->getApplicationReleasePath($application);
         $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'doctrine:migrate'), $node, $deployment);
@@ -56,18 +55,5 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
-    }
-
-    /**
-     * Rollback the task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
-    {
-        // TODO Implement rollback of Doctrine migration
     }
 }

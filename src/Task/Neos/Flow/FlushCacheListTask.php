@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -8,6 +9,9 @@ namespace TYPO3\Surf\Task\Neos\Flow;
  * file that was distributed with this source code.
  */
 
+use InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\Neos\Flow as FlowApplication;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -15,7 +19,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
+use Webmozart\Assert\Assert;
 
 /**
  * This tasks clears the list of Flow Framework cache
@@ -43,45 +47,27 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
      * Execute this task
      *
      * @param Node $node
-     * @param Application $application
+     * @param Application|FlowApplication $application
      * @param Deployment $deployment
      * @param array $options
-     * @throws InvalidConfigurationException
+     *
+     * @throws InvalidArgumentException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!$application instanceof FlowApplication) {
-            throw new InvalidConfigurationException(sprintf(
-                'Flow application needed for MigrateTask, got "%s"',
-                get_class($application)
-            ), 1429774224);
-        }
+        Assert::isInstanceOf($application, FlowApplication::class, sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)));
+        Assert::greaterThanEq($application->getVersion(), '2.3', sprintf('FlushCacheListTask is available since Flow Framework 2.3, your application version is "%s"', $application->getVersion()));
 
-        if (!isset($options['flushCacheList']) || trim($options['flushCacheList']) === '') {
-            throw new InvalidConfigurationException(
-                'Missing option "flushCacheList" for FlushCacheListTask',
-                1429774229
-            );
-        }
+        $options = $this->configureOptions($options);
 
-        if ($application->getVersion() >= '2.3') {
-            $caches = is_array($options['flushCacheList']) ? $options['flushCacheList'] : explode(
-                ',',
-                $options['flushCacheList']
-            );
-            $targetPath = $deployment->getApplicationReleasePath($application);
-            foreach ($caches as $cache) {
-                $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
-                $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf(
+        $targetPath = $deployment->getApplicationReleasePath($application);
+
+        foreach ($options['flushCacheList'] as $cache) {
+            $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
+            $this->shell->executeOrSimulate('cd ' . $targetPath . ' && ' . 'FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . sprintf(
                     'flow:cache:flushone --identifier %s',
-                        $cache
+                    $cache
                 ), $node, $deployment);
-            }
-        } else {
-            throw new InvalidConfigurationException(sprintf(
-                'FlushCacheListTask is available since Flow Framework 2.3, your application version is "%s"',
-                $application->getVersion()
-            ), 1434126060);
         }
     }
 
@@ -99,15 +85,17 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
     }
 
     /**
-     * Rollback the task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
+     * @param OptionsResolver $resolver
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        // Unable to rollback a clear cache command
+        $resolver->setRequired('flushCacheList');
+        $resolver->setAllowedValues('flushCacheList', static function ($value) {
+            return trim($value) !== '';
+        });
+
+        $resolver->setNormalizer('flushCacheList', static function (Options $options, $value) {
+            return is_array($value) ? $value : explode(',', $value);
+        });
     }
 }

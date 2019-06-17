@@ -251,14 +251,15 @@ class BaseApplication extends Application
             case 'git':
                 $workflow->addTask(GitTask::class, 'package', $this);
                 $workflow->defineTask(
-                    'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
+                    $localInstallTask = 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
                     InstallTask::class,
                     [
                         'nodeName' => 'localhost',
                         'useApplicationWorkspace' => true,
+                        'additionalArguments' => ['--ignore-platform-reqs'],
                     ]
                 );
-                $workflow->afterTask(GitTask::class, 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', $this);
+                $workflow->afterTask(GitTask::class, $localInstallTask, $this);
                 break;
         }
     }

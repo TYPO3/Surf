@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Php;
 
 /*
@@ -8,11 +9,14 @@ namespace TYPO3\Surf\Task\Php;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use TYPO3\Surf\Domain\Filesystem\Filesystem;
+use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
@@ -39,6 +43,26 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  */
 class WebOpcacheResetExecuteTask extends Task
 {
+
+    /**
+     * @var FilesystemInterface
+     */
+    private $filesystem;
+
+    /**
+     * WebOpcacheResetCreateScriptTask constructor.
+     *
+     * @param FilesystemInterface $filesystem
+     */
+    public function __construct(FilesystemInterface $filesystem = null)
+    {
+        if (! $filesystem instanceof FilesystemInterface) {
+            $filesystem = new Filesystem();
+        }
+
+        $this->filesystem = $filesystem;
+    }
+
     /**
      * Execute this task
      *
@@ -46,32 +70,42 @@ class WebOpcacheResetExecuteTask extends Task
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options Supported options: "baseUrl" (required) and "scriptIdentifier" (is passed by the create script task)
+     *
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['baseUrl'])) {
-            throw new InvalidConfigurationException('No "baseUrl" option provided for WebOpcacheResetExecuteTask', 1421932609);
-        }
-        if (!isset($options['scriptIdentifier'])) {
-            throw new InvalidConfigurationException('No "scriptIdentifier" option provided for WebOpcacheResetExecuteTask, make sure to execute "TYPO3\\Surf\\Task\\Php\\WebOpcacheResetCreateScriptTask" before this task or pass one explicitly', 1421932610);
-        }
+        $options = $this->configureOptions($options);
 
-        $streamContext = null;
-        if (isset($options['stream_context']) && is_array($options['stream_context'])) {
-            $streamContext = stream_context_create($options['stream_context']);
-        }
+        $scriptUrl = sprintf('%s/surf-opcache-reset-%s.php', $options['baseUrl'], $options['scriptIdentifier']);
 
-        $scriptIdentifier = $options['scriptIdentifier'];
-        $scriptUrl = rtrim($options['baseUrl'], '/') . '/surf-opcache-reset-' . $scriptIdentifier . '.php';
+        $result = $this->filesystem->get($scriptUrl, false, $options['stream_context']);
 
-        $result = file_get_contents($scriptUrl, false, $streamContext);
         if ($result !== 'success') {
-            if (isset($options['throwErrorOnWebOpCacheResetExecuteTask']) && $options['throwErrorOnWebOpCacheResetExecuteTask']) {
-                throw new TaskExecutionException('WebOpcacheResetExecuteTask at "' . $scriptUrl . '" did not return expected result', 1471511860);
+            if ($options['throwErrorOnWebOpCacheResetExecuteTask']) {
+                throw TaskExecutionException::webOpcacheResetExecuteTaskDidNotReturnExpectedResult($scriptUrl);
             }
-            $deployment->getLogger()->warning('Executing PHP opcache reset script at "' . $scriptUrl . '" did not return expected result');
+
+            $deployment->getLogger()->warning(sprintf('Executing PHP opcache reset script at "%s" did not return expected result', $scriptUrl));
         }
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['baseUrl', 'scriptIdentifier']);
+        $resolver->setDefault('throwErrorOnWebOpCacheResetExecuteTask', false);
+        $resolver->setDefault('stream_context', null);
+
+        $resolver->setNormalizer('stream_context', function (Options $options, $value) {
+            return is_array($value) ? stream_context_create($value) : null;
+        });
+
+        $resolver->setNormalizer('baseUrl', function (Options $options, $value) {
+            return rtrim($value, '/');
+        });
     }
 }
