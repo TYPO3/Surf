@@ -13,6 +13,8 @@ addons:
 notifications:
   slack:
     secure: PTNdRPBJpEn37XIkuWW3qYOls00FQf6XiGhi+D7+lm920pQMdk4jSVTkFtZpetLUmaB6fIC8wZp/tgJF8q1TrqbRdb+6xYaZTG8wDF3AZ/1UKWQtm8x5+VKHK/FOYW/K8gxbV4rtz3jKokZpA0iCJW5gA6v2NdkjWeNJghk9MNz/sJh6FFXbrbZMKj3jTTk1pmpuDKRxfKwsD7HQXqLad+qRRye6d0dFhfRE4MlrpcaceDRy2Ev1SDGi4eKUOlXLvkTkPpqHemcElEUXF8ITXoAhwddzG0Msq9ee482F8lMkVXGwejozkGAUw4sClTHEaa1sZ+pvrlQKQmvlmoFmrFmmpRY6jPBvq+GykuoTGvjmGNkv1D3d1279+Ff1U87WgETYinHLnDZc10ApeHpJRvofvqL/esPjdXKm0XpEhLu/iLqAD0YL1DSbTgYIQZJLbId/KVUEpdzaEOWZRf0PSlrk+mDFEhiGNsgVGnhFzBUEJyyuE5iPO+NoVDFbk3Qkkbq0IekWeqrxScY45/3rog9xZMsP+/h+5A734Aop/umxT5Zz/m66zQi5ohoHCetzU5gUtRJOi52kxFYKeTRlc6kBp2Bhl3pX0ub3Q1e+Jw1hYpklAMjFcin6Av+wXR1OG3YheMUtLGWeoQI1YPUO9xG/3XtiNjKr4Q8TBGyLOEc=
+    on_success: change
+    on_failure: always
 
 env:
   global:
