@@ -179,8 +179,9 @@ class Flow extends BaseApplication
      */
     public function buildCommand($targetPath, $command, array $arguments = [])
     {
-        return 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $this->getContext() .
-            ' ./' . $this->getFlowScriptName() . ' ' . $this->getCommandPackageKey($command) . ':' . $command . ' '
+        $phpBinaryPathAndFilename = isset($this->options['phpBinaryPathAndFilename']) ? ' ' . $this->options['phpBinaryPathAndFilename'] : '';
+        return 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $this->getContext()
+            . $phpBinaryPathAndFilename . ' ./' . $this->getFlowScriptName() . ' ' . $this->getCommandPackageKey($command) . ':' . $command . ' '
             . implode(' ', array_map('escapeshellarg', $arguments));
     }
 }
