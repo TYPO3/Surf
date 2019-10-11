@@ -58,6 +58,14 @@ class RunCommandTaskTest extends BaseTaskTest
     {
         return [
             [
+                'cd /releases/%s && FLOW_CONTEXT=Production ./flow example:command \'Some longer argument needing "escaping"\'',
+                ['command' => 'example:command', 'arguments' => 'Some longer argument needing "escaping"']
+            ],
+            [
+                'cd /releases/%s && FLOW_CONTEXT=Production ./flow site:prune \'--confirmation\' \'TRUE\'',
+                ['command' => 'site:prune', 'arguments' => ['--confirmation', 'TRUE']]
+            ],
+            [
                 'cd /releases/%s && FLOW_CONTEXT=Production ./flow command \'argument1\' \'argument2\'',
                 ['command' => 'command', 'arguments' => ['argument1', 'argument2']]
             ],
