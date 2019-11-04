@@ -55,7 +55,7 @@ class FlushCacheListTaskTest extends BaseTaskTest
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => 'list']);
-        $this->assertCommandExecuted(sprintf('cd /releases/%s && FLOW_CONTEXT=Production ./flow flow:cache:flushone --identifier list', $this->deployment->getReleaseIdentifier()));
+        $this->assertCommandExecuted(sprintf('cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:flushone \'--identifier\' \'list\'', $this->deployment->getReleaseIdentifier()));
     }
 
     /**

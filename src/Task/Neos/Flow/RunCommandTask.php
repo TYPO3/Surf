@@ -63,7 +63,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
 
         $targetPath = $deployment->getApplicationReleasePath($application);
 
-        $command = sprintf('cd %s && FLOW_CONTEXT=%s ./%s %s', $targetPath, $application->getContext(), $application->getFlowScriptName(), $options['command']);
+        $command = $application->buildCommand($targetPath, $options['command'], $options['arguments']);
 
         $this->shell->executeOrSimulate($command, $node, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
@@ -90,13 +90,10 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
         $resolver->setDefault('logOutput', true);
 
         $resolver->setDefault('arguments', []);
-        $resolver->setRequired('command');
-        $resolver->setNormalizer('command', static function (Options $options, $value) {
-            if (!empty($options['arguments'])) {
-                return sprintf('%s %s', $value, implode(' ', array_map('escapeshellarg', (array)$options['arguments'])));
-            }
-
-            return $value;
+        $resolver->setAllowedTypes('arguments', ['array', 'string']);
+        $resolver->setNormalizer('arguments', function (Options $options, $value) {
+            return (array)$value;
         });
+        $resolver->setRequired('command')->setAllowedTypes('command', 'string');
     }
 }
