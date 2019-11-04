@@ -193,6 +193,5 @@ class Flow extends BaseApplication
             $command,
             implode(' ', array_map('escapeshellarg', $arguments))
         );
-
     }
 }
