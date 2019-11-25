@@ -12,7 +12,7 @@ TYPO3\\Surf\\Task\\SourceforgeUploadTask
 
     * sourceforgeProjectName - The project name at SourceForge.
     * sourceforgeUserName - The user name to log in at SourceForge.
-    * sourceforgePackageName - The package name of the package that shouldd be uploaded.
+    * sourceforgePackageName - The package name of the package that should be uploaded.
     * version - The version of the project.
     * files - An array with files to upload to SourceForge.
 
