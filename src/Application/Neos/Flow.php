@@ -175,11 +175,11 @@ class Flow extends BaseApplication
      * @param string $targetPath the path where the command should be executed
      * @param string $command the actual command for example `cache:flush`
      * @param array $arguments list of arguments which will be appended to the command
+     * @param string $phpBinaryPathAndFilename the path to the php binary
      * @return string
      */
-    public function buildCommand($targetPath, $command, array $arguments = [])
+    public function buildCommand($targetPath, $command, array $arguments = [], $phpBinaryPathAndFilename = 'php')
     {
-        $phpBinaryPathAndFilename = isset($this->options['phpBinaryPathAndFilename']) ? $this->options['phpBinaryPathAndFilename'] : 'php';
         if (strpos($command, '.') === false) {
             $command = $this->getCommandPackageKey($command) . ':' . $command;
         }

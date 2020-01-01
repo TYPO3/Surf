@@ -34,8 +34,9 @@ use Webmozart\Assert\Assert;
  *              'flushCacheList' => [
  *                  'Neos_Fusion_Content',
  *                  'Flow_Session_MetaData',
- *                  'Flow_Session_Storage'
- *              ]
+ *                  'Flow_Session_Storage',
+ *              ],
+ *              'phpBinaryPathAndFilename', '/path/to/php',
  *          ]
  *      );
  */
@@ -65,7 +66,7 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
         foreach ($options['flushCacheList'] as $cache) {
             $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
             $this->shell->executeOrSimulate(
-                $application->buildCommand($targetPath, 'cache:flushone', ['--identifier', $cache]), $node, $deployment);
+                $application->buildCommand($targetPath, 'cache:flushone', ['--identifier', $cache], $options['phpBinaryPathAndFilename']), $node, $deployment);
         }
     }
 
@@ -95,5 +96,8 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
         $resolver->setNormalizer('flushCacheList', static function (Options $options, $value) {
             return is_array($value) ? $value : explode(',', $value);
         });
+
+        $resolver->setDefault('phpBinaryPathAndFilename', 'php')
+            ->setAllowedTypes('phpBinaryPathAndFilename', 'string');
     }
 }

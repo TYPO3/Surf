@@ -47,9 +47,6 @@ class RunCommandTaskTest extends BaseTaskTest
     public function executeSuccessfully($expectedCommand, array $options = [])
     {
         $this->application = new Flow();
-        if (isset($options['phpBinaryPathAndFilename'])) {
-            $this->application->setOption('phpBinaryPathAndFilename', $options['phpBinaryPathAndFilename']);
-        }
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted(sprintf($expectedCommand, $this->deployment->getReleaseIdentifier()));
     }

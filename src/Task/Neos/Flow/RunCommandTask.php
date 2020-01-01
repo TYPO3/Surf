@@ -30,6 +30,7 @@ use Webmozart\Assert\Assert;
  * * arguments
  * * ignoreErrors (optional)
  * * logOutput (optional)
+ * * phpBinaryPathAndFilename (optional) - path to the php binary default php
  *
  * Example:
  *  $workflow
@@ -38,6 +39,7 @@ use Webmozart\Assert\Assert;
  *              'arguments => [],
  *              'ignoreErrors' => false,
  *              'logOutput' => true,
+ *              'phpBinaryPathAndFilename', '/path/to/php',
  *          ]
  *      );
  */
@@ -54,6 +56,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
      * @param array $options
      *
      * @throws InvalidConfigurationException
+     * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -63,7 +66,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
 
         $targetPath = $deployment->getApplicationReleasePath($application);
 
-        $command = $application->buildCommand($targetPath, $options['command'], $options['arguments']);
+        $command = $application->buildCommand($targetPath, $options['command'], $options['arguments'], $options['phpBinaryPathAndFilename']);
 
         $this->shell->executeOrSimulate($command, $node, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
@@ -88,6 +91,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
     {
         $resolver->setDefault('ignoreErrors', false);
         $resolver->setDefault('logOutput', true);
+        $resolver->setDefault('phpBinaryPathAndFilename', 'php');
 
         $resolver->setDefault('arguments', []);
         $resolver->setAllowedTypes('arguments', ['array', 'string']);
