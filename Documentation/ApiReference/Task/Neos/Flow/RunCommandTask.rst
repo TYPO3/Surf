@@ -14,6 +14,7 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\RunCommandTask
     * arguments
     * ignoreErrors (optional)
     * logOutput (optional)
+    * phpBinaryPathAndFilename (optional) - path to the php binary default php
 
     Example:
      $workflow
@@ -22,6 +23,7 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\RunCommandTask
                  'arguments => [],
                  'ignoreErrors' => false,
                  'logOutput' => true,
+                 'phpBinaryPathAndFilename', '/path/to/php',
              ]
          );
 

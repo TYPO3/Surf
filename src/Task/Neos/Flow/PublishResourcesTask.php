@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Task\Neos\Flow;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -21,7 +22,9 @@ use Webmozart\Assert\Assert;
 /**
  * This task publishes static and non static resources utilizing the resource:publish command
  *
- * It takes no options
+ * It takes the following options:
+ *
+ * * phpBinaryPathAndFilename (optional) - path to the php binary default php
  */
 class PublishResourcesTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -39,10 +42,11 @@ class PublishResourcesTask extends Task implements ShellCommandServiceAwareInter
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for PublishResourcesTask, got "%s"', get_class($application)));
+        $options = $this->configureOptions($options);
 
         if ($application->getVersion() >= '3.0') {
             $targetPath = $deployment->getApplicationReleasePath($application);
-            $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'resource:publish'), $node, $deployment);
+            $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'resource:publish', [], $options['phpBinaryPathAndFilename']), $node, $deployment);
         }
     }
 
@@ -57,5 +61,14 @@ class PublishResourcesTask extends Task implements ShellCommandServiceAwareInter
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('phpBinaryPathAndFilename', 'php')
+            ->setAllowedTypes('phpBinaryPathAndFilename', 'string');
     }
 }
