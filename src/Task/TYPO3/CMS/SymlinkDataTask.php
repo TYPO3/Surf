@@ -49,14 +49,14 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
         $commands[] = 'cd ' . escapeshellarg($targetReleasePath);
 
         foreach ($options['symlinkDataFolders'] as $directory) {
-            $commands[] = sprintf('{ [ -d %1$s ] || mkdir -p %1$s; }', escapeshellarg($relativeDataPath . '/' . $directory));
+            $commands[] = sprintf('mkdir -p %1$s', escapeshellarg($relativeDataPath . '/' . $directory));
             $commands[] = sprintf('ln -sf %1$s %2$s', escapeshellarg($relativeDataPathFromWeb . '/' . $directory), escapeshellarg($absoluteWebDirectory . '/' . $directory));
         }
 
         foreach ($options['directories'] as $directory) {
             $directory = trim($directory, '\\/');
             $targetDirectory = Files::concatenatePaths([$relativeDataPath, $directory]);
-            $commands[] = sprintf('{ [ -d %1$s ] || mkdir -p %1$s; }', escapeshellarg($targetDirectory));
+            $commands[] = sprintf('mkdir -p %1$s', escapeshellarg($targetDirectory));
             $commands[] = sprintf('ln -sf %1$s %2$s', escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . $targetDirectory), escapeshellarg($directory));
         }
         $this->shell->executeOrSimulate($commands, $node, $deployment);

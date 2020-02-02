@@ -169,7 +169,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
         $directory = Files::concatenatePaths([$this->workingDirectory, $directory]);
-        return $this->shell->executeOrSimulate('test -d ' . escapeshellarg($directory), $this->targetNode, $deployment, true) === false ? false : true;
+        return $this->shell->executeOrSimulate('test -d ' . escapeshellarg($directory), $this->targetNode, $deployment, true) !== false;
     }
 
     /**
@@ -186,7 +186,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
         $pathAndFileName = $this->workingDirectory . '/' . $pathAndFileName;
-        return $this->shell->executeOrSimulate('test -f ' . escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) === false ? false : true;
+        return $this->shell->executeOrSimulate('test -f ' . escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) !== false;
     }
 
     /**

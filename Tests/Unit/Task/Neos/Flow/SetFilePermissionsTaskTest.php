@@ -48,23 +48,23 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
         return [
             [
                 // Default
-                'cd /releases/%s && FLOW_CONTEXT=Production ./flow neos.flow:core:setfilepermissions \'root\' \'www-data\' \'www-data\'',
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'www-data\' \'www-data\'',
             ],
             [
                 // Override the shellUsername and the username. The shellUsername has the precedence
-                'cd /releases/%s && FLOW_CONTEXT=Production ./flow neos.flow:core:setfilepermissions \'shellUsername\' \'www-data\' \'www-data\'',
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'shellUsername\' \'www-data\' \'www-data\'',
                 ['shellUsername' => 'shellUsername', 'username' => 'no_effect']
             ],
             [
-                'cd /releases/%s && FLOW_CONTEXT=Production ./flow neos.flow:core:setfilepermissions \'username\' \'www-data\' \'www-data\'',
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'username\' \'www-data\' \'www-data\'',
                 ['username' => 'username']
             ],
             [
-                'cd /releases/%s && FLOW_CONTEXT=Production ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'www-data\'',
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'www-data\'',
                 ['webserverUsername' => 'webserverUsername']
             ],
             [
-                'cd /releases/%s && FLOW_CONTEXT=Production ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'webserverGroupname\'',
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'webserverGroupname\'',
                 ['webserverUsername' => 'webserverUsername', 'webserverGroupname' => 'webserverGroupname']
             ],
         ];

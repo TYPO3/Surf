@@ -29,6 +29,7 @@ use Webmozart\Assert\Assert;
  * * shellUsername (optional)
  * * webserverUsername (optional)
  * * webserverGroupname (optional)
+ * * phpBinaryPathAndFilename (optional) - path to the php binary default php
  *
  * Example:
  *  $workflow
@@ -36,6 +37,7 @@ use Webmozart\Assert\Assert;
  *              'shellUsername' => 'root',
  *              'webserverUsername' => 'www-data',
  *              'webserverGroupname' => 'www-data',
+ *              'phpBinaryPathAndFilename', '/path/to/php',
  *          ]
  *      );
  */
@@ -70,7 +72,8 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
         $this->shell->executeOrSimulate($application->buildCommand(
             $targetPath,
             'core:setfilepermissions',
-            $arguments
+            $arguments,
+            $options['phpBinaryPathAndFilename']
         ), $node, $deployment);
     }
 
@@ -100,5 +103,8 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
 
         $resolver->setDefault('webserverUsername', 'www-data');
         $resolver->setDefault('webserverGroupname', 'www-data');
+
+        $resolver->setDefault('phpBinaryPathAndFilename', 'php')
+            ->setAllowedTypes('phpBinaryPathAndFilename', 'string');
     }
 }

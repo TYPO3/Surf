@@ -1,6 +1,8 @@
 .. -*- coding: utf-8 -*- with BOM.
 .. include:: Includes.txt
 
+.. _start:
+
 TYPO3 Surf |version| documentation
 ==================================
 
