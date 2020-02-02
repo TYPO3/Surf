@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  */
 
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use TYPO3\Surf\Exception\TaskExecutionException;
 use TYPO3\Surf\Task\ShellTask;
 
 class ShellTaskTest extends BaseTaskTest
@@ -22,7 +23,7 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeThrowsExceptionNoCommandGiven(): void
+    public function executeThrowsExceptionNoCommandGiven()
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, []);
@@ -34,10 +35,10 @@ class ShellTaskTest extends BaseTaskTest
      *
      * @test
      * @dataProvider commands
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
-    public function executeSomeCommandSuccessfully($command, $expectedCommand): void
+    public function executeSomeCommandSuccessfully($command, $expectedCommand)
     {
         $this->task->execute(
             $this->node,
@@ -51,7 +52,7 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function rollbackReturnVoidNoRollbackCommandGiven(): void
+    public function rollbackReturnVoidNoRollbackCommandGiven()
     {
         $this->assertNull(
             $this->task->rollback($this->node, $this->application, $this->deployment, ['command' => 'someCommand'])
@@ -62,10 +63,12 @@ class ShellTaskTest extends BaseTaskTest
      * @param string $command
      * @param string $expectedCommand
      *
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      * @test
      * @dataProvider commands
      */
-    public function rollbackSomeCommandSuccessfully($command, $expectedCommand): void
+    public function rollbackSomeCommandSuccessfully($command, $expectedCommand)
     {
         $this->task->rollback(
             $this->node,
@@ -79,7 +82,7 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @return array
      */
-    public function commands(): array
+    public function commands()
     {
         return [
             ['ln -s {sharedPath}', sprintf('ln -s %s', escapeshellarg('/shared'))],

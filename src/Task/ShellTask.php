@@ -115,7 +115,7 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @return mixed
      * @throws InvalidConfigurationException
      */
-    private function replacePaths(Application $application, Deployment $deployment, string $command)
+    private function replacePaths(Application $application, Deployment $deployment, $command)
     {
         $replacePaths = [
             '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
