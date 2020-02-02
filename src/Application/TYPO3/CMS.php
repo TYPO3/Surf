@@ -63,8 +63,8 @@ class CMS extends BaseApplication
             'rsyncExcludes' => [
                 '.ddev',
                 '.git',
-                'web/fileadmin',
-                'web/uploads'
+                '{webDirectory}/fileadmin',
+                '{webDirectory}/uploads'
             ]
         ]);
     }
