@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Transfer;
  */
 
 use TYPO3\Surf\Application\Neos\Flow;
+use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
 use TYPO3\Surf\Tests\Unit\AssertCommandExecuted;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
@@ -173,6 +174,35 @@ class RsyncTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('/rsync .* \'myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithTypo3Cms()
+    {
+        $this->application = new CMS();
+        $this->node->setOption('hostname', 'myserver.local');
+        $options = $this->application->getOptions();
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'web\/fileadmin\' --exclude \'web\/uploads\'/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithTypo3CmsAndCustomWebDirectory()
+    {
+        $this->application = new CMS();
+        $this->application->setOption('webDirectory', 'public');
+        $this->node->setOption('hostname', 'myserver.local');
+        $options = $this->application->getOptions();
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'public\/fileadmin\' --exclude \'public\/uploads\'/');
     }
 
     /**

@@ -27,6 +27,11 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
     use ShellCommandServiceAwareTrait;
 
     /**
+     * @var array
+     */
+    protected $replacePaths = [];
+
+    /**
      * Execute this task
      *
      * @param \TYPO3\Surf\Domain\Model\Node $node
@@ -38,6 +43,10 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
     {
         $localPackagePath = $deployment->getWorkspacePath($application);
         $releasePath = $deployment->getApplicationReleasePath($application);
+
+        if (isset($options['webDirectory'])) {
+            $this->replacePaths['{webDirectory}'] = $options['webDirectory'];
+        }
 
         $remotePath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache/transfer']);
         // make sure there is a remote .cache folder
@@ -123,6 +132,9 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
     protected function getExcludeFlags($rsyncExcludes)
     {
         return array_reduce($rsyncExcludes, function ($excludeOptions, $pattern) {
+            if (!empty($this->replacePaths)) {
+                $pattern = str_replace(array_keys($this->replacePaths), $this->replacePaths, $pattern);
+            }
             return $excludeOptions . ' --exclude ' . escapeshellarg($pattern);
         }, '');
     }
