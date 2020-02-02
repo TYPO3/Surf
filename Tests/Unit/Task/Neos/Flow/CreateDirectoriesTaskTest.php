@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\Flow;
+namespace TYPO3\Surf\Tests\Unit\Task\Neos\Flow;
 
 /*
  * This file is part of TYPO3 Surf.

@@ -159,7 +159,7 @@ TYPO3\\Surf\\Application\\Neos\\Neos
 
         :returns: string
 
-    .. php:method:: buildCommand($targetPath, $command, $arguments = [])
+    .. php:method:: buildCommand($targetPath, $command, $arguments = [], $phpBinaryPathAndFilename = 'php')
 
         Returns a executable flow command including the context
 
@@ -169,6 +169,8 @@ TYPO3\\Surf\\Application\\Neos\\Neos
         :param $command: the actual command for example `cache:flush`
         :type $arguments: array
         :param $arguments: list of arguments which will be appended to the command
+        :type $phpBinaryPathAndFilename: string
+        :param $phpBinaryPathAndFilename: the path to the php binary
         :returns: string
 
     .. php:method:: setSymlinks($symlinks)

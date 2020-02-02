@@ -159,8 +159,6 @@ class SymlinkDataTaskTest extends BaseTaskTest
      */
     private function mergeOptions(array $options)
     {
-        $options = array_merge($this->application->getOptions(), $options);
-
-        return $options;
+        return array_merge($this->application->getOptions(), $options);
     }
 }
