@@ -295,6 +295,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function extractHeadersFromMultiLineString($headerText)
     {
-        return $headerText ? \GuzzleHttp\headers_from_lines(explode(chr(10), $headerText)) : [];
+        return $headerText !== '' ? \GuzzleHttp\headers_from_lines(explode(chr(10), $headerText)) : [];
     }
 }

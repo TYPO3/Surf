@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -8,6 +9,7 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -15,6 +17,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task to execute shell commands on the remote host.
@@ -41,33 +44,19 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * Execute this task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     *
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['command'])) {
-            throw new InvalidConfigurationException('Missing "command" option for ShellTask', 1311168045);
-        }
-
-        $replacePaths = [
-            '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
-            '{sharedPath}' => escapeshellarg($application->getSharedPath()),
-            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
-            '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
-            '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous')
-        ];
-
-        $command = $options['command'];
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
-
-        $ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === true;
-        $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
-
-        $this->shell->executeOrSimulate($command, $node, $deployment, $ignoreErrors, $logOutput);
+        $options = $this->configureOptions($options);
+        $command = $this->replacePaths($application, $deployment, $options['command']);
+        $this->shell->executeOrSimulate($command, $node, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
 
     /**
@@ -77,6 +66,8 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -86,28 +77,54 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * Rollback this task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['rollbackCommand'])) {
+        $options = $this->configureOptions($options);
+
+        if (null === $options['rollbackCommand']) {
             return;
         }
 
+        $command = $this->replacePaths($application, $deployment, $options['rollbackCommand']);
+        $this->shell->execute($command, $node, $deployment, true);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['command']);
+        $resolver->setDefault('rollbackCommand', null);
+        $resolver->setDefault('ignoreErrors', true);
+        $resolver->setDefault('logOutput', false);
+    }
+
+    /**
+     * @param Application $application
+     * @param Deployment $deployment
+     * @param string $command
+     *
+     * @return mixed
+     * @throws InvalidConfigurationException
+     */
+    private function replacePaths(Application $application, Deployment $deployment, $command)
+    {
         $replacePaths = [
-            '{deploymentPath}' => $application->getDeploymentPath(),
-            '{sharedPath}' => $application->getSharedPath(),
-            '{releasePath}' => $deployment->getApplicationReleasePath($application),
-            '{currentPath}' => $application->getReleasesPath() . '/current',
-            '{previousPath}' => $application->getReleasesPath() . '/previous'
+            '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
+            '{sharedPath}' => escapeshellarg($application->getSharedPath()),
+            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
+            '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
+            '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous'),
         ];
 
-        $command = $options['rollbackCommand'];
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
-
-        $this->shell->execute($command, $node, $deployment, true);
+        return str_replace(array_keys($replacePaths), $replacePaths, $command);
     }
 }

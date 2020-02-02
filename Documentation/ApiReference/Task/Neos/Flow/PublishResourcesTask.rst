@@ -8,7 +8,9 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\PublishResourcesTask
 
     This task publishes static and non static resources utilizing the resource:publish command
 
-    It takes no options
+    It takes the following options:
+
+    * phpBinaryPathAndFilename (optional) - path to the php binary default php
 
     .. php:attr:: shell
 
@@ -40,6 +42,11 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\PublishResourcesTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
@@ -63,8 +70,3 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\PublishResourcesTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:

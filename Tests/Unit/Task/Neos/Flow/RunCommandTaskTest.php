@@ -58,16 +58,28 @@ class RunCommandTaskTest extends BaseTaskTest
     {
         return [
             [
-                'cd /releases/%s && FLOW_CONTEXT=Production ./flow command \'argument1\' \'argument2\'',
-                ['command' => 'command', 'arguments' => ['argument1', 'argument2']]
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow vendor.package:example:command \'Some longer argument needing "escaping"\'',
+                ['command' => 'vendor.package:example:command', 'arguments' => 'Some longer argument needing "escaping"']
             ],
             [
-                'cd /releases/%s && FLOW_CONTEXT=Production ./flow command \'argument1\'',
-                ['command' => 'command', 'arguments' => 'argument1']
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:package:activate \'--package-key\' \'Vendor.Package\'',
+                ['command' => 'package:activate', 'arguments' => ['--package-key', 'Vendor.Package']]
             ],
             [
-                'cd /releases/%s && FLOW_CONTEXT=Production ./flow command',
-                ['command' => 'command']
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow vendor.package:command \'argument1\' \'argument2\'',
+                ['command' => 'vendor.package:command', 'arguments' => ['argument1', 'argument2']]
+            ],
+            [
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow vendor.package:command \'argument1\'',
+                ['command' => 'vendor.package:command', 'arguments' => 'argument1']
+            ],
+            [
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:warmup',
+                ['command' => 'cache:warmup']
+            ],
+            [
+                'cd /releases/%s && FLOW_CONTEXT=Production /usr/local/bin/php ./flow neos.flow:cache:warmup',
+                ['command' => 'cache:warmup', 'phpBinaryPathAndFilename' => '/usr/local/bin/php']
             ],
         ];
     }
