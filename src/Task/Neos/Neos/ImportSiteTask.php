@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Task\Neos\Neos;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -16,6 +17,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use Webmozart\Assert\Assert;
 
 /**
  * This task imports a given site into a neos project by running site:import
@@ -42,19 +44,16 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
      * Execute this task
      *
      * @param Node $node
-     * @param Application $application
+     * @param Application|Flow $application
      * @param Deployment $deployment
      * @param array $options
      * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!$application instanceof Flow) {
-            throw new InvalidConfigurationException(sprintf('Flow application needed for ImportSiteTask, got "%s"', get_class($application)), 1358863473);
-        }
-        if (!isset($options['sitePackageKey'])) {
-            throw new InvalidConfigurationException(sprintf('"sitePackageKey" option not set for application "%s"', $application->getName()), 1312312646);
-        }
+        Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for ImportSiteTask, got "%s"', get_class($application)));
+
+        $options = $this->configureOptions($options);
 
         $targetPath = $deployment->getApplicationReleasePath($application);
         $arguments = [
@@ -78,15 +77,10 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * Rollback the task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
+     * @param OptionsResolver $resolver
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        // TODO Implement rollback
+        $resolver->setRequired('sitePackageKey');
     }
 }

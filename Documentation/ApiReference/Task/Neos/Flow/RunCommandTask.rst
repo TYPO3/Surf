@@ -14,6 +14,7 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\RunCommandTask
     * arguments
     * ignoreErrors (optional)
     * logOutput (optional)
+    * phpBinaryPathAndFilename (optional) - path to the php binary default php
 
     Example:
      $workflow
@@ -22,6 +23,7 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\RunCommandTask
                  'arguments => [],
                  'ignoreErrors' => false,
                  'logOutput' => true,
+                 'phpBinaryPathAndFilename', '/path/to/php',
              ]
          );
 
@@ -55,9 +57,19 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\RunCommandTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
+    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
+
+        :type $shellCommandService: ShellCommandService
+        :param $shellCommandService:
+
     .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
 
-        Rollback the task
+        Rollback this task
 
         :type $node: Node
         :param $node:
@@ -68,13 +80,8 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\RunCommandTask
         :type $options: array
         :param $options:
 
-    .. php:method:: buildCommandArguments($options)
+    .. php:method:: configureOptions($options = [])
 
         :type $options: array
-        :param $options: The command options
-        :returns: string The escaped arguments string
-
-    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
-
-        :type $shellCommandService: ShellCommandService
-        :param $shellCommandService:
+        :param $options:
+        :returns: array

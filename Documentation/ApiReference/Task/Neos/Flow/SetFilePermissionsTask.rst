@@ -13,6 +13,7 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\SetFilePermissionsTask
     * shellUsername (optional)
     * webserverUsername (optional)
     * webserverGroupname (optional)
+    * phpBinaryPathAndFilename (optional) - path to the php binary default php
 
     Example:
      $workflow
@@ -20,6 +21,7 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\SetFilePermissionsTask
                  'shellUsername' => 'root',
                  'webserverUsername' => 'www-data',
                  'webserverGroupname' => 'www-data',
+                 'phpBinaryPathAndFilename', '/path/to/php',
              ]
          );
 
@@ -53,9 +55,19 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\SetFilePermissionsTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
+    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
+
+        :type $shellCommandService: ShellCommandService
+        :param $shellCommandService:
+
     .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
 
-        Rollback the task
+        Rollback this task
 
         :type $node: Node
         :param $node:
@@ -66,7 +78,8 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\SetFilePermissionsTask
         :type $options: array
         :param $options:
 
-    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
+    .. php:method:: configureOptions($options = [])
 
-        :type $shellCommandService: ShellCommandService
-        :param $shellCommandService:
+        :type $options: array
+        :param $options:
+        :returns: array

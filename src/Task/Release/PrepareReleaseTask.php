@@ -8,13 +8,13 @@ namespace TYPO3\Surf\Task\Release;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for preparing a "TYPO3.Release" release
@@ -33,7 +33,8 @@ class PrepareReleaseTask extends Task implements ShellCommandServiceAwareInterfa
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $this->checkOptionsForValidity($options);
+        $options = $this->configureOptions($options);
+
         $host = $options['releaseHost'];
         $login = $options['releaseHostLogin'];
         $sitePath =  $options['releaseHostSitePath'];
@@ -57,17 +58,10 @@ class PrepareReleaseTask extends Task implements ShellCommandServiceAwareInterfa
     }
 
     /**
-     * Check if all required options are given
-     *
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @param OptionsResolver $resolver
      */
-    protected function checkOptionsForValidity(array $options)
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        foreach (['releaseHost', 'releaseHostSitePath', 'version', 'productName'] as $optionName) {
-            if (!isset($options[$optionName])) {
-                throw new InvalidConfigurationException('"' . $optionName . '" option not set', 1321549659);
-            }
-        }
+        $resolver->setRequired(['releaseHost', 'releaseHostSitePath', 'version', 'productName']);
     }
 }

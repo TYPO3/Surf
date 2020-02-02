@@ -318,6 +318,13 @@ TYPO3\\Surf\\Domain\\Model\\Deployment
 
         Get path to a temp folder on the filesystem
 
+    .. php:method:: rollback($dryRun = false)
+
+        Rollback a deployment
+
+        :type $dryRun: bool
+        :param $dryRun:
+
     .. php:method:: setForceRun($force)
 
         :type $force: bool

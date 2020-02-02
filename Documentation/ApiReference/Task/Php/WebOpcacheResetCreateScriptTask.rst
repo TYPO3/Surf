@@ -51,6 +51,11 @@ TYPO3\\Surf\\Task\\Php\\WebOpcacheResetCreateScriptTask
         :type $options: array
         :param $options: Supported options: "scriptBasePath" and "scriptIdentifier"
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
@@ -81,3 +86,9 @@ TYPO3\\Surf\\Task\\Php\\WebOpcacheResetCreateScriptTask
         :param $deployment:
         :type $options: array
         :param $options:
+
+    .. php:method:: configureOptions($options = [])
+
+        :type $options: array
+        :param $options:
+        :returns: array

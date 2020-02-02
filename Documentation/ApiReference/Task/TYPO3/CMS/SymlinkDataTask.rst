@@ -39,6 +39,11 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\SymlinkDataTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
@@ -56,3 +61,9 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\SymlinkDataTask
         :param $deployment:
         :type $options: array
         :param $options:
+
+    .. php:method:: configureOptions($options = [])
+
+        :type $options: array
+        :param $options:
+        :returns: array

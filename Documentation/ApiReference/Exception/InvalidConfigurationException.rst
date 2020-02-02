@@ -24,6 +24,14 @@ TYPO3\\Surf\\Exception\\InvalidConfigurationException
 
         protected
 
+    .. php:method:: createNoApplicationConfigured()
+
+        :returns: InvalidConfigurationException
+
+    .. php:method:: createNoNodesConfigured()
+
+        :returns: InvalidConfigurationException
+
     .. php:method:: __clone()
 
     .. php:method:: __construct($message, $code, $previous)

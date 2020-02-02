@@ -16,6 +16,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use Webmozart\Assert\Assert;
 
 /**
  * This Task runs unit tests for a flow application
@@ -30,16 +31,14 @@ class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
      * Execute this task
      *
      * @param Node $node
-     * @param Application $application
+     * @param Application|Flow $application
      * @param Deployment $deployment
      * @param array $options
      * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!$application instanceof Flow) {
-            throw new InvalidConfigurationException(sprintf('Flow application needed for UnitTestTask, got "%s"', get_class($application)), 1358866042);
-        }
+        Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for UnitTestTask, got "%s"', get_class($application)));
 
         $targetPath = $deployment->getApplicationReleasePath($application);
         $this->shell->executeOrSimulate('cd ' . $targetPath . ' && phpunit -c Build/' . $application->getBuildEssentialsDirectoryName() . '/PhpUnit/UnitTests.xml', $node, $deployment);

@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -47,11 +48,8 @@ class VarnishBanTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $secretFile = (isset($options['secretFile']) ? $options['secretFile'] : '/etc/varnish/secret');
-        $banUrl = (isset($options['banUrl']) ? $options['banUrl'] : '.*');
-        $varnishadm = (isset($options['varnishadm']) ? $options['varnishadm'] : '/usr/bin/varnishadm');
-
-        $this->shell->executeOrSimulate($varnishadm . ' -S ' . $secretFile . ' -T 127.0.0.1:6082 ban.url ' . escapeshellarg($banUrl), $node, $deployment);
+        $options = $this->configureOptions($options);
+        $this->shell->executeOrSimulate($options['varnishadm'] . ' -S ' . $options['secretFile'] . ' -T 127.0.0.1:6082 ban.url ' . escapeshellarg($options['banUrl']), $node, $deployment);
     }
 
     /**
@@ -64,9 +62,17 @@ class VarnishBanTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $secretFile = (isset($options['secretFile']) ? $options['secretFile'] : '/etc/varnish/secret');
-        $varnishadm = (isset($options['varnishadm']) ? $options['varnishadm'] : '/usr/bin/varnishadm');
+        $options = $this->configureOptions($options);
+        $this->shell->executeOrSimulate($options['varnishadm'] . ' -S ' . $options['secretFile'] . ' -T 127.0.0.1:6082 status', $node, $deployment);
+    }
 
-        $this->shell->executeOrSimulate($varnishadm . ' -S ' . $secretFile . ' -T 127.0.0.1:6082 status', $node, $deployment);
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('secretFile', '/etc/varnish/secret');
+        $resolver->setDefault('varnishadm', '/usr/bin/varnishadm');
+        $resolver->setDefault('banUrl', '.*');
     }
 }

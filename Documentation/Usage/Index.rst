@@ -1,11 +1,9 @@
 .. -*- coding: utf-8 -*- with BOM.
 .. include:: ../Includes.txt
 
-===============
-Getting Started
-===============
-
-First of all you have to :doc:`install Surf <../Installation/Index>`.
+=====
+Usage
+=====
 
 After installing Surf you have to create one or more deployment configuration files for your project.
 The deployment configuration files are at the moment just plain php files.
@@ -14,7 +12,7 @@ We recommend to keep the deployment configuration as simple as possible and do i
 
 Per default Surf expects the deployment configuration files within the .surf directory in your project.
 
-If you like you can specify the configuration directory with the command option --configurationPath. (:ref:`cli-usage-configuration-path-section`)
+If you like you can specify the configuration directory with the command option --configurationPath (:ref:`cli-usage-configuration-path-section`) or you could add an environment variable called SURF_WORKSPACE.
 
 But for now we are going to place our deployment configuration files in the .surf directory.
 

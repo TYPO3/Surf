@@ -11,3 +11,5 @@ Migration from 0.9.x to 2.0.0
    as the default changed from git to rsync
 #. Change options for `CreateDirectoriesTask`: Now the specified directories are based on the application's release
    path not the general deployment path (which did not make much sense)
+#. Neos CMS only: Add the task `TYPO3\Surf\Task\Neos\Neos\ImportSiteTask` to the step `migrate` again
+   if you use the Neos Application and need it to import your content after each deployment

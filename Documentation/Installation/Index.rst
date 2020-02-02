@@ -19,7 +19,7 @@ Download phar archive
 To install Surf as phar archive, run the following commands::
 
     mkdir /usr/local/surf
-    curl -L https://github.com/TYPO3/Surf/releases/download/2.0.0-beta7/surf.phar -o /usr/local/surf/surf.phar
+    curl -L https://github.com/TYPO3/Surf/releases/download/2.0.0-beta11/surf.phar -o /usr/local/surf/surf.phar
     chmod +x /usr/local/surf/surf.phar
     ln -s /usr/local/surf/surf.phar /usr/local/bin/surf
 
@@ -55,7 +55,7 @@ Surf is built using the `box project <https://box-project.github.io/box2/>`_ and
 
 * Download the latest `box.phar` and put in an executable directory
 * `cd your/surf/clone`
-* `php box build`
+* `composer install --no-dev && php box.phar build`
 
 The generated `surf.phar` should work as expected.
 

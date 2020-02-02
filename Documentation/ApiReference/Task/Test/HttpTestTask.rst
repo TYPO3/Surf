@@ -14,6 +14,18 @@ TYPO3\\Surf\\Task\\Test\\HttpTestTask
 
         protected ShellCommandService
 
+    .. php:method:: __construct(ClientInterface $client = null)
+
+        HttpTestTask constructor.
+
+        :type $client: ClientInterface
+        :param $client:
+
+    .. php:method:: setClient(ClientInterface $client)
+
+        :type $client: ClientInterface
+        :param $client:
+
     .. php:method:: execute(Node $node, Application $application, Deployment $deployment, $options = [])
 
         Execute this task
@@ -27,26 +39,31 @@ TYPO3\\Surf\\Task\\Test\\HttpTestTask
         :type $options: array
         :param $options:
 
-    .. php:method:: assertExpectedStatus($options, $result)
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
 
-        :type $options: array
-        :param $options:
-        :type $result: array
-        :param $result:
+        :type $resolver: OptionsResolver
+        :param $resolver:
 
-    .. php:method:: assertExpectedHeaders($options, $result)
+    .. php:method:: assertExpectedStatus($expected, $actual)
 
-        :type $options: array
-        :param $options:
-        :type $result: array
-        :param $result:
+        :type $expected: int
+        :param $expected:
+        :type $actual: int
+        :param $actual:
 
-    .. php:method:: assertExpectedRegexp($options, $result)
+    .. php:method:: assertExpectedHeaders($expected, $actual)
 
-        :type $options: array
-        :param $options:
-        :type $result: array
-        :param $result:
+        :type $expected: array
+        :param $expected:
+        :type $actual: array
+        :param $actual:
+
+    .. php:method:: assertExpectedRegexp($expectedRegexp, $responseBody)
+
+        :type $expectedRegexp: array
+        :param $expectedRegexp:
+        :type $responseBody: string
+        :param $responseBody:
 
     .. php:method:: testSingleHeader($headerValue, $expectedValue)
 
@@ -58,40 +75,13 @@ TYPO3\\Surf\\Task\\Test\\HttpTestTask
         :param $expectedValue:
         :returns: bool
 
-    .. php:method:: simulate(Node $node, Application $application, Deployment $deployment, $options = [])
-
-        Simulate this task
-
-        :type $node: Node
-        :param $node:
-        :type $application: Application
-        :param $application:
-        :type $deployment: Deployment
-        :param $deployment:
-        :type $options: array
-        :param $options:
-
-    .. php:method:: executeLocalCurlRequest($url, $timeout = null, $port = null, $method = 'GET', $username = null, $password = null, $data = '', $proxy = null, $proxyPort = null)
+    .. php:method:: executeLocalCurlRequest($url, $options = [])
 
         :type $url: string
         :param $url: Request URL
-        :type $timeout: int
-        :param $timeout: Request HTTP timeout, defaults to 0 (no timeout)
-        :type $port: int
-        :param $port: Request HTTP port
-        :type $method: string
-        :param $method: Request method, defaults to GET. POST, PUT and DELETE are also supported.
-        :type $username: string
-        :param $username: Optional username for HTTP authentication
-        :type $password: string
-        :param $password: Optional password for HTTP authentication
-        :type $data: string
-        :param $data:
-        :type $proxy: string
-        :param $proxy:
-        :type $proxyPort: int
-        :param $proxyPort:
-        :returns: array time in seconds and status information im associative arrays
+        :type $options: array
+        :param $options:
+        :returns: HttpResponse
 
     .. php:method:: executeRemoteCurlRequest($url, Node $node, Deployment $deployment, $additionalCurlParameters = '')
 
@@ -103,9 +93,9 @@ TYPO3\\Surf\\Task\\Test\\HttpTestTask
         :param $deployment:
         :type $additionalCurlParameters: string
         :param $additionalCurlParameters:
-        :returns: array time in seconds and status information im associative arrays
+        :returns: HttpResponse
 
-    .. php:method:: extractResponseHeaders($headerText)
+    .. php:method:: extractHeadersFromMultiLineString($headerText)
 
         Split response into headers and body part
 
@@ -130,3 +120,22 @@ TYPO3\\Surf\\Task\\Test\\HttpTestTask
         :param $deployment:
         :type $options: array
         :param $options:
+
+    .. php:method:: simulate(Node $node, Application $application, Deployment $deployment, $options = [])
+
+        Simulate this task (e.g. by logging commands it would execute)
+
+        :type $node: Node
+        :param $node:
+        :type $application: Application
+        :param $application:
+        :type $deployment: Deployment
+        :param $deployment:
+        :type $options: array
+        :param $options:
+
+    .. php:method:: configureOptions($options = [])
+
+        :type $options: array
+        :param $options:
+        :returns: array

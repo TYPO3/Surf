@@ -25,27 +25,6 @@ class SelfUpdateCommand extends Command
 {
 
     /**
-     * @var Updater
-     */
-    private $updater;
-
-    /**
-     * SelfUpdateCommand constructor.
-     *
-     * @param null $name
-     */
-    public function __construct($name = null)
-    {
-        parent::__construct($name);
-
-        $this->updater = new Updater(null, false, Updater::STRATEGY_GITHUB);
-        /** @var GithubStrategy $strategy */
-        $strategy = $this->updater->getStrategy();
-        $strategy->setPackageName('TYPO3/Surf');
-        $strategy->setPharName('surf.phar');
-    }
-
-    /**
      * @return bool
      */
     public function isEnabled()
@@ -85,44 +64,49 @@ class SelfUpdateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $updater = new Updater(null, false, Updater::STRATEGY_GITHUB);
+        /** @var GithubStrategy $strategy */
+        $strategy = $updater->getStrategy();
+        $strategy->setPackageName('TYPO3/Surf');
+        $strategy->setPharName('surf.phar');
+
         $io = new SymfonyStyle($input, $output);
 
         $stability = $input->getOption('stability');
         if (empty($stability)) {
-            // Unstable by default. Should be removed once we have a 2.0.0 final
-            $stability = GithubStrategy::UNSTABLE;
+            $stability = GithubStrategy::STABLE;
         }
         /** @var GithubStrategy $strategy */
-        $strategy = $this->updater->getStrategy();
+        $strategy = $updater->getStrategy();
         $strategy->setCurrentLocalVersion($this->getApplication()->getVersion());
         $strategy->setStability($stability);
 
         if ($input->getOption('check')) {
-            $result = $this->updater->hasUpdate();
+            $result = $updater->hasUpdate();
             if ($result) {
                 $output->writeln(sprintf(
                     'The %s build available remotely is: %s',
                     $strategy->getStability() === GithubStrategy::ANY ? 'latest' : 'current ' . $strategy->getStability(),
-                    $this->updater->getNewVersion()
+                    $updater->getNewVersion()
                 ));
-            } elseif (false === $this->updater->getNewVersion()) {
+            } elseif (false === $updater->getNewVersion()) {
                 $output->writeln('There are no new builds available.');
             } else {
                 $output->writeln(sprintf('You have the current %s build installed.', $strategy->getStability()));
             }
         } elseif ($input->getOption('rollback')) {
-            $result = $this->updater->rollback();
+            $result = $updater->rollback();
             $result ? $output->writeln('Success!') : $output->writeln('Failure!');
         } else {
-            $result = $this->updater->update();
+            $result = $updater->update();
 
             if ($result) {
                 $io->success(
                     sprintf(
                         'Your %s has been updated from "%s" to "%s".',
                         $this->getLocalPharName(),
-                        $this->updater->getOldVersion(),
-                        $this->updater->getNewVersion()
+                        $updater->getOldVersion(),
+                        $updater->getNewVersion()
                     )
                 );
             } else {

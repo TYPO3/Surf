@@ -22,4 +22,16 @@ class Filesystem implements FilesystemInterface
     {
         return file_put_contents($filename, $content);
     }
+
+    /**
+     * @param string $filename
+     * @param bool $includePath
+     * @param resource|null $streamContext
+     *
+     * @return false|string
+     */
+    public function get($filename, $includePath = false, $streamContext = null)
+    {
+        return file_get_contents($filename, $includePath, $streamContext);
+    }
 }

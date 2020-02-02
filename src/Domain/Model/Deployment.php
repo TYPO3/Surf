@@ -531,6 +531,26 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
+     * Rollback a deployment
+     *
+     * @param bool $dryRun
+     *
+     * @throws SurfException
+     * @throws SurfException\InvalidConfigurationException
+     */
+    public function rollback($dryRun = false)
+    {
+        $this->logger->notice('Rollback deployment ' . $this->name . ' (' . $this->releaseIdentifier . ')');
+
+        $this->setWorkflow(new RollbackWorkflow());
+        $this->initialize();
+        if ($dryRun) {
+            $this->setDryRun(true);
+        }
+        $this->workflow->run($this);
+    }
+
+    /**
      * @param bool $force
      */
     public function setForceRun($force)

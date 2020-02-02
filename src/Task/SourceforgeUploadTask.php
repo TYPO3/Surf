@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -8,6 +9,7 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -15,7 +17,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A task for uploading to sourceforge.
@@ -59,7 +60,7 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $deployment->getLogger()->warning(DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__));
-        $this->checkOptionsForValidity($options);
+        $options = $this->configureOptions($options);
         $projectName = $options['sourceforgeProjectName'];
 
         $sourceforgeLogin = $options['sourceforgeUserName'] . ',' . $options['sourceforgeProjectName'];
@@ -84,35 +85,11 @@ class SourceforgeUploadTask extends Task implements ShellCommandServiceAwareInte
     }
 
     /**
-     * Check if all required options are given
-     *
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @param OptionsResolver $resolver
      */
-    protected function checkOptionsForValidity(array $options)
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        if (!isset($options['sourceforgeProjectName'])) {
-            throw new InvalidConfigurationException('"sourceforgeProjectName" option not set', 1314170122);
-        }
-
-        if (!isset($options['sourceforgePackageName'])) {
-            throw new InvalidConfigurationException('"sourceforgePackageName" option not set', 1314170132);
-        }
-
-        if (!isset($options['sourceforgeUserName'])) {
-            throw new InvalidConfigurationException('"sourceforgeUserName" option not set', 1314170145);
-        }
-
-        if (!isset($options['version'])) {
-            throw new InvalidConfigurationException('"version" option not set', 1314170151);
-        }
-
-        if (!isset($options['files'])) {
-            throw new InvalidConfigurationException('"files" option for upload not set', 1314170162);
-        }
-
-        if (!is_array($options['files'])) {
-            throw new InvalidConfigurationException('"files" option for upload is not an array', 1314170175);
-        }
+        $resolver->setRequired(['sourceforgeProjectName', 'sourceforgePackageName', 'sourceforgeUserName', 'version', 'files']);
+        $resolver->setAllowedTypes('files', 'array');
     }
 }

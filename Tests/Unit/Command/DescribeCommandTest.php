@@ -32,7 +32,7 @@ class DescribeCommandTest extends TestCase
     protected $deployment;
 
     /**
-     * @var Application
+     * @var Application|BaseApplication
      */
     protected $application;
 
@@ -171,6 +171,11 @@ Applications:
      */
     public function describeTypo3Cms()
     {
+        $application = new CMS();
+        $application->addSymlink(
+            'public/typo3conf/LocalConfiguration.php',
+            '../../../../shared/Configuration/LocalConfiguration.php'
+        );
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
@@ -192,12 +197,17 @@ Applications:
       context => <success>Production</success>
       scriptFileName => <success>vendor/bin/typo3cms</success>
       webDirectory => <success>web</success>
+      symlinkDataFolders =>
+        <success>fileadmin</success>
+        <success>uploads</success>
       rsyncExcludes =>
+        <success>.ddev</success>
         <success>.git</success>
         <success>web/fileadmin</success>
         <success>web/uploads</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
+        <success>public/typo3conf/LocalConfiguration.php => ../../../../shared/Configuration/LocalConfiguration.php</success>
       deploymentPath => <success>NULL</success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
@@ -240,7 +250,7 @@ Applications:
       unlock:
         tasks:
           <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application TYPO3 CMS)
-', $this->getDescriptionOfPredefinedApplication(new CMS()));
+', $this->getDescriptionOfPredefinedApplication($application));
     }
 
     /**
@@ -264,7 +274,7 @@ Applications:
     Options: 
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
-      updateMethod => <success>composer</success>
+      updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
@@ -291,8 +301,6 @@ Applications:
         after:
           <success>TYPO3\Surf\Task\Generic\CreateSymlinksTask</success> (for application Neos)
       update:
-        tasks:
-          <success>TYPO3\Surf\Task\Composer\InstallTask</success> (for application Neos)
         after:
           <success>TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask</success> (for application Neos)
           <success>TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask</success> (for application Neos)
@@ -300,7 +308,6 @@ Applications:
       migrate:
         tasks:
           <success>TYPO3\Surf\Task\Neos\Flow\MigrateTask</success> (for application Neos)
-          <success>TYPO3\Surf\Task\Neos\Neos\ImportSiteTask</success> (for application Neos)
       finalize:
         tasks:
           <success>TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask</success> (for application Neos)

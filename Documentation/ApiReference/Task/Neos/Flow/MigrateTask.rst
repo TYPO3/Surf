@@ -8,7 +8,9 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask
 
     This tasks runs the doctrine:migrate command
 
-    It takes no options
+    It takes the following options:
+
+    * phpBinaryPathAndFilename (optional) - path to the php binary default php
 
     .. php:attr:: shell
 
@@ -40,9 +42,19 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
+    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
+
+        :type $shellCommandService: ShellCommandService
+        :param $shellCommandService:
+
     .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
 
-        Rollback the task
+        Rollback this task
 
         :type $node: Node
         :param $node:
@@ -53,7 +65,8 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\MigrateTask
         :type $options: array
         :param $options:
 
-    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
+    .. php:method:: configureOptions($options = [])
 
-        :type $shellCommandService: ShellCommandService
-        :param $shellCommandService:
+        :type $options: array
+        :param $options:
+        :returns: array

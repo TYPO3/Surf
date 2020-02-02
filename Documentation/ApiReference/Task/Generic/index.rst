@@ -8,3 +8,4 @@ TYPO3\\Surf\\Task\\Generic
 
    CreateDirectoriesTask
    CreateSymlinksTask
+   RollbackTask

@@ -61,12 +61,10 @@ TYPO3\\Surf\\Task\\SourceforgeUploadTask
         :type $options: array
         :param $options:
 
-    .. php:method:: checkOptionsForValidity($options)
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
 
-        Check if all required options are given
-
-        :type $options: array
-        :param $options:
+        :type $resolver: OptionsResolver
+        :param $resolver:
 
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
@@ -85,3 +83,9 @@ TYPO3\\Surf\\Task\\SourceforgeUploadTask
         :param $deployment:
         :type $options: array
         :param $options:
+
+    .. php:method:: configureOptions($options = [])
+
+        :type $options: array
+        :param $options:
+        :returns: array

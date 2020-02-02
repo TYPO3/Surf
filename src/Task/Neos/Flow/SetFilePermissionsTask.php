@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -8,6 +9,8 @@ namespace TYPO3\Surf\Task\Neos\Flow;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -16,6 +19,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use Webmozart\Assert\Assert;
 
 /**
  * This tasks sets the file permissions for the Neos Flow application
@@ -25,6 +29,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * * shellUsername (optional)
  * * webserverUsername (optional)
  * * webserverGroupname (optional)
+ * * phpBinaryPathAndFilename (optional) - path to the php binary default php
  *
  * Example:
  *  $workflow
@@ -32,6 +37,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  *              'shellUsername' => 'root',
  *              'webserverUsername' => 'www-data',
  *              'webserverGroupname' => 'www-data',
+ *              'phpBinaryPathAndFilename', '/path/to/php',
  *          ]
  *      );
  */
@@ -43,32 +49,31 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
      * Execute this task
      *
      * @param Node $node
-     * @param Application $application
+     * @param Application|Flow $application
      * @param Deployment $deployment
      * @param array $options
+     *
      * @throws InvalidConfigurationException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!$application instanceof Flow) {
-            throw new InvalidConfigurationException(sprintf(
-                'Flow application needed for SetFilePermissionsTask, got "%s"',
-                get_class($application)
-            ), 1358863436);
-        }
+        Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for SetFilePermissionsTask, got "%s"', get_class($application)));
 
         $targetPath = $deployment->getApplicationReleasePath($application);
 
+        $options = $this->configureOptions($options);
+
         $arguments = [
-            isset($options['shellUsername']) ? $options['shellUsername'] : (isset($options['username']) ? $options['username'] : 'root'),
-            isset($options['webserverUsername']) ? $options['webserverUsername'] : 'www-data',
-            isset($options['webserverGroupname']) ? $options['webserverGroupname'] : 'www-data'
+            $options['shellUsername'],
+            $options['webserverUsername'],
+            $options['webserverGroupname'],
         ];
 
         $this->shell->executeOrSimulate($application->buildCommand(
             $targetPath,
             'core:setfilepermissions',
-            $arguments
+            $arguments,
+            $options['phpBinaryPathAndFilename']
         ), $node, $deployment);
     }
 
@@ -86,14 +91,20 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
     }
 
     /**
-     * Rollback the task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
+     * @param OptionsResolver $resolver
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    protected function resolveOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefault('username', 'root');
+
+        $resolver->setDefault('shellUsername', static function (Options $options) {
+            return $options['username'];
+        });
+
+        $resolver->setDefault('webserverUsername', 'www-data');
+        $resolver->setDefault('webserverGroupname', 'www-data');
+
+        $resolver->setDefault('phpBinaryPathAndFilename', 'php')
+            ->setAllowedTypes('phpBinaryPathAndFilename', 'string');
     }
 }

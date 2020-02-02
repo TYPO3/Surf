@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -8,6 +9,8 @@ namespace TYPO3\Surf\Task\Neos\Flow;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -16,6 +19,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use Webmozart\Assert\Assert;
 
 /**
  * This task runs Neos Flow commands
@@ -26,6 +30,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  * * arguments
  * * ignoreErrors (optional)
  * * logOutput (optional)
+ * * phpBinaryPathAndFilename (optional) - path to the php binary default php
  *
  * Example:
  *  $workflow
@@ -34,6 +39,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  *              'arguments => [],
  *              'ignoreErrors' => false,
  *              'logOutput' => true,
+ *              'phpBinaryPathAndFilename', '/path/to/php',
  *          ]
  *      );
  */
@@ -45,26 +51,24 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
      * Execute this task
      *
      * @param Node $node
-     * @param Application $application
+     * @param Application|Flow $application
      * @param Deployment $deployment
      * @param array $options
+     *
      * @throws InvalidConfigurationException
+     * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!$application instanceof Flow) {
-            throw new InvalidConfigurationException(sprintf('Flow application needed for RunCommandTask, got "%s"', get_class($application)), 1358863336);
-        }
-        if (!isset($options['command'])) {
-            throw new InvalidConfigurationException('Missing option "command" for RunCommandTask', 1319201396);
-        }
+        Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for RunCommandTask, got "%s"', get_class($application)));
 
-        $ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === true;
-        $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
+        $options = $this->configureOptions($options);
+
         $targetPath = $deployment->getApplicationReleasePath($application);
-        $arguments = $this->buildCommandArguments($options);
-        $command = 'cd ' . $targetPath . ' && FLOW_CONTEXT=' . $application->getContext() . ' ./' . $application->getFlowScriptName() . ' ' . $options['command'] . $arguments;
-        $this->shell->executeOrSimulate($command, $node, $deployment, $ignoreErrors, $logOutput);
+
+        $command = $application->buildCommand($targetPath, $options['command'], $options['arguments'], $options['phpBinaryPathAndFilename']);
+
+        $this->shell->executeOrSimulate($command, $node, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
 
     /**
@@ -81,36 +85,19 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * Rollback the task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
+     * @param OptionsResolver $resolver
      */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        // TODO Implement rollback
-    }
+        $resolver->setDefault('ignoreErrors', false);
+        $resolver->setDefault('logOutput', true);
+        $resolver->setDefault('phpBinaryPathAndFilename', 'php');
 
-    /**
-     * @param array $options The command options
-     * @return string The escaped arguments string
-     */
-    protected function buildCommandArguments(array $options)
-    {
-        $arguments = '';
-        if (isset($options['arguments'])) {
-            if (!is_array($options['arguments'])) {
-                $options['arguments'] = [$options['arguments']];
-            }
-
-            $options['arguments'] = array_map(function ($value) {
-                return escapeshellarg($value);
-            }, $options['arguments']);
-
-            $arguments = ' ' . implode(' ', $options['arguments']);
-        }
-        return $arguments;
+        $resolver->setDefault('arguments', []);
+        $resolver->setAllowedTypes('arguments', ['array', 'string']);
+        $resolver->setNormalizer('arguments', function (Options $options, $value) {
+            return (array)$value;
+        });
+        $resolver->setRequired('command')->setAllowedTypes('command', 'string');
     }
 }

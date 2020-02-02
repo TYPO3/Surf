@@ -22,6 +22,7 @@ use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
 use TYPO3\Surf\Command\DeployCommand;
 use TYPO3\Surf\Command\DescribeCommand;
 use TYPO3\Surf\Command\MigrateCommand;
+use TYPO3\Surf\Command\RollbackCommand;
 use TYPO3\Surf\Command\SelfUpdateCommand;
 use TYPO3\Surf\Command\ShowCommand;
 use TYPO3\Surf\Command\SimulateCommand;
@@ -58,6 +59,7 @@ class Factory implements FactoryInterface
             new DescribeCommand(),
             new DeployCommand(),
             new MigrateCommand(),
+            new RollbackCommand(),
             new SelfUpdateCommand(),
         ];
     }
@@ -92,13 +94,14 @@ class Factory implements FactoryInterface
      * @param string $deploymentName
      * @param string $configurationPath
      * @param bool $simulateDeployment
+     * @param bool $initialize
      * @param bool $forceDeployment
      *
      * @return Deployment
      * @throws InvalidConfigurationException
      * @throws \TYPO3\Surf\Exception
      */
-    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true, $forceDeployment = false)
+    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true, $initialize = true, $forceDeployment = false)
     {
         $deployment = $this->createDeployment($deploymentName, $configurationPath);
         if ($deployment->getLogger() === null) {
@@ -109,8 +112,14 @@ class Factory implements FactoryInterface
             }
             $deployment->setLogger($logger);
         }
+
         $deployment->setForceRun($forceDeployment);
-        $deployment->initialize();
+
+        if ($initialize) {
+            $deployment->initialize();
+        }
+
+        $deployment->setDryRun($simulateDeployment);
 
         return $deployment;
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Composer;
 
 /*
@@ -8,6 +9,7 @@ namespace TYPO3\Surf\Task\Composer;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -40,19 +42,23 @@ class DownloadTask extends Task implements ShellCommandServiceAwareInterface
      * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param array $options
+     *
      * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $applicationReleasePath = $deployment->getApplicationReleasePath($application);
+        $options = $this->configureOptions($options);
 
-        if (isset($options['composerDownloadCommand'])) {
-            $composerDownloadCommand = $options['composerDownloadCommand'];
-        } else {
-            $composerDownloadCommand = 'curl -s https://getcomposer.org/installer | php';
-        }
+        $command = sprintf('cd %s && %s', escapeshellarg($deployment->getApplicationReleasePath($application)), $options['composerDownloadCommand']);
 
-        $command = sprintf('cd %s && %s', escapeshellarg($applicationReleasePath), $composerDownloadCommand);
         $this->shell->executeOrSimulate($command, $node, $deployment);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('composerDownloadCommand', 'curl -s https://getcomposer.org/installer | php');
     }
 }
