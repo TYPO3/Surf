@@ -20,8 +20,9 @@ TYPO3\\Surf\\Task\\RsyncFoldersTask
      $workflow
          ->setTaskOptions('TYPO3\Surf\Task\RsyncFoldersTask', [
                  'folders' => [
-                     'uploads/spaceship' => '/var/www/outerspace/uploads/spaceship',
-                     'uploads/freighter' => '/var/www/outerspace/uploads/freighter',
+                     ['uploads/spaceship', '/var/www/outerspace/uploads/spaceship'],
+                     ['uploads/freighter', '/var/www/outerspace/uploads/freighter'],
+                     ['/tmp/outerspace/lonely_planet', '/var/www/outerspace/uploads/lonely_planet']
                      '/tmp/outerspace/lonely_planet' => '/var/www/outerspace/uploads/lonely_planet'
                  ]
              ]
@@ -57,6 +58,11 @@ TYPO3\\Surf\\Task\\RsyncFoldersTask
         :type $options: array
         :param $options:
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
@@ -80,8 +86,3 @@ TYPO3\\Surf\\Task\\RsyncFoldersTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:
