@@ -18,8 +18,9 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\FlushCacheListTask
                  'flushCacheList' => [
                      'Neos_Fusion_Content',
                      'Flow_Session_MetaData',
-                     'Flow_Session_Storage'
-                 ]
+                     'Flow_Session_Storage',
+                 ],
+                 'phpBinaryPathAndFilename', '/path/to/php',
              ]
          );
 

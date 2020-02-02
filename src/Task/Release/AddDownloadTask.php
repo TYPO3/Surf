@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Release;
 
 /*
@@ -8,13 +9,13 @@ namespace TYPO3\Surf\Task\Release;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Task for adding a "TYPO3.Release" download
@@ -26,28 +27,37 @@ class AddDownloadTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * Execute this task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $this->checkOptionsForValidity($options);
+        $options = $this->configureOptions($options);
+
         $host = $options['releaseHost'];
         $login = $options['releaseHostLogin'];
-        $sitePath =  $options['releaseHostSitePath'];
+        $sitePath = $options['releaseHostSitePath'];
         $version = $options['version'];
         $label = $options['label'];
         $uriPattern = $options['downloadUriPattern'];
         $productName = $options['productName'];
-        $files = $options['files'];
 
-        $downloads = [];
-        foreach ($files as $file) {
-            $downloads[] = sprintf('"%s,%s,%s"', basename($file), sha1($file), sprintf($uriPattern, basename($file)));
-        }
-        $this->shell->executeOrSimulate(sprintf('ssh %s%s "cd \"%s\" ; ./flow release:adddownload --product-name \"%s\" --version \"%s\" --label \"%s\" %s"', ($login ? $login . '@' : ''), $host, $sitePath, $productName, $version, $label, implode(' ', $downloads)), $node, $deployment);
+        $downloads = array_map(static function ($file) use ($uriPattern) {
+            return sprintf('"%s,%s,%s"', basename($file), sha1($file), sprintf($uriPattern, basename($file)));
+        }, $options['files']);
+
+        $this->shell->executeOrSimulate(sprintf(
+            'ssh %s%s "cd \"%s\" ; ./flow release:adddownload --product-name \"%s\" --version \"%s\" --label \"%s\" %s"',
+            ($login ? $login . '@' : ''),
+            $host,
+            $sitePath,
+            $productName,
+            $version,
+            $label,
+            implode(' ', $downloads)
+        ), $node, $deployment);
     }
 
     /**
@@ -64,17 +74,11 @@ class AddDownloadTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * Check if all required options are given
-     *
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @param OptionsResolver $resolver
      */
-    protected function checkOptionsForValidity(array $options)
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        foreach (['releaseHost', 'releaseHostSitePath', 'version', 'label', 'downloadUriPattern', 'productName', 'files'] as $optionName) {
-            if (!isset($options[$optionName])) {
-                throw new InvalidConfigurationException('"' . $optionName . '" option not set', 1321549657);
-            }
-        }
+        $resolver->setAllowedTypes('files', 'array');
+        $resolver->setRequired(['releaseHost', 'releaseHostSitePath', 'version', 'label', 'downloadUriPattern', 'productName', 'files']);
     }
 }

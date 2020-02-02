@@ -13,6 +13,7 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\SetFilePermissionsTask
     * shellUsername (optional)
     * webserverUsername (optional)
     * webserverGroupname (optional)
+    * phpBinaryPathAndFilename (optional) - path to the php binary default php
 
     Example:
      $workflow
@@ -20,6 +21,7 @@ TYPO3\\Surf\\Task\\Neos\\Flow\\SetFilePermissionsTask
                  'shellUsername' => 'root',
                  'webserverUsername' => 'www-data',
                  'webserverGroupname' => 'www-data',
+                 'phpBinaryPathAndFilename', '/path/to/php',
              ]
          );
 

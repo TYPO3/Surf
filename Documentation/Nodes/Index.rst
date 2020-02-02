@@ -28,7 +28,7 @@ However, due to constraints in the infrastructure setup, sometimes, deployment s
 Custom Connection
 -----------------
 
-n case you need to connect to the remote host via more esoteric protocols, you can also implement your own remote host connection: In this case, set the option remoteCommandExecutionHandler on the node::
+In case you need to connect to the remote host via more esoteric protocols, you can also implement your own remote host connection: In this case, set the option remoteCommandExecutionHandler on the node::
 
    $node->setOption('remoteCommandExecutionHandler', function(ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput = TRUE) {
       // Now, do what you need to do in order to connect to $node and execute $command.

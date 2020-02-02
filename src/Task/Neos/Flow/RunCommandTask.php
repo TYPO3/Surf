@@ -30,6 +30,7 @@ use Webmozart\Assert\Assert;
  * * arguments
  * * ignoreErrors (optional)
  * * logOutput (optional)
+ * * phpBinaryPathAndFilename (optional) - path to the php binary default php
  *
  * Example:
  *  $workflow
@@ -38,6 +39,7 @@ use Webmozart\Assert\Assert;
  *              'arguments => [],
  *              'ignoreErrors' => false,
  *              'logOutput' => true,
+ *              'phpBinaryPathAndFilename', '/path/to/php',
  *          ]
  *      );
  */
@@ -54,6 +56,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
      * @param array $options
      *
      * @throws InvalidConfigurationException
+     * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -63,7 +66,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
 
         $targetPath = $deployment->getApplicationReleasePath($application);
 
-        $command = sprintf('cd %s && FLOW_CONTEXT=%s ./%s %s', $targetPath, $application->getContext(), $application->getFlowScriptName(), $options['command']);
+        $command = $application->buildCommand($targetPath, $options['command'], $options['arguments'], $options['phpBinaryPathAndFilename']);
 
         $this->shell->executeOrSimulate($command, $node, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
@@ -88,15 +91,13 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
     {
         $resolver->setDefault('ignoreErrors', false);
         $resolver->setDefault('logOutput', true);
+        $resolver->setDefault('phpBinaryPathAndFilename', 'php');
 
         $resolver->setDefault('arguments', []);
-        $resolver->setRequired('command');
-        $resolver->setNormalizer('command', static function (Options $options, $value) {
-            if (!empty($options['arguments'])) {
-                return sprintf('%s %s', $value, implode(' ', array_map('escapeshellarg', (array)$options['arguments'])));
-            }
-
-            return $value;
+        $resolver->setAllowedTypes('arguments', ['array', 'string']);
+        $resolver->setNormalizer('arguments', function (Options $options, $value) {
+            return (array)$value;
         });
+        $resolver->setRequired('command')->setAllowedTypes('command', 'string');
     }
 }
