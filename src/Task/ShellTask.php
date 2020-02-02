@@ -17,6 +17,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task to execute shell commands on the remote host.
@@ -49,6 +50,7 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @param array $options
      *
      * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -64,6 +66,8 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -77,6 +81,8 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -109,7 +115,7 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
      * @return mixed
      * @throws InvalidConfigurationException
      */
-    private function replacePaths(Application $application, Deployment $deployment, $command)
+    private function replacePaths(Application $application, Deployment $deployment, string $command)
     {
         $replacePaths = [
             '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),

@@ -14,7 +14,6 @@ use TYPO3\Surf\Task\ShellTask;
 
 class ShellTaskTest extends BaseTaskTest
 {
-
     /**
      * @var ShellTask
      */
@@ -23,7 +22,7 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeThrowsExceptionNoCommandGiven()
+    public function executeThrowsExceptionNoCommandGiven(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, []);
@@ -35,19 +34,28 @@ class ShellTaskTest extends BaseTaskTest
      *
      * @test
      * @dataProvider commands
+     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @throws \TYPO3\Surf\Exception\TaskExecutionException
      */
-    public function executeSomeCommandSuccessfully($command, $expectedCommand)
+    public function executeSomeCommandSuccessfully($command, $expectedCommand): void
     {
-        $this->task->execute($this->node, $this->application, $this->deployment, ['command' => $command, 'ignoreErrors' => true, 'logOutput' => true]);
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['command' => $command, 'ignoreErrors' => true, 'logOutput' => true]
+        );
         $this->assertCommandExecuted($expectedCommand);
     }
 
     /**
      * @test
      */
-    public function rollbackReturnVoidNoRollbackCommandGiven()
+    public function rollbackReturnVoidNoRollbackCommandGiven(): void
     {
-        $this->assertNull($this->task->rollback($this->node, $this->application, $this->deployment, ['command' => 'someCommand']));
+        $this->assertNull(
+            $this->task->rollback($this->node, $this->application, $this->deployment, ['command' => 'someCommand'])
+        );
     }
 
     /**
@@ -57,16 +65,21 @@ class ShellTaskTest extends BaseTaskTest
      * @test
      * @dataProvider commands
      */
-    public function rollbackSomeCommandSuccessfully($command, $expectedCommand)
+    public function rollbackSomeCommandSuccessfully($command, $expectedCommand): void
     {
-        $this->task->rollback($this->node, $this->application, $this->deployment, ['rollbackCommand' => $command, 'command' => 'someCommand']);
+        $this->task->rollback(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['rollbackCommand' => $command, 'command' => 'someCommand']
+        );
         $this->assertCommandExecuted($expectedCommand);
     }
 
     /**
      * @return array
      */
-    public function commands()
+    public function commands(): array
     {
         return [
             ['ln -s {sharedPath}', sprintf('ln -s %s', escapeshellarg('/shared'))],
