@@ -30,11 +30,13 @@ jobs:
   include:
     - &lint
       stage: test
-      php: 7.2
+      php: 7.3
       env: PHP Lint
       before_install: skip
       install: skip
       script: find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+    - <<: *lint
+      php: 7.2
     - <<: *lint
       php: 7.1
     - <<: *lint
@@ -44,10 +46,12 @@ jobs:
 
     - &phpunit
       stage: test
-      php: 7.2
+      php: 7.3
       env: PHPUnit
       before_script: composer install
       script: vendor/bin/phpunit Tests/Unit/
+    - <<: *phpunit
+      php: 7.2
     - <<: *phpunit
       php: 7.1
     - <<: *phpunit
@@ -61,8 +65,16 @@ jobs:
       before_script:
         - composer install
         - composer update
+    - <<: *phpunit
+      php: 7.3
+      env: PHPUnit=latest
+      before_script:
+        - composer install
+        - composer update
   allow_failures:
     - php: 7.2
+      env: PHPUnit=latest
+    - php: 7.3
       env: PHPUnit=latest
 
 #after_success:
