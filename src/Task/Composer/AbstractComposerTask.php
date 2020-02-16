@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Composer;
 
 /*
@@ -8,6 +9,8 @@ namespace TYPO3\Surf\Task\Composer;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -47,22 +50,25 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
     protected $suffix = ['2>&1'];
 
     /**
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     *
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (isset($options['useApplicationWorkspace']) && $options['useApplicationWorkspace'] === true) {
+        $options = $this->configureOptions($options);
+
+        if ($options['useApplicationWorkspace']) {
             $composerRootPath = $deployment->getWorkspacePath($application);
         } else {
             $composerRootPath = $deployment->getApplicationReleasePath($application);
         }
 
-        if (isset($options['nodeName'])) {
+        if ($options['nodeName'] !== null) {
             $node = $deployment->getNode($options['nodeName']);
             if ($node === null) {
                 throw new InvalidConfigurationException(sprintf('Node "%s" not found', $options['nodeName']), 1369759412);
@@ -82,8 +88,9 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     *
+     * @throws InvalidConfigurationException
+     * @throws TaskExecutionException
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -95,24 +102,16 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      *
      * @param string $manifestPath
      * @param array $options
+     *
      * @return array
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @throws TaskExecutionException
      */
-    protected function buildComposerCommands($manifestPath, array $options)
+    private function buildComposerCommands($manifestPath, array $options)
     {
-        if (!isset($options['composerCommandPath'])) {
-            throw new TaskExecutionException('Composer command not found. Set the composerCommandPath option.', 1349163257);
-        }
-
-        $additionalArguments = [];
-        if (isset($options['additionalArguments'])) {
-            $additionalArguments = (array)$options['additionalArguments'];
-        }
-
         $arguments = array_merge(
             [escapeshellcmd($options['composerCommandPath']), $this->command],
             $this->arguments,
-            array_map('escapeshellarg', $additionalArguments),
+            array_map('escapeshellarg', $options['additionalArguments']),
             $this->suffix
         );
         $script = implode(' ', $arguments);
@@ -129,11 +128,12 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      * If no manifest exists, a log message is recorded.
      *
      * @param string $path
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Deployment $deployment
+     *
      * @return bool
      */
-    protected function composerManifestExists($path, Node $node, Deployment $deployment)
+    private function composerManifestExists($path, Node $node, Deployment $deployment)
     {
         // In dry run mode, no checkout is there, this we must not assume a composer.json is there!
         if ($deployment->isDryRun()) {
@@ -143,9 +143,30 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         $composerJsonExists = $this->shell->executeOrSimulate('test -f ' . escapeshellarg($composerJsonPath), $node, $deployment, true);
         if ($composerJsonExists === false) {
             $deployment->getLogger()->debug('No composer.json found in path "' . $composerJsonPath . '"');
+
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('composerCommandPath');
+
+        $resolver->setDefault('additionalArguments', [])
+                 ->setNormalizer(
+                     'additionalArguments',
+                     static function (Options $options, $value) {
+                         return (array)$value;
+                     }
+                 );
+
+        $resolver->setDefault('useApplicationWorkspace', false);
+        $resolver->setDefault('nodeName', null);
+        $resolver->setAllowedTypes('additionalArguments', ['array', 'string']);
     }
 }

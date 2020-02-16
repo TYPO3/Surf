@@ -51,13 +51,26 @@ TYPO3\\Surf\\Task\\Transfer\\ScpTask
         :type $options: array
         :param $options:
 
-    .. php:method:: getExcludes($options)
+    .. php:method:: getExcludes($options, $fileName)
 
         :type $options: array
         :param $options:
+        :type $fileName: string
+        :param $fileName:
         :returns: string
 
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
         :param $shellCommandService:
+
+    .. php:method:: configureOptions($options = [])
+
+        :type $options: array
+        :param $options:
+        :returns: array
+
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
