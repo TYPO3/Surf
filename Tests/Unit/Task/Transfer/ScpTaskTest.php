@@ -49,9 +49,9 @@ class ScpTaskTest extends BaseTaskTest
             'rm -rf ./Data/Surf/TestDeployment/TestApplication/*.tar.gz',
             sprintf('cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" --exclude="%1$s.tar.gz" -czf %1$s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .', $releaseIdentifier),
             sprintf('scp ./Data/Surf/TestDeployment/TestApplication/%s.tar.gz jdoe@myserver.local:/home/jdoe/app/cache/transfer', $releaseIdentifier),
-            sprintf('tar -zxvf /home/jdoe/app/cache/transfer/%1$s.tar.gz -C /home/jdoe/app/releases/%1$s', $releaseIdentifier),
-            sprintf('rm -rf /home/jdoe/app/cache/transfer/%s.tar.gz', $releaseIdentifier),
-            sprintf('rm -rf ./Data/Surf/TestDeployment/TestApplication/%s.tar.gz', $releaseIdentifier),
+            sprintf('tar -xzf /home/jdoe/app/cache/transfer/%1$s.tar.gz -C /home/jdoe/app/releases/%1$s', $releaseIdentifier),
+            sprintf('rm -f /home/jdoe/app/cache/transfer/%s.tar.gz', $releaseIdentifier),
+            sprintf('rm -f ./Data/Surf/TestDeployment/TestApplication/%s.tar.gz', $releaseIdentifier),
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, []);
