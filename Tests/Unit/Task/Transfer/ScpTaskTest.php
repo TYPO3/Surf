@@ -47,7 +47,7 @@ class ScpTaskTest extends BaseTaskTest
         $expectedCommands = [
             'mkdir -p /home/jdoe/app/cache/transfer',
             'rm -rf ./Data/Surf/TestDeployment/TestApplication/*.tar.gz',
-            sprintf('cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" -zcf %s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .', $releaseIdentifier),
+            sprintf('cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" --exclude="%1$s.tar.gz" -zcf %1$s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .', $releaseIdentifier),
             sprintf('scp ./Data/Surf/TestDeployment/TestApplication/%s.tar.gz jdoe@myserver.local:/home/jdoe/app/cache/transfer', $releaseIdentifier),
             sprintf('tar -zxvf /home/jdoe/app/cache/transfer/%1$s.tar.gz -C /home/jdoe/app/releases/%1$s', $releaseIdentifier),
             sprintf('rm -rf /home/jdoe/app/cache/transfer/%s.tar.gz', $releaseIdentifier),
@@ -73,6 +73,6 @@ class ScpTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, ['scpExcludes' => ['file.txt']]);
 
-        $this->assertCommandExecuted(sprintf('cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" --exclude="file.txt" -zcf %s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .', $releaseIdentifier));
+        $this->assertCommandExecuted(sprintf('cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" --exclude="%1$s.tar.gz" --exclude="file.txt" -zcf %1$s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .', $releaseIdentifier));
     }
 }
