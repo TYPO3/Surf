@@ -7,3 +7,4 @@ TYPO3\\Surf\\Task\\Transfer
 .. toctree::
 
    RsyncTask
+   ScpTask

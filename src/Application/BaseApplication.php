@@ -22,6 +22,7 @@ use TYPO3\Surf\Task\LockDeploymentTask;
 use TYPO3\Surf\Task\Package\GitTask;
 use TYPO3\Surf\Task\SymlinkReleaseTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
+use TYPO3\Surf\Task\Transfer\ScpTask;
 use TYPO3\Surf\Task\UnlockDeploymentTask;
 
 /**
@@ -278,7 +279,7 @@ class BaseApplication extends Application
                 $workflow->addTask(RsyncTask::class, 'transfer', $this);
                 break;
             case 'scp':
-                // TODO
+                $workflow->addTask(ScpTask::class, 'transfer', $this);
                 break;
         }
     }
