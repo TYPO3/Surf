@@ -13,7 +13,6 @@ use TYPO3\Surf\Exception;
 
 final class ClockException extends Exception
 {
-
     /**
      * @param string $string
      *

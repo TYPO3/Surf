@@ -23,7 +23,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class SelfUpdateCommand extends Command
 {
-
     /**
      * @return bool
      */

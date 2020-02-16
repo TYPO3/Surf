@@ -24,7 +24,7 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  *
  * It takes the following options:
  *
- * * configurationFileExtension (optional) - yaml or something differrent
+ * * configurationFileExtension (optional) - yaml or something different
  *
  * Example:
  *  $workflow
