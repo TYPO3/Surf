@@ -41,7 +41,7 @@ Source composer installation
 
 To install Surf via composer, run the following commands::
 
-    composer global require typo3/surf:^2.0.0
+    composer global require typo3/surf:^2.0
 
 This way, you can add `~/.composer/vendor/typo3/surf` to `PHP Include Paths` of your IDE.
 
