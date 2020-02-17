@@ -41,13 +41,14 @@ class SelfUpdateCommand extends Command
                  'stability',
                  null,
                  InputOption::VALUE_OPTIONAL,
-                 'GitHub stability value (' . GithubStrategy::STABLE . ', ' . GithubStrategy::UNSTABLE . ', ' . GithubStrategy::ANY . ')'
+                 'GitHub stability value (' . GithubStrategy::STABLE . ', ' . GithubStrategy::UNSTABLE . ', ' . GithubStrategy::ANY . ')',
+                 GithubStrategy::STABLE
              )->addOption(
-                'check',
-                null,
-                InputOption::VALUE_NONE,
-                'Check for new version'
-            )->addOption(
+                 'check',
+                 null,
+                 InputOption::VALUE_NONE,
+                 'Check for new version'
+             )->addOption(
                 'rollback',
                 null,
                 InputOption::VALUE_NONE,
@@ -72,9 +73,7 @@ class SelfUpdateCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $stability = $input->getOption('stability');
-        if (empty($stability)) {
-            $stability = GithubStrategy::STABLE;
-        }
+
         /** @var GithubStrategy $strategy */
         $strategy = $updater->getStrategy();
         $strategy->setCurrentLocalVersion($this->getApplication()->getVersion());
