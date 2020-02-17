@@ -19,7 +19,7 @@ Download phar archive
 To install Surf as phar archive, run the following commands::
 
     mkdir /usr/local/surf
-    curl -L https://github.com/TYPO3/Surf/releases/download/2.0.0-beta11/surf.phar -o /usr/local/surf/surf.phar
+    curl -L https://github.com/TYPO3/Surf/releases/download/2.0.0/surf.phar -o /usr/local/surf/surf.phar
     chmod +x /usr/local/surf/surf.phar
     ln -s /usr/local/surf/surf.phar /usr/local/bin/surf
 
@@ -41,8 +41,7 @@ Source composer installation
 
 To install Surf via composer, run the following commands::
 
-    # Until stable release, you need to add stability-flag @beta
-    composer global require typo3/surf:^2.0.0@beta
+    composer global require typo3/surf:^2.0.0
 
 This way, you can add `~/.composer/vendor/typo3/surf` to `PHP Include Paths` of your IDE.
 
