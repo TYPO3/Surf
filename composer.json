@@ -35,10 +35,5 @@
     },
     "bin": [
         "surf"
-    ],
-    "config": {
-        "platform": {
-
-        }
-    }
+    ]
 }
