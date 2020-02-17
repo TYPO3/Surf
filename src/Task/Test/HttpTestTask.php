@@ -11,6 +11,7 @@ namespace TYPO3\Surf\Task\Test;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -63,14 +64,14 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * Execute this task
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
      *
      * @throws InvalidConfigurationException
      * @throws TaskExecutionException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
@@ -114,14 +115,14 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             'expectedRegexp' => null,
             'timeout' => null,
             'port' => null,
-            'method' => null,
+            'method' => 'GET',
             'username' => null,
             'password' => null,
             'data' => null,
             'proxy' => null,
             'proxyPort' => null,
         ]);
-        $resolver->setNormalizer('remote', function (Options $options, $value) {
+        $resolver->setNormalizer('remote', static function (Options $options, $value) {
             return (bool)$value;
         });
     }
@@ -225,7 +226,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      *
      * @return HttpResponse
      * @throws TaskExecutionException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     protected function executeLocalCurlRequest($url, array $options = [])
     {
@@ -265,8 +266,8 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * @param string $url Request URL
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Deployment $deployment
      * @param string $additionalCurlParameters
      *
      * @return HttpResponse
