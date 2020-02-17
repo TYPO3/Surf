@@ -17,7 +17,6 @@ use TYPO3\Surf\Exception as SurfException;
  */
 class TaskExecutionException extends SurfException
 {
-
     /**
      * @param string $scriptUrl
      *

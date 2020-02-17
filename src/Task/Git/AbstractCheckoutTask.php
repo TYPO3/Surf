@@ -50,21 +50,19 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
             if (preg_match('/[a-f0-9]{40}/', $sha1) === 0) {
                 throw new TaskExecutionException('The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
             }
+        } elseif (isset($options['tag'])) {
+            $sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/tags/{$options['tag']} | awk '{print $1 }'", $node, $deployment, true);
+            if (preg_match('/[a-f0-9]{40}/', $sha1) === 0) {
+                throw new TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
+            }
         } else {
-            if (isset($options['tag'])) {
-                $sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/tags/{$options['tag']} | awk '{print $1 }'", $node, $deployment, true);
-                if (preg_match('/[a-f0-9]{40}/', $sha1) === 0) {
-                    throw new TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
-                }
-            } else {
-                $branch = 'master';
-                if (isset($options['branch'])) {
-                    $branch = $options['branch'];
-                }
-                $sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/heads/$branch | awk '{print $1 }'", $node, $deployment, true);
-                if (preg_match('/^[a-f0-9]{40}$/', $sha1) === 0) {
-                    throw new TaskExecutionException('Could not retrieve sha1 of git branch "' . $branch . '"', 1335974926);
-                }
+            $branch = 'master';
+            if (isset($options['branch'])) {
+                $branch = $options['branch'];
+            }
+            $sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/heads/$branch | awk '{print $1 }'", $node, $deployment, true);
+            if (preg_match('/^[a-f0-9]{40}$/', $sha1) === 0) {
+                throw new TaskExecutionException('Could not retrieve sha1 of git branch "' . $branch . '"', 1335974926);
             }
         }
         return $sha1;
@@ -114,29 +112,33 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
     }
 
     /**
-     * @param $gitPath
-     * @param $sha1
+     * @param string $gitPath
+     * @param string $sha1
      * @param Node $node
      * @param Deployment $deployment
      * @param array $options
      */
     protected function executeOrSimulatePostGitCheckoutCommands($gitPath, $sha1, Node $node, Deployment $deployment, array $options)
     {
-        if (isset($options['gitPostCheckoutCommands'])) {
-            $gitPostCheckoutCommands = $options['gitPostCheckoutCommands'];
-            if (is_array($gitPostCheckoutCommands)) {
-                foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
-                    foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {
-                        $branchName = 'mybranch_' . trim($sha1) . '_' . uniqid();
-                        $command = strtr("
-							cd $gitPath
-							&& cd $localPath
-							&& git checkout -b $branchName
-							&& $postCheckoutCommand
-						", "\t\n", '  ');
-                        $this->shell->executeOrSimulate($command, $node, $deployment);
-                    }
-                }
+        if (!isset($options['gitPostCheckoutCommands'])) {
+            return;
+        }
+
+        $gitPostCheckoutCommands = $options['gitPostCheckoutCommands'];
+        if (!is_array($gitPostCheckoutCommands)) {
+            return;
+        }
+
+        foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
+            foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {
+                $branchName = 'mybranch_' . trim($sha1) . '_' . uniqid();
+                $command = strtr("
+                        cd $gitPath
+                        && cd $localPath
+                        && git checkout -b $branchName
+                        && $postCheckoutCommand
+                    ", "\t\n", '  ');
+                $this->shell->executeOrSimulate($command, $node, $deployment);
             }
         }
     }

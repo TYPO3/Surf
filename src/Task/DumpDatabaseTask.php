@@ -80,7 +80,6 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
             $options['targetUser'],
             '-p' . $options['targetPassword'],
             $options['targetDatabase']
-
         ]);
 
         $sshCommand = ['ssh'];
@@ -122,6 +121,15 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function resolveOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['sourceHost', 'sourceUser', 'sourcePassword', 'sourceDatabase', 'targetHost', 'targetUser', 'targetPassword', 'targetDatabase']);
+        $resolver->setRequired([
+            'sourceHost',
+            'sourceUser',
+            'sourcePassword',
+            'sourceDatabase',
+            'targetHost',
+            'targetUser',
+            'targetPassword',
+            'targetDatabase'
+        ]);
     }
 }

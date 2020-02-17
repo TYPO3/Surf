@@ -14,7 +14,6 @@ use TYPO3\Surf\Exception as SurfException;
 
 final class DeploymentLockedException extends SurfException
 {
-
     /**
      * @param Deployment $deployment
      * @param $currentDeploymentLockIdentifier

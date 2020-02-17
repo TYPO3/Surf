@@ -501,7 +501,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get the deployment configuration path (defaults to Build/Surf/DeploymentName/Configuration)
+     * Get the deployment configuration path (defaults to ./.surf/DeploymentName/Configuration)
      *
      * @return string The path without a trailing slash
      */
