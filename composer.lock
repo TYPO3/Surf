@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15d0282b41bf96e23f30bc654ff7ea75",
+    "content-hash": "d164468f2e79c154ed3d23862d9e23d0",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -440,16 +440,16 @@
         },
         {
             "name": "padraic/phar-updater",
-            "version": "v1.0.6",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/humbug/phar-updater.git",
-                "reference": "d01d3b8f26e541ac9b9eeba1e18d005d852f7ff1"
+                "reference": "fb9d3b1551a99466f0a74cd264f4c95a8621ac7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/humbug/phar-updater/zipball/d01d3b8f26e541ac9b9eeba1e18d005d852f7ff1",
-                "reference": "d01d3b8f26e541ac9b9eeba1e18d005d852f7ff1",
+                "url": "https://api.github.com/repos/humbug/phar-updater/zipball/fb9d3b1551a99466f0a74cd264f4c95a8621ac7a",
+                "reference": "fb9d3b1551a99466f0a74cd264f4c95a8621ac7a",
                 "shasum": ""
             },
             "require": {
@@ -488,7 +488,7 @@
                 "self-update",
                 "update"
             ],
-            "time": "2018-03-30T12:52:15+00:00"
+            "time": "2018-02-20T01:18:59+00:00"
         },
         {
             "name": "paragonie/random_compat",
