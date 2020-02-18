@@ -39,11 +39,11 @@ class RollbackCommand extends Command implements FactoryAwareInterface
                  InputOption::VALUE_OPTIONAL,
                  'Path for deployment configuration files'
              )->addOption(
-                'simulate',
-                null,
-                InputOption::VALUE_NONE,
-                'Simulate rollback'
-            );
+                 'simulate',
+                 null,
+                 InputOption::VALUE_NONE,
+                 'Simulate rollback'
+             );
     }
 
     /**

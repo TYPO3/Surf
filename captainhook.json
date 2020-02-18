@@ -1,0 +1,52 @@
+{
+    "commit-msg": {
+        "enabled": true,
+        "actions": []
+    },
+    "pre-push": {
+        "enabled": false,
+        "actions": []
+    },
+    "pre-commit": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "\\CaptainHook\\App\\Hook\\PHP\\Action\\Linting",
+                "options": [],
+                "conditions": []
+            },
+            {
+                "action": "vendor/bin/phpunit",
+                "options": [],
+                "conditions": []
+            },
+            {
+                "action": "vendor/bin/php-cs-fixer fix",
+                "options": [],
+                "conditions": []
+            }
+        ]
+    },
+    "prepare-commit-msg": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-commit": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "\\TYPO3\\Surf\\Integration\\GenerateDocumentationAction",
+                "options": {
+                }
+            }
+        ]
+    },
+    "post-merge": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-checkout": {
+        "enabled": false,
+        "actions": []
+    }
+}
