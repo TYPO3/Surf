@@ -114,7 +114,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         foreach ($applications as $application) {
             $this->output->writeln('  <success>' . $application->getName() . ':</success>');
             $this->output->writeln('    <comment>Deployment path</comment>: <success>' . $application->getDeploymentPath() . '</success>');
-            $this->output->writeln('    <comment>Options</comment>: ');
+            $this->output->writeln('    <comment>Options</comment>:');
             foreach ($application->getOptions() as $key => $value) {
                 if (is_array($value)) {
                     $this->output->writeln('      ' . $key . ' =>');
@@ -133,7 +133,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             ) . '</success>');
 
             if ($workflow instanceof SimpleWorkflow) {
-                $this->output->writeln('    <comment>Detailed workflow</comment>: ');
+                $this->output->writeln('    <comment>Detailed workflow</comment>:');
                 $this->printStages($application, $workflow->getStages(), $workflow->getTasks());
             }
         }

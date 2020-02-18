@@ -109,7 +109,7 @@ Applications:
 
   <success>TestApplication:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       rsyncExcludes =>
         <success>.git</success>
         <success>web/fileadmin</success>
@@ -122,7 +122,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
       lock:
       package:
@@ -189,7 +189,7 @@ Applications:
 
   <success>TYPO3 CMS:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -212,7 +212,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application TYPO3 CMS)
@@ -271,7 +271,7 @@ Applications:
 
   <success>Neos:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -282,7 +282,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
@@ -342,7 +342,7 @@ Applications:
 
   <success>My App:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -353,7 +353,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application My App)
@@ -404,7 +404,7 @@ Applications:
 
   <success>My App:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -415,7 +415,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application My App)
@@ -464,7 +464,7 @@ Applications:
 
   <success>My App:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -475,7 +475,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application My App)
