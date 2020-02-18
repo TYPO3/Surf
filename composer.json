@@ -33,11 +33,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "TYPO3\\Surf\\Tests\\": "Tests"
+            "TYPO3\\Surf\\Tests\\": "tests"
         }
     },
     "bin": [
-        "surf"
+        "bin/surf"
     ],
     "config": {
         "platform": {
