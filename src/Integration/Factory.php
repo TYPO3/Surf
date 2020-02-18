@@ -21,7 +21,6 @@ use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
 use TYPO3\Surf\Command\DeployCommand;
 use TYPO3\Surf\Command\DescribeCommand;
-use TYPO3\Surf\Command\MigrateCommand;
 use TYPO3\Surf\Command\RollbackCommand;
 use TYPO3\Surf\Command\SelfUpdateCommand;
 use TYPO3\Surf\Command\ShowCommand;
@@ -58,7 +57,6 @@ class Factory implements FactoryInterface
             new SimulateCommand(),
             new DescribeCommand(),
             new DeployCommand(),
-            new MigrateCommand(),
             new RollbackCommand(),
             new SelfUpdateCommand(),
         ];
