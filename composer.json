@@ -7,15 +7,14 @@
         "monolog/monolog": "^1.17",
         "neos/utility-files": "^3.0",
         "padraic/phar-updater": "1.0.5",
-        "symfony/console": "^3.4.17 || ^4.0",
-        "symfony/process": "^3.0 || ^4.0",
-        "symfony/options-resolver": "^3.0 || ^4.0",
+        "symfony/console": "^4.0",
+        "symfony/process": "^4.0",
+        "symfony/options-resolver": "^4.0",
         "guzzlehttp/guzzle": "^6.0",
         "webmozart/assert": "^1.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7 || ^6.5",
-        "symfony/finder": "^3.0 || ^4.0",
+        "phpunit/phpunit": "^6.5",
         "friendsofphp/php-cs-fixer": "^2.14",
         "sphpdox/sphpdox": "dev-master"
     },
