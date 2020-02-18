@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  */
 
 use TYPO3\Surf\Application\TYPO3\CMS;
-use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -66,16 +65,11 @@ class CompareDatabaseTask extends AbstractCliTask
      */
     protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
-        switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
-            case 'typo3_console':
-                $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '*.add,*.change';
-                return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'database:updateschema', $databaseCompareMode];
-            case 'coreapi':
-                $deployment->getLogger()->warning(DeprecationMessageFactory::createDeprecationWarningForCoreApiUsage());
-                $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '2,4';
-                return [$this->getCliDispatchScriptFileName($options), 'extbase', 'databaseapi:databasecompare', $databaseCompareMode];
-            default:
-                return [];
+        if ($this->getAvailableCliPackage($node, $application, $deployment, $options) === 'typo3_console') {
+            $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '*.add,*.change';
+            return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'database:updateschema', $databaseCompareMode];
         }
+
+        return [];
     }
 }

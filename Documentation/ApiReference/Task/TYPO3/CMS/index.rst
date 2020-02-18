@@ -7,7 +7,6 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS
 .. toctree::
 
    FlushCachesTask
-   CopyConfigurationTask
    CompareDatabaseTask
    AbstractCliTask
    ActivatePackagesTask
