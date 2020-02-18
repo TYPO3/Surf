@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\Surf\Integration\CustomGithubStrategy;
 
 /**
  * Surf list command
@@ -49,11 +50,11 @@ class SelfUpdateCommand extends Command
                  InputOption::VALUE_NONE,
                  'Check for new version'
              )->addOption(
-                'rollback',
-                null,
-                InputOption::VALUE_NONE,
-                'Rolls back to previous version'
-            )->setDescription(sprintf('Update %s to most recent stable build', $this->getLocalPharName()));
+                 'rollback',
+                 null,
+                 InputOption::VALUE_NONE,
+                 'Rolls back to previous version'
+             )->setDescription(sprintf('Update %s to most recent stable build', $this->getLocalPharName()));
     }
 
     /**
@@ -65,6 +66,8 @@ class SelfUpdateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $updater = new Updater(null, false, Updater::STRATEGY_GITHUB);
+        $updater->setStrategyObject(new CustomGithubStrategy());
+
         /** @var GithubStrategy $strategy */
         $strategy = $updater->getStrategy();
         $strategy->setPackageName('TYPO3/Surf');
