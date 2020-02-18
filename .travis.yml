@@ -37,12 +37,6 @@ jobs:
       script: find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
     - <<: *lint
       php: 7.2
-    - <<: *lint
-      php: 7.1
-    - <<: *lint
-      php: 7.0
-    - <<: *lint
-      php: 5.6
 
     - &phpunit
       stage: test
@@ -52,13 +46,6 @@ jobs:
       script: vendor/bin/phpunit Tests/Unit/
     - <<: *phpunit
       php: 7.2
-    - <<: *phpunit
-      php: 7.1
-    - <<: *phpunit
-      php: 7.0
-    - <<: *phpunit
-      php: 5.6
-      before_script: composer update --with-dependencies phpunit/phpunit
     - <<: *phpunit
       php: 7.2
       env: PHPUnit=latest
@@ -76,6 +63,3 @@ jobs:
       env: PHPUnit=latest
     - php: 7.3
       env: PHPUnit=latest
-
-#after_success:
-#  - .travis/push-documentation.sh
