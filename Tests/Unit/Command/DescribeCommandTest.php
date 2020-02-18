@@ -78,11 +78,30 @@ class DescribeCommandTest extends TestCase
                     'touch test.txt',
                 ],
             ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\TaskForAllAppsAfterTaskForOneApp', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\TaskForAllApps', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\TaskForOneAppAfterTaskForAllApps', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
             $workflow->addTask(FlushCachesTask::class, 'finalize');
             $workflow->afterTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
             $workflow->beforeTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
 
             $workflow->addTask('TYPO3\\Surf\\Task\\TaskForOneApp', 'package', $this->application);
+            $workflow->afterTask('TYPO3\\Surf\\Task\\TaskForOneApp', 'TYPO3\\Surf\\Task\\TaskForAllAppsAfterTaskForOneApp');
+
+            $workflow->addTask('TYPO3\\Surf\\Task\\TaskForAllApps', 'transfer');
+            $workflow->afterTask('TYPO3\\Surf\\Task\\TaskForAllApps', 'TYPO3\\Surf\\Task\\TaskForOneAppAfterTaskForAllApps', $this->application);
         });
         $this->deployment->initialize();
     }
@@ -136,6 +155,8 @@ Applications:
         tasks:
           <success>TYPO3\Surf\Task\TaskForOneApp</success> (for application TestApplication)
       transfer:
+        tasks:
+          <success>TYPO3\Surf\Task\TaskForAllApps</success> (for all applications)
       update:
       migrate:
       finalize:
