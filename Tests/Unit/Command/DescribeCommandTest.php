@@ -73,9 +73,16 @@ class DescribeCommandTest extends TestCase
                     'touch test.txt',
                 ],
             ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\TaskForOneApp', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
             $workflow->addTask(FlushCachesTask::class, 'finalize');
             $workflow->afterTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
             $workflow->beforeTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
+
+            $workflow->addTask('TYPO3\\Surf\\Task\\TaskForOneApp', 'package', $this->application);
         });
         $this->deployment->initialize();
     }
@@ -126,6 +133,8 @@ Applications:
       initialize:
       lock:
       package:
+        tasks:
+          <success>TYPO3\Surf\Task\TaskForOneApp</success> (for application TestApplication)
       transfer:
       update:
       migrate:
