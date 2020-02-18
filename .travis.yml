@@ -43,7 +43,7 @@ jobs:
       php: 7.3
       env: PHPUnit
       before_script: composer install
-      script: vendor/bin/phpunit Tests/Unit/
+      script: vendor/bin/phpunit tests/Unit/
     - <<: *phpunit
       php: 7.2
     - <<: *phpunit
