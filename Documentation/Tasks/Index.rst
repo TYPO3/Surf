@@ -18,24 +18,22 @@ Since a deployment configuration is just a plain PHP file you can create custom 
 
    class NpmInstallTask extends LocalShellTask
    {
-
-      /**
-      * Executes this action
-      *
-      * @param \TYPO3\Surf\Domain\Model\Node $node
-      * @param \TYPO3\Surf\Domain\Model\Application $application
-      * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-      * @param array $options
-      */
-      public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
-      {
-            if(!isset($options['command'])) {
+       /**
+        * Executes this action
+        *
+        * @param \TYPO3\Surf\Domain\Model\Node $node
+        * @param \TYPO3\Surf\Domain\Model\Application $application
+        * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+        * @param array $options
+        */
+       public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+       {
+           if (!isset($options['command'])) {
                $options['command'] = 'cd {workspacePath} && npm install';
-            }
+           }
 
-            parent::execute($node, $application, $deployment, $options);
-      }
-
+           parent::execute($node, $application, $deployment, $options);
+       }
    }
 
 
@@ -53,7 +51,7 @@ For this simple task above, we recommend to simplify this by just using the poss
 
     ...
 
-    $workflow->defineTask('NpmInstallTask', \\TYPO3\\Surf\\Task\\LocalShellTask::class, [
+    $workflow->defineTask('NpmInstallTask', \TYPO3\Surf\Task\LocalShellTask::class, [
         'command' => [
             'cd {workspacePath} && npm install',
         ]
@@ -63,11 +61,11 @@ This way you create a task dynamically by extending the base task \\TYPO3\\Surf\
 
 We will show you another convenient and often used way to customize the deployment workflow with your own tasks::
 
-   <?php
+    <?php
 
-   ...
+    ...
 
-   $workflow->defineTask('CopyEnvFileTask', \\TYPO3\\Surf\\Task\\ShellTask::class, [
+    $workflow->defineTask('CopyEnvFileTask', \TYPO3\Surf\Task\ShellTask::class, [
         'command' => [
             "cp {sharedPath}/.env {releasePath}/.env",
             "cd {releasePath}",
@@ -95,34 +93,34 @@ Add task to the deployment flow
 
 So we have seen how to create custom tasks in different ways. In the following we will see how we add these tasks to the deployment flow::
 
-   <?php
+    <?php
 
-   ...
+    ...
 
-   $application = new \\TYPO3\\Surf\\Application\\TYPO3\\CMS();
-   $deployment->addApplication($application);
-   $workflow = $deployment->getWorkflow();
+    $application = new \TYPO3\Surf\Application\TYPO3\CMS();
+    $deployment->addApplication($application);
+    $workflow = $deployment->getWorkflow();
 
-   $workflow->defineTask('CopyEnvFileTask', \\TYPO3\\Surf\\Task\\ShellTask::class, [
-      'command' => [
-         "cp {sharedPath}/.env {releasePath}/.env",
-         "cd {releasePath}",
-      ]
-   ]);
+    $workflow->defineTask('CopyEnvFileTask', \TYPO3\Surf\Task\ShellTask::class, [
+        'command' => [
+            "cp {sharedPath}/.env {releasePath}/.env",
+            "cd {releasePath}",
+        ]
+    ]);
 
-   $deployment->onInitialize(function() use ($workflow, $application) {
-      $workflow->afterStage('transfer', 'CopyEnvFileTask', $application);
-   });
+    $deployment->onInitialize(function() use ($workflow, $application) {
+        $workflow->afterStage('transfer', 'CopyEnvFileTask', $application);
+    });
 
 This will execute the new task after the stage transfer only for the application referenced by $application.
 
 Besides specifying the execution point via a stage, you can also give an existing task as an anchor and specify the task execution with **afterTask** or **beforeTask**::
 
-   <?php
+    <?php
 
-   ....
+    ...
 
-   $workflow->beforeTask(CreatePackageStatesTask::class,
+    $workflow->beforeTask(CreatePackageStatesTask::class,
         [
             'CopyEnvFileTask'
         ]
@@ -146,29 +144,29 @@ Options for Task
 
 In order to customize options of existing tasks you can do it the following ways::
 
-   <?php
+    <?php
 
-   use TYPO3\\Surf\\Task\\Transfer\\RsyncTask;
+    use TYPO3\Surf\Task\Transfer\RsyncTask;
 
-   ...
+    ...
 
-   // Customize the option for the task only for a specific application
-   $application->setOption(RsyncTask::class .'[rsyncExcludes]', [
-       '.git',
-      'web/fileadmin',
-      'web/uploads',
-   ]);
+    // Customize the option for the task only for a specific application
+    $application->setOption(RsyncTask::class . '[rsyncExcludes]', [
+        '.git',
+        'web/fileadmin',
+        'web/uploads',
+    ]);
 
-   // Customize the option for the task only for a specific node
-   $node->setOption(RsyncTask::class .'[rsyncExcludes]', [
-      'web/fileadmin',
-      'web/uploads',
-   ]);
+    // Customize the option for the task only for a specific node
+    $node->setOption(RsyncTask::class . '[rsyncExcludes]', [
+        'web/fileadmin',
+        'web/uploads',
+    ]);
 
-   // Customize the option for the whole deployment
-   $deployment->setOption(RsyncTask::class .'[rsyncExcludes]', [
-       '.git',
-   ]);
+    // Customize the option for the whole deployment
+    $deployment->setOption(RsyncTask::class . '[rsyncExcludes]', [
+        '.git',
+    ]);
 
 
 The **order is important** because application options override node options and node options override deployment options.
