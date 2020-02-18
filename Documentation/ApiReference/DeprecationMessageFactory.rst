@@ -6,10 +6,6 @@ TYPO3\\Surf\\DeprecationMessageFactory
 
 .. php:class:: DeprecationMessageFactory
 
-    .. php:method:: createDeprecationWarningForCoreApiUsage()
-
-        :returns: string
-
     .. php:method:: createGenericDeprecationWarningForTask($className, $versionOfSurfToRemoveTask = '3.0.0')
 
         :type $className: string
