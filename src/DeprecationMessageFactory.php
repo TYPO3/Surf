@@ -11,15 +11,6 @@ namespace TYPO3\Surf;
 
 final class DeprecationMessageFactory
 {
-
-    /**
-     * @return string
-     */
-    public static function createDeprecationWarningForCoreApiUsage()
-    {
-        return 'The usage of coreapi is deprecated. Please use typo3_console instead. Integration in TYPO3 Surf will be removed in Version 3.0.0';
-    }
-
     /**
      * @param string $className
      * @param string $versionOfSurfToRemoveTask
