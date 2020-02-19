@@ -73,9 +73,35 @@ class DescribeCommandTest extends TestCase
                     'touch test.txt',
                 ],
             ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\TaskForOneApp', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\TaskForAllAppsAfterTaskForOneApp', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\TaskForAllApps', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
+            $workflow->defineTask('TYPO3\\Surf\\Task\\TaskForOneAppAfterTaskForAllApps', LocalShellTask::class, [
+                'command' => [
+                    'touch test.txt',
+                ],
+            ]);
             $workflow->addTask(FlushCachesTask::class, 'finalize');
             $workflow->afterTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
             $workflow->beforeTask(FlushCachesTask::class, 'TYPO3\\Surf\\Task\\CustomTask');
+
+            $workflow->addTask('TYPO3\\Surf\\Task\\TaskForOneApp', 'package', $this->application);
+            $workflow->afterTask('TYPO3\\Surf\\Task\\TaskForOneApp', 'TYPO3\\Surf\\Task\\TaskForAllAppsAfterTaskForOneApp');
+
+            $workflow->addTask('TYPO3\\Surf\\Task\\TaskForAllApps', 'transfer');
+            $workflow->afterTask('TYPO3\\Surf\\Task\\TaskForAllApps', 'TYPO3\\Surf\\Task\\TaskForOneAppAfterTaskForAllApps', $this->application);
         });
         $this->deployment->initialize();
     }
@@ -109,7 +135,7 @@ Applications:
 
   <success>TestApplication:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       rsyncExcludes =>
         <success>.git</success>
         <success>web/fileadmin</success>
@@ -122,11 +148,17 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
       lock:
       package:
+        tasks:
+          <success>TYPO3\Surf\Task\TaskForOneApp</success> (for application TestApplication)
+          <success>Task TYPO3\Surf\Task\TaskForAllAppsAfterTaskForOneApp after TYPO3\Surf\Task\TaskForOneApp</success> (for all applications)
       transfer:
+        tasks:
+          <success>TYPO3\Surf\Task\TaskForAllApps</success> (for all applications)
+          <success>Task TYPO3\Surf\Task\TaskForOneAppAfterTaskForAllApps after TYPO3\Surf\Task\TaskForAllApps</success> (for application TestApplication)
       update:
       migrate:
       finalize:
@@ -189,7 +221,7 @@ Applications:
 
   <success>TYPO3 CMS:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -212,7 +244,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application TYPO3 CMS)
@@ -270,7 +302,7 @@ Applications:
 
   <success>Neos:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -281,7 +313,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
@@ -341,7 +373,7 @@ Applications:
 
   <success>My App:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -352,7 +384,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application My App)
@@ -403,7 +435,7 @@ Applications:
 
   <success>My App:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -414,7 +446,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application My App)
@@ -463,7 +495,7 @@ Applications:
 
   <success>My App:</success>
     Deployment path: <success></success>
-    Options: 
+    Options:
       packageMethod => <success>git</success>
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
@@ -474,7 +506,7 @@ Applications:
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
-    Detailed workflow: 
+    Detailed workflow:
       initialize:
         tasks:
           <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application My App)
