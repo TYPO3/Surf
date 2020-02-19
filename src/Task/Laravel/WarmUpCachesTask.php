@@ -18,7 +18,6 @@ class WarmUpCachesTask extends AbstractCliTask
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws TaskExecutionException
      * @throws InvalidConfigurationException
      */

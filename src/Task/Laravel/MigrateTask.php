@@ -14,7 +14,6 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A Neos Flow migration task
- *
  */
 class MigrateTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -27,7 +26,6 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      * @throws TaskExecutionException
      */
@@ -50,7 +48,6 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      * @throws TaskExecutionException
      */
@@ -66,7 +63,6 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      * @throws TaskExecutionException
      */

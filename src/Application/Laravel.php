@@ -11,8 +11,6 @@ namespace TYPO3\Surf\Application;
 
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
-use TYPO3\Surf\Task\DumpDatabaseTask;
-use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
 use TYPO3\Surf\Task\Laravel\ClearAuthResetsTask;
 use TYPO3\Surf\Task\Laravel\CreateDirectoriesTask;
 use TYPO3\Surf\Task\Laravel\EnvAwareTask;
@@ -21,7 +19,6 @@ use TYPO3\Surf\Task\Laravel\MigrateTask;
 use TYPO3\Surf\Task\Laravel\StorageLinkTask;
 use TYPO3\Surf\Task\Laravel\SymlinkDataTask;
 use TYPO3\Surf\Task\Laravel\WarmUpCachesTask;
-use TYPO3\Surf\Task\RsyncFoldersTask;
 
 class Laravel extends BaseApplication
 {
@@ -63,7 +60,6 @@ class Laravel extends BaseApplication
      *
      * @param Workflow $workflow
      * @param Deployment $deployment
-     * @return void
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {

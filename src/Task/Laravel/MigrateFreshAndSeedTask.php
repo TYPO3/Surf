@@ -26,7 +26,6 @@ class MigrateFreshAndSeedTask extends Task implements ShellCommandServiceAwareIn
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      * @throws TaskExecutionException
      */
@@ -49,7 +48,6 @@ class MigrateFreshAndSeedTask extends Task implements ShellCommandServiceAwareIn
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      * @throws InvalidConfigurationException
      * @throws TaskExecutionException
      */

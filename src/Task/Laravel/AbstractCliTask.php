@@ -70,7 +70,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param Application $application
      * @param Deployment $deployment
      * @param array $options
-     * @return void
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
