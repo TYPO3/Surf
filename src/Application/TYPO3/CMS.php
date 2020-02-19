@@ -13,7 +13,6 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Task\DumpDatabaseTask;
 use TYPO3\Surf\Task\RsyncFoldersTask;
-use TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask;
 use TYPO3\Surf\Task\TYPO3\CMS\CreatePackageStatesTask;
 use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
 use TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask;
@@ -85,14 +84,7 @@ class CMS extends BaseApplication
         }
         $workflow
             ->afterStage('transfer', CreatePackageStatesTask::class, $this)
-            ->afterStage(
-                'update',
-                [
-                    SymlinkDataTask::class,
-                    CopyConfigurationTask::class
-                ],
-                $this
-            )
+            ->afterStage('update', SymlinkDataTask::class, $this)
             ->afterStage('switch', FlushCachesTask::class, $this)
             ->addTask(SetUpExtensionsTask::class, 'migrate', $this);
     }

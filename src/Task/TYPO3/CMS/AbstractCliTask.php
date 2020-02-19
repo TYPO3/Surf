@@ -10,7 +10,6 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Application\TYPO3\CMS;
-use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -115,10 +114,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
             $this->getConsoleScriptFileName($node, $application, $deployment, $options);
             return 'typo3_console';
         } catch (InvalidConfigurationException $e) {
-            if ($this->packageExists('coreapi', $node, $application, $deployment, $options)) {
-                $deployment->getLogger()->warning(DeprecationMessageFactory::createDeprecationWarningForCoreApiUsage());
-                return 'coreapi';
-            }
         }
         return null;
     }
@@ -129,7 +124,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param Deployment $deployment
      * @param array $options
      * @return string
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     * @throws InvalidConfigurationException
      */
     protected function getConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {

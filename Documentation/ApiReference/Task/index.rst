@@ -25,7 +25,6 @@ TYPO3\\Surf\\Task
    CreateArchiveTask
    Generic/index
    LockDeploymentTask
-   SourceforgeUploadTask
    VarnishBanTask
    DumpDatabaseTask
    Git/index

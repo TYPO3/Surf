@@ -265,7 +265,6 @@ Applications:
       update:
         after:
           <success>TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask</success> (for application TYPO3 CMS)
-          <success>TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask</success> (for application TYPO3 CMS)
       migrate:
         tasks:
           <success>TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask</success> (for application TYPO3 CMS)

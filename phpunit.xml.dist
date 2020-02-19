@@ -20,7 +20,7 @@
 >
     <testsuites>
         <testsuite name="Surf Test Suite">
-            <directory>./Tests/</directory>
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
@@ -28,10 +28,9 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
-                <directory>./Resources</directory>
-                <directory>./Migrations</directory>
                 <directory>./Documentation</directory>
-                <directory>./Tests</directory>
+                <directory>./Resources</directory>
+                <directory>./tests</directory>
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>
