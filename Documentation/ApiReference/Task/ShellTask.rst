@@ -71,7 +71,7 @@ TYPO3\\Surf\\Task\\ShellTask
         :type $resolver: OptionsResolver
         :param $resolver:
 
-    .. php:method:: replacePaths(Application $application, Deployment $deployment, string $command)
+    .. php:method:: replacePaths(Application $application, Deployment $deployment, $command)
 
         :type $application: Application
         :param $application:

@@ -1,0 +1,32 @@
+#!/usr/bin/env php
+<?php
+
+requireAutoloader();
+
+$app = new \TYPO3\Surf\Cli\Symfony\ConsoleApplication('TYPO3 Surf', '3.0.0-alpha');
+$app->setFactory(new \TYPO3\Surf\Integration\Factory());
+$app->run();
+
+function requireAutoloader()
+{
+    $autoloadPaths = [
+        // Package was included as a library
+        __DIR__ . '/../../../autoload.php',
+        // Local package usage
+        __DIR__ . '/../vendor/autoload.php',
+        // Local package in packages folder
+        __DIR__ . '/../../../vendor/autoload.php',
+    ];
+    foreach ($autoloadPaths as $path) {
+        if (file_exists($path)) {
+            /** @noinspection PhpIncludeInspection */
+            return file_exists($path) && include $path;
+        }
+    }
+
+    $msg = 'You must set up the project dependencies, run the following commands:' . PHP_EOL .
+        'curl -sS https://getcomposer.org/installer | php' . PHP_EOL .
+        'php composer.phar install' . PHP_EOL;
+    fwrite(STDERR, $msg);
+    exit(1);
+}

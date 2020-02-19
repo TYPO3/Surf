@@ -78,6 +78,11 @@ TYPO3\\Surf\\Task\\Composer\\AbstractComposerTask
         :param $deployment:
         :returns: bool
 
+    .. php:method:: resolveOptions(OptionsResolver $resolver)
+
+        :type $resolver: OptionsResolver
+        :param $resolver:
+
     .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
 
         :type $shellCommandService: ShellCommandService
@@ -101,8 +106,3 @@ TYPO3\\Surf\\Task\\Composer\\AbstractComposerTask
         :type $options: array
         :param $options:
         :returns: array
-
-    .. php:method:: resolveOptions(OptionsResolver $resolver)
-
-        :type $resolver: OptionsResolver
-        :param $resolver:

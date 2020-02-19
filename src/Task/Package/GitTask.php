@@ -64,10 +64,10 @@ class GitTask extends AbstractCheckoutTask
 
         $localCheckoutPath = $deployment->getWorkspacePath($application);
 
-        $node = $deployment->getNode('localhost');
+        $localhost = $deployment->getNode('localhost');
 
-        $sha1 = $this->executeOrSimulateGitCloneOrUpdate($localCheckoutPath, $node, $deployment, $options);
+        $sha1 = $this->executeOrSimulateGitCloneOrUpdate($localCheckoutPath, $localhost, $deployment, $options);
 
-        $this->executeOrSimulatePostGitCheckoutCommands($localCheckoutPath, $sha1, $node, $deployment, $options);
+        $this->executeOrSimulatePostGitCheckoutCommands($localCheckoutPath, $sha1, $localhost, $deployment, $options);
     }
 }

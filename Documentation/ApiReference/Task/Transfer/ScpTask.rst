@@ -1,31 +1,20 @@
-----------------------------------------------------
-TYPO3\\Surf\\Task\\TYPO3\\CMS\\CopyConfigurationTask
-----------------------------------------------------
+------------------------------------
+TYPO3\\Surf\\Task\\Transfer\\ScpTask
+------------------------------------
 
-.. php:namespace: TYPO3\\Surf\\Task\\TYPO3\\CMS
+.. php:namespace: TYPO3\\Surf\\Task\\Transfer
 
-.. php:class:: CopyConfigurationTask
+.. php:class:: ScpTask
 
-    A task to copy host/context specific configuration.
+    A scp transfer task
 
-    It takes the following options:
-
-    * configurationFileExtension (optional) - Sets the file extension of the configuration file. Default is `php`.
-
-    Example:
-     $workflow
-         ->setTaskOptions('TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask', [
-                 'configurationFileExtension' => 'json'
-             ]
-         );
+    Copies the application assets from the application workspace to the node using scp.
 
     .. php:attr:: shell
 
         protected ShellCommandService
 
     .. php:method:: execute(Node $node, Application $application, Deployment $deployment, $options = [])
-
-        Executes this task
 
         :type $node: Node
         :param $node:
@@ -49,11 +38,6 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\CopyConfigurationTask
         :type $options: array
         :param $options:
 
-    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
-
-        :type $shellCommandService: ShellCommandService
-        :param $shellCommandService:
-
     .. php:method:: rollback(Node $node, Application $application, Deployment $deployment, $options = [])
 
         Rollback this task
@@ -66,6 +50,19 @@ TYPO3\\Surf\\Task\\TYPO3\\CMS\\CopyConfigurationTask
         :param $deployment:
         :type $options: array
         :param $options:
+
+    .. php:method:: getExcludes($options, $fileName)
+
+        :type $options: array
+        :param $options:
+        :type $fileName: string
+        :param $fileName:
+        :returns: string
+
+    .. php:method:: setShellCommandService(ShellCommandService $shellCommandService)
+
+        :type $shellCommandService: ShellCommandService
+        :param $shellCommandService:
 
     .. php:method:: configureOptions($options = [])
 

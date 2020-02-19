@@ -23,7 +23,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class SelfUpdateCommand extends Command
 {
-
     /**
      * @return bool
      */
@@ -42,18 +41,19 @@ class SelfUpdateCommand extends Command
                  'stability',
                  null,
                  InputOption::VALUE_OPTIONAL,
-                 'GitHub stability value (' . GithubStrategy::STABLE . ', ' . GithubStrategy::UNSTABLE . ', ' . GithubStrategy::ANY . ')'
+                 'GitHub stability value (' . GithubStrategy::STABLE . ', ' . GithubStrategy::UNSTABLE . ', ' . GithubStrategy::ANY . ')',
+                 GithubStrategy::STABLE
              )->addOption(
-                'check',
-                null,
-                InputOption::VALUE_NONE,
-                'Check for new version'
-            )->addOption(
-                'rollback',
-                null,
-                InputOption::VALUE_NONE,
-                'Rolls back to previous version'
-            )->setDescription(sprintf('Update %s to most recent stable build', $this->getLocalPharName()));
+                 'check',
+                 null,
+                 InputOption::VALUE_NONE,
+                 'Check for new version'
+             )->addOption(
+                 'rollback',
+                 null,
+                 InputOption::VALUE_NONE,
+                 'Rolls back to previous version'
+             )->setDescription(sprintf('Update %s to most recent stable build', $this->getLocalPharName()));
     }
 
     /**
@@ -73,9 +73,7 @@ class SelfUpdateCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $stability = $input->getOption('stability');
-        if (empty($stability)) {
-            $stability = GithubStrategy::STABLE;
-        }
+
         /** @var GithubStrategy $strategy */
         $strategy = $updater->getStrategy();
         $strategy->setCurrentLocalVersion($this->getApplication()->getVersion());
