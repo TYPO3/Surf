@@ -114,7 +114,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         foreach ($applications as $application) {
             $this->output->writeln('  <success>' . $application->getName() . ':</success>');
             $this->output->writeln('    <comment>Deployment path</comment>: <success>' . $application->getDeploymentPath() . '</success>');
-            $this->output->writeln('    <comment>Options</comment>: ');
+            $this->output->writeln('    <comment>Options</comment>:');
             foreach ($application->getOptions() as $key => $value) {
                 if (is_array($value)) {
                     $this->output->writeln('      ' . $key . ' =>');
@@ -133,7 +133,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             ) . '</success>');
 
             if ($workflow instanceof SimpleWorkflow) {
-                $this->output->writeln('    <comment>Detailed workflow</comment>: ');
+                $this->output->writeln('    <comment>Detailed workflow</comment>:');
                 $this->printStages($application, $workflow->getStages(), $workflow->getTasks());
             }
         }
@@ -156,9 +156,9 @@ class DescribeCommand extends Command implements FactoryAwareInterface
                     $label = $applicationName === '_' ? 'for all applications' : 'for application ' . $applicationName;
                     if (isset($tasks['stage'][$applicationName][$stage][$stageStep])) {
                         foreach ($tasks['stage'][$applicationName][$stage][$stageStep] as $task) {
-                            $this->printBeforeAfterTasks($tasks, $applicationName, $task, 'before', $output);
+                            $this->printBeforeAfterTasks($tasks, $application->getName(), $task, 'before', $output);
                             $output .= '          <success>' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
-                            $this->printBeforeAfterTasks($tasks, $applicationName, $task, 'after', $output);
+                            $this->printBeforeAfterTasks($tasks, $application->getName(), $task, 'after', $output);
                         }
                     }
                 }
@@ -182,11 +182,13 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      */
     private function printBeforeAfterTasks(array $tasks, $applicationName, $task, $step, &$output)
     {
-        $label = $applicationName === '_' ? 'for all applications' : 'for application ' . $applicationName;
-        if (isset($tasks[$step][$applicationName][$task])) {
-            // 'Task "' . $beforeTask . '" before "' . $task
-            foreach ($tasks[$step][$applicationName][$task] as $beforeAfterTask) {
-                $output .= '          <success>Task ' . $beforeAfterTask . ' ' . $step . ' ' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
+        foreach (['_', $applicationName] as $applicationName) {
+            $label = $applicationName === '_' ? 'for all applications' : 'for application ' . $applicationName;
+            if (isset($tasks[$step][$applicationName][$task])) {
+                // 'Task "' . $beforeTask . '" before "' . $task
+                foreach ($tasks[$step][$applicationName][$task] as $beforeAfterTask) {
+                    $output .= '          <success>Task ' . $beforeAfterTask . ' ' . $step . ' ' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
+                }
             }
         }
     }
