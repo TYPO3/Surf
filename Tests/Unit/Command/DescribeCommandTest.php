@@ -154,9 +154,11 @@ Applications:
       package:
         tasks:
           <success>TYPO3\Surf\Task\TaskForOneApp</success> (for application TestApplication)
+          <success>Task TYPO3\Surf\Task\TaskForAllAppsAfterTaskForOneApp after TYPO3\Surf\Task\TaskForOneApp</success> (for all applications)
       transfer:
         tasks:
           <success>TYPO3\Surf\Task\TaskForAllApps</success> (for all applications)
+          <success>Task TYPO3\Surf\Task\TaskForOneAppAfterTaskForAllApps after TYPO3\Surf\Task\TaskForAllApps</success> (for application TestApplication)
       update:
       migrate:
       finalize:
