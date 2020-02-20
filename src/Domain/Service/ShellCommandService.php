@@ -170,7 +170,7 @@ class ShellCommandService
      */
     public function executeProcess($deployment, $command, $logOutput, $logPrefix)
     {
-        $process = new Process($command);
+        $process = Process::fromShellCommandline($command);
         $process->setTimeout(null);
         $callback = null;
         if ($logOutput) {
