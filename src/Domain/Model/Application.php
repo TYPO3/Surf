@@ -22,6 +22,8 @@ class Application
      */
     public const DEFAULT_SHARED_DIR = 'shared';
 
+    public const DEFAULT_WEB_DIRECTORY = 'public';
+
     /**
      * The name
      * @var string

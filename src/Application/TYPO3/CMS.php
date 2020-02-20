@@ -24,6 +24,30 @@ use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 class CMS extends BaseApplication
 {
     /**
+     * Constructor
+     * @param string $name
+     */
+    public function __construct($name = 'TYPO3 CMS')
+    {
+        parent::__construct($name);
+
+        $this->options = array_merge($this->options, [
+            'context' => 'Production',
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'symlinkDataFolders' => [
+                'fileadmin',
+                'uploads'
+            ],
+            'rsyncExcludes' => [
+                '.ddev',
+                '.git',
+                '{webDirectory}/fileadmin',
+                '{webDirectory}/uploads'
+            ]
+        ]);
+    }
+
+    /**
      * Set the application production context
      *
      * @param string $context
@@ -43,29 +67,6 @@ class CMS extends BaseApplication
     public function getContext()
     {
         return $this->options['context'];
-    }
-
-    /**
-     * Constructor
-     * @param string $name
-     */
-    public function __construct($name = 'TYPO3 CMS')
-    {
-        parent::__construct($name);
-        $this->options = array_merge($this->options, [
-            'context' => 'Production',
-            'scriptFileName' => 'vendor/bin/typo3cms',
-            'webDirectory' => 'web',
-            'symlinkDataFolders' => [
-                'fileadmin', 'uploads'
-            ],
-            'rsyncExcludes' => [
-                '.ddev',
-                '.git',
-                '{webDirectory}/fileadmin',
-                '{webDirectory}/uploads'
-            ]
-        ]);
     }
 
     /**
