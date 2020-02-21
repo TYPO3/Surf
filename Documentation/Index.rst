@@ -68,6 +68,5 @@ Surf package is a complete automated deployment tool. It is best used but by far
      CliUsage/Index
      SmokeTesting/Index
      Examples/Index
-     ApiReference/index
      Migration/Index
 
