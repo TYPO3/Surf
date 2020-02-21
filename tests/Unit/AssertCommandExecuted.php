@@ -42,7 +42,7 @@ class AssertCommandExecuted extends Constraint
      * @param  array $other array to evaluate.
      * @return bool
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
         if (!is_array($other)) {
             throw new \InvalidArgumentException('Expected an array of executed commands as value, ' . gettype($other) . ' given');
@@ -66,7 +66,7 @@ class AssertCommandExecuted extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function toString()
+    public function toString(): string
     {
         return 'contains the command substring [' . $this->expectedCommand . ']';
     }
