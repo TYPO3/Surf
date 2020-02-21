@@ -14,8 +14,11 @@
         "webmozart/assert": "^1.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5",
+        "phpunit/phpunit": "^7.0",
         "friendsofphp/php-cs-fixer": "^2.14"
+    },
+    "scripts": {
+        "release-phar": "bin/box build"
     },
     "extra": {
         "branch-alias": {

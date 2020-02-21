@@ -1,7 +1,5 @@
 {
-  "output": "bin/surf.phar",
-  "main": "surf",
-  "chmod": "0755",
+  "output": "release/surf.phar",
   "files": [
     "LICENSE.txt",
     "Resources/Private/Scripts/PasswordSshLogin.expect"
@@ -10,9 +8,8 @@
     {
       "name": "*.php",
       "exclude": ["Tests", "tests"],
-      "in": ["src", "vendor", "Migrations", "Resources"]
+      "in": ["src", "vendor", "Resources"]
     }
   ],
-  "git-commit": "git-commit",
-  "stub": true
+  "git-commit": "git-commit"
 }
