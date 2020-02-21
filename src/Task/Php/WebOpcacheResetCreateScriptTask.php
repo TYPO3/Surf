@@ -96,9 +96,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         $scriptBasePath = $options['scriptBasePath'] ?: Files::concatenatePaths([$workspacePath, $webDirectory]);
 
         if ($options['scriptIdentifier'] === null) {
-            // Store the script identifier as an application option
-            $scriptIdentifier = bin2hex($this->randomBytesGenerator->generate(32));
-            $application->setOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]', $scriptIdentifier);
+            $scriptIdentifier = $this->setScriptIdentifier($application);
         } else {
             $scriptIdentifier = $options['scriptIdentifier'];
         }
@@ -128,6 +126,36 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
                 throw TaskExecutionException::webOpcacheResetCreateScriptTaskCouldNotWritFile($scriptFilename);
             }
         }
+    }
+
+    /**
+     * Simulate this task (e.g. by logging commands it would execute)
+     *
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
+     * @param array $options
+     */
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    {
+        $options = $this->configureOptions($options);
+
+        if ($options['scriptIdentifier'] === null) {
+            $this->setScriptIdentifier($application);
+        }
+    }
+
+    /**
+     * Store the script identifier as an application option for WebOpcacheResetExecuteTask
+     *
+     * @param Application $application
+     * @return string
+     */
+    private function setScriptIdentifier(Application $application)
+    {
+        $scriptIdentifier = bin2hex($this->randomBytesGenerator->generate(32));
+        $application->setOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]', $scriptIdentifier);
+        return $scriptIdentifier;
     }
 
     /**
