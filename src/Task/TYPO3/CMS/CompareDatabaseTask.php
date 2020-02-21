@@ -15,12 +15,12 @@ use TYPO3\Surf\Domain\Model\Node;
 
 /**
  * This task create new tables or add new fields to them.
- * This task requires the extensions `coreapi` or `typo3_console`.
+ * This task requires the extension `typo3_console`.
  *
  * It takes the following options:
  *
- * * databaseCompareMode (optional) - The mode in which the database should be compared. For `coreapi`, `2,4` is the
- *  default value. For `typo3_console`, `*.add,*.change` is the default value.
+ * * databaseCompareMode (optional) - The mode in which the database should be compared.
+ *   For `typo3_console`, `*.add,*.change` is the default value.
  *
  * Example:
  *  $workflow
@@ -44,7 +44,7 @@ class CompareDatabaseTask extends AbstractCliTask
         $this->ensureApplicationIsTypo3Cms($application);
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
-            $deployment->getLogger()->warning('Neither Extension "typo3_console" nor "coreapi" was not found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
             return;
         }
         $this->executeCliCommand(
