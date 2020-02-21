@@ -30,7 +30,7 @@ class DeployCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('deploy')
-             ->setDescription('Describes the flow for the given name')
+             ->setDescription('Deploys the application with the given name')
              ->addArgument(
                  'deploymentName',
                  InputArgument::OPTIONAL,
