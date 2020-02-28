@@ -45,14 +45,6 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Execute this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
@@ -85,22 +77,11 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($commands, $localhost, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('ignoreErrors', false);

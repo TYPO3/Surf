@@ -31,7 +31,6 @@ class SystemClockTest extends TestCase
      *
      * @test
      * @dataProvider invalidStringsCannotBeConvertedToTimestamp
-     * @throws ClockException
      */
     public function stringCouldNotBeConvertedCorrectlyExceptionIsThrown($string)
     {
@@ -44,7 +43,6 @@ class SystemClockTest extends TestCase
      * @param int $base
      * @test
      * @dataProvider validStringCanBeConvertedToTimestamp
-     * @throws ClockException
      */
     public function stringCanBeConvertedToValidTimestamp($string, $base)
     {
@@ -57,7 +55,6 @@ class SystemClockTest extends TestCase
      * @param int $expected
      * @test
      * @dataProvider validFormatCanBeConvertedToTimestamp
-     * @throws ClockException
      */
     public function successFullyCreateTimestampFromFormat($format, $time, $expected)
     {

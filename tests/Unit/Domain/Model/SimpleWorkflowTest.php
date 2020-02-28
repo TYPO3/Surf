@@ -25,10 +25,10 @@ class SimpleWorkflowTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception
      */
     public function deploymentMustBeInitializedBeforeRunning()
     {
+        $this->expectException(SurfException::class);
         $deployment = $this->buildDeployment();
         $workflow = $deployment->getWorkflow();
 
@@ -37,10 +37,10 @@ class SimpleWorkflowTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception
      */
     public function runFailsIfNoApplicationIsConfigured()
     {
+        $this->expectException(SurfException::class);
         $deployment = $this->buildDeployment();
         $workflow = $deployment->getWorkflow();
 
@@ -56,10 +56,10 @@ class SimpleWorkflowTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception
      */
     public function runFailsIfNoNodesAreConfigured()
     {
+        $this->expectException(SurfException::class);
         $deployment = $this->buildDeployment();
         $workflow = $deployment->getWorkflow();
 

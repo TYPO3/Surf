@@ -46,16 +46,6 @@ use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
  */
 class GitTask extends AbstractCheckoutTask
 {
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['repositoryUrl'])) {

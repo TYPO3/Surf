@@ -285,7 +285,6 @@ class BaseApplication extends Application
     }
 
     /**
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
      * @param string $updateMethod
      */
     protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod)

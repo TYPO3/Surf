@@ -24,14 +24,6 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Executes this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releaseIdentifier = $deployment->getReleaseIdentifier();
@@ -45,14 +37,6 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

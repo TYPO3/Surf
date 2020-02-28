@@ -28,13 +28,9 @@ class TaskManager
      * Execute a task
      *
      * @param string $taskName
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      * @param string $stage
      * @param array $options Local task options
      * @param string $definedTaskName
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = [], $definedTaskName = '')
     {
@@ -98,9 +94,6 @@ class TaskManager
      * GitCheckoutTask could be expressed like GitCheckoutTask::class . '[sha1]' => '1234...'.
      *
      * @param string $taskName
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
      * @param array $taskOptions
      * @return array
      */
@@ -129,8 +122,8 @@ class TaskManager
      * Create a task instance from the given task name
      *
      * @param string $taskName
-     * @return \TYPO3\Surf\Domain\Model\Task
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     *
+     * @return mixed
      */
     protected function createTaskInstance($taskName)
     {

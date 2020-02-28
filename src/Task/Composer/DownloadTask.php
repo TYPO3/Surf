@@ -35,16 +35,6 @@ class DownloadTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     *
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
@@ -54,9 +44,6 @@ class DownloadTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($command, $node, $deployment);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('composerDownloadCommand', 'curl -s https://getcomposer.org/installer | php');

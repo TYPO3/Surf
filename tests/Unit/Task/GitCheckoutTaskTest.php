@@ -16,9 +16,6 @@ use TYPO3\Surf\Task\GitCheckoutTask;
  */
 class GitCheckoutTaskTest extends BaseTaskTest
 {
-    /**
-     * Set up test dependencies
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -136,7 +133,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return GitCheckoutTask
      */
     protected function createTask()
     {

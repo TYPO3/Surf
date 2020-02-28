@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
+use PHPUnit_Framework_MockObject_MockObject;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Clock\ClockInterface;
 use TYPO3\Surf\Domain\Model\Application;
@@ -21,7 +22,7 @@ use TYPO3\Surf\Task\CleanupReleasesTask;
 class CleanupReleasesTaskTest extends BaseTaskTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService
+     * @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService
      */
     private $shellCommandService;
 
@@ -31,13 +32,13 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     private $folderStructure;
 
     /**
-     * @var ClockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClockInterface|PHPUnit_Framework_MockObject_MockObject
      */
     private $clockMock;
 
     protected function setUp()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService */
+        /** @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
         $this->shellCommandService = $this->createMock(ShellCommandService::class);
         $this->task = $this->createTask();
         if ($this->task instanceof ShellCommandServiceAwareInterface) {
@@ -47,7 +48,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
         $this->deployment = new Deployment('TestDeployment');
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
+        /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
@@ -75,7 +76,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     public function doNothingJustLogDebugIfOptionKeepReleasesIsNotDefined()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $logger */
+        /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $logger */
         $logger = $this->deployment->getLogger();
         $logger->expects($this->once())->method('debug');
         $this->assertNull($this->task->execute($this->node, $this->application, $this->deployment, []));

@@ -33,8 +33,6 @@ final class HttpResponse
     private $statusCode;
 
     /**
-     * Response constructor.
-     *
      * @param string $body
      * @param array $headers
      * @param string $statusCode

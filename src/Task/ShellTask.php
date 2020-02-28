@@ -17,7 +17,6 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
-use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task to execute shell commands on the remote host.
@@ -41,17 +40,6 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Execute this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
@@ -59,31 +47,11 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($command, $node, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * Rollback this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
-     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
@@ -96,9 +64,6 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->execute($command, $node, $deployment, true);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['command']);

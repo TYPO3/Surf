@@ -16,8 +16,6 @@ namespace TYPO3\Surf\Domain\Model;
 class FailedDeployment extends Deployment
 {
     /**
-     * Constructor
-     *
      * @param string $name
      */
     public function __construct($name = null)

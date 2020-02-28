@@ -31,9 +31,6 @@ class SelfUpdateCommand extends Command
         return Phar::running() !== '';
     }
 
-    /**
-     * Configure
-     */
     protected function configure()
     {
         $this->setName('self-update')
@@ -56,12 +53,6 @@ class SelfUpdateCommand extends Command
              )->setDescription(sprintf('Update %s to most recent stable build', $this->getLocalPharName()));
     }
 
-    /**
-     * Execute
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $updater = new Updater(null, false, Updater::STRATEGY_GITHUB);

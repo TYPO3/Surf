@@ -28,16 +28,6 @@ use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
  */
 class GitCheckoutTask extends AbstractCheckoutTask
 {
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['repositoryUrl'])) {
@@ -63,14 +53,6 @@ class GitCheckoutTask extends AbstractCheckoutTask
         $this->executeOrSimulatePostGitCheckoutCommands($releasePath, $sha1, $node, $deployment, $options);
     }
 
-    /**
-     * Rollback this task by removing the revision file
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasePath = $deployment->getApplicationReleasePath($application);

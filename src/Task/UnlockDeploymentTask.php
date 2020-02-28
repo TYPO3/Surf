@@ -20,12 +20,6 @@ final class UnlockDeploymentTask extends Task implements ShellCommandServiceAwar
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $deploymentLockFile = escapeshellarg(sprintf('%s/.surf/%s', $application->getDeploymentPath(), LockDeploymentTask::LOCK_FILE_NAME));
@@ -39,12 +33,6 @@ final class UnlockDeploymentTask extends Task implements ShellCommandServiceAwar
         }
     }
 
-    /**
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

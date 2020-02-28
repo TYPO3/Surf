@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Task\Neos\Flow;
  * file that was distributed with this source code.
  */
 
-use InvalidArgumentException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\Neos\Flow as FlowApplication;
@@ -44,16 +43,6 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Execute this task
-     *
-     * @param Node $node
-     * @param Application|FlowApplication $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws InvalidArgumentException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         Assert::isInstanceOf($application, FlowApplication::class, sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)));
@@ -73,22 +62,11 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
         }
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('flushCacheList');

@@ -59,10 +59,6 @@ class SimpleWorkflow extends Workflow
      * then the next stage will be executed until the final stage is reached and the workflow is finished.
      *
      * A rollback will be done for all nodes as long as the stage switch was not completed.
-     *
-     * @param Deployment $deployment
-     *
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function run(Deployment $deployment)
     {
@@ -134,7 +130,7 @@ class SimpleWorkflow extends Workflow
     /**
      * @param bool $enableRollback
      *
-     * @return \TYPO3\Surf\Domain\Model\SimpleWorkflow
+     * @return SimpleWorkflow
      */
     public function setEnableRollback($enableRollback)
     {

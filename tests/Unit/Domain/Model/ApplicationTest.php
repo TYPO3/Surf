@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
 use TYPO3\Surf\Domain\Model\Application;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Unit test for Application
@@ -45,10 +46,10 @@ class ApplicationTest extends TestCase
      * we expect an exception on relative Paths
      *
      * @test
-     * @expectedException \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function getSharedDirectoryThrowsExceptionOnRelativePaths()
     {
+        $this->expectException(InvalidConfigurationException::class);
         $application = new Application('TestApplication');
         $application->setOption('sharedDirectory', '../sharedAssets');
         $application->getSharedDirectory();

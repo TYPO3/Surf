@@ -24,48 +24,20 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  */
 abstract class Task
 {
-
-    /**
-     * Executes this action
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     */
     abstract public function execute(Node $node, Application $application, Deployment $deployment, array $options = []);
 
-    /**
-     * Rollback this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->configureOptions($options);
     }
 
-    /**
-     * Simulate this task (e.g. by logging commands it would execute)
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->configureOptions($options);
     }
 
     /**
-     * @param array $options
-     *
      * @return array
-     * @throws \Exception
      */
     protected function configureOptions(array $options = [])
     {
@@ -92,11 +64,6 @@ abstract class Task
         }
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     *
-     * @throws \Exception
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         // Configure your options here, required, normalization etc.

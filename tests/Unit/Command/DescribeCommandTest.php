@@ -41,9 +41,6 @@ class DescribeCommandTest extends TestCase
      */
     protected $node;
 
-    /**
-     * Set up tests
-     */
     protected function setUp()
     {
         $this->deployment = new Deployment('TestDeployment');
@@ -51,9 +48,6 @@ class DescribeCommandTest extends TestCase
         $this->node->setHostname('hostname');
     }
 
-    /**
-     * @throws \TYPO3\Surf\Exception
-     */
     protected function setUpCustomApplication()
     {
         $this->application = new Application('TestApplication');

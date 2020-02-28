@@ -30,15 +30,6 @@ use TYPO3\Surf\Domain\Model\Node;
  */
 class CompareDatabaseTask extends AbstractCliTask
 {
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->ensureApplicationIsTypo3Cms($application);
@@ -56,13 +47,6 @@ class CompareDatabaseTask extends AbstractCliTask
         );
     }
 
-    /**
-     * @param Node $node
-     * @param CMS $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @return array
-     */
     protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         if ($this->getAvailableCliPackage($node, $application, $deployment, $options) === 'typo3_console') {

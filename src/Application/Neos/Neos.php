@@ -58,7 +58,6 @@ class Neos extends Flow
     }
 
     /**
-     * Constructor
      * @param string $name
      */
     public function __construct($name = 'Neos')

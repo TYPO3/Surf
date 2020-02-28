@@ -24,9 +24,6 @@ class SimulateCommand extends Command implements FactoryAwareInterface
 {
     use FactoryAwareTrait;
 
-    /**
-     * Configure
-     */
     protected function configure()
     {
         $this->setName('simulate')
@@ -51,11 +48,6 @@ class SimulateCommand extends Command implements FactoryAwareInterface
     }
 
     /**
-     * Execute
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)

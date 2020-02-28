@@ -70,22 +70,11 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('webDirectory', '');

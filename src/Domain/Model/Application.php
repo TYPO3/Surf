@@ -71,9 +71,6 @@ class Application
      * Example:
      *
      *   $workflow->addTask(CreateDirectoriesTask::class, 'initialize', $this);
-     *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
@@ -93,7 +90,8 @@ class Application
      * Sets the application name
      *
      * @param string $name
-     * @return \TYPO3\Surf\Domain\Model\Application The current instance for chaining
+     *
+     * @return Application The current instance for chaining
      */
     public function setName($name)
     {
@@ -115,7 +113,8 @@ class Application
      * Set the nodes where this application should be deployed
      *
      * @param array $nodes The application nodes
-     * @return \TYPO3\Surf\Domain\Model\Application The current instance for chaining
+     *
+     * @return Application The current instance for chaining
      */
     public function setNodes(array $nodes)
     {
@@ -126,8 +125,7 @@ class Application
     /**
      * Add a node where this application should be deployed
      *
-     * @param \TYPO3\Surf\Domain\Model\Node $node The node to add
-     * @return \TYPO3\Surf\Domain\Model\Application The current instance for chaining
+     * @return Application The current instance for chaining
      */
     public function addNode(Node $node)
     {
@@ -138,7 +136,6 @@ class Application
     /**
      * Return TRUE if the given node is registered for this application
      *
-     * @param Node $node The node to test
      * @return bool TRUE if the node is registered for this application
      */
     public function hasNode(Node $node)
@@ -157,17 +154,9 @@ class Application
      * |-- shared
      *
      * @return string The deployment path
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException If no deployment path was set
      */
     public function getDeploymentPath()
     {
-        /*
-         * FIXME Move check somewhere else
-         *
-        if ($this->deploymentPath === NULL) {
-            throw new InvalidConfigurationException(sprintf('No deployment path has been defined for application %s.', $this->name), 1312220645);
-        }
-        */
         return $this->deploymentPath;
     }
 
@@ -190,7 +179,6 @@ class Application
      * if option is not set or empty constant DEFAULT_SHARED_DIR "shared" is used
      *
      * @return string
-     * @throws InvalidConfigurationException
      */
     public function getSharedDirectory()
     {
@@ -215,7 +203,8 @@ class Application
      * Sets the deployment path
      *
      * @param string $deploymentPath The deployment path
-     * @return \TYPO3\Surf\Domain\Model\Application The current instance for chaining
+     *
+     * @return Application The current instance for chaining
      */
     public function setDeploymentPath($deploymentPath)
     {
@@ -237,7 +226,8 @@ class Application
      * Sets the releases directory
      *
      * @param string $releasesDirectory
-     * @return \TYPO3\Surf\Domain\Model\Application The current instance for chaining
+     *
+     * @return Application The current instance for chaining
      */
     public function setReleasesDirectory($releasesDirectory)
     {
@@ -313,7 +303,8 @@ class Application
      * Sets all options for this application instance
      *
      * @param array $options The options to set indexed by option key
-     * @return \TYPO3\Surf\Domain\Model\Application The current instance for chaining
+     *
+     * @return Application The current instance for chaining
      */
     public function setOptions($options)
     {
@@ -326,7 +317,8 @@ class Application
      *
      * @param string $key The option key
      * @param mixed $value The option value
-     * @return \TYPO3\Surf\Domain\Model\Application The current instance for chaining
+     *
+     * @return Application The current instance for chaining
      */
     public function setOption($key, $value)
     {

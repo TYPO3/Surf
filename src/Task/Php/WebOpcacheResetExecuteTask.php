@@ -91,9 +91,6 @@ class WebOpcacheResetExecuteTask extends Task
         }
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['baseUrl', 'scriptIdentifier']);

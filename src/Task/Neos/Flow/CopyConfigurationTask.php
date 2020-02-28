@@ -16,8 +16,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
-use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task for copying local configuration to the application
@@ -37,16 +35,6 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Executes this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @throws TaskExecutionException
-     * @throws InvalidConfigurationException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $configurationFileExtension = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'yaml';
@@ -94,14 +82,6 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
         $this->shell->executeOrSimulate($commands, $localhost, $deployment);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

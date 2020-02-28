@@ -14,6 +14,7 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
+use TYPO3\Surf\Exception;
 
 /**
  * Unit test for Deployment
@@ -72,10 +73,10 @@ class DeploymentTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception
      */
     public function initializeIsAllowedOnlyOnce()
     {
+        $this->expectException(Exception::class);
         $workflow = new SimpleWorkflow();
         $deployment = new Deployment('Test deployment');
         $deployment->setWorkflow($workflow);

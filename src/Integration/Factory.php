@@ -29,9 +29,6 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\FailedDeployment;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
-/**
- * Class Factory
- */
 class Factory implements FactoryInterface
 {
     /**

@@ -38,9 +38,6 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      */
     protected $output;
 
-    /**
-     * Configure
-     */
     protected function configure()
     {
         $this->setName('describe')
@@ -58,12 +55,6 @@ class DescribeCommand extends Command implements FactoryAwareInterface
              );
     }
 
-    /**
-     * Prints configuration for the
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->input = $input;
@@ -91,10 +82,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         }
     }
 
-    /**
-     * @param array $nodes
-     */
-    protected function printNodes($nodes)
+    protected function printNodes(array $nodes)
     {
         $this->output->writeln('Nodes:' . PHP_EOL);
         foreach ($nodes as $node) {
@@ -102,12 +90,6 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         }
     }
 
-    /**
-     * Prints configuration for each defined application
-     *
-     * @param array $applications
-     * @param Workflow $workflow
-     */
     protected function printApplications(array $applications, Workflow $workflow)
     {
         $this->output->writeln(PHP_EOL . 'Applications:' . PHP_EOL);
@@ -139,13 +121,6 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         }
     }
 
-    /**
-     * Prints stages and contained tasks for given application
-     *
-     * @param Application $application
-     * @param array $stages
-     * @param array $tasks
-     */
     protected function printStages(Application $application, array $stages, array $tasks)
     {
         foreach ($stages as $stage) {

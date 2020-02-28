@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Composer;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
@@ -17,9 +18,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class InstallTaskTest extends BaseTaskTest
 {
-    /**
-     * Set up test dependencies
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -81,7 +79,7 @@ class InstallTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return Task
      */
     protected function createTask()
     {

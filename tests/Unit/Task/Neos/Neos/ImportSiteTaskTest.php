@@ -24,9 +24,6 @@ class ImportSiteTaskTest extends BaseTaskTest
      */
     protected $application;
 
-    /**
-     * Set up test dependencies
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -60,7 +57,6 @@ class ImportSiteTaskTest extends BaseTaskTest
     /**
      * @param string $version
      * @param string $commandPackageKey
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function useCorrectCommandPackageKey($version = '4.0', $commandPackageKey = 'neos.neos')
     {
