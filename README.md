@@ -1,4 +1,8 @@
-# TYPO3 Surf - Powerful and flexible deployment tool for PHP projects [![Build Status](https://travis-ci.org/TYPO3/Surf.svg?branch=master)](https://travis-ci.org/TYPO3/Surf)
+[![Build Status](https://img.shields.io/travis/TYPO3/Surf/master.svg?style=flat-square)](https://travis-ci.org/TYPO3/Surf)
+[![Coverage Status](https://img.shields.io/coveralls/TYPO3/Surf/master.svg?style=flat-square)](https://coveralls.io/github/TYPO3/Surf?branch=master)
+[![Downloads](https://img.shields.io/packagist/dt/TYPO3/Surf.svg?style=flat-square)](https://packagist.org/packages/TYPO3/Surf)
+
+# Powerful and flexible deployment tool for PHP projects
 
 ## Description
 
