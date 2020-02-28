@@ -21,10 +21,10 @@ use TYPO3\Surf\Exception as SurfException;
  */
 class Deployment implements LoggerAwareInterface
 {
-    const STATUS_SUCCESS = 0;
-    const STATUS_FAILED = 1;
-    const STATUS_CANCELLED = 2;
-    const STATUS_UNKNOWN = 3;
+    public const STATUS_SUCCESS = 0;
+    public const STATUS_FAILED = 1;
+    public const STATUS_CANCELLED = 2;
+    public const STATUS_UNKNOWN = 3;
 
     /**
      * The name of this deployment
@@ -34,7 +34,7 @@ class Deployment implements LoggerAwareInterface
 
     /**
      * The workflow used for this deployment
-     * @var \TYPO3\Surf\Domain\Model\Workflow
+     * @var Workflow
      */
     protected $workflow;
 
@@ -164,7 +164,7 @@ class Deployment implements LoggerAwareInterface
      *
      * @param callable $callback
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment
+     * @return Deployment
      */
     public function onInitialize($callback)
     {
@@ -197,7 +197,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * @param \TYPO3\Surf\Domain\Model\Application $application
+     * @param Application $application
      *
      * @return string
      */
@@ -221,7 +221,7 @@ class Deployment implements LoggerAwareInterface
      *
      * @param string $name The deployment name
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
+     * @return Deployment The current deployment instance for chaining
      */
     public function setName($name)
     {
@@ -252,7 +252,7 @@ class Deployment implements LoggerAwareInterface
      *
      * In the special case "localhost" an ad-hoc Node with hostname "localhost" is returned.
      *
-     * @return \TYPO3\Surf\Domain\Model\Node The Node or NULL if no Node with the given name was found
+     * @return Node The Node or NULL if no Node with the given name was found
      */
     public function getNode($name)
     {
@@ -279,9 +279,9 @@ class Deployment implements LoggerAwareInterface
     /**
      * Add an application to this deployment
      *
-     * @param \TYPO3\Surf\Domain\Model\Application $application The application to add
+     * @param Application $application The application to add
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
+     * @return Deployment The current deployment instance for chaining
      */
     public function addApplication(Application $application)
     {
@@ -293,7 +293,7 @@ class Deployment implements LoggerAwareInterface
     /**
      * Get the deployment workflow
      *
-     * @return \TYPO3\Surf\Domain\Model\Workflow The deployment workflow
+     * @return Workflow The deployment workflow
      */
     public function getWorkflow()
     {
@@ -303,9 +303,9 @@ class Deployment implements LoggerAwareInterface
     /**
      * Sets the deployment workflow
      *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow The workflow to set
+     * @param Workflow $workflow The workflow to set
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
+     * @return Deployment The current deployment instance for chaining
      */
     public function setWorkflow($workflow)
     {
@@ -317,7 +317,7 @@ class Deployment implements LoggerAwareInterface
     /**
      * @param LoggerInterface $logger
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment
+     * @return Deployment
      */
     public function setLogger(LoggerInterface $logger)
     {
@@ -359,7 +359,7 @@ class Deployment implements LoggerAwareInterface
      *
      * @param bool $dryRun
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment The current deployment instance for chaining
+     * @return Deployment The current deployment instance for chaining
      */
     public function setDryRun($dryRun)
     {
@@ -371,7 +371,7 @@ class Deployment implements LoggerAwareInterface
     /**
      * @param int $status
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment
+     * @return Deployment
      */
     public function setStatus($status)
     {
@@ -440,7 +440,7 @@ class Deployment implements LoggerAwareInterface
      *
      * @param array $options The options to set indexed by option key
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment The current instance for chaining
+     * @return Deployment The current instance for chaining
      */
     public function setOptions($options)
     {
@@ -455,7 +455,7 @@ class Deployment implements LoggerAwareInterface
      * @param string $key The option key
      * @param mixed $value The option value
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment The current instance for chaining
+     * @return Deployment The current instance for chaining
      */
     public function setOption($key, $value)
     {

@@ -39,37 +39,18 @@ class VarnishPurgeTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
         $this->shell->executeOrSimulate(sprintf('%s -S %s -T 127.0.0.1:6082 url.purge %s', $options['varnishadm'], $options['secretFile'], $options['purgeUrl']), $node, $deployment);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
         $this->shell->executeOrSimulate(sprintf('%s -S %s -T 127.0.0.1:6082 status', $options['varnishadm'], $options['secretFile']), $node, $deployment);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('secretFile', '/etc/varnish/secret');

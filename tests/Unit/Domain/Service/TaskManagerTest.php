@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
  */
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use TYPO3\Surf\Domain\Model\Application;
@@ -23,27 +24,27 @@ use TYPO3\Surf\Domain\Service\TaskManager;
 class TaskManagerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Model\Task
+     * @var PHPUnit_Framework_MockObject_MockObject|Task
      */
     protected $task;
 
     /**
-     * @var \TYPO3\Surf\Domain\Model\Node
+     * @var Node
      */
     protected $node;
 
     /**
-     * @var \TYPO3\Surf\Domain\Model\Application
+     * @var Application
      */
     protected $application;
 
     /**
-     * @var \TYPO3\Surf\Domain\Model\Deployment
+     * @var Deployment
      */
     protected $deployment;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Service\TaskManager
+     * @var PHPUnit_Framework_MockObject_MockObject|TaskManager
      */
     protected $taskManager;
 
@@ -52,7 +53,7 @@ class TaskManagerTest extends TestCase
         $this->node = new Node('Test node');
         $this->application = new Application('Test application');
         $this->deployment = new Deployment('Test deployment');
-        /** @var \Psr\Log\LoggerInterface $logger */
+        /** @var LoggerInterface $logger */
         $logger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($logger);
         $this->task = $this->createMock(Task::class);

@@ -17,11 +17,6 @@ use TYPO3\Surf\Domain\Service\ShellCommandService;
 /**
  * Find all releases for current application
  *
- * @param Deployment $deployment
- * @param Node $node
- * @param Application $application
- * @param ShellCommandService $shell
- *
  * @return array[]|false|string[]
  */
 function findAllReleases(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell)
@@ -34,10 +29,6 @@ function findAllReleases(Deployment $deployment, Node $node, Application $applic
 
 /**
  * Get previous release identifier
- * @param Deployment $deployment
- * @param Node $node
- * @param Application $application
- * @param ShellCommandService $shell
  *
  * @return string
  */
@@ -49,13 +40,8 @@ function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Appli
 
 /**
  * Get current release identifier
- * @param Deployment $deployment
- * @param Node $node
- * @param Application $application
- * @param ShellCommandService $shell
  *
  * @return string
- * @throws Exception\TaskExecutionException
  */
 function findCurrentReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell)
 {

@@ -47,7 +47,7 @@ final class LockDeploymentTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return LockDeploymentTask|\TYPO3\Surf\Domain\Model\Task
+     * @return LockDeploymentTask
      */
     protected function createTask()
     {

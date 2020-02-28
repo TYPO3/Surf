@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Neos\Flow;
  */
 
 use TYPO3\Surf\Application\Neos\Flow;
+use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -17,9 +18,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class CopyConfigurationTaskTest extends BaseTaskTest
 {
-    /**
-     * Set up test dependencies
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -136,7 +134,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return Task
      */
     protected function createTask()
     {

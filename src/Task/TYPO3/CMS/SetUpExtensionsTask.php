@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  */
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -23,15 +22,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  */
 class SetUpExtensionsTask extends AbstractCliTask
 {
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param CMS|\TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->ensureApplicationIsTypo3Cms($application);
@@ -62,9 +52,6 @@ class SetUpExtensionsTask extends AbstractCliTask
         );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('extensionKeys', []);

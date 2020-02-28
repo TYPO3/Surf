@@ -23,26 +23,11 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @return array
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
-     */
     protected function resolveSha1(Node $node, Deployment $deployment, array $options)
     {
         if (isset($options['sha1'])) {
@@ -69,10 +54,6 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
     }
 
     /**
-     * @param string $checkoutPath
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
      * @return array
      */
     protected function executeOrSimulateGitCloneOrUpdate($checkoutPath, Node $node, Deployment $deployment, array $options)
@@ -111,13 +92,6 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
         return $sha1;
     }
 
-    /**
-     * @param string $gitPath
-     * @param string $sha1
-     * @param Node $node
-     * @param Deployment $deployment
-     * @param array $options
-     */
     protected function executeOrSimulatePostGitCheckoutCommands($gitPath, $sha1, Node $node, Deployment $deployment, array $options)
     {
         if (!isset($options['gitPostCheckoutCommands'])) {

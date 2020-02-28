@@ -19,14 +19,6 @@ use TYPO3\Surf\Domain\Model\Node;
  */
 class FlushCachesTask extends AbstractCliTask
 {
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->ensureApplicationIsTypo3Cms($application);
@@ -44,13 +36,6 @@ class FlushCachesTask extends AbstractCliTask
         );
     }
 
-    /**
-     * @param Node $node
-     * @param CMS $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @return array
-     */
     protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {

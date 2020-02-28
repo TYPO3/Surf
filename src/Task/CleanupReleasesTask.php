@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
-use TYPO3\Surf\Domain\Clock\ClockException;
 use TYPO3\Surf\Domain\Clock\ClockInterface;
 use TYPO3\Surf\Domain\Clock\SystemClock;
 use TYPO3\Surf\Domain\Model\Application;
@@ -18,7 +17,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A cleanup task to delete old (unused) releases.
@@ -50,11 +48,6 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
      */
     private $clock;
 
-    /**
-     * CleanupReleasesTask constructor.
-     *
-     * @param ClockInterface|null $clock
-     */
     public function __construct(ClockInterface $clock = null)
     {
         if (null === $clock) {
@@ -64,18 +57,6 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         $this->clock = $clock;
     }
 
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     *
-     * @return void|null
-     * @throws ClockException
-     * @throws TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (! isset($options['keepReleases']) && ! isset($options['onlyRemoveReleasesOlderThan'])) {
@@ -112,27 +93,13 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         }
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @throws ClockException
-     * @throws TaskExecutionException
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
     /**
-     * @param array $options
-     * @param array $removableReleases
-     *
      * @return array
-     * @throws ClockException
      */
     private function removeReleasesByAge(array $options, array $removableReleases)
     {
@@ -144,9 +111,6 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     }
 
     /**
-     * @param array $options
-     * @param array $removableReleases
-     *
      * @return array
      */
     private function removeReleasesByNumber(array $options, array $removableReleases)

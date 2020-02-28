@@ -11,13 +11,7 @@ namespace TYPO3\Surf;
 
 final class DeprecationMessageFactory
 {
-    /**
-     * @param string $className
-     * @param string $versionOfSurfToRemoveTask
-     *
-     * @return string
-     */
-    public static function createGenericDeprecationWarningForTask($className, $versionOfSurfToRemoveTask = '3.0.0')
+    public static function createGenericDeprecationWarningForTask(string $className, string $versionOfSurfToRemoveTask = '3.0.0'): string
     {
         return sprintf('The usage of %s is deprecated and will be removed in TYPO3 Surf Version %s', $className, $versionOfSurfToRemoveTask);
     }

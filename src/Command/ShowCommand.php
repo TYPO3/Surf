@@ -22,9 +22,6 @@ class ShowCommand extends Command implements FactoryAwareInterface
 {
     use FactoryAwareTrait;
 
-    /**
-     * Configure
-     */
     protected function configure()
     {
         $this->setName('show')
@@ -37,12 +34,6 @@ class ShowCommand extends Command implements FactoryAwareInterface
             );
     }
 
-    /**
-     * Execute
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configurationPath = $input->getOption('configurationPath');

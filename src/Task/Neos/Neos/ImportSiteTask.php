@@ -16,7 +16,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 use Webmozart\Assert\Assert;
 
 /**
@@ -40,15 +39,6 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Execute this task
-     *
-     * @param Node $node
-     * @param Application|Flow $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @throws InvalidConfigurationException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for ImportSiteTask, got "%s"', get_class($application)));
@@ -63,22 +53,11 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'site:import', $arguments), $node, $deployment);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('sitePackageKey');

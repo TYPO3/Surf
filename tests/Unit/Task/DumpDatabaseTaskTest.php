@@ -16,9 +16,6 @@ use TYPO3\Surf\Task\DumpDatabaseTask;
  */
 class DumpDatabaseTaskTest extends BaseTaskTest
 {
-    /**
-     * Set up test dependencies
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -56,7 +53,7 @@ class DumpDatabaseTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return DumpDatabaseTask
      */
     protected function createTask()
     {

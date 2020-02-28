@@ -19,9 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class RsyncTaskTest extends BaseTaskTest
 {
-    /**
-     * Set up test dependencies
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -206,7 +203,7 @@ class RsyncTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return RsyncTask
      */
     protected function createTask()
     {

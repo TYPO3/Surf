@@ -21,9 +21,6 @@ class RollbackCommand extends Command implements FactoryAwareInterface
 {
     use FactoryAwareTrait;
 
-    /**
-     * Configure
-     */
     protected function configure()
     {
         $this->setName('rollback')

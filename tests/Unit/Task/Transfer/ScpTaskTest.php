@@ -15,10 +15,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class ScpTaskTest extends BaseTaskTest
 {
-
-    /**
-     * Set up test dependencies
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -27,7 +23,7 @@ class ScpTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return ScpTask
      */
     protected function createTask()
     {

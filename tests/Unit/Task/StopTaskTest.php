@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Exception\StopWorkflowException;
 use TYPO3\Surf\Task\StopTask;
 
 /**
@@ -17,24 +18,24 @@ class StopTaskTest extends BaseTaskTest
 {
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception\StopWorkflowException
      */
     public function executeThrowsStopWorkflowException()
     {
+        $this->expectException(StopWorkflowException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
     }
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception\StopWorkflowException
      */
     public function simulateThrowsStopWorkflowException()
     {
+        $this->expectException(StopWorkflowException::class);
         $this->task->simulate($this->node, $this->application, $this->deployment);
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return StopTask
      */
     protected function createTask()
     {

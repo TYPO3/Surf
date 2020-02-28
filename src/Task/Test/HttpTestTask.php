@@ -101,9 +101,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('url');

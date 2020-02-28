@@ -57,12 +57,6 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
      */
     private $filesystem;
 
-    /**
-     * WebOpcacheResetCreateScriptTask constructor.
-     *
-     * @param RandomBytesGeneratorInterface $randomBytesGenerator
-     * @param FilesystemInterface $filesystem
-     */
     public function __construct(RandomBytesGeneratorInterface $randomBytesGenerator = null, FilesystemInterface $filesystem = null)
     {
         if (! $randomBytesGenerator instanceof RandomBytesGeneratorInterface) {
@@ -77,16 +71,6 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         $this->randomBytesGenerator = $randomBytesGenerator;
     }
 
-    /**
-     * Execute this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options Supported options: "scriptBasePath" and "scriptIdentifier"
-     *
-     * @throws TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
@@ -128,14 +112,6 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         }
     }
 
-    /**
-     * Simulate this task (e.g. by logging commands it would execute)
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
@@ -146,9 +122,6 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
     }
 
     /**
-     * Store the script identifier as an application option for WebOpcacheResetExecuteTask
-     *
-     * @param Application $application
      * @return string
      */
     private function setScriptIdentifier(Application $application)
@@ -158,11 +131,6 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         return $scriptIdentifier;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     *
-     * @throws \Exception
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('scriptIdentifier', null);

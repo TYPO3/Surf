@@ -39,7 +39,7 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task|UnlockDeploymentTask
+     * @return UnlockDeploymentTask
      */
     protected function createTask()
     {

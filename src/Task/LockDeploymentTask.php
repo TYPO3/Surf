@@ -27,12 +27,6 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
 
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (! $deployment->isDryRun()) {
@@ -55,14 +49,6 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
         }
     }
 
-    /**
-     * Removes lock file on failed deployment
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $unLockDeployment = new UnlockDeploymentTask();
@@ -70,14 +56,6 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
         $unLockDeployment->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws DeploymentLockedException
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

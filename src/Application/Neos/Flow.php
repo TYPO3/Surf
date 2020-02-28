@@ -45,12 +45,6 @@ class Flow extends BaseApplication
         parent::__construct($name);
     }
 
-    /**
-     * Register tasks for this application
-     *
-     * @param Workflow $workflow
-     * @param Deployment $deployment
-     */
     public function registerTasks(Workflow $workflow, Deployment $deployment)
     {
         parent::registerTasks($workflow, $deployment);
@@ -69,7 +63,6 @@ class Flow extends BaseApplication
     /**
      * Add support for updateMethod "composer"
      *
-     * @param Workflow $workflow
      * @param string $updateMethod
      */
     protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod)

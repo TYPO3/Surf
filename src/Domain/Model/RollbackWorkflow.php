@@ -25,11 +25,6 @@ final class RollbackWorkflow extends Workflow
         'rollback:cleanup',
     ];
 
-    /**
-     * @param Deployment $deployment
-     *
-     * @throws \TYPO3\Surf\Exception
-     */
     public function run(Deployment $deployment)
     {
         parent::run($deployment);
@@ -70,9 +65,6 @@ final class RollbackWorkflow extends Workflow
         }
     }
 
-    /**
-     * @param Deployment $deployment
-     */
     private function configureRollbackTasks(Deployment $deployment)
     {
         foreach ($deployment->getNodes() as $node) {

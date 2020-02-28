@@ -16,8 +16,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
-use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A scp transfer task
@@ -28,15 +26,6 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $fileName = sprintf('%s.tar.gz', $deployment->getReleaseIdentifier());
@@ -102,32 +91,11 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate(sprintf('rm -f %s/%s', $localPackagePath, $fileName), $localhost, $deployment);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * Rollback this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws TaskExecutionException
-     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
@@ -135,9 +103,6 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * @param array $options
-     * @param string $fileName
-     *
      * @return string
      */
     private function getExcludes(array $options, $fileName)

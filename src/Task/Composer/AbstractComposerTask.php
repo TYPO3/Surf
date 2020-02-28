@@ -19,7 +19,6 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
-use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * Installs the composer packages based on a composer.json file in the projects root folder
@@ -49,15 +48,6 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      */
     protected $suffix = ['2>&1'];
 
-    /**
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
@@ -81,17 +71,6 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         }
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
-     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
@@ -100,13 +79,9 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
     /**
      * Build the composer command in the given $path.
      *
-     * @param string $manifestPath
-     * @param array $options
-     *
      * @return array
-     * @throws TaskExecutionException
      */
-    private function buildComposerCommands($manifestPath, array $options)
+    private function buildComposerCommands(string $manifestPath, array $options)
     {
         $arguments = array_merge(
             [escapeshellcmd($options['composerCommandPath']), $this->command],
@@ -125,15 +100,9 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
     /**
      * Checks if a composer manifest exists in the directory at the given path.
      *
-     * If no manifest exists, a log message is recorded.
-     *
-     * @param string $path
-     * @param Node $node
-     * @param Deployment $deployment
-     *
      * @return bool
      */
-    private function composerManifestExists($path, Node $node, Deployment $deployment)
+    private function composerManifestExists(string $path, Node $node, Deployment $deployment)
     {
         // In dry run mode, no checkout is there, this we must not assume a composer.json is there!
         if ($deployment->isDryRun()) {
@@ -150,9 +119,6 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         return true;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function resolveOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('composerCommandPath');

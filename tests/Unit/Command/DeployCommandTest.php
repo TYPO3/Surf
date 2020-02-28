@@ -36,10 +36,6 @@ final class DeployCommandTest extends TestCase
      */
     protected $deployment;
 
-    /**
-     * @throws \TYPO3\Surf\Exception
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     */
     protected function setUp()
     {
         $this->node = new Node('TestNode');

@@ -11,6 +11,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
 use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Application\TYPO3\CMS;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\TYPO3\CMS\RunCommandTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -30,29 +31,29 @@ class RunCommandTaskTest extends BaseTaskTest
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function exceptionThrownBecauseApplicationIsNotOfTypeCMS()
     {
+        $this->expectException(InvalidConfigurationException::class);
         $wrongApplication = $this->getMockBuilder(BaseApplication::class)->disableOriginalConstructor()->getMock();
         $this->task->execute($this->node, $wrongApplication, $this->deployment);
     }
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function exceptionThrownBecauseNoCommandOptionDefined()
     {
+        $this->expectException(InvalidConfigurationException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, []);
     }
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception\InvalidConfigurationException
      */
     public function exceptionThrownBecauseNoScriptFileNameOptionDefined()
     {
+        $this->expectException(InvalidConfigurationException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, ['command' => 'command']);
     }
 

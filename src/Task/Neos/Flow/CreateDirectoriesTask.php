@@ -19,14 +19,6 @@ use TYPO3\Surf\Domain\Model\Node;
  */
 class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTask
 {
-    /**
-     * Execute this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = [
