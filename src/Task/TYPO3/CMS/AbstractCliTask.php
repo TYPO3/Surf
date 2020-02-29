@@ -39,16 +39,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      */
     protected $targetNode;
 
-    /**
-     * Execute this task
-     *
-     * @param array $cliArguments
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param CMS $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @return bool|mixed
-     */
     protected function executeCliCommand(array $cliArguments, Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
@@ -72,14 +62,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * Determines the path to the working directory and the target node by given options
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     */
     protected function determineWorkingDirectoryAndTargetNode(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($this->workingDirectory, $this->targetNode)) {
@@ -94,10 +76,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     }
 
     /**
-     * @param Node $node
-     * @param CMS $application
-     * @param Deployment $deployment
-     * @param array $options
      * @return string
      */
     protected function getAvailableCliPackage(Node $node, CMS $application, Deployment $deployment, array $options = [])
@@ -111,12 +89,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     }
 
     /**
-     * @param Node $node
-     * @param CMS $application
-     * @param Deployment $deployment
-     * @param array $options
      * @return string
-     * @throws InvalidConfigurationException
      */
     protected function getConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
@@ -146,10 +119,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * Checks if a given directory exists.
      *
      * @param string $directory
-     * @param Node $node
-     * @param CMS $application
-     * @param Deployment $deployment
-     * @param array $options
      * @return bool
      */
     protected function directoryExists($directory, Node $node, CMS $application, Deployment $deployment, array $options = [])
@@ -163,10 +132,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * Checks if a given file exists.
      *
      * @param string $pathAndFileName
-     * @param Node $node
-     * @param CMS $application
-     * @param Deployment $deployment
-     * @param array $options
      * @return bool
      */
     protected function fileExists($pathAndFileName, Node $node, CMS $application, Deployment $deployment, array $options = [])
@@ -176,10 +141,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         return $this->shell->executeOrSimulate('test -f ' . escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) !== false;
     }
 
-    /**
-     * @param Application $application
-     * @throws InvalidConfigurationException
-     */
     protected function ensureApplicationIsTypo3Cms(Application $application)
     {
         if (!$application instanceof CMS) {
@@ -188,16 +149,5 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
                 1420210955
             );
         }
-    }
-
-    /**
-     * @param array $options
-     *
-     * @return string
-     */
-    protected function getCliDispatchScriptFileName(array $options = [])
-    {
-        $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
-        return $webDirectory !== '' ? sprintf('%s/typo3/cli_dispatch.phpsh', $webDirectory) : 'typo3/cli_dispatch.phpsh';
     }
 }

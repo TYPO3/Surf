@@ -22,7 +22,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
@@ -61,18 +60,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         $this->client = $client;
     }
 
-    /**
-     * Execute this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     *
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
-     * @throws GuzzleException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
@@ -137,12 +124,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
-    /**
-     * @param array $expected
-     * @param array $actual
-     *
-     * @throws TaskExecutionException
-     */
     protected function assertExpectedHeaders(array $expected, array $actual)
     {
         if (count($expected) > 0) {
@@ -168,12 +149,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
-    /**
-     * @param array $expectedRegexp
-     * @param string $responseBody
-     *
-     * @throws TaskExecutionException
-     */
     protected function assertExpectedRegexp(array $expectedRegexp, $responseBody)
     {
         if (count($expectedRegexp) > 0) {

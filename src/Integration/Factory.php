@@ -27,6 +27,7 @@ use TYPO3\Surf\Command\ShowCommand;
 use TYPO3\Surf\Command\SimulateCommand;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\FailedDeployment;
+use TYPO3\Surf\Exception;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 class Factory implements FactoryInterface
@@ -94,7 +95,7 @@ class Factory implements FactoryInterface
      *
      * @return Deployment
      * @throws InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception
+     * @throws Exception
      */
     public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true, $initialize = true, $forceDeployment = false)
     {

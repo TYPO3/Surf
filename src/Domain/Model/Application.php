@@ -20,7 +20,7 @@ class Application
      *
      * @const
      */
-    const DEFAULT_SHARED_DIR = 'shared';
+    public const DEFAULT_SHARED_DIR = 'shared';
 
     /**
      * The name

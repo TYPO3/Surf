@@ -49,11 +49,6 @@ class WebOpcacheResetExecuteTask extends Task
      */
     private $filesystem;
 
-    /**
-     * WebOpcacheResetCreateScriptTask constructor.
-     *
-     * @param FilesystemInterface $filesystem
-     */
     public function __construct(FilesystemInterface $filesystem = null)
     {
         if (! $filesystem instanceof FilesystemInterface) {
@@ -63,17 +58,6 @@ class WebOpcacheResetExecuteTask extends Task
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options Supported options: "baseUrl" (required) and "scriptIdentifier" (is passed by the create script task)
-     *
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
