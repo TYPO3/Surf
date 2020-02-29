@@ -16,7 +16,6 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A task to execute shell commands on the remote host.
@@ -73,12 +72,9 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * @param Application $application
-     * @param Deployment $deployment
      * @param string $command
      *
      * @return mixed
-     * @throws InvalidConfigurationException
      */
     private function replacePaths(Application $application, Deployment $deployment, $command)
     {

@@ -91,14 +91,6 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * Rollback this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasePath = $deployment->getApplicationReleasePath($application);

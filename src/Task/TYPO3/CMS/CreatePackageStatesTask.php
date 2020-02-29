@@ -19,13 +19,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  */
 class CreatePackageStatesTask extends AbstractCliTask
 {
-    /**
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->ensureApplicationIsTypo3Cms($application);
@@ -53,10 +46,6 @@ class CreatePackageStatesTask extends AbstractCliTask
      *
      * If no manifest exists, a log message is recorded.
      *
-     * @param Node $node
-     * @param CMS $application
-     * @param Deployment $deployment
-     * @param array $options
      * @return bool
      */
     protected function packageStatesFileExists(Node $node, CMS $application, Deployment $deployment, array $options = [])

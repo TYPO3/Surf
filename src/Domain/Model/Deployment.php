@@ -263,7 +263,7 @@ class Deployment implements LoggerAwareInterface
         }
         $nodes = $this->getNodes();
 
-        return isset($nodes[$name]) ? $nodes[$name] : null;
+        return $nodes[$name] ?? null;
     }
 
     /**

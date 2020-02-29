@@ -24,14 +24,6 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Executes this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releaseIdentifier = $deployment->getReleaseIdentifier();
@@ -45,14 +37,6 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * Rollback this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasesPath = $application->getReleasesPath();

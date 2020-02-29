@@ -32,15 +32,6 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Executes this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $deploymentPath = $application->getDeploymentPath();
@@ -66,15 +57,6 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * Rollback this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @todo Make the removal of a failed release configurable, sometimes it's necessary to inspect a failed release
-     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasesPath = $application->getReleasesPath();
