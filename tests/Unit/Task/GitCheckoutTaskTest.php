@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Exception\TaskExecutionException;
 use TYPO3\Surf\Task\GitCheckoutTask;
 
@@ -26,7 +27,16 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithEmptyOptionsAndValidSha1FetchesResetsCopiesAndCleansRepository()
+    public function executeWithOutRepositoryUrlThrowsException(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithEmptyOptionsAndValidSha1FetchesResetsCopiesAndCleansRepository(): void
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git'
@@ -45,7 +55,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithBranchOptionAndValidSha1FetchesResetsAndCopiesRepository()
+    public function executeWithBranchOptionAndValidSha1FetchesResetsAndCopiesRepository(): void
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
@@ -64,7 +74,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithDisabledRecursiveSubmodulesOptionDoesNotUpdateSubmodulesRecursively()
+    public function executeWithDisabledRecursiveSubmodulesOptionDoesNotUpdateSubmodulesRecursively(): void
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
@@ -81,7 +91,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithoutRecursiveSubmodulesOptionUpdatesSubmodulesRecursively()
+    public function executeWithoutRecursiveSubmodulesOptionUpdatesSubmodulesRecursively(): void
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git'
@@ -97,7 +107,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithFetachAllTagsOptionExecutesFetchTags()
+    public function executeWithFetachAllTagsOptionExecutesFetchTags(): void
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
@@ -113,10 +123,10 @@ class GitCheckoutTaskTest extends BaseTaskTest
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception\TaskExecutionException
      */
-    public function executeWithEmptyOptionsAndInvalidSha1ThrowsException()
+    public function executeWithEmptyOptionsAndInvalidSha1ThrowsException(): void
     {
+        $this->expectException(TaskExecutionException::class);
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git'
         ];

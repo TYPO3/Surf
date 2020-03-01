@@ -8,11 +8,11 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
 
 /**
@@ -30,16 +30,10 @@ class GitCheckoutTask extends AbstractCheckoutTask
 {
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['repositoryUrl'])) {
-            throw new InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', $application->getName()), 1335974764);
-        }
+        $options = $this->configureOptions($options);
 
         $releasePath = $deployment->getApplicationReleasePath($application);
         $checkoutPath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache/transfer']);
-
-        if (!isset($options['hardClean'])) {
-            $options['hardClean'] = true;
-        }
 
         $sha1 = $this->executeOrSimulateGitCloneOrUpdate($checkoutPath, $node, $deployment, $options);
 
@@ -57,5 +51,11 @@ class GitCheckoutTask extends AbstractCheckoutTask
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
         $this->shell->execute('rm -f ' . $releasePath . 'REVISION', $node, $deployment, true);
+    }
+
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['repositoryUrl']);
+        $resolver->setDefault('hardClean', true);
     }
 }
