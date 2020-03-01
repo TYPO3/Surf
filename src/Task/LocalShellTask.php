@@ -8,13 +8,13 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A shell task for local packaging.
@@ -40,22 +40,16 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        $options = $this->configureOptions($options);
         $replacePaths = [];
         $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
 
-        if (!isset($options['command'])) {
-            throw new InvalidConfigurationException('Missing "command" option for LocalShellTask', 1311168045);
-        }
-        $command = $options['command'];
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
-
-        $ignoreErrors = isset($options['ignoreErrors']) && $options['ignoreErrors'] === true;
-        $logOutput = !(isset($options['logOutput']) && $options['logOutput'] === false);
+        $command = str_replace(array_keys($replacePaths), $replacePaths, $options['command']);
 
         $localhost = new Node('localhost');
         $localhost->onLocalhost();
 
-        $this->shell->executeOrSimulate($command, $localhost, $deployment, $ignoreErrors, $logOutput);
+        $this->shell->executeOrSimulate($command, $localhost, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
 
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
@@ -68,15 +62,23 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
         $replacePaths = [];
         $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
 
-        if (!isset($options['rollbackCommand'])) {
+        if (null === $options['rollbackCommand']) {
             return;
         }
-        $command = $options['rollbackCommand'];
-        $command = str_replace(array_keys($replacePaths), $replacePaths, $command);
+
+        $command = str_replace(array_keys($replacePaths), $replacePaths, $options['rollbackCommand']);
 
         $localhost = new Node('localhost');
         $localhost->onLocalhost();
 
         $this->shell->execute($command, $localhost, $deployment, true);
+    }
+
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['command']);
+        $resolver->setDefault('rollbackCommand', null);
+        $resolver->setDefault('ignoreErrors', false);
+        $resolver->setDefault('logOutput', false);
     }
 }
