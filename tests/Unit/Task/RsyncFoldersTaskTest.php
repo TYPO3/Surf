@@ -13,7 +13,6 @@ use TYPO3\Surf\Task\RsyncFoldersTask;
 
 class RsyncFoldersTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
@@ -28,7 +27,7 @@ class RsyncFoldersTaskTest extends BaseTaskTest
      * @dataProvider executeWithDifferentOptions
      *
      * @param array|string $expectedCommands
-     * @param array $options
+     * @param array        $options
      */
     public function executeSuccessfully($expectedCommands, array $options)
     {
@@ -38,7 +37,7 @@ class RsyncFoldersTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        foreach ((array)$expectedCommands as $expectedCommand) {
+        foreach ((array) $expectedCommands as $expectedCommand) {
             $this->assertCommandExecuted($expectedCommand);
         }
     }
@@ -53,18 +52,18 @@ class RsyncFoldersTaskTest extends BaseTaskTest
                 'rsync -avz --delete -e ssh uploads/spaceship/ hostname:/var/www/outerspace/uploads/spaceship/',
                 [
                     'folders' => [
-                        ['uploads/spaceship', '/var/www/outerspace/uploads/spaceship']
-                    ]
-                ]
+                        ['uploads/spaceship', '/var/www/outerspace/uploads/spaceship'],
+                    ],
+                ],
             ],
             [
                 'rsync -avz --delete -e ssh uploads/spaceship/ username@hostname:/var/www/outerspace/uploads/spaceship/',
                 [
                     'username' => 'username',
-                    'folders' => [
-                        ['uploads/spaceship', '/var/www/outerspace/uploads/spaceship']
-                    ]
-                ]
+                    'folders'  => [
+                        ['uploads/spaceship', '/var/www/outerspace/uploads/spaceship'],
+                    ],
+                ],
             ],
             [
                 [
@@ -74,22 +73,22 @@ class RsyncFoldersTaskTest extends BaseTaskTest
                 ],
                 [
                     'username' => 'username',
-                    'folders' => [
+                    'folders'  => [
                         ['uploads/spaceship1', '/var/www/outerspace/uploads/spaceship1'],
                         ['uploads/spaceship2', '/var/www/outerspace/uploads/spaceship2'],
-                        'uploads/spaceship3' => '/var/www/outerspace/uploads/spaceship3'
-                    ]
-                ]
+                        'uploads/spaceship3' => '/var/www/outerspace/uploads/spaceship3',
+                    ],
+                ],
             ],
             [
                 'rsync -avz --delete -e ssh -P \'222\' uploads/spaceship/ username@hostname:/var/www/outerspace/uploads/spaceship/',
                 [
                     'username' => 'username',
-                    'port' => 222,
-                    'folders' => [
-                        ['uploads/spaceship', '/var/www/outerspace/uploads/spaceship']
-                    ]
-                ]
+                    'port'     => 222,
+                    'folders'  => [
+                        ['uploads/spaceship', '/var/www/outerspace/uploads/spaceship'],
+                    ],
+                ],
             ],
         ];
     }

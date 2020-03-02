@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Composer;
 
 /*
@@ -14,7 +15,7 @@ use TYPO3\Surf\Task\Composer\CommandTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Unit test for the TagTask
+ * Unit test for the TagTask.
  */
 class CommandTaskTest extends BaseTaskTest
 {
@@ -32,8 +33,8 @@ class CommandTaskTest extends BaseTaskTest
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-            'command' => 'run-script',
-            'additionalArguments' => 'my-script'
+            'command'             => 'run-script',
+            'additionalArguments' => 'my-script',
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -48,7 +49,7 @@ class CommandTaskTest extends BaseTaskTest
         $this->expectException(InvalidConfigurationException::class);
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-            'additionalArguments' => 'my-script'
+            'additionalArguments' => 'my-script',
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -61,9 +62,9 @@ class CommandTaskTest extends BaseTaskTest
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-            'command' => 'run-script',
+            'command'             => 'run-script',
             'additionalArguments' => 'my-script',
-            'suffix' => ['2>&1']
+            'suffix'              => ['2>&1'],
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -77,9 +78,9 @@ class CommandTaskTest extends BaseTaskTest
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-            'command' => 'run-script',
+            'command'             => 'run-script',
             'additionalArguments' => 'my-script',
-            'suffix' => '2>&1'
+            'suffix'              => '2>&1',
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -93,9 +94,9 @@ class CommandTaskTest extends BaseTaskTest
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-            'command' => 'run-script',
+            'command'             => 'run-script',
             'additionalArguments' => 'my-script',
-            'suffix' => [],
+            'suffix'              => [],
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -109,9 +110,9 @@ class CommandTaskTest extends BaseTaskTest
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-            'command' => 'run-script',
+            'command'             => 'run-script',
             'additionalArguments' => 'my-script',
-            'suffix' => '',
+            'suffix'              => '',
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -125,9 +126,9 @@ class CommandTaskTest extends BaseTaskTest
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-            'command' => 'run-script',
+            'command'             => 'run-script',
             'additionalArguments' => 'my-script',
-            'suffix' => null
+            'suffix'              => null,
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -142,9 +143,9 @@ class CommandTaskTest extends BaseTaskTest
         $this->expectException(InvalidConfigurationException::class);
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
-            'command' => 'run-script',
+            'command'             => 'run-script',
             'additionalArguments' => 'my-script',
-            'suffix' => ['&& echo \'Hello world!\'']
+            'suffix'              => ['&& echo \'Hello world!\''],
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -157,14 +158,14 @@ class CommandTaskTest extends BaseTaskTest
     {
         $options = [
             'composerCommandPath' => 'composer',
-            'command' => 'update',
-            'arguments' => [
+            'command'             => 'update',
+            'arguments'           => [
                 '--no-ansi',
                 '--no-interaction',
                 '--no-dev',
                 '--no-progress',
-                '--classmap-authoritative'
-            ]
+                '--classmap-authoritative',
+            ],
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);

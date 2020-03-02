@@ -21,7 +21,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use Webmozart\Assert\Assert;
 
 /**
- * This tasks clears the list of Flow Framework cache
+ * This tasks clears the list of Flow Framework cache.
  *
  * It takes the following options:
  *

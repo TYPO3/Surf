@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 
 /*
@@ -19,7 +20,7 @@ use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
- * Unit test for SimpleWorkflow
+ * Unit test for SimpleWorkflow.
  */
 class SimpleWorkflowTest extends TestCase
 {
@@ -50,6 +51,7 @@ class SimpleWorkflowTest extends TestCase
             $workflow->run($deployment);
         } catch (SurfException $exception) {
             $this->assertEquals(1334652420, $exception->getCode());
+
             throw $exception;
         }
     }
@@ -71,12 +73,13 @@ class SimpleWorkflowTest extends TestCase
             $workflow->run($deployment);
         } catch (SurfException $exception) {
             $this->assertEquals(1334652427, $exception->getCode());
+
             throw $exception;
         }
     }
 
     /**
-     * Data provider with task definitions and expected executions
+     * Data provider with task definitions and expected executions.
      *
      * Tests a simple setup with one node and one application.
      *
@@ -96,14 +99,14 @@ class SimpleWorkflowTest extends TestCase
                 },
                 [
                     [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'test1.example.com',
+                        'task'        => 'typo3.surf:test:setup',
+                        'node'        => 'test1.example.com',
                         'application' => 'Test application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
-                    ]
-                ]
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
+                    ],
+                ],
             ],
 
             [
@@ -118,38 +121,38 @@ class SimpleWorkflowTest extends TestCase
                 },
                 [
                     [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'test1.example.com',
+                        'task'        => 'typo3.surf:test:setup',
+                        'node'        => 'test1.example.com',
                         'application' => 'Test application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:secondsetup',
-                        'node' => 'test1.example.com',
+                        'task'        => 'typo3.surf:test:secondsetup',
+                        'node'        => 'test1.example.com',
                         'application' => 'Test application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:finalize',
-                        'node' => 'test1.example.com',
+                        'task'        => 'typo3.surf:test:finalize',
+                        'node'        => 'test1.example.com',
                         'application' => 'Test application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:thirdsetup',
-                        'node' => 'test1.example.com',
+                        'task'        => 'typo3.surf:test:thirdsetup',
+                        'node'        => 'test1.example.com',
                         'application' => 'Test application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
-                    ]
-                ]
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
+                    ],
+                ],
             ],
 
             [
@@ -164,31 +167,31 @@ class SimpleWorkflowTest extends TestCase
                 },
                 [
                     [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'test1.example.com',
+                        'task'        => 'typo3.surf:test:setup',
+                        'node'        => 'test1.example.com',
                         'application' => 'Test application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:checkout',
-                        'node' => 'test1.example.com',
+                        'task'        => 'typo3.surf:test:checkout',
+                        'node'        => 'test1.example.com',
                         'application' => 'Test application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'update',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'update',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:symlink',
-                        'node' => 'test1.example.com',
+                        'task'        => 'typo3.surf:test:symlink',
+                        'node'        => 'test1.example.com',
                         'application' => 'Test application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'switch',
-                        'options' => []
-                    ]
-                ]
-            ]
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'switch',
+                        'options'     => [],
+                    ],
+                ],
+            ],
 
         ];
     }
@@ -197,9 +200,9 @@ class SimpleWorkflowTest extends TestCase
      * @test
      * @dataProvider globalTaskDefinitions
      *
-     * @param string $message
+     * @param string   $message
      * @param \Closure $initializeCallback
-     * @param array $expectedExecutions
+     * @param array    $expectedExecutions
      */
     public function globalTaskDefinitionsAreExecutedCorrectly($message, $initializeCallback, array $expectedExecutions)
     {
@@ -221,7 +224,7 @@ class SimpleWorkflowTest extends TestCase
     }
 
     /**
-     * Data provider with task definitions and expected executions
+     * Data provider with task definitions and expected executions.
      *
      * A more complex setup with two applications running on three nodes.
      *
@@ -245,55 +248,55 @@ class SimpleWorkflowTest extends TestCase
                 },
                 [
                     [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'typo3.surf:test:setup',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'flow-2.example.com',
+                        'task'        => 'typo3.surf:test:setup',
+                        'node'        => 'flow-2.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'neos.example.com',
+                        'task'        => 'typo3.surf:test:setup',
+                        'node'        => 'neos.example.com',
                         'application' => 'TYPO3 Neos Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:doctrine:migrate',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'typo3.surf:test:doctrine:migrate',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'migrate',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'migrate',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:doctrine:migrate',
-                        'node' => 'flow-2.example.com',
+                        'task'        => 'typo3.surf:test:doctrine:migrate',
+                        'node'        => 'flow-2.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'migrate',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'migrate',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'typo3.surf:test:em:updatedatabase',
-                        'node' => 'neos.example.com',
+                        'task'        => 'typo3.surf:test:em:updatedatabase',
+                        'node'        => 'neos.example.com',
                         'application' => 'TYPO3 Neos Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'migrate',
-                        'options' => []
-                    ]
-                ]
-            ]
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'migrate',
+                        'options'     => [],
+                    ],
+                ],
+            ],
 
         ];
     }
@@ -302,9 +305,9 @@ class SimpleWorkflowTest extends TestCase
      * @test
      * @dataProvider applicationTaskDefinitions
      *
-     * @param string $message
+     * @param string   $message
      * @param \Closure $initializeCallback
-     * @param array $expectedExecutions
+     * @param array    $expectedExecutions
      */
     public function applicationTaskDefinitionsAreExecutedCorrectly($message, $initializeCallback, array $expectedExecutions)
     {
@@ -333,7 +336,7 @@ class SimpleWorkflowTest extends TestCase
     }
 
     /**
-     * Build a Deployment object with Workflow for testing
+     * Build a Deployment object with Workflow for testing.
      *
      * @param array $executedTasks Register for executed tasks
      *
@@ -394,85 +397,85 @@ class SimpleWorkflowTest extends TestCase
 
         $expected = [
             [
-                'task' => 'before1:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'before1:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'before2:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'before2:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'before3:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'before3:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'task1:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'task1:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'task2:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'task2:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'task3:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'task3:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'after1:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'after1:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'after2:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'after2:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'after3:initialize',
-                'node' => 'flow-1.example.com',
+                'task'        => 'after3:initialize',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'initialize',
-                'options' => []
+                'deployment'  => 'Test deployment',
+                'stage'       => 'initialize',
+                'options'     => [],
             ],
             [
-                'task' => 'task1:package',
-                'node' => 'flow-1.example.com',
+                'task'        => 'task1:package',
+                'node'        => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
-                'deployment' => 'Test deployment',
-                'stage' => 'package',
-                'options' => []
-            ]
+                'deployment'  => 'Test deployment',
+                'stage'       => 'package',
+                'options'     => [],
+            ],
         ];
 
         $this->assertEquals($expected, $executedTasks);
@@ -493,14 +496,14 @@ class SimpleWorkflowTest extends TestCase
                 },
                 [
                     [
-                        'task' => 'task2:package',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task2:package',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'package',
-                        'options' => []
-                    ]
-                ]
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'package',
+                        'options'     => [],
+                    ],
+                ],
             ],
             'remove task in before hook' => [
                 function ($workflow, $application) {
@@ -512,22 +515,22 @@ class SimpleWorkflowTest extends TestCase
                 },
                 [
                     [
-                        'task' => 'task3:before',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task3:before',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'task1:initialize',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task1:initialize',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
-                    ]
-                ]
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
+                    ],
+                ],
             ],
             'remove task in after hook' => [
                 function ($workflow, $application) {
@@ -539,23 +542,23 @@ class SimpleWorkflowTest extends TestCase
                 },
                 [
                     [
-                        'task' => 'task1:initialize',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task1:initialize',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'task3:after',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task3:after',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
-                    ]
-                ]
-            ]
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -569,8 +572,8 @@ class SimpleWorkflowTest extends TestCase
                 [
                     [
                         'application' => 'Neos Flow Application',
-                        'node' => 'flow-1.example.com',
-                        'callable' => function (Workflow $workflow, Application $application) {
+                        'node'        => 'flow-1.example.com',
+                        'callable'    => function (Workflow $workflow, Application $application) {
                             $workflow->addTask('task1:initialize', 'initialize', $application);
                             $workflow->addTask('task2:package', 'package', $application);
                             $workflow->afterTask('task2:package', 'task2:whatever', $application);
@@ -579,8 +582,8 @@ class SimpleWorkflowTest extends TestCase
                     ],
                     [
                         'application' => 'TYPO3 Application',
-                        'node' => 'typo3.example.com',
-                        'callable' => function (Workflow $workflow, Application $application) {
+                        'node'        => 'typo3.example.com',
+                        'callable'    => function (Workflow $workflow, Application $application) {
                             $workflow->addTask('task1:initialize', 'initialize', $application);
                             $workflow->addTask('task2:package', 'package', $application);
                             $workflow->afterTask('task2:package', 'task2:whatever', $application);
@@ -590,36 +593,36 @@ class SimpleWorkflowTest extends TestCase
                 ],
                 [
                     [
-                        'task' => 'task1:initialize',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task1:initialize',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => [],
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'initialize',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'task2:package',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task2:package',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'package',
-                        'options' => [],
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'package',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'task2:package',
-                        'node' => 'typo3.example.com',
+                        'task'        => 'task2:package',
+                        'node'        => 'typo3.example.com',
                         'application' => 'TYPO3 Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'package',
-                        'options' => [],
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'package',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'task2:whatever',
-                        'node' => 'typo3.example.com',
+                        'task'        => 'task2:whatever',
+                        'node'        => 'typo3.example.com',
                         'application' => 'TYPO3 Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'package',
-                        'options' => [],
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'package',
+                        'options'     => [],
                     ],
                 ],
             ],
@@ -697,23 +700,23 @@ class SimpleWorkflowTest extends TestCase
                 },
                 [
                     [
-                        'task' => 'task1:switch',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task1:switch',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'switch',
-                        'options' => []
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'switch',
+                        'options'     => [],
                     ],
                     [
-                        'task' => 'task2:afterSwitch',
-                        'node' => 'flow-1.example.com',
+                        'task'        => 'task2:afterSwitch',
+                        'node'        => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'switch',
-                        'options' => []
-                    ]
-                ]
-            ]
+                        'deployment'  => 'Test deployment',
+                        'stage'       => 'switch',
+                        'options'     => [],
+                    ],
+                ],
+            ],
         ];
     }
 

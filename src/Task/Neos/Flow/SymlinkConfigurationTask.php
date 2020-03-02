@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -17,7 +18,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * This task takes care of symlinking the shared Production Configuration
+ * This task takes care of symlinking the shared Production Configuration.
  *
  * Note: this might cause problems with concurrent access due to the cached configuration
  * inside this directory.
@@ -39,7 +40,7 @@ class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareI
         $commands = [
             "cd {$targetReleasePath}/Configuration",
             "if [ -d {$context} ]; then rm -Rf {$context}; fi",
-            "mkdir -p ../../../shared/Configuration/{$context}"
+            "mkdir -p ../../../shared/Configuration/{$context}",
         ];
 
         if (strpos($context, '/') !== false) {

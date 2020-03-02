@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Cli\Symfony\Logger;
 
 /*
@@ -37,10 +38,10 @@ class ConsoleHandler extends AbstractProcessingHandler
      * @var array
      */
     private $verbosityLevelMap = [
-        OutputInterface::VERBOSITY_NORMAL => Logger::INFO,
-        OutputInterface::VERBOSITY_VERBOSE => Logger::DEBUG,
+        OutputInterface::VERBOSITY_NORMAL       => Logger::INFO,
+        OutputInterface::VERBOSITY_VERBOSE      => Logger::DEBUG,
         OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::DEBUG,
-        OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
+        OutputInterface::VERBOSITY_DEBUG        => Logger::DEBUG,
     ];
 
     /**
@@ -105,7 +106,7 @@ class ConsoleHandler extends AbstractProcessingHandler
      */
     protected function write(array $record)
     {
-        $this->output->write((string)$record['formatted']);
+        $this->output->write((string) $record['formatted']);
     }
 
     /**

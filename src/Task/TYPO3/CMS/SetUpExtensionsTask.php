@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 /*
@@ -29,7 +30,8 @@ class SetUpExtensionsTask extends AbstractCliTask
         try {
             $scriptFileName = $this->getConsoleScriptFileName($node, $application, $deployment, $options);
         } catch (InvalidConfigurationException $e) {
-            $deployment->getLogger()->warning('TYPO3 Console script (' . $options['scriptFileName'] . ') was not found! Make sure it is available in your project, you set the "scriptFileName" option correctly or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            $deployment->getLogger()->warning('TYPO3 Console script ('.$options['scriptFileName'].') was not found! Make sure it is available in your project, you set the "scriptFileName" option correctly or remove this task ('.__CLASS__.') in your deployment configuration!');
+
             return;
         }
 

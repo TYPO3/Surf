@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Application\Neos;
 
 /*
@@ -20,18 +21,20 @@ use TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask;
 use TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask;
 
 /**
- * A Neos Flow application template
+ * A Neos Flow application template.
  */
 class Flow extends BaseApplication
 {
     /**
-     * The production context
+     * The production context.
+     *
      * @var string
      */
     protected $context = 'Production';
 
     /**
-     * The Neos Flow major and minor version of this application
+     * The Neos Flow major and minor version of this application.
+     *
      * @var string
      */
     protected $version = '4.0';
@@ -39,7 +42,8 @@ class Flow extends BaseApplication
     public const DEFAULT_WEB_DIRECTORY = 'Web';
 
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param string $name
      */
     public function __construct($name = 'Neos Flow')
@@ -60,14 +64,14 @@ class Flow extends BaseApplication
             ->afterStage('update', [
                 SymlinkDataTask::class,
                 SymlinkConfigurationTask::class,
-                CopyConfigurationTask::class
+                CopyConfigurationTask::class,
             ], $this)
             ->addTask(MigrateTask::class, 'migrate', $this)
             ->addTask(PublishResourcesTask::class, 'finalize', $this);
     }
 
     /**
-     * Add support for updateMethod "composer"
+     * Add support for updateMethod "composer".
      *
      * @param string $updateMethod
      */
@@ -84,19 +88,21 @@ class Flow extends BaseApplication
     }
 
     /**
-     * Set the application production context
+     * Set the application production context.
      *
      * @param string $context
+     *
      * @return Flow
      */
     public function setContext($context)
     {
         $this->context = trim($context);
+
         return $this;
     }
 
     /**
-     * Get the application production context
+     * Get the application production context.
      *
      * @return string
      */
@@ -122,7 +128,7 @@ class Flow extends BaseApplication
     }
 
     /**
-     * Get the directory name for build essentials (e.g. to run unit tests)
+     * Get the directory name for build essentials (e.g. to run unit tests).
      *
      * The value depends on the Flow version of the application.
      *
@@ -133,11 +139,12 @@ class Flow extends BaseApplication
         if ($this->getVersion() <= '1.1') {
             return 'Common';
         }
+
         return 'BuildEssentials';
     }
 
     /**
-     * Get the name of the Flow script (flow or flow3)
+     * Get the name of the Flow script (flow or flow3).
      *
      * The value depends on the Flow version of the application.
      *
@@ -148,13 +155,15 @@ class Flow extends BaseApplication
         if ($this->getVersion() <= '1.1') {
             return 'flow3';
         }
+
         return 'flow';
     }
 
     /**
-     * Get the package key to prefix the command
+     * Get the package key to prefix the command.
      *
      * @param string $command
+     *
      * @return string
      */
     public function getCommandPackageKey($command = '')
@@ -165,22 +174,24 @@ class Flow extends BaseApplication
         if ($this->getVersion() < '4.0') {
             return 'typo3.flow';
         }
+
         return 'neos.flow';
     }
 
     /**
-     * Returns a executable flow command including the context
+     * Returns a executable flow command including the context.
      *
-     * @param string $targetPath the path where the command should be executed
-     * @param string $command the actual command for example `cache:flush`
-     * @param array $arguments list of arguments which will be appended to the command
+     * @param string $targetPath               the path where the command should be executed
+     * @param string $command                  the actual command for example `cache:flush`
+     * @param array  $arguments                list of arguments which will be appended to the command
      * @param string $phpBinaryPathAndFilename the path to the php binary
+     *
      * @return string
      */
     public function buildCommand($targetPath, $command, array $arguments = [], $phpBinaryPathAndFilename = 'php')
     {
         if (strpos($command, '.') === false) {
-            $command = $this->getCommandPackageKey($command) . ':' . $command;
+            $command = $this->getCommandPackageKey($command).':'.$command;
         }
 
         return sprintf(

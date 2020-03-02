@@ -15,15 +15,14 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 final class RollbackTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
     public function executeSuccessfully()
     {
         $releasesPath = $this->application->getReleasesPath();
-        $previousReleasePath = $releasesPath . '/previous';
-        $currentReleasePath = $releasesPath . '/current';
+        $previousReleasePath = $releasesPath.'/previous';
+        $currentReleasePath = $releasesPath.'/current';
 
         $this->responses = [
             sprintf('if [ -d %1$s/. ]; then find %1$s/. -maxdepth 1 -type d -exec basename {} \; ; fi', $releasesPath) => '.

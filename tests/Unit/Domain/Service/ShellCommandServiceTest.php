@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 
 /*
@@ -15,19 +16,20 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Service\ShellCommandService;
 
 /**
- * Unit test for the ShellCommandService
+ * Unit test for the ShellCommandService.
  */
 class ShellCommandServiceTest extends TestCase
 {
     /**
-     * Test, if the given options are respected in executed SSH command
+     * Test, if the given options are respected in executed SSH command.
      *
      * @test
      * @dataProvider commandOptionDataProvider
+     *
      * @param string $expectedCommandArguments
      * @param string $username
      * @param string $password
-     * @param int $port
+     * @param int    $port
      * @param string $privateKey
      */
     public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null, $privateKey = null)
@@ -58,51 +60,52 @@ class ShellCommandServiceTest extends TestCase
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
-        $expectedCommand = $expectedCommandArguments . ' \'echo "Hello World"\'';
+        $expectedCommand = $expectedCommandArguments.' \'echo "Hello World"\'';
         $service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue([0, 'Hello World']));
 
         $service->executeOrSimulate('echo "Hello World"', $node, $deployment);
     }
 
     /**
-     * Data provider for executeRemoteCommandRespectsOptionsInSshCommand
+     * Data provider for executeRemoteCommandRespectsOptionsInSshCommand.
      *
      * @return array
      */
     public function commandOptionDataProvider()
     {
-        $resourcesPath = realpath(__DIR__ . '/../../../../Resources');
+        $resourcesPath = realpath(__DIR__.'/../../../../Resources');
+
         return [
             [
                 'ssh -A \'remote-host.example.com\'',
                 null,
                 null,
-                null
+                null,
             ],
             [
                 'ssh -A \'jdoe@remote-host.example.com\'',
                 'jdoe',
                 null,
-                null
+                null,
             ],
             [
                 'ssh -A -p \'12345\' \'jdoe@remote-host.example.com\'',
                 'jdoe',
                 null,
-                12345
+                12345,
             ],
             [
                 'ssh -A -i \'~/.ssh/foo\' \'jdoe@remote-host.example.com\'',
                 'jdoe',
                 null,
                 null,
-                '~/.ssh/foo'
+                '~/.ssh/foo',
             ],
             [
-                'expect \'' . $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',
+                'expect \''.$resourcesPath.'/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',
                 'jdoe',
                 'myPassword',
-                null
+                null,
             ],
         ];
     }
@@ -120,6 +123,7 @@ class ShellCommandServiceTest extends TestCase
 
         $node->setRemoteCommandExecutionHandler(function (ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput) use (&$arguments) {
             $arguments = func_get_args();
+
             return [0, 'Hello World'];
         });
 
@@ -135,7 +139,7 @@ class ShellCommandServiceTest extends TestCase
             'foo command',
             $node,
             $deployment,
-            true
+            true,
         ], $arguments);
     }
 

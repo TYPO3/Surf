@@ -25,7 +25,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
- * A task for testing HTTP request
+ * A task for testing HTTP request.
  *
  * This task could be used to do smoke-tests against web applications in release (e.g. on a virtual host mounted
  * on the "next" symlink).
@@ -46,7 +46,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function __construct(ClientInterface $client = null)
     {
-        if (! $client instanceof ClientInterface) {
+        if (!$client instanceof ClientInterface) {
             $client = new Client();
         }
         $this->client = $client;
@@ -92,22 +92,22 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     {
         $resolver->setRequired('url');
         $resolver->setDefaults([
-            'remote' => false,
+            'remote'                   => false,
             'additionalCurlParameters' => '',
-            'expectedStatus' => null,
-            'expectedHeaders' => null,
-            'expectedRegexp' => null,
-            'timeout' => null,
-            'port' => null,
-            'method' => 'GET',
-            'username' => null,
-            'password' => null,
-            'data' => null,
-            'proxy' => null,
-            'proxyPort' => null,
+            'expectedStatus'           => null,
+            'expectedHeaders'          => null,
+            'expectedRegexp'           => null,
+            'timeout'                  => null,
+            'port'                     => null,
+            'method'                   => 'GET',
+            'username'                 => null,
+            'password'                 => null,
+            'data'                     => null,
+            'proxy'                    => null,
+            'proxyPort'                => null,
         ]);
         $resolver->setNormalizer('remote', static function (Options $options, $value) {
-            return (bool)$value;
+            return (bool) $value;
         });
     }
 
@@ -119,7 +119,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function assertExpectedStatus($expected, $actual)
     {
-        if ((int)$actual !== (int)$expected) {
+        if ((int) $actual !== (int) $expected) {
             throw new TaskExecutionException(sprintf('Expected status code %d but got %d', $expected, $actual), 1319536619);
         }
     }
@@ -128,8 +128,8 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     {
         if (count($expected) > 0) {
             foreach ($expected as $headerName => $expectedValue) {
-                if (! isset($actual[$headerName])) {
-                    throw new TaskExecutionException('Expected header "' . $headerName . '" not present', 1319535441);
+                if (!isset($actual[$headerName])) {
+                    throw new TaskExecutionException('Expected header "'.$headerName.'" not present', 1319535441);
                 }
                 $headerValue = $actual[$headerName];
 
@@ -142,7 +142,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
                 }
 
                 $partialSuccess = $this->testSingleHeader($headerValue, $expectedValue);
-                if (! $partialSuccess) {
+                if (!$partialSuccess) {
                     throw new TaskExecutionException(sprintf('Expected header value for "%s" did not match "%s": "%s"', $headerName, $expectedValue, $headerValue), 1319535733);
                 }
             }
@@ -154,15 +154,15 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         if (count($expectedRegexp) > 0) {
             foreach ($expectedRegexp as $regexp) {
                 $regexp = trim($regexp);
-                if ($regexp !== '' && ! preg_match($regexp, $responseBody)) {
-                    throw new TaskExecutionException('Body did not match expected regular expression "' . $regexp . '": ' . substr($responseBody, 0, 200) . (strlen($responseBody) > 200 ? '...' : ''), 1319536046);
+                if ($regexp !== '' && !preg_match($regexp, $responseBody)) {
+                    throw new TaskExecutionException('Body did not match expected regular expression "'.$regexp.'": '.substr($responseBody, 0, 200).(strlen($responseBody) > 200 ? '...' : ''), 1319536046);
                 }
             }
         }
     }
 
     /**
-     * Compare returned HTTP headers with expected values
+     * Compare returned HTTP headers with expected values.
      *
      * @param string $headerValue
      * @param string $expectedValue
@@ -171,7 +171,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function testSingleHeader($headerValue, $expectedValue)
     {
-        if (! $headerValue || trim($headerValue) === '') {
+        if (!$headerValue || trim($headerValue) === '') {
             return false;
         }
 
@@ -180,10 +180,10 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             $result = $headerValue === trim(substr($expectedValue, 1));
         } // < Intval smaller than
         elseif (strpos($expectedValue, '<') === 0) {
-            $result = (int)$headerValue < (int)substr($expectedValue, 1);
+            $result = (int) $headerValue < (int) substr($expectedValue, 1);
         } // > Intval bigger than
         elseif (strpos($expectedValue, '>') === 0) {
-            $result = (int)$headerValue > (int)substr($expectedValue, 1);
+            $result = (int) $headerValue > (int) substr($expectedValue, 1);
         } // Default
         else {
             $result = $headerValue === $expectedValue;
@@ -193,12 +193,13 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * @param string $url Request URL
-     * @param array $options
+     * @param string $url     Request URL
+     * @param array  $options
      *
-     * @return HttpResponse
      * @throws TaskExecutionException
      * @throws GuzzleException
+     *
+     * @return HttpResponse
      */
     protected function executeLocalCurlRequest($url, array $options = [])
     {
@@ -209,11 +210,11 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
 
         if ($options['timeout'] !== null) {
-            $guzzleOptions['timeout'] = (int)ceil($options['timeout'] / 1000);
+            $guzzleOptions['timeout'] = (int) ceil($options['timeout'] / 1000);
         }
 
         if ($options['port'] !== null) {
-            $guzzleOptions['port'] = (int)$options['port'];
+            $guzzleOptions['port'] = (int) $options['port'];
         }
 
         if ($options['proxy'] !== null && $options['proxyPort'] !== null) {
@@ -237,20 +238,21 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * @param string $url Request URL
-     * @param Node $node
+     * @param string     $url                      Request URL
+     * @param Node       $node
      * @param Deployment $deployment
-     * @param string $additionalCurlParameters
+     * @param string     $additionalCurlParameters
+     *
+     * @throws TaskExecutionException
      *
      * @return HttpResponse
-     * @throws TaskExecutionException
      */
     protected function executeRemoteCurlRequest($url, Node $node, Deployment $deployment, $additionalCurlParameters = '')
     {
-        $command = 'curl -s -I ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
+        $command = 'curl -s -I '.$additionalCurlParameters.' '.escapeshellarg($url);
         $head = $this->shell->execute($command, $node, $deployment, false, false);
 
-        $command = 'curl -s ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
+        $command = 'curl -s '.$additionalCurlParameters.' '.escapeshellarg($url);
         $body = $this->shell->execute($command, $node, $deployment, false, false);
         list($status, $headersString) = explode(chr(10), $head, 2);
         $statusParts = explode(' ', $status);
@@ -260,7 +262,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * Split response into headers and body part
+     * Split response into headers and body part.
      *
      * @param string $headerText
      *

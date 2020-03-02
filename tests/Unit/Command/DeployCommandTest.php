@@ -20,7 +20,6 @@ use TYPO3\Surf\Integration\FactoryInterface;
 
 final class DeployCommandTest extends TestCase
 {
-
     /**
      * @var Node
      */
@@ -60,7 +59,7 @@ final class DeployCommandTest extends TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
-            '--force' => true,
+            '--force'        => true,
         ]);
         $this->deployment->setForceRun(true);
         $this->assertEquals($this->deployment->getStatus(), Deployment::STATUS_SUCCESS);

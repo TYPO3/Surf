@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -19,7 +20,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use Webmozart\Assert\Assert;
 
 /**
- * This task publishes static and non static resources utilizing the resource:publish command
+ * This task publishes static and non static resources utilizing the resource:publish command.
  *
  * It takes the following options:
  *

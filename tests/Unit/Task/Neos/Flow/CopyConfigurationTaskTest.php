@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Neos\Flow;
 
 /*
@@ -14,7 +15,7 @@ use TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Unit test for the SymlinkConfigurationTask
+ * Unit test for the SymlinkConfigurationTask.
  */
 class CopyConfigurationTaskTest extends BaseTaskTest
 {
@@ -31,7 +32,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
      */
     public function executeOnLocalhostFindsConfigurationRecursively()
     {
-        $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
+        $deployBasePath = __DIR__.'/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
         $this->node->onLocalhost();
@@ -52,7 +53,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
      */
     public function executeFindsFilesWithExtensionSpecified()
     {
-        $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
+        $deployBasePath = __DIR__.'/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
         $this->node->onLocalhost();
@@ -74,7 +75,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
      */
     public function executeOnRemoteHostFindsConfigurationRecursively()
     {
-        $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
+        $deployBasePath = __DIR__.'/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
         $this->node->setHostname('remote');
@@ -95,7 +96,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
      */
     public function executeOnRemoteHostFindsConfigurationRecursivelyWithSSHPassword()
     {
-        $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
+        $deployBasePath = __DIR__.'/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
         $this->node->setHostname('remote');
@@ -117,12 +118,12 @@ class CopyConfigurationTaskTest extends BaseTaskTest
      */
     public function executeOnRemoteHostCorrectlyAppliesSshOptions()
     {
-        $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
+        $deployBasePath = __DIR__.'/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
         $this->deployment->setName('test1');
         $this->node->setHostname('remote');
         $options = [
-            'port' => '22',
+            'port'     => '22',
             'username' => 'foo',
         ];
 

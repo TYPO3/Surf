@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -18,7 +19,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use Webmozart\Assert\Assert;
 
 /**
- * This Task runs unit tests for a flow application
+ * This Task runs unit tests for a flow application.
  *
  * It takes no options
  */
@@ -31,7 +32,7 @@ class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for UnitTestTask, got "%s"', get_class($application)));
 
         $targetPath = $deployment->getApplicationReleasePath($application);
-        $this->shell->executeOrSimulate('cd ' . $targetPath . ' && phpunit -c Build/' . $application->getBuildEssentialsDirectoryName() . '/PhpUnit/UnitTests.xml', $node, $deployment);
+        $this->shell->executeOrSimulate('cd '.$targetPath.' && phpunit -c Build/'.$application->getBuildEssentialsDirectoryName().'/PhpUnit/UnitTests.xml', $node, $deployment);
     }
 
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])

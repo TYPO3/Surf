@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Php;
 
 /*
@@ -59,11 +60,11 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
 
     public function __construct(RandomBytesGeneratorInterface $randomBytesGenerator = null, FilesystemInterface $filesystem = null)
     {
-        if (! $randomBytesGenerator instanceof RandomBytesGeneratorInterface) {
+        if (!$randomBytesGenerator instanceof RandomBytesGeneratorInterface) {
             $randomBytesGenerator = new RandomBytesGenerator();
         }
 
-        if (! $filesystem instanceof FilesystemInterface) {
+        if (!$filesystem instanceof FilesystemInterface) {
             $filesystem = new Filesystem();
         }
 
@@ -89,13 +90,13 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         $localhost->onLocalhost();
 
         $commands = [
-            'cd ' . escapeshellarg($scriptBasePath),
+            'cd '.escapeshellarg($scriptBasePath),
             'rm -f surf-opcache-reset-*',
         ];
 
         $this->shell->executeOrSimulate($commands, $localhost, $deployment);
 
-        if (! $deployment->isDryRun()) {
+        if (!$deployment->isDryRun()) {
             $scriptFilename = sprintf('%s/surf-opcache-reset-%s.php', $scriptBasePath, $scriptIdentifier);
 
             $result = $this->filesystem->put($scriptFilename, '<?php
@@ -127,7 +128,8 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
     private function setScriptIdentifier(Application $application)
     {
         $scriptIdentifier = bin2hex($this->randomBytesGenerator->generate(32));
-        $application->setOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]', $scriptIdentifier);
+        $application->setOption(WebOpcacheResetExecuteTask::class.'[scriptIdentifier]', $scriptIdentifier);
+
         return $scriptIdentifier;
     }
 

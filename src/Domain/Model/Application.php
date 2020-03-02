@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Model;
 
 /*
@@ -11,12 +12,12 @@ namespace TYPO3\Surf\Domain\Model;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A generic application without any tasks
+ * A generic application without any tasks.
  */
 class Application
 {
     /**
-     * default directory name for shared directory
+     * default directory name for shared directory.
      *
      * @const
      */
@@ -25,37 +26,42 @@ class Application
     public const DEFAULT_WEB_DIRECTORY = 'public';
 
     /**
-     * The name
+     * The name.
+     *
      * @var string
      */
     protected $name;
 
     /**
-     * The nodes for this application
+     * The nodes for this application.
+     *
      * @var array
      */
     protected $nodes = [];
 
     /**
-     * The deployment path for this application on a node
+     * The deployment path for this application on a node.
+     *
      * @var string
      */
     protected $deploymentPath;
 
     /**
-     * The relative releases directory for this application on a node
+     * The relative releases directory for this application on a node.
+     *
      * @var string
      */
     protected $releasesDirectory = 'releases';
 
     /**
-     * The options
+     * The options.
+     *
      * @var array
      */
     protected $options = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $name
      */
@@ -65,7 +71,7 @@ class Application
     }
 
     /**
-     * Register tasks for this application
+     * Register tasks for this application.
      *
      * This is a template method that should be overridden by specific applications to define
      * new task or to add tasks to the workflow.
@@ -79,7 +85,7 @@ class Application
     }
 
     /**
-     * Get the application name
+     * Get the application name.
      *
      * @return string
      */
@@ -89,7 +95,7 @@ class Application
     }
 
     /**
-     * Sets the application name
+     * Sets the application name.
      *
      * @param string $name
      *
@@ -98,11 +104,12 @@ class Application
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
     /**
-     * Get the nodes where this application should be deployed
+     * Get the nodes where this application should be deployed.
      *
      * @return Node[] The application nodes
      */
@@ -112,7 +119,7 @@ class Application
     }
 
     /**
-     * Set the nodes where this application should be deployed
+     * Set the nodes where this application should be deployed.
      *
      * @param array $nodes The application nodes
      *
@@ -121,22 +128,24 @@ class Application
     public function setNodes(array $nodes)
     {
         $this->nodes = $nodes;
+
         return $this;
     }
 
     /**
-     * Add a node where this application should be deployed
+     * Add a node where this application should be deployed.
      *
      * @return Application The current instance for chaining
      */
     public function addNode(Node $node)
     {
         $this->nodes[$node->getName()] = $node;
+
         return $this;
     }
 
     /**
-     * Return TRUE if the given node is registered for this application
+     * Return TRUE if the given node is registered for this application.
      *
      * @return bool TRUE if the node is registered for this application
      */
@@ -146,7 +155,7 @@ class Application
     }
 
     /**
-     * Get the deployment path for this application
+     * Get the deployment path for this application.
      *
      * This is the path for an application pointing to the root of the Surf deployment:
      *
@@ -163,7 +172,7 @@ class Application
     }
 
     /**
-     * Get the path for shared resources for this application
+     * Get the path for shared resources for this application.
      *
      * This path defaults to a directory "shared" below the deployment path.
      *
@@ -171,11 +180,11 @@ class Application
      */
     public function getSharedPath()
     {
-        return $this->getDeploymentPath() . '/' . $this->getSharedDirectory();
+        return $this->getDeploymentPath().'/'.$this->getSharedDirectory();
     }
 
     /**
-     * Returns the shared directory
+     * Returns the shared directory.
      *
      * takes directory name from option "sharedDirectory"
      * if option is not set or empty constant DEFAULT_SHARED_DIR "shared" is used
@@ -198,11 +207,12 @@ class Application
             }
             $result = rtrim($sharedPath, '/');
         }
+
         return $result;
     }
 
     /**
-     * Sets the deployment path
+     * Sets the deployment path.
      *
      * @param string $deploymentPath The deployment path
      *
@@ -211,11 +221,12 @@ class Application
     public function setDeploymentPath($deploymentPath)
     {
         $this->deploymentPath = rtrim($deploymentPath, '/');
+
         return $this;
     }
 
     /**
-     * Returns the releases directory
+     * Returns the releases directory.
      *
      * @return string $releasesDirectory
      */
@@ -225,7 +236,7 @@ class Application
     }
 
     /**
-     * Sets the releases directory
+     * Sets the releases directory.
      *
      * @param string $releasesDirectory
      *
@@ -240,21 +251,22 @@ class Application
             );
         }
         $this->releasesDirectory = trim($releasesDirectory, '/');
+
         return $this;
     }
 
     /**
-     * Returns path to the directory with releases
+     * Returns path to the directory with releases.
      *
      * @return string Path to the releases directory
      */
     public function getReleasesPath()
     {
-        return rtrim($this->getDeploymentPath() . '/' . $this->getReleasesDirectory(), '/');
+        return rtrim($this->getDeploymentPath().'/'.$this->getReleasesDirectory(), '/');
     }
 
     /**
-     * Get all options defined on this application instance
+     * Get all options defined on this application instance.
      *
      * The options will include the deploymentPath and sharedPath for
      * unified option handling.
@@ -265,15 +277,16 @@ class Application
     {
         return array_merge($this->options, [
             'deploymentPath' => $this->getDeploymentPath(),
-            'releasesPath' => $this->getReleasesPath(),
-            'sharedPath' => $this->getSharedPath()
+            'releasesPath'   => $this->getReleasesPath(),
+            'sharedPath'     => $this->getSharedPath(),
         ]);
     }
 
     /**
-     * Get an option defined on this application instance
+     * Get an option defined on this application instance.
      *
      * @param string $key
+     *
      * @return mixed
      */
     public function getOption($key)
@@ -291,9 +304,10 @@ class Application
     }
 
     /**
-     * Test if an option was set for this application
+     * Test if an option was set for this application.
      *
      * @param string $key The option key
+     *
      * @return bool TRUE If the option was set
      */
     public function hasOption($key)
@@ -302,7 +316,7 @@ class Application
     }
 
     /**
-     * Sets all options for this application instance
+     * Sets all options for this application instance.
      *
      * @param array $options The options to set indexed by option key
      *
@@ -311,20 +325,22 @@ class Application
     public function setOptions($options)
     {
         $this->options = $options;
+
         return $this;
     }
 
     /**
-     * Set an option for this application instance
+     * Set an option for this application instance.
      *
-     * @param string $key The option key
-     * @param mixed $value The option value
+     * @param string $key   The option key
+     * @param mixed  $value The option value
      *
      * @return Application The current instance for chaining
      */
     public function setOption($key, $value)
     {
         $this->options[$key] = $value;
+
         return $this;
     }
 }

@@ -17,7 +17,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class FlushCacheListTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */

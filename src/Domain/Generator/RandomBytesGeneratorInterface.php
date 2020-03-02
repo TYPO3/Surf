@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Generator;
 
 /*
@@ -10,7 +11,6 @@ namespace TYPO3\Surf\Domain\Generator;
 
 interface RandomBytesGeneratorInterface
 {
-
     /**
      * @param int $length
      *

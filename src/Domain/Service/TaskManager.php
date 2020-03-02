@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Service;
 
 /*
@@ -14,40 +15,41 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
- * A task manager
+ * A task manager.
  */
 class TaskManager
 {
     /**
-     * Task history for rollback
+     * Task history for rollback.
+     *
      * @var array
      */
     protected $taskHistory = [];
 
     /**
-     * Execute a task
+     * Execute a task.
      *
      * @param string $taskName
      * @param string $stage
-     * @param array $options Local task options
+     * @param array  $options         Local task options
      * @param string $definedTaskName
      */
     public function execute($taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = [], $definedTaskName = '')
     {
         $definedTaskName = $definedTaskName ?: $taskName;
-        $deployment->getLogger()->info($node->getName() . ' (' . $application->getName() . ') ' . $definedTaskName);
+        $deployment->getLogger()->info($node->getName().' ('.$application->getName().') '.$definedTaskName);
 
         $task = $this->createTaskInstance($taskName);
 
         $globalOptions = $this->overrideOptions($definedTaskName, $deployment, $node, $application, $options);
 
         $this->taskHistory[] = [
-            'task' => $task,
-            'node' => $node,
+            'task'        => $task,
+            'node'        => $node,
             'application' => $application,
-            'deployment' => $deployment,
-            'stage' => $stage,
-            'options' => $globalOptions
+            'deployment'  => $deployment,
+            'stage'       => $stage,
+            'options'     => $globalOptions,
         ];
 
         if (!$deployment->isDryRun()) {
@@ -58,12 +60,12 @@ class TaskManager
     }
 
     /**
-     * Rollback all tasks stored in the task history in reverse order
+     * Rollback all tasks stored in the task history in reverse order.
      */
     public function rollback()
     {
         foreach (array_reverse($this->taskHistory) as $historicTask) {
-            $historicTask['deployment']->getLogger()->info('Rolling back ' . get_class($historicTask['task']));
+            $historicTask['deployment']->getLogger()->info('Rolling back '.get_class($historicTask['task']));
             if (!$historicTask['deployment']->isDryRun()) {
                 $historicTask['task']->rollback($historicTask['node'], $historicTask['application'], $historicTask['deployment'], $historicTask['options']);
             }
@@ -72,7 +74,7 @@ class TaskManager
     }
 
     /**
-     * Reset the task history
+     * Reset the task history.
      */
     public function reset()
     {
@@ -80,7 +82,7 @@ class TaskManager
     }
 
     /**
-     * Override options for a task
+     * Override options for a task.
      *
      * The order of the options is:
      *
@@ -94,7 +96,8 @@ class TaskManager
      * GitCheckoutTask could be expressed like GitCheckoutTask::class . '[sha1]' => '1234...'.
      *
      * @param string $taskName
-     * @param array $taskOptions
+     * @param array  $taskOptions
+     *
      * @return array
      */
     protected function overrideOptions($taskName, Deployment $deployment, Node $node, Application $application, array $taskOptions)
@@ -119,7 +122,7 @@ class TaskManager
     }
 
     /**
-     * Create a task instance from the given task name
+     * Create a task instance from the given task name.
      *
      * @param string $taskName
      *
@@ -132,21 +135,25 @@ class TaskManager
         if ($task instanceof ShellCommandServiceAwareInterface) {
             $task->setShellCommandService(new ShellCommandService());
         }
+
         return $task;
     }
 
     /**
-     * Map the task name to the proper task class
+     * Map the task name to the proper task class.
      *
      * @param string $taskName
-     * @return string
+     *
      * @throws SurfException
+     *
+     * @return string
      */
     protected function mapTaskNameToTaskClass($taskName)
     {
         if (class_exists($taskName)) {
             return $taskName;
         }
+
         throw new SurfException(sprintf('No task found for identifier "%s". Make sure this is a valid class name or a defined task with valid base class name!', $taskName), 1451210811);
     }
 }

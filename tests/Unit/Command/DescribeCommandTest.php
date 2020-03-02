@@ -25,7 +25,6 @@ use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
 
 class DescribeCommandTest extends TestCase
 {
-
     /**
      * @var Deployment
      */
@@ -52,7 +51,7 @@ class DescribeCommandTest extends TestCase
     {
         $this->application = new Application('TestApplication');
         $this->application->setOption('rsyncExcludes', ['.git', 'web/fileadmin', 'web/uploads']);
-        $this->application->setOption(RsyncTask::class . '[rsyncExcludes]', ['.git', 'web/fileadmin', 'web/uploads']);
+        $this->application->setOption(RsyncTask::class.'[rsyncExcludes]', ['.git', 'web/fileadmin', 'web/uploads']);
         $this->application->addNode($this->node);
         $this->deployment->addApplication($this->application);
         $this->deployment->onInitialize(function () {
@@ -102,6 +101,7 @@ class DescribeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @throws \TYPO3\Surf\Exception
      */
     public function describeCustomApplication()
@@ -170,8 +170,10 @@ Applications:
     /**
      * @param $application
      * @param array $options
-     * @return string
+     *
      * @throws \TYPO3\Surf\Exception
+     *
+     * @return string
      */
     protected function getDescriptionOfPredefinedApplication($application, $options = [])
     {
@@ -189,6 +191,7 @@ Applications:
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
         ]);
+
         return $commandTester->getDisplay();
     }
 

@@ -18,7 +18,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * A scp transfer task
+ * A scp transfer task.
  *
  * Copies the application assets from the application workspace to the node using scp.
  */
@@ -113,7 +113,7 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
         }
 
         foreach ($excludes as &$exclude) {
-            $exclude = '--exclude="' . $exclude . '"';
+            $exclude = '--exclude="'.$exclude.'"';
         }
 
         return implode(' ', $excludes);

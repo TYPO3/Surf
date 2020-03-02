@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Filesystem;
 
 /*
@@ -10,7 +11,6 @@ namespace TYPO3\Surf\Domain\Filesystem;
 
 interface FilesystemInterface
 {
-
     /**
      * @param string $filename
      * @param string $content
@@ -20,8 +20,8 @@ interface FilesystemInterface
     public function put($filename, $content);
 
     /**
-     * @param string $filename
-     * @param bool $includePath
+     * @param string        $filename
+     * @param bool          $includePath
      * @param resource|null $streamContext
      *
      * @return false|string

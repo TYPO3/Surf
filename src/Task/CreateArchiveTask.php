@@ -72,7 +72,7 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
     {
         $options = $this->configureOptions($options);
 
-        $this->shell->execute('rm -f ' . $options['targetFile'] . '; mkdir -p ' . dirname($options['targetFile']), $node, $deployment);
+        $this->shell->execute('rm -f '.$options['targetFile'].'; mkdir -p '.dirname($options['targetFile']), $node, $deployment);
         $sourcePath = $deployment->getApplicationReleasePath($application);
 
         $tarOptions = sprintf(' --transform="s,^%s,%s," ', ltrim($sourcePath, '/'), $options['baseDirectory']);
@@ -87,7 +87,7 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
             $tarOptions .= sprintf(' -cjf %s %s', $options['targetFile'], $sourcePath);
             $this->shell->execute(sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions), $node, $deployment);
         } elseif (substr($options['targetFile'], -4) === '.zip') {
-            $temporaryDirectory = $this->filesystem->getTemporaryDirectory() . '/' . $this->idGenerator->generate('f3_deploy');
+            $temporaryDirectory = $this->filesystem->getTemporaryDirectory().'/'.$this->idGenerator->generate('f3_deploy');
             $this->shell->execute(sprintf('mkdir -p %s', $temporaryDirectory), $node, $deployment);
             $tarOptions .= sprintf(' -cf %s/out.tar %s', $temporaryDirectory, $sourcePath);
             $this->shell->execute(sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions), $node, $deployment);

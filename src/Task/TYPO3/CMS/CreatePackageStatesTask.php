@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 /*
@@ -15,7 +16,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * Creates the package states file and removes all not active packages from the according folders
+ * Creates the package states file and removes all not active packages from the according folders.
  */
 class CreatePackageStatesTask extends AbstractCliTask
 {
@@ -42,7 +43,7 @@ class CreatePackageStatesTask extends AbstractCliTask
     }
 
     /**
-     * Checks if the package states file exists
+     * Checks if the package states file exists.
      *
      * If no manifest exists, a log message is recorded.
      *
@@ -51,6 +52,7 @@ class CreatePackageStatesTask extends AbstractCliTask
     protected function packageStatesFileExists(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
-        return $this->fileExists($webDirectory . '/typo3conf/PackageStates.php', $node, $application, $deployment, $options);
+
+        return $this->fileExists($webDirectory.'/typo3conf/PackageStates.php', $node, $application, $deployment, $options);
     }
 }

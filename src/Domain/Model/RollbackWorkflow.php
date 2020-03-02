@@ -15,7 +15,6 @@ use TYPO3\Surf\Task\Generic\RollbackTask;
 
 final class RollbackWorkflow extends Workflow
 {
-
     /**
      * @var array
      */
@@ -42,15 +41,15 @@ final class RollbackWorkflow extends Workflow
         $this->configureRollbackTasks($deployment);
 
         foreach ($this->stages as $stage) {
-            $deployment->getLogger()->notice('Stage ' . $stage);
+            $deployment->getLogger()->notice('Stage '.$stage);
             foreach ($nodes as $node) {
-                $deployment->getLogger()->debug('Node ' . $node->getName());
+                $deployment->getLogger()->debug('Node '.$node->getName());
                 foreach ($applications as $application) {
-                    if (! $application->hasNode($node)) {
+                    if (!$application->hasNode($node)) {
                         continue;
                     }
 
-                    $deployment->getLogger()->debug('Application ' . $application->getName());
+                    $deployment->getLogger()->debug('Application '.$application->getName());
 
                     try {
                         $this->executeStage($stage, $node, $application, $deployment);
@@ -69,7 +68,7 @@ final class RollbackWorkflow extends Workflow
     {
         foreach ($deployment->getNodes() as $node) {
             foreach ($deployment->getApplications() as $application) {
-                if (! $application->hasNode($node)) {
+                if (!$application->hasNode($node)) {
                     continue;
                 }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Transfer;
 
 /*
@@ -18,7 +19,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * A rsync transfer task
+ * A rsync transfer task.
  *
  * Copies the application assets from the application workspace to the node using rsync.
  */
@@ -42,25 +43,25 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
 
         $remotePath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache/transfer']);
         // make sure there is a remote .cache folder
-        $command = 'mkdir -p ' . $remotePath;
+        $command = 'mkdir -p '.$remotePath;
         $this->shell->executeOrSimulate($command, $node, $deployment);
 
-        $username = $node->hasOption('username') ? $node->getOption('username') . '@' : '';
+        $username = $node->hasOption('username') ? $node->getOption('username').'@' : '';
         $hostname = $node->getHostname();
         $noPubkeyAuthentication = $node->hasOption('password') ? ' -o PubkeyAuthentication=no' : '';
-        $port = $node->hasOption('port') ? ' -p ' . escapeshellarg($node->getOption('port')) : '';
-        $key = $node->hasOption('privateKeyFile') ? ' -i ' . escapeshellarg($node->getOption('privateKeyFile')) : '';
+        $port = $node->hasOption('port') ? ' -p '.escapeshellarg($node->getOption('port')) : '';
+        $key = $node->hasOption('privateKeyFile') ? ' -i '.escapeshellarg($node->getOption('privateKeyFile')) : '';
         $quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
-        $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $noPubkeyAuthentication . $port . $key . '" ');
+        $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh'.$noPubkeyAuthentication.$port.$key.'" ');
 
         $rsyncExcludes = isset($options['rsyncExcludes']) ? $options['rsyncExcludes'] : ['.git'];
         $excludeFlags = $this->getExcludeFlags($rsyncExcludes);
 
-        $rsyncFlags = (isset($options['rsyncFlags']) ? $options['rsyncFlags'] : '--recursive --times --perms --links --delete --delete-excluded') . $excludeFlags;
+        $rsyncFlags = (isset($options['rsyncFlags']) ? $options['rsyncFlags'] : '--recursive --times --perms --links --delete --delete-excluded').$excludeFlags;
 
         $destinationArgument = ($node->isLocalhost() ? $remotePath : "{$username}{$hostname}:{$remotePath}");
 
-        $command = "rsync {$quietFlag} --compress {$rshFlag} {$rsyncFlags} " . escapeshellarg($localPackagePath . '/.') . ' ' . escapeshellarg($destinationArgument);
+        $command = "rsync {$quietFlag} --compress {$rshFlag} {$rsyncFlags} ".escapeshellarg($localPackagePath.'/.').' '.escapeshellarg($destinationArgument);
 
         if ($node->hasOption('password')) {
             $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
@@ -94,15 +95,16 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
-        $this->shell->execute('rm -Rf ' . $releasePath, $node, $deployment, true);
+        $this->shell->execute('rm -Rf '.$releasePath, $node, $deployment, true);
     }
 
     /**
-     * Generates the --exclude flags for a given array of exclude patterns
+     * Generates the --exclude flags for a given array of exclude patterns.
      *
      * Example: ['foo', '/bar'] => --exclude 'foo' --exclude '/bar'
      *
      * @param array $rsyncExcludes An array of patterns to be excluded
+     *
      * @return string
      */
     protected function getExcludeFlags($rsyncExcludes)
@@ -111,7 +113,8 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
             if (!empty($this->replacePaths)) {
                 $pattern = str_replace(array_keys($this->replacePaths), $this->replacePaths, $pattern);
             }
-            return $excludeOptions . ' --exclude ' . escapeshellarg($pattern);
+
+            return $excludeOptions.' --exclude '.escapeshellarg($pattern);
         }, '');
     }
 }

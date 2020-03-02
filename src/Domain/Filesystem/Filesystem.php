@@ -11,7 +11,6 @@ namespace TYPO3\Surf\Domain\Filesystem;
 
 class Filesystem implements FilesystemInterface
 {
-
     /**
      * @param string $filename
      * @param string $content
@@ -24,8 +23,8 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * @param string $filename
-     * @param bool $includePath
+     * @param string        $filename
+     * @param bool          $includePath
      * @param resource|null $streamContext
      *
      * @return false|string

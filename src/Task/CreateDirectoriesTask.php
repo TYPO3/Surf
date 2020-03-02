@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -39,15 +40,15 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
         $releasesPath = $application->getReleasesPath();
         $releaseIdentifier = $deployment->getReleaseIdentifier();
         $releasePath = $deployment->getApplicationReleasePath($application);
-        $result = $this->shell->execute('test -d ' . $deploymentPath, $node, $deployment, true);
+        $result = $this->shell->execute('test -d '.$deploymentPath, $node, $deployment, true);
         if ($result === false) {
-            throw new TaskExecutionException('Deployment directory "' . $deploymentPath . '" does not exist on node ' . $node->getName(), 1311003253);
+            throw new TaskExecutionException('Deployment directory "'.$deploymentPath.'" does not exist on node '.$node->getName(), 1311003253);
         }
         $commands = [
-            'mkdir -p ' . $releasesPath,
-            'mkdir -p ' . $sharedPath,
-            'mkdir -p ' . $releasePath,
-            'cd ' . $releasesPath . ';ln -snf ./' . $releaseIdentifier . ' next'
+            'mkdir -p '.$releasesPath,
+            'mkdir -p '.$sharedPath,
+            'mkdir -p '.$releasePath,
+            'cd '.$releasesPath.';ln -snf ./'.$releaseIdentifier.' next',
         ];
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
@@ -62,8 +63,8 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
         $releasesPath = $application->getReleasesPath();
         $releasePath = $deployment->getApplicationReleasePath($application);
         $commands = [
-            'rm ' . $releasesPath . '/next',
-            'rm -rf ' . $releasePath
+            'rm '.$releasesPath.'/next',
+            'rm -rf '.$releasePath,
         ];
         $this->shell->execute($commands, $node, $deployment, true);
     }

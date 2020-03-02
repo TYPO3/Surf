@@ -14,7 +14,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class DownloadTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */

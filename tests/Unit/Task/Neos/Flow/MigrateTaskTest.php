@@ -16,7 +16,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class MigrateTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */

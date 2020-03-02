@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Generic;
 
 /*
@@ -13,11 +14,10 @@ use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Class CreateSymlinksTaskTest
+ * Class CreateSymlinksTaskTest.
  */
 class CreateSymlinksTaskTest extends BaseTaskTest
 {
-
     /**
      * @var CreateSymlinksTask
      */
@@ -40,7 +40,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
 
     /**
      * per default Generic\CreateSymlinksTask uses the current release path as base directory
-     * for symlink creation
+     * for symlink creation.
      *
      * @test
      */
@@ -55,15 +55,15 @@ class CreateSymlinksTaskTest extends BaseTaskTest
 
     /**
      * if option "genericSymlinksBaseDir" is set, instead of release path, the herin given path
-     * is used as  base directory
+     * is used as  base directory.
      *
      * @test
      */
     public function createsSymlinkInConfiguredBasePath()
     {
         $options = [
-            'symlinks' => ['media' => '../media'],
-            'genericSymlinksBaseDir' => '/home/foobar/data'
+            'symlinks'               => ['media' => '../media'],
+            'genericSymlinksBaseDir' => '/home/foobar/data',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -72,7 +72,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
     }
 
     /**
-     * the option "symlinks" is an array of symlinks, the symlinks are created looping through the array
+     * the option "symlinks" is an array of symlinks, the symlinks are created looping through the array.
      *
      * @test
      */
@@ -81,8 +81,8 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         $options = [
             'symlinks' => [
                 'media' => '../media',
-                'log' => '../log',
-                'var' => '../var',
+                'log'   => '../log',
+                'var'   => '../var',
             ],
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);

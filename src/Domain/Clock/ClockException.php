@@ -25,7 +25,7 @@ final class ClockException extends Exception
 
     /**
      * @param string $format
-     * @param int $time
+     * @param int    $time
      *
      * @return ClockException
      */

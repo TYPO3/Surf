@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Neos\Flow;
 
 /*
@@ -13,11 +14,10 @@ use TYPO3\Surf\Task\Neos\Flow\CreateDirectoriesTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Class CreateDirectoriesTaskTest
+ * Class CreateDirectoriesTaskTest.
  */
 class CreateDirectoriesTaskTest extends BaseTaskTest
 {
-
     /**
      * @var CreateDirectoriesTask
      */

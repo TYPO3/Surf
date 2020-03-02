@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf;
 
 /*
@@ -9,7 +10,7 @@ namespace TYPO3\Surf;
  */
 
 /**
- * Base Surf exception
+ * Base Surf exception.
  */
 class Exception extends \Exception
 {

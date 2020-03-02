@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A task
+ * A task.
  */
 abstract class Task
 {
@@ -46,6 +46,7 @@ abstract class Task
             // We set all global options as defined options, otherwise we would get a lot of exceptions
             $resolver->setDefined(array_keys($options));
             $this->resolveOptions($resolver);
+
             return $resolver->resolve($options);
         } catch (MissingOptionsException $e) {
             throw new InvalidConfigurationException($e->getMessage(), $e->getCode());

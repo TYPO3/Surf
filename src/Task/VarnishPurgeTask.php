@@ -18,7 +18,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * Task for purging in Varnish, should be used for Varnish 2.x
+ * Task for purging in Varnish, should be used for Varnish 2.x.
  *
  * It takes the following options:
  *

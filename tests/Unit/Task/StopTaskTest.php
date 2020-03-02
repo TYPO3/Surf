@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task;
 
 /*
@@ -12,7 +13,7 @@ use TYPO3\Surf\Exception\StopWorkflowException;
 use TYPO3\Surf\Task\StopTask;
 
 /**
- * Unit test for the StopTask
+ * Unit test for the StopTask.
  */
 class StopTaskTest extends BaseTaskTest
 {

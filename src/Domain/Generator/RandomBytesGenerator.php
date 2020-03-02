@@ -11,7 +11,6 @@ namespace TYPO3\Surf\Domain\Generator;
 
 class RandomBytesGenerator implements RandomBytesGeneratorInterface
 {
-
     /**
      * @param int $length
      *

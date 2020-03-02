@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Application\Neos;
 
 /*
@@ -9,7 +10,7 @@ namespace TYPO3\Surf\Application\Neos;
  */
 
 /**
- * A Neos application template
+ * A Neos application template.
  */
 class Neos extends Flow
 {
@@ -45,7 +46,7 @@ class Neos extends Flow
         'workspace:rebase',
         'workspace:publishall',
         'workspace:discardall',
-        'workspace:list'
+        'workspace:list',
     ];
 
     /**
@@ -62,6 +63,7 @@ class Neos extends Flow
 
     /**
      * @param string $command
+     *
      * @return bool
      */
     protected function isNeosCommand($command)
@@ -70,9 +72,10 @@ class Neos extends Flow
     }
 
     /**
-     * Get the package key to prefix the command
+     * Get the package key to prefix the command.
      *
      * @param string $command
+     *
      * @return string
      */
     public function getCommandPackageKey($command = '')
@@ -80,6 +83,7 @@ class Neos extends Flow
         if ($this->getVersion() < '4.0') {
             return $this->isNeosCommand($command) ? 'typo3.neos' : 'typo3.flow';
         }
+
         return $this->isNeosCommand($command) ? 'neos.neos' : 'neos.flow';
     }
 }

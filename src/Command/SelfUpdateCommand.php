@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Surf list command
+ * Surf list command.
  */
 class SelfUpdateCommand extends Command
 {
@@ -38,7 +38,7 @@ class SelfUpdateCommand extends Command
                  'stability',
                  null,
                  InputOption::VALUE_OPTIONAL,
-                 'GitHub stability value (' . GithubStrategy::STABLE . ', ' . GithubStrategy::UNSTABLE . ', ' . GithubStrategy::ANY . ')',
+                 'GitHub stability value ('.GithubStrategy::STABLE.', '.GithubStrategy::UNSTABLE.', '.GithubStrategy::ANY.')',
                  GithubStrategy::STABLE
              )->addOption(
                  'check',
@@ -75,7 +75,7 @@ class SelfUpdateCommand extends Command
             if ($result) {
                 $output->writeln(sprintf(
                     'The %s build available remotely is: %s',
-                    $strategy->getStability() === GithubStrategy::ANY ? 'latest' : 'current ' . $strategy->getStability(),
+                    $strategy->getStability() === GithubStrategy::ANY ? 'latest' : 'current '.$strategy->getStability(),
                     $updater->getNewVersion()
                 ));
             } elseif (false === $updater->getNewVersion()) {

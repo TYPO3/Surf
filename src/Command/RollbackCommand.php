@@ -44,12 +44,13 @@ class RollbackCommand extends Command implements FactoryAwareInterface
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null
      * @throws \TYPO3\Surf\Exception
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
+     *
+     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

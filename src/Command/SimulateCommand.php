@@ -18,7 +18,7 @@ use TYPO3\Surf\Integration\FactoryAwareInterface;
 use TYPO3\Surf\Integration\FactoryAwareTrait;
 
 /**
- * Surf simulate command
+ * Surf simulate command.
  */
 class SimulateCommand extends Command implements FactoryAwareInterface
 {

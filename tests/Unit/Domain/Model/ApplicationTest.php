@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 
 /*
@@ -13,12 +14,12 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * Unit test for Application
+ * Unit test for Application.
  */
 class ApplicationTest extends TestCase
 {
     /**
-     * The directory for shared assets is by default 'shared'
+     * The directory for shared assets is by default 'shared'.
      *
      * @test
      */
@@ -30,7 +31,7 @@ class ApplicationTest extends TestCase
 
     /**
      * If option 'sharedDirectory' is configured we expect this to be returned
-     * by getSharedDirectory
+     * by getSharedDirectory.
      *
      * @test
      */
@@ -43,7 +44,7 @@ class ApplicationTest extends TestCase
 
     /**
      * Relative paths are not allowed as sharedDirectory
-     * we expect an exception on relative Paths
+     * we expect an exception on relative Paths.
      *
      * @test
      */

@@ -38,9 +38,9 @@ class HttpTestTaskTest extends BaseTaskTest
     public function executeRemoteCurlCommand()
     {
         $options = [
-            'url' => self::URL,
-            'remote' => 1,
-            'expectedStatus' => 200,
+            'url'             => self::URL,
+            'remote'          => 1,
+            'expectedStatus'  => 200,
             'expectedHeaders' => 'X-Powered-By:PHP/5.6.34
             Server:Apache',
             'expectedRegexp' => '/Hello/',
@@ -74,7 +74,7 @@ Content-Type: text/html; charset=UTF-8',
     public function correctStatusCodeIsReturned()
     {
         $options = [
-            'url' => self::URL,
+            'url'            => self::URL,
             'expectedStatus' => 200,
         ];
         $this->mockClient(new Response(200));
@@ -88,7 +88,7 @@ Content-Type: text/html; charset=UTF-8',
     {
         $this->expectException(InvalidConfigurationException::class);
         $options = [
-            'url' => self::URL,
+            'url'            => self::URL,
             'expectedStatus' => 300,
         ];
         $this->mockClient(new Response(200, [], 'Hello World'));
@@ -102,7 +102,7 @@ Content-Type: text/html; charset=UTF-8',
     public function correctResponseHeaders()
     {
         $options = [
-            'url' => self::URL,
+            'url'             => self::URL,
             'expectedHeaders' => 'X-Powered-By:PHP/5.6.34
             Server:Apache',
         ];
@@ -116,7 +116,7 @@ Content-Type: text/html; charset=UTF-8',
     public function inCorrectResponseHeadersThrowsException()
     {
         $options = [
-            'url' => self::URL,
+            'url'             => self::URL,
             'expectedHeaders' => 'Server:SomeWeirdServer',
         ];
         $this->mockClient(new Response(200, ['Server:Apache'], 'Hello World'));
@@ -130,7 +130,7 @@ Content-Type: text/html; charset=UTF-8',
     public function responseBodyContainsCorrectContent()
     {
         $options = [
-            'url' => self::URL,
+            'url'            => self::URL,
             'expectedRegexp' => '/Hello/',
         ];
         $this->mockClient(new Response(200, [], 'Hello World'));
@@ -143,7 +143,7 @@ Content-Type: text/html; charset=UTF-8',
     public function responseBodyDoesNotContainsCorrectContent()
     {
         $options = [
-            'url' => self::URL,
+            'url'            => self::URL,
             'expectedRegexp' => '/Some stupid content here/',
         ];
         $this->mockClient(new Response(200, [], 'Hello World'));

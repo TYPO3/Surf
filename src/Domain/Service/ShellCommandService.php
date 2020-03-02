@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Service;
 
 /*
@@ -15,16 +16,17 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
- * A shell command service
+ * A shell command service.
  */
 class ShellCommandService
 {
     /**
-     * Execute a shell command (locally or remote depending on the node hostname)
+     * Execute a shell command (locally or remote depending on the node hostname).
      *
-     * @param array|string $command The shell command to execute, either string or array of commands
-     * @param bool $ignoreErrors If this command should ignore exit codes unequal zero
-     * @param bool $logOutput TRUE if the output of the command should be logged
+     * @param array|string $command      The shell command to execute, either string or array of commands
+     * @param bool         $ignoreErrors If this command should ignore exit codes unequal zero
+     * @param bool         $logOutput    TRUE if the output of the command should be logged
+     *
      * @return mixed The output of the shell command or false if the command returned a non-zero exit code and $ignoreErrors was enabled.
      */
     public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = false, $logOutput = true)
@@ -36,13 +38,15 @@ class ShellCommandService
         }
         if (!$ignoreErrors && $exitCode !== 0) {
             $deployment->getLogger()->warning(rtrim($returnedOutput));
-            throw new TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
+
+            throw new TaskExecutionException('Command returned non-zero return code: '.$exitCode, 1311007746);
         }
+
         return $exitCode === 0 ? $returnedOutput : false;
     }
 
     /**
-     * Simulate a command by just outputting what would be executed
+     * Simulate a command by just outputting what would be executed.
      *
      * @param array|string $command
      *
@@ -52,20 +56,22 @@ class ShellCommandService
     {
         if ($node->isLocalhost()) {
             $command = $this->prepareCommand($command);
-            $deployment->getLogger()->debug('... (localhost): "' . $command . '"');
+            $deployment->getLogger()->debug('... (localhost): "'.$command.'"');
         } else {
             $command = $this->prepareCommand($command);
-            $deployment->getLogger()->debug('... $' . $node->getName() . ': "' . $command . '"');
+            $deployment->getLogger()->debug('... $'.$node->getName().': "'.$command.'"');
         }
+
         return true;
     }
 
     /**
-     * Execute or simulate a command (if the deployment is in dry run mode)
+     * Execute or simulate a command (if the deployment is in dry run mode).
      *
      * @param array|string $command
-     * @param bool $ignoreErrors
-     * @param bool $logOutput true if the output of the command should be logged
+     * @param bool         $ignoreErrors
+     * @param bool         $logOutput    true if the output of the command should be logged
+     *
      * @return mixed false if command failed or command output as string
      */
     public function executeOrSimulate($command, Node $node, Deployment $deployment, $ignoreErrors = false, $logOutput = true)
@@ -73,35 +79,38 @@ class ShellCommandService
         if (!$deployment->isDryRun()) {
             return $this->execute($command, $node, $deployment, $ignoreErrors, $logOutput);
         }
+
         return $this->simulate($command, $node, $deployment);
     }
 
     /**
-     * Execute a shell command locally
+     * Execute a shell command locally.
      *
      * @param array|string $command
-     * @param bool $logOutput TRUE if the output of the command should be logged
+     * @param bool         $logOutput TRUE if the output of the command should be logged
+     *
      * @return array
      */
     protected function executeLocalCommand($command, Deployment $deployment, $logOutput = true)
     {
         $command = $this->prepareCommand($command);
-        $deployment->getLogger()->debug('(localhost): "' . $command . '"');
+        $deployment->getLogger()->debug('(localhost): "'.$command.'"');
 
         return $this->executeProcess($deployment, $command, $logOutput, '> ');
     }
 
     /**
-     * Execute a shell command via SSH
+     * Execute a shell command via SSH.
      *
      * @param array|string $command
-     * @param bool $logOutput TRUE if the output of the command should be logged
+     * @param bool         $logOutput TRUE if the output of the command should be logged
+     *
      * @return array
      */
     protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = true)
     {
         $command = $this->prepareCommand($command);
-        $deployment->getLogger()->debug('$' . $node->getName() . ': "' . $command . '"');
+        $deployment->getLogger()->debug('$'.$node->getName().': "'.$command.'"');
 
         if ($node->hasOption('remoteCommandExecutionHandler')) {
             $remoteCommandExecutionHandler = $node->getOption('remoteCommandExecutionHandler');
@@ -118,16 +127,16 @@ class ShellCommandService
         // TODO Get SSH options from node or deployment
         $sshOptions = ['-A'];
         if ($node->hasOption('port')) {
-            $sshOptions[] = '-p ' . escapeshellarg($node->getOption('port'));
+            $sshOptions[] = '-p '.escapeshellarg($node->getOption('port'));
         }
         if ($node->hasOption('password')) {
             $sshOptions[] = '-o PubkeyAuthentication=no';
         }
         if ($node->hasOption('privateKeyFile')) {
-            $sshOptions[] = '-i ' . escapeshellarg($node->getOption('privateKeyFile'));
+            $sshOptions[] = '-i '.escapeshellarg($node->getOption('privateKeyFile'));
         }
 
-        $sshCommand = 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command);
+        $sshCommand = 'ssh '.implode(' ', $sshOptions).' '.escapeshellarg($username.$hostname).' '.escapeshellarg($command);
 
         if ($node->hasOption('password')) {
             $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
@@ -142,6 +151,7 @@ class ShellCommandService
         if (isset($passwordSshLoginScriptPathAndFilename) && \Phar::running() !== '') {
             unlink($passwordSshLoginScriptPathAndFilename);
         }
+
         return $success;
     }
 
@@ -150,8 +160,9 @@ class ShellCommandService
      * collecting its output.
      *
      * @param string $command
-     * @param bool $logOutput
+     * @param bool   $logOutput
      * @param string $logPrefix
+     *
      * @return array The exit code of the command and the returned output
      */
     public function executeProcess($deployment, $command, $logOutput, $logPrefix)
@@ -162,20 +173,22 @@ class ShellCommandService
         if ($logOutput) {
             $callback = function ($type, $data) use ($deployment, $logPrefix) {
                 if ($type === Process::OUT) {
-                    $deployment->getLogger()->debug($logPrefix . trim($data));
+                    $deployment->getLogger()->debug($logPrefix.trim($data));
                 } elseif ($type === Process::ERR) {
-                    $deployment->getLogger()->error($logPrefix . trim($data));
+                    $deployment->getLogger()->error($logPrefix.trim($data));
                 }
             };
         }
         $exitCode = $process->run($callback);
+
         return [$exitCode, trim($process->getOutput())];
     }
 
     /**
-     * Prepare a command
+     * Prepare a command.
      *
      * @param array|string $command
+     *
      * @return string
      */
     protected function prepareCommand($command)
@@ -186,6 +199,7 @@ class ShellCommandService
         if (is_array($command)) {
             return implode(' && ', $command);
         }
-        throw new TaskExecutionException('Command must be string or array, ' . gettype($command) . ' given.', 1312454906);
+
+        throw new TaskExecutionException('Command must be string or array, '.gettype($command).' given.', 1312454906);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -41,13 +42,13 @@ class VarnishBanTask extends Task implements ShellCommandServiceAwareInterface
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
-        $this->shell->executeOrSimulate($options['varnishadm'] . ' -S ' . $options['secretFile'] . ' -T 127.0.0.1:6082 ban.url ' . escapeshellarg($options['banUrl']), $node, $deployment);
+        $this->shell->executeOrSimulate($options['varnishadm'].' -S '.$options['secretFile'].' -T 127.0.0.1:6082 ban.url '.escapeshellarg($options['banUrl']), $node, $deployment);
     }
 
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $options = $this->configureOptions($options);
-        $this->shell->executeOrSimulate($options['varnishadm'] . ' -S ' . $options['secretFile'] . ' -T 127.0.0.1:6082 status', $node, $deployment);
+        $this->shell->executeOrSimulate($options['varnishadm'].' -S '.$options['secretFile'].' -T 127.0.0.1:6082 status', $node, $deployment);
     }
 
     protected function resolveOptions(OptionsResolver $resolver)

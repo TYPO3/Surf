@@ -15,7 +15,6 @@ use TYPO3\Surf\Domain\Clock\SystemClock;
 
 class SystemClockTest extends TestCase
 {
-
     /**
      * @var SystemClock
      */
@@ -40,7 +39,7 @@ class SystemClockTest extends TestCase
 
     /**
      * @param string $string
-     * @param int $base
+     * @param int    $base
      * @test
      * @dataProvider validStringCanBeConvertedToTimestamp
      */
@@ -51,8 +50,8 @@ class SystemClockTest extends TestCase
 
     /**
      * @param string $format
-     * @param int $time
-     * @param int $expected
+     * @param int    $time
+     * @param int    $expected
      * @test
      * @dataProvider validFormatCanBeConvertedToTimestamp
      */

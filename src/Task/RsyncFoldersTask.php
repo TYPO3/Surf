@@ -55,18 +55,18 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
 
         $replacePaths = [
             '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
-            '{sharedPath}' => escapeshellarg($application->getSharedPath()),
-            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
-            '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
-            '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous'),
+            '{sharedPath}'     => escapeshellarg($application->getSharedPath()),
+            '{releasePath}'    => escapeshellarg($deployment->getApplicationReleasePath($application)),
+            '{currentPath}'    => escapeshellarg($application->getReleasesPath().'/current'),
+            '{previousPath}'   => escapeshellarg($application->getReleasesPath().'/previous'),
         ];
 
         // Build commands to transfer folders
         $commands = array_map(static function (array $folderPair) use ($replacePaths, $options, $node) {
-            $sourceFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[0]), '/') . '/';
-            $targetFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[1]), '/') . '/';
+            $sourceFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[0]), '/').'/';
+            $targetFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[1]), '/').'/';
 
-            $port = $node->hasOption('port') ? ' -P ' . escapeshellarg($node->getOption('port')) : '';
+            $port = $node->hasOption('port') ? ' -P '.escapeshellarg($node->getOption('port')) : '';
 
             return sprintf('rsync -avz --delete -e ssh%s %s %s%s:%s', $port, $sourceFolder, $options['username'], $node->getHostname(), $targetFolder);
         }, $options['folders']);

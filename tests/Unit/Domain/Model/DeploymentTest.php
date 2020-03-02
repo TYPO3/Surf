@@ -17,7 +17,7 @@ use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Exception;
 
 /**
- * Unit test for Deployment
+ * Unit test for Deployment.
  */
 class DeploymentTest extends TestCase
 {
@@ -136,7 +136,7 @@ class DeploymentTest extends TestCase
     }
 
     /**
-     * Reset global state
+     * Reset global state.
      */
     protected function tearDown()
     {

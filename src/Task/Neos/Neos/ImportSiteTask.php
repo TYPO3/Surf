@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Neos;
 
 /*
@@ -19,7 +20,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use Webmozart\Assert\Assert;
 
 /**
- * This task imports a given site into a neos project by running site:import
+ * This task imports a given site into a neos project by running site:import.
  *
  * This command expects a Sites.xml file to be located in the private resources directory of the given package
  * (Resources/Private/Content/Sites.xml)
@@ -48,7 +49,7 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
         $targetPath = $deployment->getApplicationReleasePath($application);
         $arguments = [
             '--package-key',
-            $options['sitePackageKey']
+            $options['sitePackageKey'],
         ];
         $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'site:import', $arguments), $node, $deployment);
     }

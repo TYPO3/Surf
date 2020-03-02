@@ -21,7 +21,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use Webmozart\Assert\Assert;
 
 /**
- * This tasks sets the file permissions for the Neos Flow application
+ * This tasks sets the file permissions for the Neos Flow application.
  *
  * It takes the following options:
  *

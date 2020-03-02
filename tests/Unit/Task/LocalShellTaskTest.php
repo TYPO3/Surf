@@ -15,7 +15,6 @@ use TYPO3\Surf\Task\LocalShellTask;
 
 class LocalShellTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
