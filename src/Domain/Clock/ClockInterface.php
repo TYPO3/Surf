@@ -18,7 +18,7 @@ interface ClockInterface
 
     /**
      * @param string $string
-     * @param int $time
+     * @param int    $time
      *
      * @return int
      */

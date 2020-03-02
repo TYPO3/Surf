@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
 /*
@@ -13,7 +14,7 @@ use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Class SymlinkDataTaskTest
+ * Class SymlinkDataTaskTest.
  */
 class SymlinkDataTaskTest extends BaseTaskTest
 {
@@ -64,8 +65,8 @@ class SymlinkDataTaskTest extends BaseTaskTest
     public function disableCreationOfUploadsFolder()
     {
         $options = [
-            'webDirectory' => '',
-            'symlinkDataFolders' => ['fileadmin']
+            'webDirectory'       => '',
+            'symlinkDataFolders' => ['fileadmin'],
         ];
         $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -86,7 +87,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     public function withAdditionalDirectoriesCreatesCorrectLinks()
     {
         $options = [
-            'directories' => ['pictures', 'test/assets'],
+            'directories'  => ['pictures', 'test/assets'],
             'webDirectory' => '',
         ];
         $options = $this->mergeOptions($options);
@@ -111,7 +112,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     public function withApplicationRootCreatesCorrectLinks()
     {
         $options = [
-            'webDirectory' => 'web/'
+            'webDirectory' => 'web/',
         ];
         $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -132,7 +133,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     {
         $options = [
             'webDirectory' => 'web/',
-            'directories' => ['pictures', 'test/assets', '/withSlashes/'],
+            'directories'  => ['pictures', 'test/assets', '/withSlashes/'],
         ];
         $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);

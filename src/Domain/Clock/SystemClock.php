@@ -23,10 +23,11 @@ final class SystemClock implements ClockInterface
 
     /**
      * @param string $string
-     * @param int $time
+     * @param int    $time
+     *
+     * @throws ClockException
      *
      * @return false|int
-     * @throws ClockException
      */
     public function stringToTime($string, $time = null)
     {
@@ -44,8 +45,9 @@ final class SystemClock implements ClockInterface
      * @param string $format
      * @param string $time
      *
-     * @return int
      * @throws ClockException
+     *
+     * @return int
      */
     public function createTimestampFromFormat($format, $time)
     {
@@ -54,6 +56,7 @@ final class SystemClock implements ClockInterface
         if ($datetime === false) {
             throw ClockException::formatCouldNotBeConvertedToTimestamp($format, $time);
         }
+
         return $datetime->format('U');
     }
 }

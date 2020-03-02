@@ -35,6 +35,7 @@ class ShellTaskTest extends BaseTaskTest
      *
      * @test
      * @dataProvider commands
+     *
      * @throws InvalidConfigurationException
      * @throws TaskExecutionException
      */

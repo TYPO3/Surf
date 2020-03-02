@@ -19,7 +19,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use Webmozart\Assert\Assert;
 
 /**
- * This Task runs functional tests for a flow application
+ * This Task runs functional tests for a flow application.
  *
  * It takes no options
  */

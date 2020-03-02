@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Exception;
 
 /*
@@ -11,7 +12,7 @@ namespace TYPO3\Surf\Exception;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
- * Invalid deployment configuration exception
+ * Invalid deployment configuration exception.
  */
 class InvalidConfigurationException extends SurfException
 {

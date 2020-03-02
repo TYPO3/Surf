@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Service;
 
 /*
@@ -8,7 +9,7 @@ namespace TYPO3\Surf\Domain\Service;
  * file that was distributed with this source code.
  */
 /**
- * A shell command service aware class
+ * A shell command service aware class.
  */
 interface ShellCommandServiceAwareInterface
 {

@@ -14,7 +14,6 @@ use TYPO3\Surf\Domain\Model\Node;
 
 class NodeTest extends TestCase
 {
-
     /**
      * @test
      */

@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Domain\Model;
 
 /*
@@ -9,7 +10,7 @@ namespace TYPO3\Surf\Domain\Model;
  */
 
 /**
- * Representing a failed deployment
+ * Representing a failed deployment.
  *
  * This class does nothing
  */
@@ -26,7 +27,7 @@ class FailedDeployment extends Deployment
 
     /**
      * Initialize the deployment
-     * noop
+     * noop.
      */
     public function initialize()
     {
@@ -34,7 +35,7 @@ class FailedDeployment extends Deployment
 
     /**
      * Run this deployment
-     * noop
+     * noop.
      */
     public function deploy()
     {
@@ -42,14 +43,14 @@ class FailedDeployment extends Deployment
 
     /**
      * Simulate this deployment without executing tasks
-     * noop
+     * noop.
      */
     public function simulate()
     {
     }
 
     /**
-     * Get the current deployment status
+     * Get the current deployment status.
      *
      * @return int One of the Deployment::STATUS_* constants
      */

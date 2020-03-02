@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit;
 
 /*
@@ -12,7 +13,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**
- * Class AssertCommandExecuted
+ * Class AssertCommandExecuted.
  */
 class AssertCommandExecuted extends Constraint
 {
@@ -27,7 +28,7 @@ class AssertCommandExecuted extends Constraint
     public function __construct($expectedCommand)
     {
         if (!is_string($expectedCommand)) {
-            throw new InvalidArgumentException('Expected command should be a string, ' . gettype($expectedCommand) . ' given');
+            throw new InvalidArgumentException('Expected command should be a string, '.gettype($expectedCommand).' given');
         }
         $this->expectedCommand = $expectedCommand;
         parent::__construct();
@@ -39,13 +40,14 @@ class AssertCommandExecuted extends Constraint
      *
      * This method can be overridden to implement the evaluation algorithm.
      *
-     * @param  array $other array to evaluate.
+     * @param array $other array to evaluate.
+     *
      * @return bool
      */
     protected function matches($other): bool
     {
         if (!is_array($other)) {
-            throw new \InvalidArgumentException('Expected an array of executed commands as value, ' . gettype($other) . ' given');
+            throw new \InvalidArgumentException('Expected an array of executed commands as value, '.gettype($other).' given');
         }
 
         foreach ($other as $command) {
@@ -68,6 +70,6 @@ class AssertCommandExecuted extends Constraint
      */
     public function toString(): string
     {
-        return 'contains the command substring [' . $this->expectedCommand . ']';
+        return 'contains the command substring ['.$this->expectedCommand.']';
     }
 }

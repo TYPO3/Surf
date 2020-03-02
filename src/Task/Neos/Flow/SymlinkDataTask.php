@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -16,7 +17,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * This task takes care of symlinking the shared Data
+ * This task takes care of symlinking the shared Data.
  *
  * It takes no options
  */
@@ -32,7 +33,7 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
             "mkdir -p $releasesPath/$releaseIdentifier/Data",
             "cd $releasesPath/$releaseIdentifier",
             'ln -sf ../../../shared/Data/Logs ./Data/Logs',
-            'ln -sf ../../../shared/Data/Persistent ./Data/Persistent'
+            'ln -sf ../../../shared/Data/Persistent ./Data/Persistent',
         ];
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }

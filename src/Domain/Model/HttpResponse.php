@@ -34,7 +34,7 @@ final class HttpResponse
 
     /**
      * @param string $body
-     * @param array $headers
+     * @param array  $headers
      * @param string $statusCode
      */
     public function __construct($body, array $headers, $statusCode)

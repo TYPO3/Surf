@@ -14,7 +14,6 @@ use TYPO3\Surf\DeprecationMessageFactory;
 
 class DeprecationMessageFactoryTest extends TestCase
 {
-
     /**
      * @test
      */

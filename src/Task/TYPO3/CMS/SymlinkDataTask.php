@@ -34,11 +34,11 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
         $webDirectory = $options['webDirectory'];
         $relativeDataPath = $relativeDataPathFromWeb = '../../shared/Data';
         if ($webDirectory !== '') {
-            $relativeDataPathFromWeb = str_repeat('../', substr_count(trim($webDirectory, '/'), '/') + 1) . $relativeDataPath;
+            $relativeDataPathFromWeb = str_repeat('../', substr_count(trim($webDirectory, '/'), '/') + 1).$relativeDataPath;
         }
         $absoluteWebDirectory = Files::concatenatePaths([$targetReleasePath, $webDirectory]);
 
-        $commands[] = 'cd ' . escapeshellarg($targetReleasePath);
+        $commands[] = 'cd '.escapeshellarg($targetReleasePath);
 
         foreach ($options['symlinkDataFolders'] as $directory) {
             $commands[] = sprintf('mkdir -p %1$s', escapeshellarg(Files::concatenatePaths([$relativeDataPath, $directory])));
@@ -55,7 +55,7 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
             $commands[] = sprintf('mkdir -p %1$s', escapeshellarg($targetDirectory));
             $commands[] = sprintf(
                 'ln -sf %1$s %2$s',
-                escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')) . $targetDirectory),
+                escapeshellarg(str_repeat('../', substr_count(trim($directory, '/'), '/')).$targetDirectory),
                 escapeshellarg($directory)
             );
         }

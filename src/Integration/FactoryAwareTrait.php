@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Integration;
 
 /*
@@ -9,7 +10,7 @@ namespace TYPO3\Surf\Integration;
  */
 
 /**
- * Trait FactoryAwareTrait
+ * Trait FactoryAwareTrait.
  */
 trait FactoryAwareTrait
 {

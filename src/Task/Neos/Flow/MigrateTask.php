@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -19,7 +20,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use Webmozart\Assert\Assert;
 
 /**
- * This tasks runs the doctrine:migrate command
+ * This tasks runs the doctrine:migrate command.
  *
  * It takes the following options:
  *

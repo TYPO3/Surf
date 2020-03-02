@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Exception;
 
 /*
@@ -11,7 +12,7 @@ namespace TYPO3\Surf\Exception;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
- * An exception during task execution
+ * An exception during task execution.
  *
  * Something went wrong or an assertion during task execution was not successful.
  */

@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Command;
 
 /*
@@ -16,7 +17,7 @@ use TYPO3\Surf\Integration\FactoryAwareInterface;
 use TYPO3\Surf\Integration\FactoryAwareTrait;
 
 /**
- * Surf list command
+ * Surf list command.
  */
 class ShowCommand extends Command implements FactoryAwareInterface
 {
@@ -39,7 +40,7 @@ class ShowCommand extends Command implements FactoryAwareInterface
         $configurationPath = $input->getOption('configurationPath');
         $deploymentNames = $this->factory->getDeploymentNames($configurationPath);
 
-        $output->writeln(sprintf(PHP_EOL . '<u>Deployments in "%s":</u>' . PHP_EOL, $this->factory->getDeploymentsBasePath($configurationPath)));
+        $output->writeln(sprintf(PHP_EOL.'<u>Deployments in "%s":</u>'.PHP_EOL, $this->factory->getDeploymentsBasePath($configurationPath)));
         foreach ($deploymentNames as $deploymentName) {
             $line = sprintf('  <info>%s</info>', $deploymentName);
             $output->writeln($line);

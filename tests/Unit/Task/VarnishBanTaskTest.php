@@ -19,7 +19,6 @@ use TYPO3\Surf\Task\VarnishBanTask;
 
 class VarnishBanTaskTest extends BaseTaskTest
 {
-
     /**
      * @var VarnishBanTask
      */
@@ -42,7 +41,7 @@ class VarnishBanTaskTest extends BaseTaskTest
         $options = [
             'varnishadm' => 'varnishadm',
             'secretFile' => 'secretFile',
-            'banUrl' => 'banUrl',
+            'banUrl'     => 'banUrl',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("/varnishadm -S secretFile -T 127.0.0.1:6082 ban.url 'banUrl'/");
@@ -65,7 +64,7 @@ class VarnishBanTaskTest extends BaseTaskTest
         $options = [
             'varnishadm' => 'varnishadm',
             'secretFile' => 'secretFile',
-            'banUrl' => 'banUrl',
+            'banUrl'     => 'banUrl',
         ];
         $this->task->simulate($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted('/varnishadm -S secretFile -T 127.0.0.1:6082 status/');

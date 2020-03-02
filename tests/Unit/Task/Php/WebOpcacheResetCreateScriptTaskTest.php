@@ -20,7 +20,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
 {
-
     /**
      * @var FilesystemInterface|PHPUnit_Framework_MockObject_MockObject
      */
@@ -44,7 +43,7 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
         $this->randomBytesGenerator->expects($this->once())->method('generate')->willReturn($randomBytes);
         $this->task->execute($this->node, $this->application, $this->deployment);
 
-        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]'));
+        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class.'[scriptIdentifier]'));
     }
 
     /**
@@ -61,7 +60,7 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
         $this->randomBytesGenerator->expects($this->once())->method('generate')->willReturn($randomBytes);
         $this->task->execute($this->node, $this->application, $this->deployment);
 
-        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]'));
+        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class.'[scriptIdentifier]'));
     }
 
     /**

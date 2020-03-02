@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
- * A Deployment
+ * A Deployment.
  *
  * This is the base object exposed to a deployment configuration script and serves as a configuration builder and
  * model for an actual deployment.
@@ -27,49 +27,57 @@ class Deployment implements LoggerAwareInterface
     public const STATUS_UNKNOWN = 3;
 
     /**
-     * The name of this deployment
+     * The name of this deployment.
+     *
      * @var string
      */
     protected $name;
 
     /**
-     * The workflow used for this deployment
+     * The workflow used for this deployment.
+     *
      * @var Workflow
      */
     protected $workflow;
 
     /**
-     * The applications deployed with this deployment
+     * The applications deployed with this deployment.
+     *
      * @var Application[]
      */
     protected $applications = [];
 
     /**
-     * A logger instance used to log messages during deployment
+     * A logger instance used to log messages during deployment.
+     *
      * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * The release identifier will be created on each deployment
+     * The release identifier will be created on each deployment.
+     *
      * @var string
      */
     protected $releaseIdentifier;
 
     /**
-     * TRUE if the deployment should be simulated
+     * TRUE if the deployment should be simulated.
+     *
      * @var string
      */
     protected $dryRun = false;
 
     /**
-     * Callbacks that should be executed after initialization
+     * Callbacks that should be executed after initialization.
+     *
      * @var array
      */
     protected $initCallbacks = [];
 
     /**
-     * Tells if the deployment ran successfully or failed
+     * Tells if the deployment ran successfully or failed.
+     *
      * @var int
      */
     protected $status = self::STATUS_UNKNOWN;
@@ -80,27 +88,29 @@ class Deployment implements LoggerAwareInterface
     protected $initialized = false;
 
     /**
-     * The options
+     * The options.
+     *
      * @var array
      */
     protected $options = [];
 
     /**
-     * The deployment declaration base path for this deployment
+     * The deployment declaration base path for this deployment.
+     *
      * @var string
      */
     protected $deploymentBasePath;
 
     /**
      * The base path to the local workspaces when packaging for deployment
-     * (may be temporary directory)
+     * (may be temporary directory).
      *
      * @var string
      */
     protected $workspacesBasePath;
 
     /**
-     * The base path to a temporary directory
+     * The base path to a temporary directory.
      *
      * @var string
      */
@@ -117,9 +127,9 @@ class Deployment implements LoggerAwareInterface
     private $deploymentLockIdentifier;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $deploymentLockIdentifier
      */
     public function __construct($name, $deploymentLockIdentifier = null)
@@ -131,7 +141,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Initialize the deployment
+     * Initialize the deployment.
      *
      * Must be called before calling deploy() on a deployment.
      *
@@ -160,7 +170,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Add a callback to the initialization
+     * Add a callback to the initialization.
      *
      * @param callable $callback
      *
@@ -174,25 +184,25 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Run this deployment
+     * Run this deployment.
      *
      * @throws SurfException
      */
     public function deploy()
     {
-        $this->logger->notice('Deploying ' . $this->name . ' (' . $this->releaseIdentifier . ')');
+        $this->logger->notice('Deploying '.$this->name.' ('.$this->releaseIdentifier.')');
         $this->workflow->run($this);
     }
 
     /**
-     * Simulate this deployment without executing tasks
+     * Simulate this deployment without executing tasks.
      *
      * It will set dryRun = TRUE which can be inspected by any task.
      */
     public function simulate()
     {
         $this->setDryRun(true);
-        $this->logger->notice('Simulating ' . $this->name . ' (' . $this->releaseIdentifier . ')');
+        $this->logger->notice('Simulating '.$this->name.' ('.$this->releaseIdentifier.')');
         $this->workflow->run($this);
     }
 
@@ -203,11 +213,11 @@ class Deployment implements LoggerAwareInterface
      */
     public function getApplicationReleasePath(Application $application)
     {
-        return $application->getReleasesPath() . '/' . $this->getReleaseIdentifier();
+        return $application->getReleasesPath().'/'.$this->getReleaseIdentifier();
     }
 
     /**
-     * Get the Deployment's name
+     * Get the Deployment's name.
      *
      * @return string The Deployment's name
      */
@@ -217,7 +227,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Sets the deployment name
+     * Sets the deployment name.
      *
      * @param string $name The deployment name
      *
@@ -231,7 +241,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get all nodes of this deployment
+     * Get all nodes of this deployment.
      *
      * @return Node[] The deployment nodes with all application nodes
      */
@@ -248,7 +258,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get a node by name
+     * Get a node by name.
      *
      * In the special case "localhost" an ad-hoc Node with hostname "localhost" is returned.
      *
@@ -259,6 +269,7 @@ class Deployment implements LoggerAwareInterface
         if ($name === 'localhost') {
             $node = new Node('localhost');
             $node->onLocalhost();
+
             return $node;
         }
         $nodes = $this->getNodes();
@@ -267,7 +278,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get all applications for this deployment
+     * Get all applications for this deployment.
      *
      * @return Application[]
      */
@@ -277,7 +288,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Add an application to this deployment
+     * Add an application to this deployment.
      *
      * @param Application $application The application to add
      *
@@ -291,7 +302,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get the deployment workflow
+     * Get the deployment workflow.
      *
      * @return Workflow The deployment workflow
      */
@@ -301,7 +312,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Sets the deployment workflow
+     * Sets the deployment workflow.
      *
      * @param Workflow $workflow The workflow to set
      *
@@ -335,7 +346,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get the deployment release identifier
+     * Get the deployment release identifier.
      *
      * This gets the current release identifier when running a deployment.
      *
@@ -355,7 +366,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Set the dry run mode for this deployment
+     * Set the dry run mode for this deployment.
      *
      * @param bool $dryRun
      *
@@ -381,7 +392,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get the current deployment status
+     * Get the current deployment status.
      *
      * @return int One of the Deployment::STATUS_* constants
      */
@@ -399,7 +410,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get all options defined on this application instance
+     * Get all options defined on this application instance.
      *
      * The options will include the deploymentPath and sharedPath for
      * unified option handling.
@@ -412,7 +423,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get an option defined on the deployment
+     * Get an option defined on the deployment.
      *
      * @param string $key
      *
@@ -424,7 +435,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Test if an option was set for this deployment
+     * Test if an option was set for this deployment.
      *
      * @param string $key The option key
      *
@@ -436,7 +447,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Sets all options for the deployment
+     * Sets all options for the deployment.
      *
      * @param array $options The options to set indexed by option key
      *
@@ -450,10 +461,10 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Set an option for the deployment
+     * Set an option for the deployment.
      *
-     * @param string $key The option key
-     * @param mixed $value The option value
+     * @param string $key   The option key
+     * @param mixed  $value The option value
      *
      * @return Deployment The current instance for chaining
      */
@@ -465,7 +476,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Set the deployment base path
+     * Set the deployment base path.
      *
      * @param string $deploymentConfigurationPath
      */
@@ -475,7 +486,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get the deployment base path (defaults to ./.surf)
+     * Get the deployment base path (defaults to ./.surf).
      *
      * @return string
      */
@@ -501,17 +512,17 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Get the deployment configuration path (defaults to ./.surf/DeploymentName/Configuration)
+     * Get the deployment configuration path (defaults to ./.surf/DeploymentName/Configuration).
      *
      * @return string The path without a trailing slash
      */
     public function getDeploymentConfigurationPath()
     {
-        return $this->getDeploymentBasePath() . '/' . $this->getName() . '/Configuration';
+        return $this->getDeploymentBasePath().'/'.$this->getName().'/Configuration';
     }
 
     /**
-     * Get a local workspace directory for the application
+     * Get a local workspace directory for the application.
      *
      * @param Application $application
      *
@@ -519,11 +530,11 @@ class Deployment implements LoggerAwareInterface
      */
     public function getWorkspacePath(Application $application)
     {
-        return $this->workspacesBasePath . '/' . $this->getName() . '/' . $application->getName();
+        return $this->workspacesBasePath.'/'.$this->getName().'/'.$application->getName();
     }
 
     /**
-     * Get path to a temp folder on the filesystem
+     * Get path to a temp folder on the filesystem.
      */
     public function getTemporaryPath()
     {
@@ -531,7 +542,7 @@ class Deployment implements LoggerAwareInterface
     }
 
     /**
-     * Rollback a deployment
+     * Rollback a deployment.
      *
      * @param bool $dryRun
      *
@@ -540,7 +551,7 @@ class Deployment implements LoggerAwareInterface
      */
     public function rollback($dryRun = false)
     {
-        $this->logger->notice('Rollback deployment ' . $this->name . ' (' . $this->releaseIdentifier . ')');
+        $this->logger->notice('Rollback deployment '.$this->name.' ('.$this->releaseIdentifier.')');
 
         $this->setWorkflow(new RollbackWorkflow());
         $this->initialize();
@@ -555,7 +566,7 @@ class Deployment implements LoggerAwareInterface
      */
     public function setForceRun($force)
     {
-        $this->forceRun = (bool)$force;
+        $this->forceRun = (bool) $force;
     }
 
     /**
@@ -579,8 +590,8 @@ class Deployment implements LoggerAwareInterface
      */
     private function setDeploymentLockIdentifier($deploymentLockIdentifier = null)
     {
-        if (! is_string($deploymentLockIdentifier) || $deploymentLockIdentifier === '') {
-            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') : $this->releaseIdentifier;
+        if (!is_string($deploymentLockIdentifier) || $deploymentLockIdentifier === '') {
+            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false ? (string) getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') : $this->releaseIdentifier;
         }
         $this->deploymentLockIdentifier = $deploymentLockIdentifier;
     }

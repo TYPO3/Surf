@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Composer;
 
 /*
@@ -9,7 +10,7 @@ namespace TYPO3\Surf\Task\Composer;
  */
 
 /**
- * Installs the composer packages based on a composer.json file in the projects root folder
+ * Installs the composer packages based on a composer.json file in the projects root folder.
  *
  * It takes the following options:
  *
@@ -29,14 +30,14 @@ namespace TYPO3\Surf\Task\Composer;
 class InstallTask extends AbstractComposerTask
 {
     /**
-     * Command to run
+     * Command to run.
      *
      * @var string
      */
     protected $command = 'install';
 
     /**
-     * Arguments for the command
+     * Arguments for the command.
      *
      * @var array
      */
@@ -45,6 +46,6 @@ class InstallTask extends AbstractComposerTask
         '--no-interaction',
         '--no-dev',
         '--no-progress',
-        '--classmap-authoritative'
+        '--classmap-authoritative',
     ];
 }

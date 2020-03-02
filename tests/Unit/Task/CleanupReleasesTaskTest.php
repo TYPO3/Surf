@@ -22,7 +22,7 @@ use TYPO3\Surf\Task\CleanupReleasesTask;
 class CleanupReleasesTaskTest extends BaseTaskTest
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService
+     * @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService
      */
     private $shellCommandService;
 
@@ -58,7 +58,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $this->deployment->setDeploymentBasePath('root');
         $this->folderStructure = [
-            '.' => '.',
+            '.'              => '.',
             '20171108132211' => [
                 'index.php',
             ],
@@ -91,7 +91,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $this->shellCommandService->expects($this->at(1))->method('execute')->willReturn(implode(' ', $folders));
 
         $command = array_reduce(['20171108132211', '20171109193135'], function ($carry, $folder) {
-            return $carry . sprintf('rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;', $this->application->getReleasesPath(), $folder);
+            return $carry.sprintf('rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;', $this->application->getReleasesPath(), $folder);
         }, '');
 
         $this->shellCommandService->expects($this->once())->method('executeOrSimulate')->with($command);
@@ -102,9 +102,9 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      * @test
      * @dataProvider keepReleasesByAgeDataProvider
      *
-     * @param int $currentTime
+     * @param int   $currentTime
      * @param array $identifiers
-     * @param int $stringToTime
+     * @param int   $stringToTime
      * @param array $expectedFoldersToBeRemoved
      */
     public function removeReleasesByAge($currentTime, array $identifiers, $stringToTime, array $expectedFoldersToBeRemoved)
@@ -129,7 +129,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $command = array_reduce(array_map(function ($expectedFolderToBeRemoved) use ($currentTime) {
             return strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime));
         }, $expectedFoldersToBeRemoved), function ($command, $folder) {
-            return $command . sprintf('rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;', $this->application->getReleasesPath(), $folder);
+            return $command.sprintf('rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;', $this->application->getReleasesPath(), $folder);
         }, '');
 
         $this->shellCommandService->expects($this->once())->method('executeOrSimulate')->with($command);

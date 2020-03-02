@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Composer;
 
 /*
@@ -14,7 +15,7 @@ use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Unit test for the TagTask
+ * Unit test for the TagTask.
  */
 class InstallTaskTest extends BaseTaskTest
 {

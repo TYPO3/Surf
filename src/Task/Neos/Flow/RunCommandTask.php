@@ -21,7 +21,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use Webmozart\Assert\Assert;
 
 /**
- * This task runs Neos Flow commands
+ * This task runs Neos Flow commands.
  *
  * It takes the following options:
  *
@@ -73,7 +73,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
         $resolver->setDefault('arguments', []);
         $resolver->setAllowedTypes('arguments', ['array', 'string']);
         $resolver->setNormalizer('arguments', function (Options $options, $value) {
-            return (array)$value;
+            return (array) $value;
         });
         $resolver->setRequired('command')->setAllowedTypes('command', 'string');
     }

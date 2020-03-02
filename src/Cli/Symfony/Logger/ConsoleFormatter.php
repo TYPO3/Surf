@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Cli\Symfony\Logger;
 
 /*

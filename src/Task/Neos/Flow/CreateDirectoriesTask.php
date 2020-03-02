@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -13,7 +14,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
- * A task to create Neos Flow specific directories
+ * A task to create Neos Flow specific directories.
  *
  * It takes no options
  */
@@ -25,9 +26,9 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTa
             'directories' => [
                 'shared/Data/Logs',
                 'shared/Data/Persistent',
-                'shared/Configuration'
+                'shared/Configuration',
             ],
-            'baseDirectory' => $application->getDeploymentPath()
+            'baseDirectory' => $application->getDeploymentPath(),
         ];
         parent::execute($node, $application, $deployment, $options);
     }

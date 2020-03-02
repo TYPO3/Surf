@@ -47,7 +47,7 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
         $baseDirectory = $options['genericSymlinksBaseDir'] ?: $deployment->getApplicationReleasePath($application);
 
         $commands = [
-            'cd ' . $baseDirectory,
+            'cd '.$baseDirectory,
         ];
 
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
@@ -69,7 +69,7 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
         $resolver->setDefault('genericSymlinksBaseDir', null);
         $resolver->setAllowedTypes('genericSymlinksBaseDir', ['string', 'null']);
         $resolver->setNormalizer('genericSymlinksBaseDir', function (Options $options, $value) {
-            return ! empty($value) ? $value : null;
+            return !empty($value) ? $value : null;
         });
     }
 }

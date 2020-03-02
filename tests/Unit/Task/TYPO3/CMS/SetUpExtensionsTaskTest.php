@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
 /*
@@ -13,7 +14,7 @@ use TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Class SetUpExtensionsTaskTest
+ * Class SetUpExtensionsTaskTest.
  */
 class SetUpExtensionsTaskTest extends BaseTaskTest
 {
@@ -53,7 +54,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     {
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
-            'extensionKeys' => ['foo', 'bar']
+            'extensionKeys'  => ['foo', 'bar'],
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' 'foo,bar'");
@@ -66,7 +67,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     {
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
-            'extensionKeys' => ['foo', 'bar']
+            'extensionKeys'  => ['foo', 'bar'],
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
@@ -79,9 +80,9 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     public function consoleIsFoundInCorrectPathWithWebDirectoryAndSlashesAreTrimmed()
     {
         $options = [
-            'extensionKeys' => ['foo', 'bar'],
+            'extensionKeys'  => ['foo', 'bar'],
             'scriptFileName' => 'vendor/bin/typo3cms',
-            'webDirectory' => '/web/',
+            'webDirectory'   => '/web/',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");

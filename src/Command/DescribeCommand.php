@@ -22,7 +22,7 @@ use TYPO3\Surf\Integration\FactoryAwareInterface;
 use TYPO3\Surf\Integration\FactoryAwareTrait;
 
 /**
- * Surf describe command
+ * Surf describe command.
  */
 class DescribeCommand extends Command implements FactoryAwareInterface
 {
@@ -64,14 +64,14 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         $deployment = $this->factory->getDeployment($deploymentName, $configurationPath);
         $workflow = $deployment->getWorkflow();
 
-        if (! $deployment instanceof FailedDeployment) {
-            $output->writeln('<success>Deployment ' . $deployment->getName() . '</success>');
+        if (!$deployment instanceof FailedDeployment) {
+            $output->writeln('<success>Deployment '.$deployment->getName().'</success>');
             $output->writeln('');
-            $output->writeln('Workflow: <success>' . $workflow->getName() . '</success>');
+            $output->writeln('Workflow: <success>'.$workflow->getName().'</success>');
 
             if ($workflow instanceof SimpleWorkflow) {
                 $value = $workflow->isEnableRollback() ? 'true' : 'false';
-                $output->writeln('    <comment>Rollback enabled:</comment> <info>' . $value . '</info>');
+                $output->writeln('    <comment>Rollback enabled:</comment> <info>'.$value.'</info>');
             }
 
             $output->writeln('');
@@ -84,35 +84,35 @@ class DescribeCommand extends Command implements FactoryAwareInterface
 
     protected function printNodes(array $nodes)
     {
-        $this->output->writeln('Nodes:' . PHP_EOL);
+        $this->output->writeln('Nodes:'.PHP_EOL);
         foreach ($nodes as $node) {
-            $this->output->writeln('  <success>' . $node->getName() . '</success> <info>(' . $node->getHostname() . ')</info>');
+            $this->output->writeln('  <success>'.$node->getName().'</success> <info>('.$node->getHostname().')</info>');
         }
     }
 
     protected function printApplications(array $applications, Workflow $workflow)
     {
-        $this->output->writeln(PHP_EOL . 'Applications:' . PHP_EOL);
+        $this->output->writeln(PHP_EOL.'Applications:'.PHP_EOL);
         foreach ($applications as $application) {
-            $this->output->writeln('  <success>' . $application->getName() . ':</success>');
-            $this->output->writeln('    <comment>Deployment path</comment>: <success>' . $application->getDeploymentPath() . '</success>');
+            $this->output->writeln('  <success>'.$application->getName().':</success>');
+            $this->output->writeln('    <comment>Deployment path</comment>: <success>'.$application->getDeploymentPath().'</success>');
             $this->output->writeln('    <comment>Options</comment>:');
             foreach ($application->getOptions() as $key => $value) {
                 if (is_array($value)) {
-                    $this->output->writeln('      ' . $key . ' =>');
+                    $this->output->writeln('      '.$key.' =>');
                     foreach ($value as $itemKey => $itemValue) {
                         $itemOutput = is_string($itemKey) ? sprintf('%s => %s', $itemKey, $itemValue) : $itemValue;
                         $this->output->writeln(sprintf('        <success>%s</success>', $itemOutput));
                     }
                 } else {
                     $printableValue = is_scalar($value) ? $value : gettype($value);
-                    $this->output->writeln('      ' . $key . ' => <success>' . $printableValue . '</success>');
+                    $this->output->writeln('      '.$key.' => <success>'.$printableValue.'</success>');
                 }
             }
-            $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(
+            $this->output->writeln('    <comment>Nodes</comment>: <success>'.implode(
                 ', ',
                     $application->getNodes()
-            ) . '</success>');
+            ).'</success>');
 
             if ($workflow instanceof SimpleWorkflow) {
                 $this->output->writeln('    <comment>Detailed workflow</comment>:');
@@ -124,22 +124,22 @@ class DescribeCommand extends Command implements FactoryAwareInterface
     protected function printStages(Application $application, array $stages, array $tasks)
     {
         foreach ($stages as $stage) {
-            $this->output->writeln('      <comment>' . $stage . ':</comment>');
+            $this->output->writeln('      <comment>'.$stage.':</comment>');
             foreach (['before', 'tasks', 'after'] as $stageStep) {
                 $output = '';
                 foreach (['_', $application->getName()] as $applicationName) {
-                    $label = $applicationName === '_' ? 'for all applications' : 'for application ' . $applicationName;
+                    $label = $applicationName === '_' ? 'for all applications' : 'for application '.$applicationName;
                     if (isset($tasks['stage'][$applicationName][$stage][$stageStep])) {
                         foreach ($tasks['stage'][$applicationName][$stage][$stageStep] as $task) {
                             $this->printBeforeAfterTasks($tasks, $application->getName(), $task, 'before', $output);
-                            $output .= '          <success>' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
+                            $output .= '          <success>'.$task.'</success> <info>('.$label.')</info>'.PHP_EOL;
                             $this->printBeforeAfterTasks($tasks, $application->getName(), $task, 'after', $output);
                         }
                     }
                 }
 
                 if (strlen($output) > 0) {
-                    $this->output->writeln('        <info>' . $stageStep . ':</info>');
+                    $this->output->writeln('        <info>'.$stageStep.':</info>');
                 }
                 $this->output->write($output);
             }
@@ -147,9 +147,9 @@ class DescribeCommand extends Command implements FactoryAwareInterface
     }
 
     /**
-     * Print all tasks before or after a task
+     * Print all tasks before or after a task.
      *
-     * @param array $tasks
+     * @param array  $tasks
      * @param string $applicationName
      * @param string $task
      * @param string $step
@@ -158,11 +158,11 @@ class DescribeCommand extends Command implements FactoryAwareInterface
     private function printBeforeAfterTasks(array $tasks, $applicationName, $task, $step, &$output)
     {
         foreach (['_', $applicationName] as $applicationName) {
-            $label = $applicationName === '_' ? 'for all applications' : 'for application ' . $applicationName;
+            $label = $applicationName === '_' ? 'for all applications' : 'for application '.$applicationName;
             if (isset($tasks[$step][$applicationName][$task])) {
                 // 'Task "' . $beforeTask . '" before "' . $task
                 foreach ($tasks[$step][$applicationName][$task] as $beforeAfterTask) {
-                    $output .= '          <success>Task ' . $beforeAfterTask . ' ' . $step . ' ' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
+                    $output .= '          <success>Task '.$beforeAfterTask.' '.$step.' '.$task.'</success> <info>('.$label.')</info>'.PHP_EOL;
                 }
             }
         }

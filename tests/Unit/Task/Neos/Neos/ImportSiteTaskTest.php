@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Neos\Neos;
 
 /*
@@ -62,7 +63,7 @@ class ImportSiteTaskTest extends BaseTaskTest
     {
         $this->application->setVersion($version);
         $options = [
-            'sitePackageKey' => 'Test.Site'
+            'sitePackageKey' => 'Test.Site',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("./flow $commandPackageKey:site:import '--package-key' 'Test.Site'");

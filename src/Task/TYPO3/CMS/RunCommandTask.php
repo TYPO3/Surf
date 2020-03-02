@@ -16,7 +16,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
- * Task for running arbitrary TYPO3 commands
+ * Task for running arbitrary TYPO3 commands.
  */
 class RunCommandTask extends AbstractCliTask
 {
@@ -42,7 +42,7 @@ class RunCommandTask extends AbstractCliTask
         $resolver->setRequired('command');
         $resolver->setDefault('arguments', []);
         $resolver->setNormalizer('arguments', function (Options $options, $value) {
-            return (array)$value;
+            return (array) $value;
         });
     }
 }

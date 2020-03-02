@@ -59,8 +59,8 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (! isset($options['keepReleases']) && ! isset($options['onlyRemoveReleasesOlderThan'])) {
-            $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"');
+        if (!isset($options['keepReleases']) && !isset($options['onlyRemoveReleasesOlderThan'])) {
+            $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would keep' : 'Keeping').' all releases for "'.$application->getName().'"');
 
             return;
         }
@@ -86,7 +86,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
             $removeCommand .= "rm -rf {$releasesPath}/{$removeRelease};rm -f {$releasesPath}/{$removeRelease}REVISION;";
         }
         if (count($removeReleases) > 0) {
-            $deployment->getLogger()->info(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
+            $deployment->getLogger()->info(($deployment->isDryRun() ? 'Would remove' : 'Removing').' releases '.implode(', ', $removeReleases));
             $this->shell->executeOrSimulate($removeCommand, $node, $deployment);
         } else {
             $deployment->getLogger()->info('No releases to remove');
@@ -105,6 +105,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     {
         $onlyRemoveReleasesOlderThan = $this->clock->stringToTime($options['onlyRemoveReleasesOlderThan']);
         $currentTime = $this->clock->currentTime();
+
         return array_filter($removableReleases, function ($removeRelease) use ($onlyRemoveReleasesOlderThan, $currentTime) {
             return ($currentTime - $this->clock->createTimestampFromFormat('YmdHis', $removeRelease)) > ($currentTime - $onlyRemoveReleasesOlderThan);
         });
@@ -117,6 +118,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     {
         sort($removableReleases);
         $keepReleases = $options['keepReleases'];
+
         return array_slice($removableReleases, 0, count($removableReleases) - $keepReleases);
     }
 }

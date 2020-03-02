@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Transfer;
 
 /*
@@ -15,7 +16,7 @@ use TYPO3\Surf\Tests\Unit\AssertCommandExecuted;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Unit test for the RsyncTask
+ * Unit test for the RsyncTask.
  */
 class RsyncTaskTest extends BaseTaskTest
 {
@@ -94,7 +95,7 @@ class RsyncTaskTest extends BaseTaskTest
     {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
-            'rsyncExcludes' => []
+            'rsyncExcludes' => [],
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -117,8 +118,8 @@ class RsyncTaskTest extends BaseTaskTest
             'rsyncExcludes' => [
                 '.git',
                 '.gitmodules',
-                '/Deploy'
-            ]
+                '/Deploy',
+            ],
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -133,7 +134,7 @@ class RsyncTaskTest extends BaseTaskTest
     {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
-            'rsyncFlags' => '--recursive --times --perms --links --delete --delete-excluded --append-verify'
+            'rsyncFlags' => '--recursive --times --perms --links --delete --delete-excluded --append-verify',
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -148,12 +149,12 @@ class RsyncTaskTest extends BaseTaskTest
     {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
-            'rsyncFlags' => '--recursive --times --perms --links --delete --delete-excluded --append-verify',
+            'rsyncFlags'    => '--recursive --times --perms --links --delete --delete-excluded --append-verify',
             'rsyncExcludes' => [
                 '.git',
                 '.gitmodules',
-                '/Deploy'
-            ]
+                '/Deploy',
+            ],
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);

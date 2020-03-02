@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task;
 
 /*
@@ -20,18 +21,20 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Tests\Unit\AssertCommandExecuted;
 
 /**
- * Base unit test for tasks
+ * Base unit test for tasks.
  */
 abstract class BaseTaskTest extends TestCase
 {
     /**
-     * Executed commands
+     * Executed commands.
+     *
      * @var array
      */
     protected $commands;
 
     /**
-     * Predefined command respones
+     * Predefined command respones.
+     *
      * @var array
      */
     protected $responses;
@@ -62,7 +65,7 @@ abstract class BaseTaskTest extends TestCase
     protected $mockLogger;
 
     /**
-     * Set up test dependencies
+     * Set up test dependencies.
      *
      * This sets up a stubbed shell command service to record command executions
      * and return predefined command responses.
@@ -85,6 +88,7 @@ abstract class BaseTaskTest extends TestCase
                     return $responses[$command];
                 }
             }
+
             return '';
         }));
         $shellCommandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
@@ -96,6 +100,7 @@ abstract class BaseTaskTest extends TestCase
                     return $responses[$command];
                 }
             }
+
             return '';
         }));
         $this->task = $this->createTask();
@@ -116,7 +121,7 @@ abstract class BaseTaskTest extends TestCase
     }
 
     /**
-     * Assert that a command was executed
+     * Assert that a command was executed.
      *
      * The substring will be matched against all executed commands
      * (called with execute or executeOrSimulate).

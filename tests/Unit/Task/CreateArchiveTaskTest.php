@@ -92,8 +92,8 @@ class CreateArchiveTaskTest extends BaseTaskTest
         $tarOptions .= sprintf(' -czf %s %s', $options['targetFile'], $sourcePath);
 
         $expectedCommands = [
-            sprintf('rm -f %1$s; mkdir -p ' . dirname('%1$s'), $options['targetFile']),
-            sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions)
+            sprintf('rm -f %1$s; mkdir -p '.dirname('%1$s'), $options['targetFile']),
+            sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions),
         ];
 
         foreach ($expectedCommands as $command) {
@@ -120,11 +120,11 @@ class CreateArchiveTaskTest extends BaseTaskTest
         $tarOptions .= sprintf(' -cf %s/out.tar %s', 'tmp/12345', $sourcePath);
 
         $expectedCommands = [
-            sprintf('rm -f %1$s; mkdir -p ' . dirname('%1$s'), $options['targetFile']),
+            sprintf('rm -f %1$s; mkdir -p '.dirname('%1$s'), $options['targetFile']),
             sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions),
             'mkdir -p tmp/12345',
             sprintf('cd %s; tar -xf out.tar; rm out.tar; zip --quiet -9 -r out %s', 'tmp/12345', $options['baseDirectory']),
-            sprintf('mv %s/out.zip %s; rm -Rf %s', 'tmp/12345', $options['targetFile'], 'tmp/12345')
+            sprintf('mv %s/out.zip %s; rm -Rf %s', 'tmp/12345', $options['targetFile'], 'tmp/12345'),
         ];
 
         foreach ($expectedCommands as $command) {
@@ -146,8 +146,8 @@ class CreateArchiveTaskTest extends BaseTaskTest
         $tarOptions .= sprintf(' -cjf %s %s', $options['targetFile'], $sourcePath);
 
         $expectedCommands = [
-            sprintf('rm -f %1$s; mkdir -p ' . dirname('%1$s'), $options['targetFile']),
-            sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions)
+            sprintf('rm -f %1$s; mkdir -p '.dirname('%1$s'), $options['targetFile']),
+            sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions),
         ];
 
         foreach ($expectedCommands as $command) {
@@ -162,6 +162,7 @@ class CreateArchiveTaskTest extends BaseTaskTest
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->idGenerator = $this->prophesize(IdGeneratorInterface::class);
+
         return new CreateArchiveTask($this->filesystem->reveal(), $this->idGenerator->reveal());
     }
 }

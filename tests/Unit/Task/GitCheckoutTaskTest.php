@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task;
 
 /*
@@ -13,7 +14,7 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 use TYPO3\Surf\Task\GitCheckoutTask;
 
 /**
- * Unit test for the GitCheckoutTask
+ * Unit test for the GitCheckoutTask.
  */
 class GitCheckoutTaskTest extends BaseTaskTest
 {
@@ -39,10 +40,10 @@ class GitCheckoutTaskTest extends BaseTaskTest
     public function executeWithEmptyOptionsAndValidSha1FetchesResetsCopiesAndCleansRepository(): void
     {
         $options = [
-            'repositoryUrl' => 'ssh://git.example.com/project/path.git'
+            'repositoryUrl' => 'ssh://git.example.com/project/path.git',
         ];
         $this->responses = [
-            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -59,10 +60,10 @@ class GitCheckoutTaskTest extends BaseTaskTest
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
-            'branch' => 'release/production'
+            'branch'        => 'release/production',
         ];
         $this->responses = [
-            'git ls-remote ssh://git.example.com/project/path.git refs/heads/release/production | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+            'git ls-remote ssh://git.example.com/project/path.git refs/heads/release/production | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -77,11 +78,11 @@ class GitCheckoutTaskTest extends BaseTaskTest
     public function executeWithDisabledRecursiveSubmodulesOptionDoesNotUpdateSubmodulesRecursively(): void
     {
         $options = [
-            'repositoryUrl' => 'ssh://git.example.com/project/path.git',
-            'recursiveSubmodules' => false
+            'repositoryUrl'       => 'ssh://git.example.com/project/path.git',
+            'recursiveSubmodules' => false,
         ];
         $this->responses = [
-            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -94,10 +95,10 @@ class GitCheckoutTaskTest extends BaseTaskTest
     public function executeWithoutRecursiveSubmodulesOptionUpdatesSubmodulesRecursively(): void
     {
         $options = [
-            'repositoryUrl' => 'ssh://git.example.com/project/path.git'
+            'repositoryUrl' => 'ssh://git.example.com/project/path.git',
         ];
         $this->responses = [
-            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -111,10 +112,10 @@ class GitCheckoutTaskTest extends BaseTaskTest
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
-            'fetchAllTags' => true
+            'fetchAllTags'  => true,
         ];
         $this->responses = [
-            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -128,16 +129,17 @@ class GitCheckoutTaskTest extends BaseTaskTest
     {
         $this->expectException(TaskExecutionException::class);
         $options = [
-            'repositoryUrl' => 'ssh://git.example.com/project/path.git'
+            'repositoryUrl' => 'ssh://git.example.com/project/path.git',
         ];
         $this->responses = [
-            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'foo-bar d5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+            'git ls-remote ssh://git.example.com/project/path.git refs/heads/master | awk \'{print $1 }\'' => 'foo-bar d5b7769852a5faa69574fcd3db0799f4ffbd9eec',
         ];
 
         try {
             $this->task->execute($this->node, $this->application, $this->deployment, $options);
         } catch (TaskExecutionException $exception) {
             $this->assertEquals(1335974926, $exception->getCode());
+
             throw $exception;
         }
     }

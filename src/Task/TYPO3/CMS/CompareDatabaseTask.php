@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 /*
@@ -35,7 +36,8 @@ class CompareDatabaseTask extends AbstractCliTask
         $this->ensureApplicationIsTypo3Cms($application);
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
-            $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure one is available in your project, or remove this task ('.__CLASS__.') in your deployment configuration!');
+
             return;
         }
         $this->executeCliCommand(
@@ -51,6 +53,7 @@ class CompareDatabaseTask extends AbstractCliTask
     {
         if ($this->getAvailableCliPackage($node, $application, $deployment, $options) === 'typo3_console') {
             $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '*.add,*.change';
+
             return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'database:updateschema', $databaseCompareMode];
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -39,7 +40,7 @@ class GitCheckoutTask extends AbstractCheckoutTask
 
         $command = strtr("
             cp -RPp $checkoutPath/. $releasePath
-                && (echo $sha1 > $releasePath" . 'REVISION)
+                && (echo $sha1 > $releasePath".'REVISION)
             ', "\t\n", '  ');
 
         $this->shell->executeOrSimulate($command, $node, $deployment);
@@ -50,7 +51,7 @@ class GitCheckoutTask extends AbstractCheckoutTask
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
-        $this->shell->execute('rm -f ' . $releasePath . 'REVISION', $node, $deployment, true);
+        $this->shell->execute('rm -f '.$releasePath.'REVISION', $node, $deployment, true);
     }
 
     protected function resolveOptions(OptionsResolver $resolver)

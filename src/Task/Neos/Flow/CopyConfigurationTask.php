@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Neos\Flow;
 
 /*
@@ -18,7 +19,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
 /**
- * A task for copying local configuration to the application
+ * A task for copying local configuration to the application.
  *
  * It takes the following options:
  *
@@ -48,16 +49,16 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
         foreach ($configurationFiles as $configuration) {
             $targetConfigurationPath = dirname(str_replace($configurationPath, '', $configuration));
             $escapedSourcePath = escapeshellarg($configuration);
-            $escapedTargetPath = escapeshellarg(Files::concatenatePaths([$targetReleasePath, 'Configuration', $targetConfigurationPath]) . '/');
+            $escapedTargetPath = escapeshellarg(Files::concatenatePaths([$targetReleasePath, 'Configuration', $targetConfigurationPath]).'/');
             if ($node->isLocalhost()) {
-                $commands[] = 'mkdir -p ' . $escapedTargetPath;
-                $commands[] = 'cp ' . $escapedSourcePath . ' ' . $escapedTargetPath;
+                $commands[] = 'mkdir -p '.$escapedTargetPath;
+                $commands[] = 'cp '.$escapedSourcePath.' '.$escapedTargetPath;
             } else {
-                $username = isset($options['username']) ? $options['username'] . '@' : '';
+                $username = isset($options['username']) ? $options['username'].'@' : '';
                 $hostname = $node->getHostname();
 
-                $sshPort = isset($options['port']) ? '-p ' . escapeshellarg($options['port']) . ' ' : '';
-                $scpPort = isset($options['port']) ? '-P ' . escapeshellarg($options['port']) . ' ' : '';
+                $sshPort = isset($options['port']) ? '-p '.escapeshellarg($options['port']).' ' : '';
+                $scpPort = isset($options['port']) ? '-P '.escapeshellarg($options['port']).' ' : '';
                 $sshOptions = '';
                 $expect = '';
                 if ($node->hasOption('password')) {
@@ -70,7 +71,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
                     }
                     $expect = sprintf('expect %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')));
                 }
-                $createDirectoryCommand = '"mkdir -p ' . $escapedTargetPath . '"';
+                $createDirectoryCommand = '"mkdir -p '.$escapedTargetPath.'"';
                 $commands[] = ltrim("{$expect} ssh {$sshOptions}{$sshPort}{$username}{$hostname} {$createDirectoryCommand}");
                 $commands[] = ltrim("{$expect} scp {$sshOptions}{$scpPort}{$escapedSourcePath} {$username}{$hostname}:\"{$escapedTargetPath}\"");
             }

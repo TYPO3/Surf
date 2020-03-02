@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task;
 
 /*
@@ -12,7 +13,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\DumpDatabaseTask;
 
 /**
- * Unit test for the DumpDatabaseTaskTest
+ * Unit test for the DumpDatabaseTaskTest.
  */
 class DumpDatabaseTaskTest extends BaseTaskTest
 {
@@ -38,12 +39,12 @@ class DumpDatabaseTaskTest extends BaseTaskTest
     public function executeProperlyEscapesInputOptions()
     {
         $options = [
-            'sourceHost' => 'localhost',
-            'sourceUser' => 'user',
+            'sourceHost'     => 'localhost',
+            'sourceUser'     => 'user',
             'sourcePassword' => '(pass)',
             'sourceDatabase' => 'db',
-            'targetHost' => 'localhost',
-            'targetUser' => 'user',
+            'targetHost'     => 'localhost',
+            'targetUser'     => 'user',
             'targetPassword' => '(pass)',
             'targetDatabase' => 'db',
         ];

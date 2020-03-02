@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Git;
 
 /*
@@ -17,7 +18,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A task which can be used to tag a git repository and its submodules
+ * A task which can be used to tag a git repository and its submodules.
  *
  * It takes the following options:
  *
@@ -47,17 +48,17 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
         $options = $this->processOptions($options, $deployment);
 
         $targetPath = $deployment->getApplicationReleasePath($application);
-        $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git tag -f -a -m %s %s', escapeshellarg($options['description']), escapeshellarg($options['tagName'])), $node, $deployment);
+        $this->shell->executeOrSimulate(sprintf('cd '.$targetPath.'; git tag -f -a -m %s %s', escapeshellarg($options['description']), escapeshellarg($options['tagName'])), $node, $deployment);
         if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === true) {
-            $submoduleCommand = escapeshellarg(sprintf('git tag -f -a -m %s %s', escapeshellarg($options['description']), escapeshellarg($options['submoduleTagNamePrefix'] . $options['tagName'])));
-            $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach %s', $submoduleCommand), $node, $deployment);
+            $submoduleCommand = escapeshellarg(sprintf('git tag -f -a -m %s %s', escapeshellarg($options['description']), escapeshellarg($options['submoduleTagNamePrefix'].$options['tagName'])));
+            $this->shell->executeOrSimulate(sprintf('cd '.$targetPath.'; git submodule foreach %s', $submoduleCommand), $node, $deployment);
         }
 
         if (isset($options['pushTag']) && $options['pushTag'] === true) {
-            $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git push %s %s', escapeshellarg($options['remote']), escapeshellarg($options['tagName'])), $node, $deployment);
+            $this->shell->executeOrSimulate(sprintf('cd '.$targetPath.'; git push %s %s', escapeshellarg($options['remote']), escapeshellarg($options['tagName'])), $node, $deployment);
             if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === true) {
-                $submoduleCommand = escapeshellarg(sprintf('git push %s %s', escapeshellarg($options['remote']), escapeshellarg($options['submoduleTagNamePrefix'] . $options['tagName'])));
-                $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach %s', $submoduleCommand), $node, $deployment);
+                $submoduleCommand = escapeshellarg(sprintf('git push %s %s', escapeshellarg($options['remote']), escapeshellarg($options['submoduleTagNamePrefix'].$options['tagName'])));
+                $this->shell->executeOrSimulate(sprintf('cd '.$targetPath.'; git submodule foreach %s', $submoduleCommand), $node, $deployment);
             }
         }
     }
@@ -87,11 +88,11 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
             $options[$optionName] = str_replace(
                 [
                     '{releaseIdentifier}',
-                    '{deploymentName}'
+                    '{deploymentName}',
                 ],
                 [
                     $deployment->getReleaseIdentifier(),
-                    $deployment->getName()
+                    $deployment->getName(),
                 ],
                 $options[$optionName]
             );
@@ -103,8 +104,10 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
 
         if (!isset($options['remote'])) {
             $options['remote'] = 'origin';
+
             return $options;
         }
+
         return $options;
     }
 }

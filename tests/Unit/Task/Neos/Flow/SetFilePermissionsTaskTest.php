@@ -16,7 +16,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SetFilePermissionsTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
@@ -31,7 +30,7 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
      * @dataProvider executeWithDifferentOptions
      *
      * @param string $expectedCommand
-     * @param array $options
+     * @param array  $options
      */
     public function executeSuccessfully($expectedCommand, array $options = [])
     {
@@ -53,19 +52,19 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
             [
                 // Override the shellUsername and the username. The shellUsername has the precedence
                 'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'shellUsername\' \'www-data\' \'www-data\'',
-                ['shellUsername' => 'shellUsername', 'username' => 'no_effect']
+                ['shellUsername' => 'shellUsername', 'username' => 'no_effect'],
             ],
             [
                 'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'username\' \'www-data\' \'www-data\'',
-                ['username' => 'username']
+                ['username' => 'username'],
             ],
             [
                 'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'www-data\'',
-                ['webserverUsername' => 'webserverUsername']
+                ['webserverUsername' => 'webserverUsername'],
             ],
             [
                 'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'webserverGroupname\'',
-                ['webserverUsername' => 'webserverUsername', 'webserverGroupname' => 'webserverGroupname']
+                ['webserverUsername' => 'webserverUsername', 'webserverGroupname' => 'webserverGroupname'],
             ],
         ];
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Git;
 
 /*
@@ -17,7 +18,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * A task which can push to a git remote
+ * A task which can push to a git remote.
  *
  * It takes the following options:
  *
@@ -50,9 +51,9 @@ class PushTask extends Task implements ShellCommandServiceAwareInterface
 
         $targetPath = $deployment->getApplicationReleasePath($application);
 
-        $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git push -f %s %s', $options['remote'], $options['refspec']), $node, $deployment);
+        $this->shell->executeOrSimulate(sprintf('cd '.$targetPath.'; git push -f %s %s', $options['remote'], $options['refspec']), $node, $deployment);
         if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === true) {
-            $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git push -f %s %s\'', $options['remote'], $options['refspec']), $node, $deployment);
+            $this->shell->executeOrSimulate(sprintf('cd '.$targetPath.'; git submodule foreach \'git push -f %s %s\'', $options['remote'], $options['refspec']), $node, $deployment);
         }
     }
 

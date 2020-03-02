@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -59,8 +60,8 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
             $options['sourceHost'],
             '-u',
             $options['sourceUser'],
-            '-p' . $options['sourcePassword'],
-            $options['sourceDatabase']
+            '-p'.$options['sourcePassword'],
+            $options['sourceDatabase'],
         ]);
 
         $mysqlCommand = new Process([
@@ -69,14 +70,14 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
             $options['targetHost'],
             '-u',
             $options['targetUser'],
-            '-p' . $options['targetPassword'],
-            $options['targetDatabase']
+            '-p'.$options['targetPassword'],
+            $options['targetDatabase'],
         ]);
 
         $sshCommand = ['ssh'];
-        $username = isset($options['username']) ? $options['username'] . '@' : '';
+        $username = isset($options['username']) ? $options['username'].'@' : '';
         $hostname = $node->getHostname();
-        $sshCommand[] = $username . $hostname;
+        $sshCommand[] = $username.$hostname;
         if ($node->hasOption('port')) {
             $sshCommand[] = '-P';
             $sshCommand[] = $node->getOption('port');
@@ -85,8 +86,8 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
         $sshCommand = new Process($sshCommand);
 
         $command = $dumpCommand->getCommandLine()
-            . ' | '
-            . $sshCommand->getCommandLine();
+            .' | '
+            .$sshCommand->getCommandLine();
 
         $localhost = new Node('localhost');
         $localhost->onLocalhost();
@@ -109,7 +110,7 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
             'targetHost',
             'targetUser',
             'targetPassword',
-            'targetDatabase'
+            'targetDatabase',
         ]);
     }
 }

@@ -52,8 +52,8 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
         $this->filesystem->expects($this->once())->method('get')->willReturn('failure');
         $this->expectException(TaskExecutionException::class);
         $options = [
-            'baseUrl' => 'https://domain.com/',
-            'scriptIdentifier' => 'script-identifier',
+            'baseUrl'                                => 'https://domain.com/',
+            'scriptIdentifier'                       => 'script-identifier',
             'throwErrorOnWebOpCacheResetExecuteTask' => true,
         ];
 
@@ -68,10 +68,10 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
     {
         $this->filesystem->expects($this->once())->method('get')->with('https://domain.com/surf-opcache-reset-script-identifier.php', false, null)->willReturn('success');
         $options = [
-            'baseUrl' => 'https://domain.com/',
-            'scriptIdentifier' => 'script-identifier',
+            'baseUrl'                                => 'https://domain.com/',
+            'scriptIdentifier'                       => 'script-identifier',
             'throwErrorOnWebOpCacheResetExecuteTask' => true,
-            'stream_context' => '',
+            'stream_context'                         => '',
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -84,12 +84,12 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
     {
         $this->filesystem->expects($this->once())->method('get')->with('https://domain.com/surf-opcache-reset-script-identifier.php', false)->willReturn('success');
         $options = [
-            'baseUrl' => 'https://domain.com/',
-            'scriptIdentifier' => 'script-identifier',
+            'baseUrl'                                => 'https://domain.com/',
+            'scriptIdentifier'                       => 'script-identifier',
             'throwErrorOnWebOpCacheResetExecuteTask' => true,
-            'stream_context' => [
+            'stream_context'                         => [
                 'http' => [
-                    'header' => 'Authorization: Basic ' . base64_encode('username:password'),
+                    'header' => 'Authorization: Basic '.base64_encode('username:password'),
                 ],
             ],
         ];

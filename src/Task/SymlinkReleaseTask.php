@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -28,8 +29,8 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
     {
         $releaseIdentifier = $deployment->getReleaseIdentifier();
         $releasesPath = $application->getReleasesPath();
-        $this->shell->executeOrSimulate('cd ' . $releasesPath . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./' . $releaseIdentifier . ' ./current && rm -f ./next', $node, $deployment);
-        $deployment->getLogger()->notice('<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>');
+        $this->shell->executeOrSimulate('cd '.$releasesPath.' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./'.$releaseIdentifier.' ./current && rm -f ./next', $node, $deployment);
+        $deployment->getLogger()->notice('<success>Node "'.$node->getName().'" '.($deployment->isDryRun() ? 'would be' : 'is').' live!</success>');
     }
 
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
@@ -40,6 +41,6 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releasesPath = $application->getReleasesPath();
-        $this->shell->execute('cd ' . $releasesPath . ' && rm -f ./current && mv ./previous ./current', $node, $deployment, true);
+        $this->shell->execute('cd '.$releasesPath.' && rm -f ./current && mv ./previous ./current', $node, $deployment, true);
     }
 }

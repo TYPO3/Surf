@@ -15,7 +15,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Service\ShellCommandService;
 
 /**
- * Find all releases for current application
+ * Find all releases for current application.
  *
  * @return array[]|false|string[]
  */
@@ -28,23 +28,25 @@ function findAllReleases(Deployment $deployment, Node $node, Application $applic
 }
 
 /**
- * Get previous release identifier
+ * Get previous release identifier.
  *
  * @return string
  */
 function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell)
 {
-    $previousReleasePath = $application->getReleasesPath() . '/previous';
+    $previousReleasePath = $application->getReleasesPath().'/previous';
+
     return trim($shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment));
 }
 
 /**
- * Get current release identifier
+ * Get current release identifier.
  *
  * @return string
  */
 function findCurrentReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell)
 {
-    $currentReleasePath = $application->getReleasesPath() . '/current';
+    $currentReleasePath = $application->getReleasesPath().'/current';
+
     return trim($shell->execute("if [ -h $currentReleasePath ]; then basename `readlink $currentReleasePath` ; fi", $node, $deployment));
 }

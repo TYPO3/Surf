@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Application\TYPO3;
 
 /*
@@ -19,12 +20,13 @@ use TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask;
 use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 
 /**
- * TYPO3 CMS application
+ * TYPO3 CMS application.
  */
 class CMS extends BaseApplication
 {
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param string $name
      */
     public function __construct($name = 'TYPO3 CMS')
@@ -32,35 +34,37 @@ class CMS extends BaseApplication
         parent::__construct($name);
 
         $this->options = array_merge($this->options, [
-            'context' => 'Production',
-            'scriptFileName' => 'vendor/bin/typo3cms',
+            'context'            => 'Production',
+            'scriptFileName'     => 'vendor/bin/typo3cms',
             'symlinkDataFolders' => [
                 'fileadmin',
-                'uploads'
+                'uploads',
             ],
             'rsyncExcludes' => [
                 '.ddev',
                 '.git',
                 '{webDirectory}/fileadmin',
-                '{webDirectory}/uploads'
-            ]
+                '{webDirectory}/uploads',
+            ],
         ]);
     }
 
     /**
-     * Set the application production context
+     * Set the application production context.
      *
      * @param string $context
+     *
      * @return CMS
      */
     public function setContext($context)
     {
         $this->options['context'] = trim($context);
+
         return $this;
     }
 
     /**
-     * Get the application production context
+     * Get the application production context.
      *
      * @return string
      */
@@ -70,9 +74,9 @@ class CMS extends BaseApplication
     }
 
     /**
-     * Register tasks for this application
+     * Register tasks for this application.
      *
-     * @param Workflow $workflow
+     * @param Workflow   $workflow
      * @param Deployment $deployment
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment)

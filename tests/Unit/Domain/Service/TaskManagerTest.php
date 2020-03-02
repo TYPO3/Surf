@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 
 /*
@@ -19,7 +20,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\TaskManager;
 
 /**
- * Unit test for the TaskManager
+ * Unit test for the TaskManager.
  */
 class TaskManagerTest extends TestCase
 {
@@ -71,7 +72,7 @@ class TaskManagerTest extends TestCase
     public function executePassesPrefixedTaskOptionsToTask()
     {
         $globalOptions = [
-            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Foo'
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Foo',
         ];
         $this->deployment->setOptions($globalOptions);
 
@@ -92,7 +93,7 @@ class TaskManagerTest extends TestCase
     public function executePassesNodeOptionsToTask()
     {
         $nodeOptions = [
-            'ssh[username]' => 'jdoe'
+            'ssh[username]' => 'jdoe',
         ];
         $this->node->setOptions($nodeOptions);
 
@@ -113,7 +114,7 @@ class TaskManagerTest extends TestCase
     public function executePassesApplicationOptionsToTask()
     {
         $applicationOptions = [
-            'repositoryUrl' => 'ssh://review.typo3.org/foo'
+            'repositoryUrl' => 'ssh://review.typo3.org/foo',
         ];
         $this->application->setOptions($applicationOptions);
 
@@ -134,11 +135,11 @@ class TaskManagerTest extends TestCase
     public function nodeOptionsOverrideDeploymentOptions()
     {
         $globalOptions = [
-            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Deployment'
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Deployment',
         ];
         $this->deployment->setOptions($globalOptions);
         $nodeOptions = [
-            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Node'
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Node',
         ];
         $this->node->setOptions($nodeOptions);
 
@@ -161,11 +162,11 @@ class TaskManagerTest extends TestCase
     public function applicationOptionsOverrideNodeOptions()
     {
         $nodeOptions = [
-            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Node'
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Node',
         ];
         $this->node->setOptions($nodeOptions);
         $applicationOptions = [
-            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Application'
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Application',
         ];
         $this->application->setOptions($applicationOptions);
 
@@ -188,11 +189,11 @@ class TaskManagerTest extends TestCase
     public function applicationOptionsOverrideDeploymentOptions()
     {
         $globalOptions = [
-            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Deployment'
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Deployment',
         ];
         $this->deployment->setOptions($globalOptions);
         $applicationOptions = [
-            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Application'
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Application',
         ];
         $this->application->setOptions($applicationOptions);
 
@@ -215,7 +216,7 @@ class TaskManagerTest extends TestCase
     public function executeDoesNotPassPrefixedTaskOptionsOfBaseTaskToDefinedTask()
     {
         $globalOptions = [
-            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Foo'
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask[taskOption]' => 'Foo',
         ];
         $this->deployment->setOptions($globalOptions);
 
@@ -236,7 +237,7 @@ class TaskManagerTest extends TestCase
     public function executePassePrefixedDefinedTaskOptionsToDefinedTask()
     {
         $globalOptions = [
-            'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask[taskOption]' => 'Foo'
+            'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask[taskOption]' => 'Foo',
         ];
         $this->deployment->setOptions($globalOptions);
 

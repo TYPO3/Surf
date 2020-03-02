@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Neos\Flow;
 
 /*
@@ -13,7 +14,7 @@ use TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 /**
- * Unit test for the SymlinkConfigurationTask
+ * Unit test for the SymlinkConfigurationTask.
  */
 class SymlinkConfigurationTaskTest extends BaseTaskTest
 {

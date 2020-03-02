@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Exception;
 
 /*
@@ -11,7 +12,7 @@ namespace TYPO3\Surf\Exception;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
- * A control exception to stop the execution of a workflow
+ * A control exception to stop the execution of a workflow.
  */
 class StopWorkflowException extends SurfException
 {

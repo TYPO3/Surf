@@ -18,14 +18,14 @@ use TYPO3\Surf\Integration\FactoryAwareInterface;
 use TYPO3\Surf\Integration\FactoryAwareTrait;
 
 /**
- * Surf deploy command
+ * Surf deploy command.
  */
 class DeployCommand extends Command implements FactoryAwareInterface
 {
     use FactoryAwareTrait;
 
     /**
-     * Configure
+     * Configure.
      */
     protected function configure()
     {

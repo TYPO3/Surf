@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task\Composer;
 
 /*
@@ -15,7 +16,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 
 /**
- * Runs a custom composer command
+ * Runs a custom composer command.
  *
  * It takes the following options:
  *
@@ -56,9 +57,9 @@ class CommandTask extends AbstractComposerTask
     {
         parent::resolveOptions($resolver);
         $resolver->setDefaults([
-            'command' => null,
+            'command'   => null,
             'arguments' => ['--no-ansi', '--no-interaction'],
-            'suffix' => ['2>&1']
+            'suffix'    => ['2>&1'],
         ]);
 
         $resolver
@@ -79,7 +80,8 @@ class CommandTask extends AbstractComposerTask
             ->setAllowedValues('suffix', [['2>&1'], [], '2>&1', '', null])
             ->setNormalizer('suffix', static function (Options $options, $value) {
                 $value = ($value === '') ? null : $value;
-                return (array)$value;
+
+                return (array) $value;
             });
     }
 }

@@ -21,28 +21,28 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
- * Installs the composer packages based on a composer.json file in the projects root folder
+ * Installs the composer packages based on a composer.json file in the projects root folder.
  */
 abstract class AbstractComposerTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
     /**
-     * Command to run
+     * Command to run.
      *
      * @var string
      */
     protected $command = '';
 
     /**
-     * Arguments for the command
+     * Arguments for the command.
      *
      * @var array
      */
     protected $arguments = [];
 
     /**
-     * Suffix for the command
+     * Suffix for the command.
      *
      * @var array
      */
@@ -92,7 +92,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         $script = implode(' ', $arguments);
 
         return [
-            'cd ' . escapeshellarg($manifestPath),
+            'cd '.escapeshellarg($manifestPath),
             $script,
         ];
     }
@@ -109,9 +109,9 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
             return false;
         }
         $composerJsonPath = Files::concatenatePaths([$path, 'composer.json']);
-        $composerJsonExists = $this->shell->executeOrSimulate('test -f ' . escapeshellarg($composerJsonPath), $node, $deployment, true);
+        $composerJsonExists = $this->shell->executeOrSimulate('test -f '.escapeshellarg($composerJsonPath), $node, $deployment, true);
         if ($composerJsonExists === false) {
-            $deployment->getLogger()->debug('No composer.json found in path "' . $composerJsonPath . '"');
+            $deployment->getLogger()->debug('No composer.json found in path "'.$composerJsonPath.'"');
 
             return false;
         }
@@ -125,7 +125,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
 
         $resolver->setDefault('additionalArguments', [])
             ->setNormalizer('additionalArguments', static function (Options $options, $value) {
-                return (array)$value;
+                return (array) $value;
             });
 
         $resolver->setDefault('useApplicationWorkspace', false);
