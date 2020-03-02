@@ -1,6 +1,5 @@
 .idea/
 vendor/
-phpunit.xml
 .php_cs.cache
 # The Api reference is auto generated and should not be part of the repository
 /Documentation-GENERATED-temp
