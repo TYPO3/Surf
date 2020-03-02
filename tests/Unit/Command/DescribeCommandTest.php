@@ -220,9 +220,9 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      webDirectory => <success>public</success>
       context => <success>Production</success>
       scriptFileName => <success>vendor/bin/typo3cms</success>
-      webDirectory => <success>web</success>
       symlinkDataFolders =>
         <success>fileadmin</success>
         <success>uploads</success>
@@ -301,6 +301,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      webDirectory => <success>Web</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>
@@ -372,6 +373,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>
@@ -434,6 +436,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success></success>
+      webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>
@@ -494,6 +497,7 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>

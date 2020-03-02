@@ -70,6 +70,7 @@ class BaseApplication extends Application
         'transferMethod' => 'rsync',
         'updateMethod' => null,
         'lockDeployment' => true,
+        'webDirectory' => self::DEFAULT_WEB_DIRECTORY,
     ];
 
     /**

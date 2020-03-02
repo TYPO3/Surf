@@ -49,20 +49,24 @@ class Neos extends Flow
     ];
 
     /**
+     * @param string $name
+     */
+    public function __construct($name = 'Neos')
+    {
+        parent::__construct($name);
+
+        $this->options = array_merge($this->options, [
+            'webDirectory' => self::DEFAULT_WEB_DIRECTORY,
+        ]);
+    }
+
+    /**
      * @param string $command
      * @return bool
      */
     protected function isNeosCommand($command)
     {
         return in_array($command, $this->neosCommands);
-    }
-
-    /**
-     * @param string $name
-     */
-    public function __construct($name = 'Neos')
-    {
-        parent::__construct($name);
     }
 
     /**

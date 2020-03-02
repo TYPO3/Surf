@@ -36,6 +36,8 @@ class Flow extends BaseApplication
      */
     protected $version = '4.0';
 
+    public const DEFAULT_WEB_DIRECTORY = 'Web';
+
     /**
      * Constructor
      * @param string $name
@@ -43,6 +45,10 @@ class Flow extends BaseApplication
     public function __construct($name = 'Neos Flow')
     {
         parent::__construct($name);
+
+        $this->options = array_merge($this->options, [
+            'webDirectory' => self::DEFAULT_WEB_DIRECTORY,
+        ]);
     }
 
     public function registerTasks(Workflow $workflow, Deployment $deployment)
