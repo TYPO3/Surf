@@ -9,6 +9,8 @@ namespace TYPO3\Surf\Task\Transfer;
  */
 
 use Phar;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -33,10 +35,12 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        $options = $this->configureOptions($options);
+
         $localPackagePath = $deployment->getWorkspacePath($application);
         $releasePath = $deployment->getApplicationReleasePath($application);
 
-        if (isset($options['webDirectory'])) {
+        if ($options['webDirectory'] !== null) {
             $this->replacePaths['{webDirectory}'] = $options['webDirectory'];
         }
 
@@ -50,20 +54,16 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $noPubkeyAuthentication = $node->hasOption('password') ? ' -o PubkeyAuthentication=no' : '';
         $port = $node->hasOption('port') ? ' -p ' . escapeshellarg($node->getOption('port')) : '';
         $key = $node->hasOption('privateKeyFile') ? ' -i ' . escapeshellarg($node->getOption('privateKeyFile')) : '';
-        $quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
         $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $noPubkeyAuthentication . $port . $key . '" ');
 
-        $rsyncExcludes = isset($options['rsyncExcludes']) ? $options['rsyncExcludes'] : ['.git'];
-        $excludeFlags = $this->getExcludeFlags($rsyncExcludes);
-
-        $rsyncFlags = (isset($options['rsyncFlags']) ? $options['rsyncFlags'] : '--recursive --times --perms --links --delete --delete-excluded') . $excludeFlags;
+        $rsyncFlags = $options['rsyncFlags'] . $this->getExcludeFlags($options['rsyncExcludes']);
 
         $destinationArgument = ($node->isLocalhost() ? $remotePath : "{$username}{$hostname}:{$remotePath}");
 
-        $command = "rsync {$quietFlag} --compress {$rshFlag} {$rsyncFlags} " . escapeshellarg($localPackagePath . '/.') . ' ' . escapeshellarg($destinationArgument);
+        $command = "rsync {$options['quietFlag']} --compress {$rshFlag} {$rsyncFlags} " . escapeshellarg($localPackagePath . '/.') . ' ' . escapeshellarg($destinationArgument);
 
         if ($node->hasOption('password')) {
-            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
+            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(__DIR__, 3), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
             if (Phar::running() !== '') {
                 $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
                 $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([$deployment->getTemporaryPath(), 'PasswordSshLogin.expect']);
@@ -101,11 +101,8 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
      * Generates the --exclude flags for a given array of exclude patterns
      *
      * Example: ['foo', '/bar'] => --exclude 'foo' --exclude '/bar'
-     *
-     * @param array $rsyncExcludes An array of patterns to be excluded
-     * @return string
      */
-    protected function getExcludeFlags($rsyncExcludes)
+    protected function getExcludeFlags(array $rsyncExcludes): string
     {
         return array_reduce($rsyncExcludes, function ($excludeOptions, $pattern) {
             if (!empty($this->replacePaths)) {
@@ -113,5 +110,20 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
             }
             return $excludeOptions . ' --exclude ' . escapeshellarg($pattern);
         }, '');
+    }
+
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('webDirectory', null);
+        $resolver->setDefault('rsyncExcludes', ['.git']);
+        $resolver->setDefault('verbose', false);
+        $resolver->setDefault('quietFlag', static function (Options $options) {
+            if ($options['verbose']) {
+                return '';
+            }
+
+            return '-q';
+        });
+        $resolver->setDefault('rsyncFlags', '--recursive --times --perms --links --delete --delete-excluded');
     }
 }
