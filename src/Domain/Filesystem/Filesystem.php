@@ -34,4 +34,14 @@ class Filesystem implements FilesystemInterface
     {
         return file_get_contents($filename, $includePath, $streamContext);
     }
+
+    public function isDirectory(string $directory): bool
+    {
+        return is_dir($directory);
+    }
+
+    public function getTemporaryDirectory(): string
+    {
+        return sys_get_temp_dir();
+    }
 }
