@@ -27,4 +27,8 @@ interface FilesystemInterface
      * @return false|string
      */
     public function get($filename, $includePath = false, $streamContext = null);
+
+    public function isDirectory(string $directory): bool;
+
+    public function getTemporaryDirectory(): string;
 }

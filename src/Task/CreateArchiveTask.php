@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -8,14 +9,17 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use TYPO3\Surf\Domain\Filesystem\Filesystem;
+use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
+use TYPO3\Surf\Domain\Generator\IdGenerator;
+use TYPO3\Surf\Domain\Generator\IdGeneratorInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
-use TYPO3\Surf\Exception\TaskExecutionException;
 
 /**
  * A task for creating an zip / tar.gz / tar.bz2 archive.
@@ -48,18 +52,32 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @var FilesystemInterface
+     */
+    private $filesystem;
+
+    /**
+     * @var IdGeneratorInterface
+     */
+    private $idGenerator;
+
+    public function __construct(FilesystemInterface $filesystem = null, IdGeneratorInterface $idGenerator = null)
+    {
+        $this->filesystem = $filesystem ?? new Filesystem();
+        $this->idGenerator = $idGenerator ?? new IdGenerator();
+    }
+
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $this->checkOptionsForValidity($options);
+        $options = $this->configureOptions($options);
 
         $this->shell->execute('rm -f ' . $options['targetFile'] . '; mkdir -p ' . dirname($options['targetFile']), $node, $deployment);
         $sourcePath = $deployment->getApplicationReleasePath($application);
 
         $tarOptions = sprintf(' --transform="s,^%s,%s," ', ltrim($sourcePath, '/'), $options['baseDirectory']);
-        if (isset($options['exclude']) && is_array($options['exclude'])) {
-            foreach ($options['exclude'] as $excludePattern) {
-                $tarOptions .= sprintf(' --exclude="%s" ', $excludePattern);
-            }
+        foreach ($options['exclude'] as $excludePattern) {
+            $tarOptions .= sprintf(' --exclude="%s" ', $excludePattern);
         }
 
         if (substr($options['targetFile'], -7) === '.tar.gz') {
@@ -69,32 +87,26 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
             $tarOptions .= sprintf(' -cjf %s %s', $options['targetFile'], $sourcePath);
             $this->shell->execute(sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions), $node, $deployment);
         } elseif (substr($options['targetFile'], -4) === '.zip') {
-            $temporaryDirectory = sys_get_temp_dir() . '/' . uniqid('f3_deploy');
+            $temporaryDirectory = $this->filesystem->getTemporaryDirectory() . '/' . $this->idGenerator->generate('f3_deploy');
             $this->shell->execute(sprintf('mkdir -p %s', $temporaryDirectory), $node, $deployment);
             $tarOptions .= sprintf(' -cf %s/out.tar %s', $temporaryDirectory, $sourcePath);
             $this->shell->execute(sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions), $node, $deployment);
             $this->shell->execute(sprintf('cd %s; tar -xf out.tar; rm out.tar; zip --quiet -9 -r out %s', $temporaryDirectory, $options['baseDirectory']), $node, $deployment);
             $this->shell->execute(sprintf('mv %s/out.zip %s; rm -Rf %s', $temporaryDirectory, $options['targetFile'], $temporaryDirectory), $node, $deployment);
-        } else {
-            throw new TaskExecutionException('Unknown target file format', 1314248387);
         }
     }
 
-    protected function checkOptionsForValidity(array $options)
+    protected function resolveOptions(OptionsResolver $resolver)
     {
-        if (!isset($options['sourceDirectory']) || !is_dir($options['sourceDirectory'])) {
-            throw new InvalidConfigurationException('sourceDirectory not configured', 1314187354);
-        }
+        $resolver->setRequired(['sourceDirectory', 'targetFile', 'baseDirectory']);
+        $resolver->setDefault('exclude', []);
+        $resolver->setAllowedTypes('exclude', 'array');
 
-        if (!isset($options['targetFile'])) {
-            throw new InvalidConfigurationException('targetFile not configured', 1314187356);
-        }
-        if (!preg_match('/\.(tar\.gz|tar\.bz2|zip)$/', $options['targetFile'])) {
-            throw new InvalidConfigurationException('targetFile only with file ending tar.gz, tar.bz2 or zip supported, given: "' . $options['targetFile'] . '"!', 1314187359);
-        }
-
-        if (!isset($options['baseDirectory'])) {
-            throw new InvalidConfigurationException('baseDirectory not configured', 1314187361);
-        }
+        $resolver->setAllowedValues('sourceDirectory', function ($directory) {
+            return $this->filesystem->isDirectory($directory);
+        });
+        $resolver->setAllowedValues('targetFile', static function ($targetFile) {
+            return preg_match('/\.(tar\.gz|tar\.bz2|zip)$/', $targetFile);
+        });
     }
 }
