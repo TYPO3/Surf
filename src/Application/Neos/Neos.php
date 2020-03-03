@@ -60,22 +60,12 @@ class Neos extends Flow
         ]);
     }
 
-    /**
-     * @param string $command
-     * @return bool
-     */
-    protected function isNeosCommand($command)
+    protected function isNeosCommand($command): bool
     {
-        return in_array($command, $this->neosCommands);
+        return in_array($command, $this->neosCommands, false);
     }
 
-    /**
-     * Get the package key to prefix the command
-     *
-     * @param string $command
-     * @return string
-     */
-    public function getCommandPackageKey($command = '')
+    public function getCommandPackageKey(string $command = ''): string
     {
         if ($this->getVersion() < '4.0') {
             return $this->isNeosCommand($command) ? 'typo3.neos' : 'typo3.flow';

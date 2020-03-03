@@ -138,7 +138,7 @@ Applications:
         <success>.git</success>
         <success>web/fileadmin</success>
         <success>web/uploads</success>
-      deploymentPath => <success>NULL</success>
+      deploymentPath => <success></success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
@@ -234,7 +234,7 @@ Applications:
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
         <success>public/typo3conf/LocalConfiguration.php => ../../../../shared/Configuration/LocalConfiguration.php</success>
-      deploymentPath => <success>NULL</success>
+      deploymentPath => <success></success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
@@ -304,7 +304,7 @@ Applications:
       webDirectory => <success>Web</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success>NULL</success>
+      deploymentPath => <success></success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
@@ -376,7 +376,7 @@ Applications:
       webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success>NULL</success>
+      deploymentPath => <success></success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
@@ -439,7 +439,7 @@ Applications:
       webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success>NULL</success>
+      deploymentPath => <success></success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
@@ -500,7 +500,7 @@ Applications:
       webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success>NULL</success>
+      deploymentPath => <success></success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
