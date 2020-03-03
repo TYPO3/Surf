@@ -8,13 +8,13 @@ namespace TYPO3\Surf\Task\Git;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * A task which can push to a git remote
@@ -40,18 +40,12 @@ class PushTask extends Task implements ShellCommandServiceAwareInterface
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['remote'])) {
-            throw new InvalidConfigurationException('Missing "remote" option for PushTask', 1314186541);
-        }
-
-        if (!isset($options['refspec'])) {
-            throw new InvalidConfigurationException('Missing "refspec" option for PushTask', 1314186553);
-        }
+        $options = $this->configureOptions($options);
 
         $targetPath = $deployment->getApplicationReleasePath($application);
 
         $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git push -f %s %s', $options['remote'], $options['refspec']), $node, $deployment);
-        if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === true) {
+        if ($options['recurseIntoSubmodules']) {
             $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git submodule foreach \'git push -f %s %s\'', $options['remote'], $options['refspec']), $node, $deployment);
         }
     }
@@ -59,5 +53,12 @@ class PushTask extends Task implements ShellCommandServiceAwareInterface
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
+    }
+
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['remote', 'refspec']);
+        $resolver->setDefault('recurseIntoSubmodules', false);
+        $resolver->setAllowedTypes('recurseIntoSubmodules', 'boolean');
     }
 }
