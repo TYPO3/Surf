@@ -12,6 +12,7 @@ use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use Webmozart\Assert\Assert;
 
 /**
  * This task create new tables or add new fields to them.
@@ -32,7 +33,7 @@ class CompareDatabaseTask extends AbstractCliTask
 {
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $this->ensureApplicationIsTypo3Cms($application);
+        Assert::isInstanceOf($application, CMS::class);
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
             $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure one is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');

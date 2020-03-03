@@ -140,14 +140,4 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         $pathAndFileName = $this->workingDirectory . '/' . $pathAndFileName;
         return $this->shell->executeOrSimulate('test -f ' . escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) !== false;
     }
-
-    protected function ensureApplicationIsTypo3Cms(Application $application)
-    {
-        if (!$application instanceof CMS) {
-            throw new InvalidConfigurationException(
-                'Application must be of type TYPO3 CMS when executing this task!',
-                1420210955
-            );
-        }
-    }
 }

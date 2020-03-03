@@ -13,6 +13,7 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
+use Webmozart\Assert\Assert;
 
 /**
  * Creates the package states file and removes all not active packages from the according folders
@@ -21,7 +22,7 @@ class CreatePackageStatesTask extends AbstractCliTask
 {
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $this->ensureApplicationIsTypo3Cms($application);
+        Assert::isInstanceOf($application, CMS::class);
         if (!$this->packageStatesFileExists($node, $application, $deployment, $options)) {
             try {
                 $scriptFileName = $this->getConsoleScriptFileName($node, $application, $deployment, $options);
