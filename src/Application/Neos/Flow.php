@@ -38,11 +38,7 @@ class Flow extends BaseApplication
 
     public const DEFAULT_WEB_DIRECTORY = 'Web';
 
-    /**
-     * Constructor
-     * @param string $name
-     */
-    public function __construct($name = 'Neos Flow')
+    public function __construct(string $name = 'Neos Flow')
     {
         parent::__construct($name);
 
@@ -51,7 +47,7 @@ class Flow extends BaseApplication
         ]);
     }
 
-    public function registerTasks(Workflow $workflow, Deployment $deployment)
+    public function registerTasks(Workflow $workflow, Deployment $deployment): void
     {
         parent::registerTasks($workflow, $deployment);
 
@@ -66,12 +62,7 @@ class Flow extends BaseApplication
             ->addTask(PublishResourcesTask::class, 'finalize', $this);
     }
 
-    /**
-     * Add support for updateMethod "composer"
-     *
-     * @param string $updateMethod
-     */
-    protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod)
+    protected function registerTasksForUpdateMethod(Workflow $workflow, string $updateMethod): void
     {
         switch ($updateMethod) {
             case 'composer':
@@ -83,40 +74,23 @@ class Flow extends BaseApplication
         }
     }
 
-    /**
-     * Set the application production context
-     *
-     * @param string $context
-     * @return Flow
-     */
-    public function setContext($context)
+    public function setContext(string $context): self
     {
         $this->context = trim($context);
         return $this;
     }
 
-    /**
-     * Get the application production context
-     *
-     * @return string
-     */
-    public function getContext()
+    public function getContext(): string
     {
         return $this->context;
     }
 
-    /**
-     * @param string $version
-     */
-    public function setVersion($version)
+    public function setVersion(string $version)
     {
         $this->version = $version;
     }
 
-    /**
-     * @return string
-     */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -125,10 +99,8 @@ class Flow extends BaseApplication
      * Get the directory name for build essentials (e.g. to run unit tests)
      *
      * The value depends on the Flow version of the application.
-     *
-     * @return string
      */
-    public function getBuildEssentialsDirectoryName()
+    public function getBuildEssentialsDirectoryName(): string
     {
         if ($this->getVersion() <= '1.1') {
             return 'Common';
@@ -140,10 +112,8 @@ class Flow extends BaseApplication
      * Get the name of the Flow script (flow or flow3)
      *
      * The value depends on the Flow version of the application.
-     *
-     * @return string
      */
-    public function getFlowScriptName()
+    public function getFlowScriptName(): string
     {
         if ($this->getVersion() <= '1.1') {
             return 'flow3';
@@ -151,13 +121,7 @@ class Flow extends BaseApplication
         return 'flow';
     }
 
-    /**
-     * Get the package key to prefix the command
-     *
-     * @param string $command
-     * @return string
-     */
-    public function getCommandPackageKey($command = '')
+    public function getCommandPackageKey(string $command = ''): string
     {
         if ($this->getVersion() < '2.0') {
             return 'typo3.flow3';
@@ -170,14 +134,8 @@ class Flow extends BaseApplication
 
     /**
      * Returns a executable flow command including the context
-     *
-     * @param string $targetPath the path where the command should be executed
-     * @param string $command the actual command for example `cache:flush`
-     * @param array $arguments list of arguments which will be appended to the command
-     * @param string $phpBinaryPathAndFilename the path to the php binary
-     * @return string
      */
-    public function buildCommand($targetPath, $command, array $arguments = [], $phpBinaryPathAndFilename = 'php')
+    public function buildCommand(string $targetPath, string $command, array $arguments = [], string $phpBinaryPathAndFilename = 'php'): string
     {
         if (strpos($command, '.') === false) {
             $command = $this->getCommandPackageKey($command) . ':' . $command;

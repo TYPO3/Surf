@@ -18,16 +18,9 @@ use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
 use TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask;
 use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 
-/**
- * TYPO3 CMS application
- */
 class CMS extends BaseApplication
 {
-    /**
-     * Constructor
-     * @param string $name
-     */
-    public function __construct($name = 'TYPO3 CMS')
+    public function __construct(string $name = 'TYPO3 CMS')
     {
         parent::__construct($name);
 
@@ -47,35 +40,18 @@ class CMS extends BaseApplication
         ]);
     }
 
-    /**
-     * Set the application production context
-     *
-     * @param string $context
-     * @return CMS
-     */
-    public function setContext($context)
+    public function setContext(string $context): self
     {
         $this->options['context'] = trim($context);
         return $this;
     }
 
-    /**
-     * Get the application production context
-     *
-     * @return string
-     */
-    public function getContext()
+    public function getContext(): string
     {
         return $this->options['context'];
     }
 
-    /**
-     * Register tasks for this application
-     *
-     * @param Workflow $workflow
-     * @param Deployment $deployment
-     */
-    public function registerTasks(Workflow $workflow, Deployment $deployment)
+    public function registerTasks(Workflow $workflow, Deployment $deployment): void
     {
         parent::registerTasks($workflow, $deployment);
 

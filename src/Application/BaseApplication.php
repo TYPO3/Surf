@@ -89,11 +89,8 @@ class BaseApplication extends Application
      *
      * Cleanup stage:
      *   - Clean up old releases
-     *
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
      */
-    public function registerTasks(Workflow $workflow, Deployment $deployment)
+    public function registerTasks(Workflow $workflow, Deployment $deployment): void
     {
         $this->setOption(GenericCreateDirectoriesTask::class . '[directories]', $this->getDirectories());
         $this->setOption(CreateSymlinksTask::class . '[symlinks]', $this->getSymlinks());
@@ -109,7 +106,7 @@ class BaseApplication extends Application
         $workflow->afterStage('transfer', CreateSymlinksTask::class, $this);
 
         if ($this->hasOption('updateMethod')) {
-            $this->registerTasksForUpdateMethod($workflow, $this->getOption('updateMethod'));
+            $this->registerTasksForUpdateMethod($workflow, (string)$this->getOption('updateMethod'));
         }
 
         // TODO Define tasks for local shell task and local git checkout
@@ -132,38 +129,24 @@ class BaseApplication extends Application
 
     /**
      * Override all symlinks to be created with the given array of symlinks.
-     *
-     * @param array $symlinks
-     *
-     * @return \TYPO3\Surf\Application\BaseApplication
      * @see addSymlinks()
      */
-    public function setSymlinks(array $symlinks)
+    public function setSymlinks(array $symlinks): self
     {
         $this->symlinks = $symlinks;
 
         return $this;
     }
 
-    /**
-     * Get all symlinks to be created for the application
-     *
-     * @return array
-     */
-    public function getSymlinks()
+    public function getSymlinks(): array
     {
         return $this->symlinks;
     }
 
     /**
      * Register an additional symlink to be created for the application
-     *
-     * @param string $linkPath The link to create
-     * @param string $sourcePath The file/directory where the link should point to
-     *
-     * @return \TYPO3\Surf\Application\BaseApplication
      */
-    public function addSymlink($linkPath, $sourcePath)
+    public function addSymlink(string $linkPath, string $sourcePath): self
     {
         $this->symlinks[$linkPath] = $sourcePath;
 
@@ -172,13 +155,9 @@ class BaseApplication extends Application
 
     /**
      * Register an array of additional symlinks to be created for the application
-     *
-     * @param array $symlinks
-     *
-     * @return \TYPO3\Surf\Application\BaseApplication
      * @see setSymlinks()
      */
-    public function addSymlinks(array $symlinks)
+    public function addSymlinks(array $symlinks): self
     {
         foreach ($symlinks as $linkPath => $sourcePath) {
             $this->addSymlink($linkPath, $sourcePath);
@@ -189,52 +168,28 @@ class BaseApplication extends Application
 
     /**
      * Override all directories to be created for the application
-     *
-     * @param array $directories
-     *
-     * @return \TYPO3\Surf\Application\BaseApplication
      * @see addDIrectories()
      */
-    public function setDirectories(array $directories)
+    public function setDirectories(array $directories): self
     {
         $this->directories = $directories;
 
         return $this;
     }
 
-    /**
-     * Get directories to be created for the application
-     *
-     * @return array
-     */
-    public function getDirectories()
+    public function getDirectories(): array
     {
         return $this->directories;
     }
 
-    /**
-     * Register an additional directory to be created for the application
-     *
-     * @param string $path
-     *
-     * @return \TYPO3\Surf\Application\BaseApplication
-     */
-    public function addDirectory($path)
+    public function addDirectory(string $path): self
     {
         $this->directories[] = $path;
 
         return $this;
     }
 
-    /**
-     * Register an array of additional directories to be created for the application
-     *
-     * @param array $directories
-     *
-     * @return \TYPO3\Surf\Application\BaseApplication
-     * @see setDirectories()
-     */
-    public function addDirectories(array $directories)
+    public function addDirectories(array $directories): self
     {
         foreach ($directories as $path) {
             $this->addDirectory($path);
@@ -243,11 +198,7 @@ class BaseApplication extends Application
         return $this;
     }
 
-    /**
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param string $packageMethod
-     */
-    protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod)
+    protected function registerTasksForPackageMethod(Workflow $workflow, string $packageMethod): void
     {
         switch ($packageMethod) {
             case 'git':
@@ -266,11 +217,7 @@ class BaseApplication extends Application
         }
     }
 
-    /**
-     * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param string $transferMethod
-     */
-    protected function registerTasksForTransferMethod(Workflow $workflow, $transferMethod)
+    protected function registerTasksForTransferMethod(Workflow $workflow, string $transferMethod): void
     {
         switch ($transferMethod) {
             case 'git':
@@ -285,10 +232,7 @@ class BaseApplication extends Application
         }
     }
 
-    /**
-     * @param string $updateMethod
-     */
-    protected function registerTasksForUpdateMethod(Workflow $workflow, $updateMethod)
+    protected function registerTasksForUpdateMethod(Workflow $workflow, string $updateMethod): void
     {
     }
 }
