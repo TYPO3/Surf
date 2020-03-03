@@ -8,10 +8,10 @@ namespace TYPO3\Surf\Task\Package;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
-use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
 
 /**
@@ -48,9 +48,7 @@ class GitTask extends AbstractCheckoutTask
 {
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['repositoryUrl'])) {
-            throw new InvalidConfigurationException(sprintf('Missing "repositoryUrl" option for application "%s"', $application->getName()), 1374074052);
-        }
+        $options = $this->configureOptions($options);
 
         $localCheckoutPath = $deployment->getWorkspacePath($application);
 
@@ -59,5 +57,10 @@ class GitTask extends AbstractCheckoutTask
         $sha1 = $this->executeOrSimulateGitCloneOrUpdate($localCheckoutPath, $localhost, $deployment, $options);
 
         $this->executeOrSimulatePostGitCheckoutCommands($localCheckoutPath, $sha1, $localhost, $deployment, $options);
+    }
+
+    protected function resolveOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('repositoryUrl');
     }
 }
