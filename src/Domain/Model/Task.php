@@ -19,9 +19,6 @@ use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
-/**
- * A task
- */
 abstract class Task
 {
     abstract public function execute(Node $node, Application $application, Deployment $deployment, array $options = []);
