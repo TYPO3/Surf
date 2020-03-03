@@ -11,9 +11,11 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use Webmozart\Assert\Assert;
 
 /**
  * Task for running arbitrary TYPO3 commands
@@ -22,7 +24,7 @@ class RunCommandTask extends AbstractCliTask
 {
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $this->ensureApplicationIsTypo3Cms($application);
+        Assert::isInstanceOf($application, CMS::class);
 
         $options = $this->configureOptions($options);
 

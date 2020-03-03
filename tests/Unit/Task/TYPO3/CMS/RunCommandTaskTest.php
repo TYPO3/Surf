@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
  * file that was distributed with this source code.
  */
 
+use InvalidArgumentException;
 use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
@@ -34,7 +35,7 @@ class RunCommandTaskTest extends BaseTaskTest
      */
     public function exceptionThrownBecauseApplicationIsNotOfTypeCMS()
     {
-        $this->expectException(InvalidConfigurationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $wrongApplication = $this->getMockBuilder(BaseApplication::class)->disableOriginalConstructor()->getMock();
         $this->task->execute($this->node, $wrongApplication, $this->deployment);
     }
