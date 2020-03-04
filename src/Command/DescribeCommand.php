@@ -41,18 +41,18 @@ class DescribeCommand extends Command implements FactoryAwareInterface
     protected function configure()
     {
         $this->setName('describe')
-             ->setDescription('Describes the flow for the given name')
-             ->addArgument(
-                 'deploymentName',
-                 InputArgument::REQUIRED,
-                 'The deployment name'
-             )
-             ->addOption(
-                 'configurationPath',
-                 null,
-                 InputOption::VALUE_OPTIONAL,
-                 'Path for deployment configuration files'
-             );
+            ->setDescription('Describes the flow for the given name')
+            ->addArgument(
+                'deploymentName',
+                InputArgument::REQUIRED,
+                'The deployment name'
+            )
+            ->addOption(
+                'configurationPath',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Path for deployment configuration files'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -110,9 +110,9 @@ class DescribeCommand extends Command implements FactoryAwareInterface
                 }
             }
             $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(
-                ', ',
+                    ', ',
                     $application->getNodes()
-            ) . '</success>');
+                ) . '</success>');
 
             if ($workflow instanceof SimpleWorkflow) {
                 $this->output->writeln('    <comment>Detailed workflow</comment>:');
