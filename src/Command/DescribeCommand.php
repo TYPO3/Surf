@@ -109,10 +109,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
                     $this->output->writeln('      ' . $key . ' => <success>' . $printableValue . '</success>');
                 }
             }
-            $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(
-                    ', ',
-                    $application->getNodes()
-                ) . '</success>');
+            $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(', ', $application->getNodes()) . '</success>');
 
             if ($workflow instanceof SimpleWorkflow) {
                 $this->output->writeln('    <comment>Detailed workflow</comment>:');
@@ -138,7 +135,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
                     }
                 }
 
-                if (strlen($output) > 0) {
+                if ($output !== '') {
                     $this->output->writeln('        <info>' . $stageStep . ':</info>');
                 }
                 $this->output->write($output);
@@ -157,11 +154,11 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      */
     private function printBeforeAfterTasks(array $tasks, $applicationName, $task, $step, &$output)
     {
-        foreach (['_', $applicationName] as $applicationName) {
-            $label = $applicationName === '_' ? 'for all applications' : 'for application ' . $applicationName;
-            if (isset($tasks[$step][$applicationName][$task])) {
+        foreach (['_', $applicationName] as $name) {
+            $label = $name === '_' ? 'for all applications' : 'for application ' . $name;
+            if (isset($tasks[$step][$name][$task])) {
                 // 'Task "' . $beforeTask . '" before "' . $task
-                foreach ($tasks[$step][$applicationName][$task] as $beforeAfterTask) {
+                foreach ($tasks[$step][$name][$task] as $beforeAfterTask) {
                     $output .= '          <success>Task ' . $beforeAfterTask . ' ' . $step . ' ' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
                 }
             }
