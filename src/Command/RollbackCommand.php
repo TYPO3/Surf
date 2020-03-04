@@ -25,17 +25,17 @@ class RollbackCommand extends Command implements FactoryAwareInterface
     {
         $this->setName('rollback')
             ->setDescription('Rollback current to previous release and remove current folder')
-             ->addArgument(
-                 'deploymentName',
-                 InputArgument::OPTIONAL,
-                 'The deployment name'
-             )
-             ->addOption(
-                 'configurationPath',
-                 null,
-                 InputOption::VALUE_OPTIONAL,
-                 'Path for deployment configuration files'
-             )->addOption(
+            ->addArgument(
+                'deploymentName',
+                InputArgument::OPTIONAL,
+                'The deployment name'
+            )
+            ->addOption(
+                'configurationPath',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Path for deployment configuration files'
+            )->addOption(
                 'simulate',
                 null,
                 InputOption::VALUE_NONE,
