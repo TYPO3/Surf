@@ -13,24 +13,14 @@ use DateTime;
 
 final class SystemClock implements ClockInterface
 {
-    /**
-     * @return int
-     */
-    public function currentTime()
+    public function currentTime(): int
     {
         return time();
     }
 
-    /**
-     * @param string $string
-     * @param int $time
-     *
-     * @return false|int
-     * @throws ClockException
-     */
-    public function stringToTime($string, $time = null)
+    public function stringToTime(string $string, int $time = null): int
     {
-        $time = $time ?? time();
+        $time = $time ?? $this->currentTime();
         $timestamp = strtotime($string, $time);
 
         if ($timestamp === false) {
@@ -40,14 +30,7 @@ final class SystemClock implements ClockInterface
         return $timestamp;
     }
 
-    /**
-     * @param string $format
-     * @param string $time
-     *
-     * @return int
-     * @throws ClockException
-     */
-    public function createTimestampFromFormat($format, $time)
+    public function createTimestampFromFormat(string $format, string $time): int
     {
         $datetime = DateTime::createFromFormat($format, $time);
 
