@@ -24,7 +24,7 @@ Surf package is a complete automated deployment tool. It is best used but by far
       Surf, Deployment, TYPO3, Flow, Neos
 
    :Copyright:
-      2018
+      |copyright|
 
    :Author:
       The contributors of the TYPO3 Surf project
