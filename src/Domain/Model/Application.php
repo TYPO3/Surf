@@ -70,7 +70,7 @@ class Application
      *
      *   $workflow->addTask(CreateDirectoriesTask::class, 'initialize', $this);
      */
-    public function registerTasks(Workflow $workflow, Deployment $deployment)
+    public function registerTasks(Workflow $workflow, Deployment $deployment): void
     {
     }
 

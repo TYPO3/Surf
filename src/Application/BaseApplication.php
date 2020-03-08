@@ -127,10 +127,6 @@ class BaseApplication extends Application
         }
     }
 
-    /**
-     * Override all symlinks to be created with the given array of symlinks.
-     * @see addSymlinks()
-     */
     public function setSymlinks(array $symlinks): self
     {
         $this->symlinks = $symlinks;
@@ -143,9 +139,6 @@ class BaseApplication extends Application
         return $this->symlinks;
     }
 
-    /**
-     * Register an additional symlink to be created for the application
-     */
     public function addSymlink(string $linkPath, string $sourcePath): self
     {
         $this->symlinks[$linkPath] = $sourcePath;
@@ -153,10 +146,6 @@ class BaseApplication extends Application
         return $this;
     }
 
-    /**
-     * Register an array of additional symlinks to be created for the application
-     * @see setSymlinks()
-     */
     public function addSymlinks(array $symlinks): self
     {
         foreach ($symlinks as $linkPath => $sourcePath) {
@@ -166,10 +155,6 @@ class BaseApplication extends Application
         return $this;
     }
 
-    /**
-     * Override all directories to be created for the application
-     * @see addDIrectories()
-     */
     public function setDirectories(array $directories): self
     {
         $this->directories = $directories;
