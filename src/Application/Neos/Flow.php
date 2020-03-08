@@ -19,9 +19,6 @@ use TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask;
 use TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask;
 use TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask;
 
-/**
- * A Neos Flow application template
- */
 class Flow extends BaseApplication
 {
     /**
@@ -85,7 +82,7 @@ class Flow extends BaseApplication
         return $this->context;
     }
 
-    public function setVersion(string $version)
+    public function setVersion(string $version): void
     {
         $this->version = $version;
     }
@@ -102,7 +99,7 @@ class Flow extends BaseApplication
      */
     public function getBuildEssentialsDirectoryName(): string
     {
-        if ($this->getVersion() <= '1.1') {
+        if (version_compare($this->getVersion(), '1.1', '<=')) {
             return 'Common';
         }
         return 'BuildEssentials';
@@ -115,7 +112,7 @@ class Flow extends BaseApplication
      */
     public function getFlowScriptName(): string
     {
-        if ($this->getVersion() <= '1.1') {
+        if (version_compare($this->getVersion(), '1.1', '<=')) {
             return 'flow3';
         }
         return 'flow';
@@ -123,10 +120,10 @@ class Flow extends BaseApplication
 
     public function getCommandPackageKey(string $command = ''): string
     {
-        if ($this->getVersion() < '2.0') {
+        if (version_compare($this->getVersion(), '2.0', '<')) {
             return 'typo3.flow3';
         }
-        if ($this->getVersion() < '4.0') {
+        if (version_compare($this->getVersion(), '4.0', '<')) {
             return 'typo3.flow';
         }
         return 'neos.flow';

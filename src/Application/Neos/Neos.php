@@ -8,9 +8,6 @@ namespace TYPO3\Surf\Application\Neos;
  * file that was distributed with this source code.
  */
 
-/**
- * A Neos application template
- */
 class Neos extends Flow
 {
     /**
@@ -48,10 +45,7 @@ class Neos extends Flow
         'workspace:list'
     ];
 
-    /**
-     * @param string $name
-     */
-    public function __construct($name = 'Neos')
+    public function __construct(string $name = 'Neos')
     {
         parent::__construct($name);
 
@@ -60,9 +54,9 @@ class Neos extends Flow
         ]);
     }
 
-    protected function isNeosCommand($command): bool
+    protected function isNeosCommand(string $command): bool
     {
-        return in_array($command, $this->neosCommands, false);
+        return in_array($command, $this->neosCommands, true);
     }
 
     public function getCommandPackageKey(string $command = ''): string
