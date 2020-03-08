@@ -10,24 +10,20 @@ namespace TYPO3\Surf\Exception;
 
 use TYPO3\Surf\Exception as SurfException;
 
-/**
- * Invalid deployment configuration exception
- */
 class InvalidConfigurationException extends SurfException
 {
-    /**
-     * @return InvalidConfigurationException
-     */
-    public static function createNoApplicationConfigured()
+    public static function createNoApplicationConfigured(): self
     {
         return new static('No application configured for deployment', 1334652420);
     }
 
-    /**
-     * @return InvalidConfigurationException
-     */
-    public static function createNoNodesConfigured()
+    public static function createNoNodesConfigured(): self
     {
         return new static('No nodes configured for application', 1334652427);
+    }
+
+    public static function createNoDeploymentNameGiven(): self
+    {
+        return new static('No deployment name given!', 1451865016);
     }
 }

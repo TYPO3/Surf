@@ -44,4 +44,35 @@ class Filesystem implements FilesystemInterface
     {
         return sys_get_temp_dir();
     }
+
+    public function getRealPath(string $path): string
+    {
+        $realpath = realpath($path);
+
+        if ($realpath === false) {
+            throw new \InvalidArgumentException(sprintf('Could not create realpath from path %s', $path));
+        }
+
+        return $realpath;
+    }
+
+    public function fileExists(string $file): bool
+    {
+        return file_exists($file);
+    }
+
+    public function createDirectory(string $directory): bool
+    {
+        return mkdir($directory, 0777, true);
+    }
+
+    public function glob(string $pattern): array
+    {
+        return glob($pattern);
+    }
+
+    public function requireFile(string $file): void
+    {
+        require($file);
+    }
 }
