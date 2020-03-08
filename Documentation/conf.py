@@ -22,13 +22,13 @@ import t3SphinxThemeRtd
 # -- Project information -----------------------------------------------------
 
 project = u'Surf'
-copyright = u'2018, Surf Team'
+copyright = u'2020, Surf Team'
 author = u'Surf Team'
 
 # The short X.Y version
-version = u'1.0'
+version = u'2.0'
 # The full version, including alpha/beta/rc tags
-release = u'1.0.0'
+release = u'2.0.2'
 
 
 # -- General configuration ---------------------------------------------------

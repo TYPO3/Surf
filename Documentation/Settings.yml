@@ -1,9 +1,9 @@
 ---
 conf.py:
-  copyright: 2018
+  copyright: 2020
   project: Surf
   version: 2.0
-  release: 2.0.0
+  release: 2.0.2
   latex_documents:
   - - Index
   html_theme_options:
