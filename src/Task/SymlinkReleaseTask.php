@@ -26,9 +26,9 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $releaseIdentifier = $deployment->getReleaseIdentifier();
-        $releasesPath = $application->getReleasesPath();
-        $this->shell->executeOrSimulate('cd ' . $releasesPath . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./' . $releaseIdentifier . ' ./current && rm -f ./next', $node, $deployment);
+        $command = sprintf('cd %s && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./%s ./current && rm -f ./next', $application->getReleasesPath(), $deployment->getReleaseIdentifier());
+
+        $this->shell->executeOrSimulate($command, $node, $deployment);
         $deployment->getLogger()->notice('<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>');
     }
 
@@ -39,7 +39,8 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
 
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $releasesPath = $application->getReleasesPath();
-        $this->shell->execute('cd ' . $releasesPath . ' && rm -f ./current && mv ./previous ./current', $node, $deployment, true);
+        $command = sprintf('cd %s && rm -f ./current && mv ./previous ./current', $application->getReleasesPath());
+
+        $this->shell->execute($command, $node, $deployment, true);
     }
 }
