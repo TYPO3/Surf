@@ -15,10 +15,14 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^7.0",
-        "friendsofphp/php-cs-fixer": "^2.14"
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "phpstan/phpstan": "^0.12.14",
+        "phpstan/phpstan-webmozart-assert": "^0.12.2",
+        "jangregor/phpstan-prophecy": "^0.6.2"
     },
     "scripts": {
-        "release-phar": "bin/box build"
+        "release-phar": "bin/box build",
+        "phpstan": "vendor/bin/phpstan analyse --ansi"
     },
     "extra": {
         "branch-alias": {

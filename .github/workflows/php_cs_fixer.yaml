@@ -3,7 +3,7 @@ name: Format (PHP)
 on:
     push:
         branches:
-            - "master"
+            - master
 
 jobs:
     php-cs-fixer:

@@ -17,6 +17,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class SymlinkConfigurationTaskTest extends BaseTaskTest
 {
+    /**
+     * @var Flow
+     */
+    protected $application;
+
     protected function setUp()
     {
         parent::setUp();
@@ -53,7 +58,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return SymlinkConfigurationTask
      */
     protected function createTask()
     {

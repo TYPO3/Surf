@@ -27,15 +27,12 @@ class HttpTestTaskTest extends BaseTaskTest
      */
     protected $task;
 
-    /**
-     * @test
-     */
-    const URL = 'https://whatever.iwant.com';
+    private const URL = 'https://whatever.iwant.com';
 
     /**
      * @test
      */
-    public function executeRemoteCurlCommand()
+    public function executeRemoteCurlCommand(): void
     {
         $options = [
             'url' => self::URL,
@@ -62,7 +59,7 @@ Content-Type: text/html; charset=UTF-8',
     /**
      * @test
      */
-    public function emptyUrlOptionThrowsException()
+    public function emptyUrlOptionThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, []);
@@ -71,7 +68,7 @@ Content-Type: text/html; charset=UTF-8',
     /**
      * @test
      */
-    public function correctStatusCodeIsReturned()
+    public function correctStatusCodeIsReturned(): void
     {
         $options = [
             'url' => self::URL,
@@ -84,7 +81,7 @@ Content-Type: text/html; charset=UTF-8',
     /**
      * @test
      */
-    public function inCorrectStatusCodeThrowsException()
+    public function inCorrectStatusCodeThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $options = [
@@ -99,7 +96,7 @@ Content-Type: text/html; charset=UTF-8',
     /**
      * @test
      */
-    public function correctResponseHeaders()
+    public function correctResponseHeaders(): void
     {
         $options = [
             'url' => self::URL,
@@ -113,7 +110,7 @@ Content-Type: text/html; charset=UTF-8',
     /**
      * @test
      */
-    public function inCorrectResponseHeadersThrowsException()
+    public function inCorrectResponseHeadersThrowsException(): void
     {
         $options = [
             'url' => self::URL,
@@ -127,7 +124,7 @@ Content-Type: text/html; charset=UTF-8',
     /**
      * @test
      */
-    public function responseBodyContainsCorrectContent()
+    public function responseBodyContainsCorrectContent(): void
     {
         $options = [
             'url' => self::URL,
@@ -140,7 +137,7 @@ Content-Type: text/html; charset=UTF-8',
     /**
      * @test
      */
-    public function responseBodyDoesNotContainsCorrectContent()
+    public function responseBodyDoesNotContainsCorrectContent(): void
     {
         $options = [
             'url' => self::URL,
@@ -159,10 +156,7 @@ Content-Type: text/html; charset=UTF-8',
         return new HttpTestTask();
     }
 
-    /**
-     * @param $options
-     */
-    protected function assertNoExceptionThrown($options)
+    protected function assertNoExceptionThrown(array $options): void
     {
         $exception = null;
 
@@ -177,10 +171,7 @@ Content-Type: text/html; charset=UTF-8',
         $this->assertNull($exception);
     }
 
-    /**
-     * @param Response $response
-     */
-    protected function mockClient(Response $response)
+    protected function mockClient(Response $response): void
     {
         // Create a mock and queue one response.
         $mock = new MockHandler([$response]);

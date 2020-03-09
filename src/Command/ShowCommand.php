@@ -45,5 +45,7 @@ class ShowCommand extends Command implements FactoryAwareInterface
             $output->writeln($line);
         }
         $output->writeln('');
+
+        return 0;
     }
 }

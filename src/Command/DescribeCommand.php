@@ -80,6 +80,8 @@ class DescribeCommand extends Command implements FactoryAwareInterface
 
             $this->printApplications($deployment->getApplications(), $deployment->getWorkflow());
         }
+
+        return 0;
     }
 
     protected function printNodes(array $nodes)

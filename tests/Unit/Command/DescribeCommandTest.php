@@ -18,6 +18,7 @@ use TYPO3\Surf\Command\DescribeCommand;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Exception;
 use TYPO3\Surf\Integration\FactoryInterface;
 use TYPO3\Surf\Task\LocalShellTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
@@ -102,7 +103,7 @@ class DescribeCommandTest extends TestCase
 
     /**
      * @test
-     * @throws \TYPO3\Surf\Exception
+     * @throws Exception
      */
     public function describeCustomApplication()
     {
@@ -168,10 +169,10 @@ Applications:
     }
 
     /**
-     * @param $application
+     * @param Application $application
      * @param array $options
      * @return string
-     * @throws \TYPO3\Surf\Exception
+     * @throws Exception
      */
     protected function getDescriptionOfPredefinedApplication($application, $options = [])
     {
