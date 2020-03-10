@@ -34,24 +34,22 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $deploymentPath = $application->getDeploymentPath();
-        $sharedPath = $application->getSharedPath();
-        $releasesPath = $application->getReleasesPath();
-        $releaseIdentifier = $deployment->getReleaseIdentifier();
-        $releasePath = $deployment->getApplicationReleasePath($application);
-        $result = $this->shell->execute('test -d ' . $deploymentPath, $node, $deployment, true);
+        $result = $this->shell->execute(sprintf('test -d %s', $application->getDeploymentPath()), $node, $deployment, true);
         if ($result === false) {
-            throw new TaskExecutionException('Deployment directory "' . $deploymentPath . '" does not exist on node ' . $node->getName(), 1311003253);
+            throw new TaskExecutionException('Deployment directory "'.$application->getDeploymentPath().'" does not exist on node '.$node->getName(), 1311003253);
         }
         $commands = [
-            'mkdir -p ' . $releasesPath,
-            'mkdir -p ' . $sharedPath,
-            'mkdir -p ' . $releasePath,
-            'cd ' . $releasesPath . ';ln -snf ./' . $releaseIdentifier . ' next'
+            sprintf('mkdir -p %s', $application->getReleasesPath()),
+            sprintf('mkdir -p %s', $application->getSharedPath()),
+            sprintf('mkdir -p %s', $deployment->getApplicationReleasePath($application)),
+            sprintf('cd %s;ln -snf ./%s next', $application->getReleasesPath(), $deployment->getReleaseIdentifier())
         ];
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
@@ -59,11 +57,9 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
 
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $releasesPath = $application->getReleasesPath();
-        $releasePath = $deployment->getApplicationReleasePath($application);
         $commands = [
-            'rm ' . $releasesPath . '/next',
-            'rm -rf ' . $releasePath
+            sprintf('rm %s/next', $application->getReleasesPath()),
+            sprintf('rm -rf %s', $deployment->getApplicationReleasePath($application))
         ];
         $this->shell->execute($commands, $node, $deployment, true);
     }
