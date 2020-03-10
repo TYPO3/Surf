@@ -15,25 +15,15 @@ use TYPO3\Surf\Exception as SurfException;
  *
  * Something went wrong or an assertion during task execution was not successful.
  */
-class TaskExecutionException extends SurfException
+final class TaskExecutionException extends SurfException
 {
-    /**
-     * @param string $scriptUrl
-     *
-     * @return TaskExecutionException
-     */
-    public static function webOpcacheResetExecuteTaskDidNotReturnExpectedResult($scriptUrl)
+    public static function webOpcacheResetExecuteTaskDidNotReturnExpectedResult(string $scriptUrl): TaskExecutionException
     {
-        return new static(sprintf('WebOpcacheResetExecuteTask at "%s" did not return expected result', $scriptUrl), 1471511860);
+        return new self(sprintf('WebOpcacheResetExecuteTask at "%s" did not return expected result', $scriptUrl), 1471511860);
     }
 
-    /**
-     * @param string $scriptFilename
-     *
-     * @return TaskExecutionException
-     */
-    public static function webOpcacheResetCreateScriptTaskCouldNotWritFile($scriptFilename)
+    public static function webOpcacheResetCreateScriptTaskCouldNotWritFile(string $scriptFilename): TaskExecutionException
     {
-        return new static(sprintf('Could not write file "%s"', $scriptFilename), 1421932414);
+        return new self(sprintf('Could not write file "%s"', $scriptFilename), 1421932414);
     }
 }

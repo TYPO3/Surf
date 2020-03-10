@@ -36,7 +36,7 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
     {
         $result = $this->shell->execute(sprintf('test -d %s', $application->getDeploymentPath()), $node, $deployment, true);
         if ($result === false) {
-            throw new TaskExecutionException('Deployment directory "'.$application->getDeploymentPath().'" does not exist on node '.$node->getName(), 1311003253);
+            throw new TaskExecutionException('Deployment directory "' . $application->getDeploymentPath() . '" does not exist on node ' . $node->getName(), 1311003253);
         }
         $commands = [
             sprintf('mkdir -p %s', $application->getReleasesPath()),

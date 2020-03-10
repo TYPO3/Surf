@@ -28,7 +28,7 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
         $this->execute($node, $application, $deployment, $options);
     }
 
-    protected function resolveSha1(Node $node, Deployment $deployment, array $options)
+    protected function resolveSha1(Node $node, Deployment $deployment, array $options): string
     {
         if (isset($options['sha1'])) {
             $sha1 = $options['sha1'];
@@ -41,10 +41,7 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
                 throw new TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
             }
         } else {
-            $branch = 'master';
-            if (isset($options['branch'])) {
-                $branch = $options['branch'];
-            }
+            $branch = $options['branch'] ?? 'master';
             $sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/heads/$branch | awk '{print $1 }'", $node, $deployment, true);
             if (preg_match('/^[a-f0-9]{40}$/', $sha1) === 0) {
                 throw new TaskExecutionException('Could not retrieve sha1 of git branch "' . $branch . '"', 1335974926);
@@ -53,10 +50,7 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
         return $sha1;
     }
 
-    /**
-     * @return array
-     */
-    protected function executeOrSimulateGitCloneOrUpdate($checkoutPath, Node $node, Deployment $deployment, array $options)
+    protected function executeOrSimulateGitCloneOrUpdate($checkoutPath, Node $node, Deployment $deployment, array $options): string
     {
         $sha1 = $this->resolveSha1($node, $deployment, $options);
         $repositoryUrl = escapeshellarg($options['repositoryUrl']);
@@ -105,7 +99,7 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
 
         foreach ($gitPostCheckoutCommands as $localPath => $postCheckoutCommandsPerPath) {
             foreach ($postCheckoutCommandsPerPath as $postCheckoutCommand) {
-                $branchName = 'mybranch_' . trim($sha1) . '_' . uniqid();
+                $branchName = 'mybranch_' . trim($sha1) . '_' . uniqid('', true);
                 $command = strtr("
                         cd $gitPath
                         && cd $localPath

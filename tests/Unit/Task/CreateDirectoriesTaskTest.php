@@ -1,6 +1,6 @@
 <?php
 
-namespace TYPO3\Surf\tests\Unit\Task;
+namespace TYPO3\Surf\Tests\Unit\Task;
 
 /*
  * This file is part of TYPO3 Surf.
@@ -9,9 +9,7 @@ namespace TYPO3\Surf\tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
-use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Task\CreateDirectoriesTask;
-use PHPUnit\Framework\TestCase;
 
 class CreateDirectoriesTaskTest extends BaseTaskTest
 {

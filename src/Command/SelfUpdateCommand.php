@@ -102,6 +102,8 @@ class SelfUpdateCommand extends Command
                 $io->success(sprintf('Your %s is already up to date.', $this->getLocalPharName()));
             }
         }
+
+        return 0;
     }
 
     /**

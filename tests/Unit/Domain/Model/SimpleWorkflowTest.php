@@ -88,8 +88,8 @@ class SimpleWorkflowTest extends TestCase
 
             [
                 'Just one global task in stage initialize',
-                function ($workflow, $application) {
-                    return function () use ($workflow, $application) {
+                static function (Workflow $workflow, Application $application) {
+                    return static function () use ($workflow) {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize');
                     };
@@ -108,8 +108,8 @@ class SimpleWorkflowTest extends TestCase
 
             [
                 'Add multiple tasks with afterTask',
-                function ($workflow, $application) {
-                    return function () use ($workflow, $application) {
+                function (Workflow $workflow, Application $application) {
+                    return static function () use ($workflow) {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
                             ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
@@ -154,8 +154,8 @@ class SimpleWorkflowTest extends TestCase
 
             [
                 'Tasks in different stages',
-                function ($workflow, $application) {
-                    return function () use ($workflow, $application) {
+                static function (Workflow $workflow, Application $application) {
+                    return static function () use ($workflow) {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
                             ->addTask('typo3.surf:test:checkout', 'update')
@@ -660,8 +660,8 @@ class SimpleWorkflowTest extends TestCase
      * @test
      * @dataProvider taskRegistrationExamples
      *
-     * @param $callback
-     * @param $expectedTasks
+     * @param callable $callback
+     * @param array $expectedTasks
      *
      * @throws SurfException
      * @throws SurfException\InvalidConfigurationException
