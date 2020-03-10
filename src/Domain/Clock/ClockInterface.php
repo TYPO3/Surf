@@ -11,24 +11,9 @@ namespace TYPO3\Surf\Domain\Clock;
 
 interface ClockInterface
 {
-    /**
-     * @return int
-     */
-    public function currentTime();
+    public function currentTime(): int;
 
-    /**
-     * @param string $string
-     * @param int $time
-     *
-     * @return int
-     */
-    public function stringToTime($string, $time = null);
+    public function stringToTime(string $string, int $time = null): int;
 
-    /**
-     * @param string $format
-     * @param string $time
-     *
-     * @return int
-     */
-    public function createTimestampFromFormat($format, $time);
+    public function createTimestampFromFormat(string $format, string $time): int;
 }
