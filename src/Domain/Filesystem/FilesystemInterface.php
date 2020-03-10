@@ -39,6 +39,4 @@ interface FilesystemInterface
     public function createDirectory(string $directory): bool;
 
     public function glob(string $pattern): array;
-
-    public function requireFile(string $file): void;
 }

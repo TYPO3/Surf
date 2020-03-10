@@ -50,7 +50,7 @@ class Filesystem implements FilesystemInterface
         $realpath = realpath($path);
 
         if ($realpath === false) {
-            throw new \InvalidArgumentException(sprintf('Could not create realpath from path %s', $path));
+            return '';
         }
 
         return $realpath;
@@ -69,10 +69,5 @@ class Filesystem implements FilesystemInterface
     public function glob(string $pattern): array
     {
         return glob($pattern);
-    }
-
-    public function requireFile(string $file): void
-    {
-        require($file);
     }
 }

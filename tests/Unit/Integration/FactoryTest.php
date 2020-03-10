@@ -225,11 +225,12 @@ class FactoryTest extends TestCase
      */
     public function getDeployment(): void
     {
+        putenv('HOME=' . __DIR__ . '/Fixtures');
+        $files = [getenv('HOME') . '/.surf/deployments/deploy.php'];
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
-        $this->filesystem->requireFile(getenv('HOME') . '/.surf/deployments/foo.php');
-        $deployment = $this->subject->getDeployment('foo');
+        $deployment = $this->subject->getDeployment('deploy');
         $this->assertFalse($deployment->getForceRun());
         $this->assertTrue($deployment->isInitialized());
     }
@@ -239,12 +240,12 @@ class FactoryTest extends TestCase
      */
     public function getFirstAndOnlyDeployment(): void
     {
-        $files = [getenv('HOME') . '/.surf/deployments/foo.php'];
+        putenv('HOME=' . __DIR__ . '/Fixtures');
+        $files = [getenv('HOME') . '/.surf/deployments/deploy.php'];
         $this->filesystem->glob(getenv('HOME') . '/.surf/deployments/*.php')->willReturn($files);
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
-        $this->filesystem->requireFile(getenv('HOME') . '/.surf/deployments/foo.php');
         $this->subject->getDeployment('');
     }
 
@@ -253,10 +254,11 @@ class FactoryTest extends TestCase
      */
     public function getDeploymentImplicitlyThrowsException(): void
     {
+        putenv('HOME=' . __DIR__ . '/Fixtures');
         $this->expectException(InvalidConfigurationException::class);
 
         $files = [
-            getenv('HOME') . '/.surf/deployments/foo.php',
+            getenv('HOME') . '/.surf/deployments/deploy.php',
             getenv('HOME') . '/.surf/deployments/bar.php',
         ];
         $this->filesystem->glob(getenv('HOME') . '/.surf/deployments/*.php')->willReturn($files);
