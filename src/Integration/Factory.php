@@ -196,7 +196,7 @@ class Factory implements FactoryInterface
             $this->ensureDirectoryExists($tempPath);
             $deployment->setTemporaryPath($tempPath);
 
-            $this->filesystem->requireFile($deploymentPathAndFilename);
+            require($deploymentPathAndFilename);
         } else {
             $this->createLogger()->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
             $deployment = new FailedDeployment();

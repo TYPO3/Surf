@@ -55,7 +55,7 @@ class RollbackCommand extends Command implements FactoryAwareInterface
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');
-        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath, $input->getOption('simulate'), false);
+        $deployment = $this->factory->getDeployment((string)$deploymentName, $configurationPath, $input->getOption('simulate'), false);
         $deployment->rollback($input->getOption('simulate'));
 
         return $deployment->getStatus();

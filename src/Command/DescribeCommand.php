@@ -61,7 +61,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
         $this->output = $output;
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');
-        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath);
+        $deployment = $this->factory->getDeployment((string)$deploymentName, $configurationPath);
         $workflow = $deployment->getWorkflow();
 
         if (! $deployment instanceof FailedDeployment) {
