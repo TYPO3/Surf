@@ -43,7 +43,7 @@ class TaskManager
 
         $globalOptions = $this->overrideOptions($definedTaskName, $deployment, $node, $application, $options);
 
-        $this->taskHistory[] = TaskInHistory::create($task, $node, $application, $deployment, $stage, $options);
+        $this->taskHistory[] = TaskInHistory::create($task, $node, $application, $deployment, $stage, $globalOptions);
 
         if (!$deployment->isDryRun()) {
             $task->execute($node, $application, $deployment, $globalOptions);
