@@ -16,9 +16,7 @@ use TYPO3\Surf\Integration\FactoryAwareInterface;
 use TYPO3\Surf\Integration\FactoryInterface;
 
 /**
- * A base application with Git checkout and basic release directory structure
- *
- * Most specific applications will extend from BaseApplication.
+ * @codeCoverageIgnore
  */
 class ConsoleApplication extends Application
 {
@@ -27,21 +25,12 @@ class ConsoleApplication extends Application
      */
     protected $factory;
 
-    /**
-     * @param FactoryInterface $factory
-     */
-    public function setFactory(FactoryInterface $factory)
+    public function setFactory(FactoryInterface $factory): void
     {
         $this->factory = $factory;
     }
 
-    /**
-     * @param InputInterface|null $input
-     * @param OutputInterface|null $output
-     * @return int
-     * @throws \Exception
-     */
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    public function run(InputInterface $input = null, OutputInterface $output = null): int
     {
         foreach ($this->factory->createCommands() as $command) {
             $this->add($command);
@@ -49,14 +38,7 @@ class ConsoleApplication extends Application
         return parent::run($input, $this->factory->createOutput());
     }
 
-    /**
-     * @param Command $command
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
-     * @throws \Exception
-     */
-    protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
+    protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output): int
     {
         if ($command instanceof FactoryAwareInterface) {
             $command->setFactory($this->factory);
