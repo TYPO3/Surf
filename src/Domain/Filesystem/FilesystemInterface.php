@@ -31,4 +31,14 @@ interface FilesystemInterface
     public function isDirectory(string $directory): bool;
 
     public function getTemporaryDirectory(): string;
+
+    public function getRealPath(string $path): string;
+
+    public function fileExists(string $file): bool;
+
+    public function createDirectory(string $directory): bool;
+
+    public function glob(string $pattern): array;
+
+    public function requireFile(string $file): void;
 }

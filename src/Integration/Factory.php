@@ -12,8 +12,7 @@ namespace TYPO3\Surf\Integration;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
+use RuntimeException;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,9 +24,10 @@ use TYPO3\Surf\Command\RollbackCommand;
 use TYPO3\Surf\Command\SelfUpdateCommand;
 use TYPO3\Surf\Command\ShowCommand;
 use TYPO3\Surf\Command\SimulateCommand;
+use TYPO3\Surf\Domain\Filesystem\Filesystem;
+use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\FailedDeployment;
-use TYPO3\Surf\Exception;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 class Factory implements FactoryInterface
@@ -43,12 +43,19 @@ class Factory implements FactoryInterface
     protected $logger;
 
     /**
-     * Create the necessary commands
-     *
-     * @return Command[]
-     * @throws LogicException
+     * @var FilesystemInterface
      */
-    public function createCommands()
+    protected $filesystem;
+
+    public function __construct(FilesystemInterface $filesystem = null)
+    {
+        $this->filesystem = $filesystem ?? new Filesystem();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCommands(): array
     {
         return [
             new ShowCommand(),
@@ -60,12 +67,7 @@ class Factory implements FactoryInterface
         ];
     }
 
-    /**
-     * Create the output
-     *
-     * @return ConsoleOutput
-     */
-    public function createOutput()
+    public function createOutput(): OutputInterface
     {
         if ($this->output === null) {
             $this->output = new ConsoleOutput();
@@ -84,29 +86,15 @@ class Factory implements FactoryInterface
         return $this->output;
     }
 
-    /**
-     * Get the deployment object
-     *
-     * @param string $deploymentName
-     * @param string $configurationPath
-     * @param bool $simulateDeployment
-     * @param bool $initialize
-     * @param bool $forceDeployment
-     *
-     * @return Deployment
-     * @throws InvalidConfigurationException
-     * @throws Exception
-     */
-    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true, $initialize = true, $forceDeployment = false)
+    public function getDeployment(string $deploymentName, string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment
     {
         $deployment = $this->createDeployment($deploymentName, $configurationPath);
         if ($deployment->getLogger() === null) {
-            $logger = $this->createLogger();
             if (! $simulateDeployment) {
                 $logFilePath = Files::concatenatePaths([$this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log']);
-                $logger->pushHandler(new StreamHandler($logFilePath));
+                $this->createLogger()->pushHandler(new StreamHandler($logFilePath));
             }
-            $deployment->setLogger($logger);
+            $deployment->setLogger($this->createLogger());
         }
 
         $deployment->setForceRun($forceDeployment);
@@ -121,71 +109,56 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Get available deployment names
-     *
-     * Will look up all .php files in the directory ./.surf/ or the given path if specified.
-     *
-     * @param string $path
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getDeploymentNames($path = null)
+    public function getDeploymentNames(string $path = null): array
     {
         $path = $this->getDeploymentsBasePath($path);
-        $files = glob(Files::concatenatePaths([$path, '*.php']));
+        $files = $this->filesystem->glob(Files::concatenatePaths([$path, '*.php']));
 
-        return array_map(function ($file) use ($path) {
+        return array_map(static function ($file) use ($path) {
             return substr($file, strlen($path) + 1, -4);
         }, $files);
     }
 
     /**
-     * Get the root path of the surf deployment declarations
-     *
-     * This defaults to ./.surf if a NULL path is given.
-     *
-     * @param string $path An absolute path (optional)
-     *
-     * @return string The configuration root path without a trailing slash.
-     * @throws \RuntimeException
-     * @throws InvalidConfigurationException
+     * @inheritDoc
      */
-    public function getDeploymentsBasePath($path = null)
+    public function getDeploymentsBasePath(string $path = null): string
     {
-        $localDeploymentDescription = @realpath('./.surf');
-        if (! $path && is_dir($localDeploymentDescription)) {
+        $localDeploymentDescription = $this->filesystem->getRealPath('./.surf');
+        if (! $path && $this->filesystem->isDirectory($localDeploymentDescription)) {
             $path = $localDeploymentDescription;
         }
-        $path = $path ?: Files::concatenatePaths([$this->getHomeDir(), 'deployments']);
+        $path = $path ?: Files::concatenatePaths([$this->getHomeDirectory(), 'deployments']);
         $this->ensureDirectoryExists($path);
 
         return $path;
     }
 
     /**
-     * Get the base path to local workspaces
-     *
-     * @param string $path An absolute path (optional)
-     *
-     * @return string The workspaces base path without a trailing slash.
-     * @throws \RuntimeException
-     * @throws InvalidConfigurationException
+     * @inheritDoc
      */
-    public function getWorkspacesBasePath($path = null)
+    public function getWorkspacesBasePath(string $path = null): string
     {
         $workspacesBasePath = getenv('SURF_WORKSPACE');
-        if (! $workspacesBasePath) {
-            $path = $path ?: $this->getHomeDir();
-            if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-                if ($workspacesBasePath = getenv('LOCALAPPDATA')) {
-                    $workspacesBasePath = Files::concatenatePaths([$workspacesBasePath, 'Surf']);
-                } else {
-                    $workspacesBasePath = Files::concatenatePaths([$path, 'workspace']);
-                }
-            } else {
-                $workspacesBasePath = Files::concatenatePaths([$path, 'workspace']);
-            }
+
+        if ($workspacesBasePath) {
+            $this->ensureDirectoryExists($workspacesBasePath);
+
+            return $workspacesBasePath;
         }
+
+        $path = $path ?: $this->getHomeDirectory();
+
+        if (defined('PHP_WINDOWS_VERSION_MAJOR') && $workspacesBasePath = getenv('LOCALAPPDATA')) {
+            $workspacesBasePath = Files::concatenatePaths([$workspacesBasePath, 'Surf']);
+            $this->ensureDirectoryExists($workspacesBasePath);
+
+            return $workspacesBasePath;
+        }
+
+        $workspacesBasePath = Files::concatenatePaths([$path, 'workspace']);
         $this->ensureDirectoryExists($workspacesBasePath);
 
         return $workspacesBasePath;
@@ -198,36 +171,32 @@ class Factory implements FactoryInterface
      *
      * The script has access to a deployment object as "$deployment". This could change
      * in the future.
-     *
-     * @param string $deploymentName
-     * @param string $path
-     *
-     * @return Deployment
-     * @throws \RuntimeException
-     * @throws InvalidConfigurationException
      */
-    protected function createDeployment($deploymentName, $path = null)
+    protected function createDeployment(string $deploymentName, string $path = null): Deployment
     {
         $deploymentConfigurationPath = $this->getDeploymentsBasePath($path);
         $workspacesBasePath = $this->getWorkspacesBasePath();
 
         if (empty($deploymentName)) {
             $deploymentNames = $this->getDeploymentNames($path);
+
             if (count($deploymentNames) !== 1) {
-                throw new InvalidConfigurationException('No deployment name given!', 1451865016);
+                throw InvalidConfigurationException::createNoDeploymentNameGiven();
             }
+
             $deploymentName = array_pop($deploymentNames);
         }
 
         $deploymentPathAndFilename = Files::concatenatePaths([$deploymentConfigurationPath, $deploymentName . '.php']);
-        if (file_exists($deploymentPathAndFilename)) {
+        if ($this->filesystem->fileExists($deploymentPathAndFilename)) {
             $deployment = new Deployment($deploymentName);
             $deployment->setDeploymentBasePath($deploymentConfigurationPath);
             $deployment->setWorkspacesBasePath($workspacesBasePath);
             $tempPath = Files::concatenatePaths([$workspacesBasePath, $deploymentName]);
             $this->ensureDirectoryExists($tempPath);
             $deployment->setTemporaryPath($tempPath);
-            require($deploymentPathAndFilename);
+
+            $this->filesystem->requireFile($deploymentPathAndFilename);
         } else {
             $this->createLogger()->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
             $deployment = new FailedDeployment();
@@ -236,40 +205,37 @@ class Factory implements FactoryInterface
         return $deployment;
     }
 
-    /**
-     * Get the home directory
-     *
-     * @return string
-     * @throws \RuntimeException
-     * @throws InvalidConfigurationException
-     */
-    protected function getHomeDir()
+    protected function getHomeDirectory(): string
     {
         $home = getenv('SURF_HOME');
-        if (! $home) {
-            if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-                if (! getenv('APPDATA')) {
-                    throw new \RuntimeException('The APPDATA or SURF_HOME environment variable must be set for composer to run correctly');
-                }
-                $home = Files::concatenatePaths([getenv('APPDATA'), 'Surf']);
-            } else {
-                if (! getenv('HOME')) {
-                    throw new \RuntimeException('The HOME or SURF_HOME environment variable must be set for composer to run correctly');
-                }
-                $home = Files::concatenatePaths([getenv('HOME'), '.surf']);
-            }
+
+        if ($home) {
+            $this->ensureDirectoryExists($home);
+
+            return $home;
         }
+
+        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+            if (! getenv('APPDATA')) {
+                throw new RuntimeException('The APPDATA or SURF_HOME environment variable must be set for composer to run correctly');
+            }
+            $home = Files::concatenatePaths([getenv('APPDATA'), 'Surf']);
+
+            $this->ensureDirectoryExists($home);
+
+            return $home;
+        }
+
+        if (! getenv('HOME')) {
+            throw new RuntimeException('The HOME or SURF_HOME environment variable must be set for composer to run correctly');
+        }
+        $home = Files::concatenatePaths([getenv('HOME'), '.surf']);
         $this->ensureDirectoryExists($home);
 
         return $home;
     }
 
-    /**
-     * Create a logger instance
-     *
-     * @return Logger
-     */
-    protected function createLogger()
+    protected function createLogger(): Logger
     {
         if ($this->logger === null) {
             $consoleHandler = new ConsoleHandler($this->createOutput());
@@ -279,17 +245,10 @@ class Factory implements FactoryInterface
         return $this->logger;
     }
 
-    /**
-     * Check that the directory exists
-     *
-     * @param string $dir
-     *
-     * @throws InvalidConfigurationException
-     */
-    protected function ensureDirectoryExists($dir)
+    protected function ensureDirectoryExists(string $directory): void
     {
-        if (! file_exists($dir) && ! @mkdir($dir, 0777, true) && ! is_dir($dir)) {
-            throw new InvalidConfigurationException(sprintf('Directory "%s" cannot be created!', $dir), 1451862775);
+        if (! $this->filesystem->fileExists($directory) && ! $this->filesystem->createDirectory($directory) && ! $this->filesystem->isDirectory($directory)) {
+            throw new InvalidConfigurationException(sprintf('Directory "%s" cannot be created!', $directory), 1451862775);
         }
     }
 }

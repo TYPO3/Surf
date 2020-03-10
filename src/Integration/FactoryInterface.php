@@ -17,51 +17,28 @@ interface FactoryInterface
     /**
      * @return Command[]
      */
-    public function createCommands();
+    public function createCommands(): array;
 
-    /**
-     * @return OutputInterface
-     */
-    public function createOutput();
+    public function createOutput(): OutputInterface;
 
-    /**
-     * Get the deployment object with the specified name
-     *
-     * @param string $deploymentName
-     * @param string|null $configurationPath
-     * @param bool $simulateDeployment
-     * @param bool $initialize
-     * @param bool $forceDeployment
-     *
-     * @return Deployment
-     */
-    public function getDeployment($deploymentName, $configurationPath = null, $simulateDeployment = true, $initialize = true, $forceDeployment = false);
+    public function getDeployment(string $deploymentName, string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment;
 
     /**
      * Get available deployment names
      *
      * Will look up all .php files in the directory ./.surf/ or the given path if specified.
-     *
-     * @param string $path
-     * @return array
      */
-    public function getDeploymentNames($path = null);
+    public function getDeploymentNames(string $path = null): array;
 
     /**
      * Get the root path of the surf deployment declarations
      *
      * This defaults to ./.surf if a NULL path is given.
-     *
-     * @param string $path An absolute path (optional)
-     * @return string The configuration root path without a trailing slash.
      */
-    public function getDeploymentsBasePath($path = null);
+    public function getDeploymentsBasePath(string $path = null): string;
 
     /**
      * Get the base path to local workspaces
-     *
-     * @param string $path An absolute path (optional)
-     * @return string The workspaces base path without a trailing slash.
      */
-    public function getWorkspacesBasePath($path = null);
+    public function getWorkspacesBasePath(string $path = null): string;
 }
