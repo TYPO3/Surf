@@ -66,6 +66,9 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
         ), $node, $deployment);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

@@ -65,6 +65,9 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

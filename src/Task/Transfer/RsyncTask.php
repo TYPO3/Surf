@@ -86,6 +86,9 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($command, $node, $deployment);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

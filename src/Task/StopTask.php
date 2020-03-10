@@ -28,6 +28,9 @@ class StopTask extends Task
         throw new StopWorkflowException('Workflow stopped explicitly');
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

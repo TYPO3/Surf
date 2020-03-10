@@ -38,6 +38,9 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'doctrine:migrate', [], $options['phpBinaryPathAndFilename']), $node, $deployment);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

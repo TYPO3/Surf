@@ -40,6 +40,9 @@ class PublishResourcesTask extends Task implements ShellCommandServiceAwareInter
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
