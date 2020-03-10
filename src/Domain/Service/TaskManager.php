@@ -11,7 +11,6 @@ namespace TYPO3\Surf\Domain\Service;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
-use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Model\TaskInHistory;
 
 /**
@@ -29,9 +28,9 @@ class TaskManager
      */
     private $taskFactory;
 
-    public function __construct(TaskFactory $taskFactory = null)
+    public function __construct(TaskFactory $taskFactory)
     {
-        $this->taskFactory = $taskFactory ?? new TaskFactory();
+        $this->taskFactory = $taskFactory;
     }
 
     public function execute(string $taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = [], string $definedTaskName = ''): void

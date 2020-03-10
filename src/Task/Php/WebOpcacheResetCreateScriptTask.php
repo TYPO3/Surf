@@ -10,9 +10,7 @@ namespace TYPO3\Surf\Task\Php;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Flow\Utility\Files;
-use TYPO3\Surf\Domain\Filesystem\Filesystem;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
-use TYPO3\Surf\Domain\Generator\RandomBytesGenerator;
 use TYPO3\Surf\Domain\Generator\RandomBytesGeneratorInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -57,16 +55,8 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
      */
     private $filesystem;
 
-    public function __construct(RandomBytesGeneratorInterface $randomBytesGenerator = null, FilesystemInterface $filesystem = null)
+    public function __construct(RandomBytesGeneratorInterface $randomBytesGenerator, FilesystemInterface $filesystem)
     {
-        if (! $randomBytesGenerator instanceof RandomBytesGeneratorInterface) {
-            $randomBytesGenerator = new RandomBytesGenerator();
-        }
-
-        if (! $filesystem instanceof FilesystemInterface) {
-            $filesystem = new Filesystem();
-        }
-
         $this->filesystem = $filesystem;
         $this->randomBytesGenerator = $randomBytesGenerator;
     }

@@ -10,9 +10,7 @@ namespace TYPO3\Surf\Task;
  */
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use TYPO3\Surf\Domain\Filesystem\Filesystem;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
-use TYPO3\Surf\Domain\Generator\IdGenerator;
 use TYPO3\Surf\Domain\Generator\IdGeneratorInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -62,10 +60,10 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
      */
     private $idGenerator;
 
-    public function __construct(FilesystemInterface $filesystem = null, IdGeneratorInterface $idGenerator = null)
+    public function __construct(FilesystemInterface $filesystem, IdGeneratorInterface $idGenerator)
     {
-        $this->filesystem = $filesystem ?? new Filesystem();
-        $this->idGenerator = $idGenerator ?? new IdGenerator();
+        $this->filesystem = $filesystem;
+        $this->idGenerator = $idGenerator;
     }
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])

@@ -18,20 +18,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Surf list command
- */
 class SelfUpdateCommand extends Command
 {
-    /**
-     * @return bool
-     */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return Phar::running() !== '';
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('self-update')
              ->addOption(
@@ -53,7 +47,7 @@ class SelfUpdateCommand extends Command
              )->setDescription(sprintf('Update %s to most recent stable build', $this->getLocalPharName()));
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $updater = new Updater(null, false, Updater::STRATEGY_GITHUB);
         /** @var GithubStrategy $strategy */
@@ -106,10 +100,7 @@ class SelfUpdateCommand extends Command
         return 0;
     }
 
-    /**
-     * @return string
-     */
-    private function getLocalPharName()
+    private function getLocalPharName(): string
     {
         return basename(Phar::running());
     }

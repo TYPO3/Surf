@@ -18,16 +18,10 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\FailedDeployment;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Domain\Model\Workflow;
-use TYPO3\Surf\Integration\FactoryAwareInterface;
-use TYPO3\Surf\Integration\FactoryAwareTrait;
+use TYPO3\Surf\Integration\FactoryInterface;
 
-/**
- * Surf describe command
- */
-class DescribeCommand extends Command implements FactoryAwareInterface
+class DescribeCommand extends Command
 {
-    use FactoryAwareTrait;
-
     /**
      * @var InputInterface
      */
@@ -37,6 +31,17 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      * @var OutputInterface
      */
     protected $output;
+
+    /**
+     * @var FactoryInterface
+     */
+    private $factory;
+
+    public function __construct(FactoryInterface $factory, string $name = null)
+    {
+        parent::__construct($name);
+        $this->factory = $factory;
+    }
 
     protected function configure()
     {
@@ -55,7 +60,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->input = $input;
         $this->output = $output;

@@ -14,14 +14,22 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\Surf\Integration\FactoryAwareInterface;
-use TYPO3\Surf\Integration\FactoryAwareTrait;
+use TYPO3\Surf\Integration\FactoryInterface;
 
-class RollbackCommand extends Command implements FactoryAwareInterface
+class RollbackCommand extends Command
 {
-    use FactoryAwareTrait;
+    /**
+     * @var FactoryInterface
+     */
+    private $factory;
 
-    protected function configure()
+    public function __construct(FactoryInterface $factory, string $name = null)
+    {
+        parent::__construct($name);
+        $this->factory = $factory;
+    }
+
+    protected function configure(): void
     {
         $this->setName('rollback')
             ->setDescription('Rollback current to previous release and remove current folder')
@@ -43,15 +51,7 @@ class RollbackCommand extends Command implements FactoryAwareInterface
             );
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|null
-     * @throws \TYPO3\Surf\Exception
-     * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');

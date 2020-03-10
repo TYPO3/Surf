@@ -14,17 +14,22 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\Surf\Integration\FactoryAwareInterface;
-use TYPO3\Surf\Integration\FactoryAwareTrait;
+use TYPO3\Surf\Integration\FactoryInterface;
 
-/**
- * Surf simulate command
- */
-class SimulateCommand extends Command implements FactoryAwareInterface
+class SimulateCommand extends Command
 {
-    use FactoryAwareTrait;
+    /**
+     * @var FactoryInterface
+     */
+    private $factory;
 
-    protected function configure()
+    public function __construct(FactoryInterface $factory, string $name = null)
+    {
+        parent::__construct($name);
+        $this->factory = $factory;
+    }
+
+    protected function configure(): void
     {
         $this->setName('simulate')
              ->setDescription('Simulates the deployment for the given name')
@@ -47,10 +52,7 @@ class SimulateCommand extends Command implements FactoryAwareInterface
              );
     }
 
-    /**
-     * @return int
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');

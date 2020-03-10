@@ -9,10 +9,8 @@ namespace TYPO3\Surf\Cli\Symfony;
  */
 
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\Surf\Integration\FactoryAwareInterface;
 use TYPO3\Surf\Integration\FactoryInterface;
 
 /**
@@ -25,24 +23,20 @@ class ConsoleApplication extends Application
      */
     protected $factory;
 
-    public function setFactory(FactoryInterface $factory): void
+    /**
+     * @var OutputInterface
+     */
+    private $output;
+
+    public function __construct(FactoryInterface $factory, OutputInterface $output, string $name = 'TYPO3 Surf', string $version = '3.0.0-alpha')
     {
+        parent::__construct($name, $version);
         $this->factory = $factory;
+        $this->output = $output;
     }
 
     public function run(InputInterface $input = null, OutputInterface $output = null): int
     {
-        foreach ($this->factory->createCommands() as $command) {
-            $this->add($command);
-        }
-        return parent::run($input, $this->factory->createOutput());
-    }
-
-    protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output): int
-    {
-        if ($command instanceof FactoryAwareInterface) {
-            $command->setFactory($this->factory);
-        }
-        return parent::doRunCommand($command, $input, $output);
+        return parent::run($input, $this->output);
     }
 }

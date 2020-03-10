@@ -6,3 +6,4 @@ vendor/
 sphpdox.phar
 _Output/
 Documentation/.doctrees
+var/

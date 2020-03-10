@@ -18,9 +18,12 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Task\CleanupReleasesTask;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class CleanupReleasesTaskTest extends BaseTaskTest
 {
+    use KernelAwareTrait;
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService
      */
@@ -48,6 +51,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
         $this->deployment = new Deployment('TestDeployment');
+        $this->deployment->setContainer(static::getKernel()->getContainer());
         /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);

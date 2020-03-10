@@ -10,14 +10,18 @@ namespace TYPO3\Surf\Domain\Service;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
  * @final
  */
-class TaskFactory
+class TaskFactory implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * Create a task instance from the given task name
      *
@@ -25,25 +29,12 @@ class TaskFactory
      */
     public function createTaskInstance(string $taskName)
     {
-        $taskClassName = $this->mapTaskNameToTaskClass($taskName);
-        $task = new $taskClassName();
+        $task = $this->container->get($taskName);
 
         if (!$task instanceof Task) {
             throw new SurfException(sprintf('The task %s is not a subclass of %s but of class %s', $taskName, Task::class, get_class($task)), 1451210811);
         }
 
-        if ($task instanceof ShellCommandServiceAwareInterface) {
-            $task->setShellCommandService(new ShellCommandService());
-        }
         return $task;
-    }
-
-    private function mapTaskNameToTaskClass(string $taskName): string
-    {
-        if (!class_exists($taskName)) {
-            throw new SurfException(sprintf('No task found for identifier "%s". Make sure this is a valid class name or a defined task with valid base class name!', $taskName), 1451210811);
-        }
-
-        return $taskName;
     }
 }

@@ -11,7 +11,6 @@ namespace TYPO3\Surf\Task\Php;
 
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use TYPO3\Surf\Domain\Filesystem\Filesystem;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -49,12 +48,8 @@ class WebOpcacheResetExecuteTask extends Task
      */
     private $filesystem;
 
-    public function __construct(FilesystemInterface $filesystem = null)
+    public function __construct(FilesystemInterface $filesystem)
     {
-        if (! $filesystem instanceof FilesystemInterface) {
-            $filesystem = new Filesystem();
-        }
-
         $this->filesystem = $filesystem;
     }
 

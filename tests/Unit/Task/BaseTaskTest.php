@@ -18,12 +18,15 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Tests\Unit\AssertCommandExecuted;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 /**
  * Base unit test for tasks
  */
 abstract class BaseTaskTest extends TestCase
 {
+    use KernelAwareTrait;
+
     /**
      * Executed commands
      * @var array
@@ -106,6 +109,7 @@ abstract class BaseTaskTest extends TestCase
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
         $this->deployment = new Deployment('TestDeployment');
+        $this->deployment->setContainer(static::getKernel()->getContainer());
         /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
         $this->mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($this->mockLogger);
