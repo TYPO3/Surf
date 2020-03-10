@@ -37,6 +37,9 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

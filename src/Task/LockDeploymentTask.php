@@ -56,6 +56,9 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
         $unLockDeployment->execute($node, $application, $deployment, $options);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);

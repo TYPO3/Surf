@@ -62,6 +62,9 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
