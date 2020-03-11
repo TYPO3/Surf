@@ -37,16 +37,20 @@ class DescribeCommand extends Command
      */
     private $factory;
 
-    public function __construct(FactoryInterface $factory, string $name = null)
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'describe';
+
+    public function __construct(FactoryInterface $factory)
     {
-        parent::__construct($name);
+        parent::__construct();
         $this->factory = $factory;
     }
 
     protected function configure()
     {
-        $this->setName('describe')
-            ->setDescription('Describes the flow for the given name')
+        $this->setDescription('Describes the flow for the given name')
             ->addArgument(
                 'deploymentName',
                 InputArgument::REQUIRED,

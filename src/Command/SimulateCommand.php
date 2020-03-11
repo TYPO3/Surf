@@ -23,16 +23,20 @@ class SimulateCommand extends Command
      */
     private $factory;
 
-    public function __construct(FactoryInterface $factory, string $name = null)
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'simulate';
+
+    public function __construct(FactoryInterface $factory)
     {
-        parent::__construct($name);
+        parent::__construct();
         $this->factory = $factory;
     }
 
     protected function configure(): void
     {
-        $this->setName('simulate')
-             ->setDescription('Simulates the deployment for the given name')
+        $this->setDescription('Simulates the deployment for the given name')
              ->addArgument(
                  'deploymentName',
                  InputArgument::OPTIONAL,

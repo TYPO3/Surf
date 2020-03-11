@@ -23,16 +23,20 @@ class RollbackCommand extends Command
      */
     private $factory;
 
-    public function __construct(FactoryInterface $factory, string $name = null)
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'rollback';
+
+    public function __construct(FactoryInterface $factory)
     {
-        parent::__construct($name);
+        parent::__construct();
         $this->factory = $factory;
     }
 
     protected function configure(): void
     {
-        $this->setName('rollback')
-            ->setDescription('Rollback current to previous release and remove current folder')
+        $this->setDescription('Rollback current to previous release and remove current folder')
             ->addArgument(
                 'deploymentName',
                 InputArgument::OPTIONAL,

@@ -21,16 +21,20 @@ class ShowCommand extends Command
      */
     private $factory;
 
-    public function __construct(FactoryInterface $factory, string $name = null)
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'show';
+
+    public function __construct(FactoryInterface $factory)
     {
-        parent::__construct($name);
+        parent::__construct();
         $this->factory = $factory;
     }
 
     protected function configure(): void
     {
-        $this->setName('show')
-            ->setDescription('Shows all the deployments depending on the directory configuration')
+        $this->setDescription('Shows all the deployments depending on the directory configuration')
             ->addOption(
                 'configurationPath',
                 null,

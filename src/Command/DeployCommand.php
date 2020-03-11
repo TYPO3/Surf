@@ -23,16 +23,20 @@ class DeployCommand extends Command
      */
     private $factory;
 
-    public function __construct(FactoryInterface $factory, string $name = null)
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'deploy';
+
+    public function __construct(FactoryInterface $factory)
     {
-        parent::__construct($name);
+        parent::__construct();
         $this->factory = $factory;
     }
 
     protected function configure(): void
     {
-        $this->setName('deploy')
-             ->setDescription('Deploys the application with the given name')
+        $this->setDescription('Deploys the application with the given name')
              ->addArgument(
                  'deploymentName',
                  InputArgument::OPTIONAL,

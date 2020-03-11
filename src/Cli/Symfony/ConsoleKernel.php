@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace TYPO3\Surf\Cli\Symfony;
 
@@ -12,11 +12,14 @@ namespace TYPO3\Surf\Cli\Symfony;
  */
 
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel;
 use TYPO3\Surf\Cli\Symfony\CompilerPasses\CommandsToApplicationCompilerPass;
-use TYPO3\Surf\Cli\Symfony\CompilerPasses\ContainerAwareInterfaceCompilerPass;
-use TYPO3\Surf\Cli\Symfony\CompilerPasses\ShellCommandServiceAwareInterfaceCompilerPass;
+use TYPO3\Surf\Domain\Service\ShellCommandService;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 
 final class ConsoleKernel extends Kernel
 {
@@ -33,7 +36,7 @@ final class ConsoleKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__ . '/../../../Resources/services.yaml');
+        $loader->load(__DIR__.'/../../../Resources/services.yaml');
     }
 
     /**
@@ -42,7 +45,13 @@ final class ConsoleKernel extends Kernel
     protected function build(ContainerBuilder $containerBuilder): void
     {
         $containerBuilder->addCompilerPass(new CommandsToApplicationCompilerPass());
-        $containerBuilder->addCompilerPass(new ContainerAwareInterfaceCompilerPass());
-        $containerBuilder->addCompilerPass(new ShellCommandServiceAwareInterfaceCompilerPass());
+        $containerBuilder->registerForAutoconfiguration(
+            ContainerAwareInterface::class)->addMethodCall(
+            'setContainer', [new Reference(ContainerInterface::class)]
+        );
+        $containerBuilder->registerForAutoconfiguration(
+            ShellCommandServiceAwareInterface::class)->addMethodCall(
+            'setShellCommandService', [new Reference(ShellCommandService::class)]
+        );
     }
 }

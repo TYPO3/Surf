@@ -20,6 +20,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SelfUpdateCommand extends Command
 {
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'self-update';
+
     public function isEnabled(): bool
     {
         return Phar::running() !== '';
@@ -27,8 +32,7 @@ class SelfUpdateCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('self-update')
-             ->addOption(
+        $this->addOption(
                  'stability',
                  null,
                  InputOption::VALUE_OPTIONAL,
