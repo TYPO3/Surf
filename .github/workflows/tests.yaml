@@ -9,8 +9,6 @@ on:
 jobs:
     tests:
         runs-on: ubuntu-latest
-        env:
-            COMPOSER_CACHE_DIR: ${{ github.workspace }}/.cache/composer
         strategy:
             matrix:
                 php: ['7.2', '7.3', '7.4']
@@ -18,9 +16,11 @@ jobs:
         name: PHP ${{ matrix.php }} tests
         steps:
             -   uses: actions/checkout@v2.0.0
+            -   id: composer-cache
+                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
             -   uses: actions/cache@v1
                 with:
-                    path: ${{ github.workspace }}/.cache
+                    path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
                         ${{ runner.os }}-composer-

@@ -9,13 +9,13 @@ on:
 jobs:
     phpstan:
         runs-on: ubuntu-latest
-        env:
-            COMPOSER_CACHE_DIR: ${{ github.workspace }}/.cache/composer
         steps:
             -   uses: actions/checkout@v2
+            -   id: composer-cache
+                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
             -   uses: actions/cache@v1
                 with:
-                    path: ${{ github.workspace }}/.cache
+                    path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
                         ${{ runner.os }}-composer-
