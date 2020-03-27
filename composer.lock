@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5090f7f93efe09f95309c057a6c6852a",
+    "content-hash": "162c9a90bec6e32e758aa10c56b64107",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1236,16 +1236,16 @@
         },
         {
             "name": "symfony/http-kernel",
-            "version": "v4.4.5",
+            "version": "v4.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "8c8734486dada83a6041ab744709bdc1651a8462"
+                "reference": "02ee1d0d616b031fb48a1c9c3e5dc092dd7e448d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/8c8734486dada83a6041ab744709bdc1651a8462",
-                "reference": "8c8734486dada83a6041ab744709bdc1651a8462",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/02ee1d0d616b031fb48a1c9c3e5dc092dd7e448d",
+                "reference": "02ee1d0d616b031fb48a1c9c3e5dc092dd7e448d",
                 "shasum": ""
             },
             "require": {
@@ -1322,7 +1322,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "time": "2020-02-29T10:31:38+00:00"
+            "time": "2020-03-27T08:32:28+00:00"
         },
         {
             "name": "symfony/mime",

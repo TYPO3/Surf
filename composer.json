@@ -4,25 +4,25 @@
     "license": "GPL-3.0-or-later",
     "require": {
         "php": "^7.2",
+        "guzzlehttp/guzzle": "^6.0",
         "monolog/monolog": "^1.17",
         "neos/utility-files": "^3.0",
         "padraic/phar-updater": "1.0.5",
-        "symfony/console": "^4.0",
-        "symfony/process": "^4.0",
-        "symfony/options-resolver": "^4.0",
-        "guzzlehttp/guzzle": "^6.0",
-        "webmozart/assert": "^1.4",
-        "symfony/dependency-injection": "^5.0",
         "symfony/config": "^5.0",
+        "symfony/console": "^4.0",
+        "symfony/dependency-injection": "^5.0",
+        "symfony/http-kernel": "^4.0",
+        "symfony/options-resolver": "^4.0",
+        "symfony/process": "^4.0",
         "symfony/yaml": "^5.0",
-        "symfony/http-kernel": "^4.0"
+        "webmozart/assert": "^1.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0",
         "friendsofphp/php-cs-fixer": "^2.14",
+        "jangregor/phpstan-prophecy": "^0.6.2",
         "phpstan/phpstan": "^0.12.14",
         "phpstan/phpstan-webmozart-assert": "^0.12.2",
-        "jangregor/phpstan-prophecy": "^0.6.2"
+        "phpunit/phpunit": "^7.0"
     },
     "scripts": {
         "release-phar": "bin/box build",
@@ -50,6 +50,8 @@
         "bin/surf"
     ],
     "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
         "platform": {
             "php": "7.2.5"
         }
