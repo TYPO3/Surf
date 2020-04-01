@@ -1,8 +1,15 @@
+parameters:
+    name: 'TYPO3 Surf'
+    version: '3.0.0-alpha'
+
 services:
     _defaults:
         autowire: true
         autoconfigure: true
         public: true
+        bind:
+            $name: '%name%'
+            $version: '%version%'
     TYPO3\Surf\:
         resource: '../src/*'
         exclude: '../src/{Cli,Application,Exception,Domain/Model,DeprecationMessageFactory.php,Exception.php,functions.php}'

@@ -28,7 +28,7 @@ class ConsoleApplication extends Application
      */
     private $output;
 
-    public function __construct(FactoryInterface $factory, OutputInterface $output, string $name = 'TYPO3 Surf', string $version = '3.0.0-alpha')
+    public function __construct(FactoryInterface $factory, OutputInterface $output, string $name, string $version)
     {
         parent::__construct($name, $version);
         $this->factory = $factory;

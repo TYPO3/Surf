@@ -5,6 +5,7 @@ requireAutoloader();
 
 $kernel = new \TYPO3\Surf\Cli\Symfony\ConsoleKernel('prod', false);
 $kernel->boot();
+/* @var \Symfony\Component\DependencyInjection\Container $container */
 $container = $kernel->getContainer();
 
 $application = $container->get(\TYPO3\Surf\Cli\Symfony\ConsoleApplication::class);
