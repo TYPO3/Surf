@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace TYPO3\Surf\Cli\Symfony;
 
@@ -36,7 +36,7 @@ final class ConsoleKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__.'/../../../Resources/services.yaml');
+        $loader->load(__DIR__ . '/../../../Resources/services.yaml');
     }
 
     /**
@@ -46,12 +46,16 @@ final class ConsoleKernel extends Kernel
     {
         $containerBuilder->addCompilerPass(new CommandsToApplicationCompilerPass());
         $containerBuilder->registerForAutoconfiguration(
-            ContainerAwareInterface::class)->addMethodCall(
-            'setContainer', [new Reference(ContainerInterface::class)]
+            ContainerAwareInterface::class
+        )->addMethodCall(
+            'setContainer',
+                [new Reference(ContainerInterface::class)]
         );
         $containerBuilder->registerForAutoconfiguration(
-            ShellCommandServiceAwareInterface::class)->addMethodCall(
-            'setShellCommandService', [new Reference(ShellCommandService::class)]
+            ShellCommandServiceAwareInterface::class
+        )->addMethodCall(
+            'setShellCommandService',
+                [new Reference(ShellCommandService::class)]
         );
     }
 }
