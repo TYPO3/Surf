@@ -12,5 +12,5 @@ namespace TYPO3\Surf\Domain\Service;
  */
 interface ShellCommandServiceAwareInterface
 {
-    public function setShellCommandService(ShellCommandService $shellCommandService);
+    public function setShellCommandService(ShellCommandService $shellCommandService): void;
 }

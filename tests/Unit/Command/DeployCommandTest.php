@@ -10,60 +10,46 @@ namespace TYPO3\Surf\Tests\Unit\Command;
  */
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\Surf\Command\DeployCommand;
-use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
-use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Integration\FactoryInterface;
 
 final class DeployCommandTest extends TestCase
 {
 
     /**
-     * @var Node
+     * @var DeployCommand
      */
-    protected $node;
+    protected $subject;
 
     /**
-     * @var Application
+     * @var FactoryInterface|ObjectProphecy
      */
-    protected $application;
-
-    /**
-     * @var Deployment
-     */
-    protected $deployment;
+    private $factory;
 
     protected function setUp()
     {
-        $this->node = new Node('TestNode');
-        $this->node->setHostname('hostname');
-        $this->deployment = new Deployment('TestDeployment');
-        $this->application = new Application('TestApplication');
-        $this->application->addNode($this->node);
-        $this->deployment->addApplication($this->application);
-        $this->deployment->initialize();
-        $this->deployment->setLogger($this->createMock(LoggerInterface::class));
+        $this->factory = $this->prophesize(FactoryInterface::class);
+        $this->subject = new DeployCommand($this->factory->reveal());
     }
 
     /**
      * @test
      */
-    public function executeForceRun()
+    public function executeForceRun(): void
     {
-        $factory = $this->createMock(FactoryInterface::class);
-        $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
-        $command = new DeployCommand();
-        $command->setFactory($factory);
-        $commandTester = new CommandTester($command);
+        $deployment = $this->prophesize(Deployment::class);
+        $deployment->deploy()->shouldBeCalledOnce();
+        $deployment->getStatus()->willReturn(Deployment::STATUS_SUCCESS);
+        $this->factory->getDeployment('Foo', Argument::exact(null), Argument::exact(false), Argument::exact(true), Argument::exact(true))->willReturn($deployment);
+
+        $commandTester = new CommandTester($this->subject);
         $commandTester->execute([
-            'deploymentName' => $this->deployment->getName(),
+            'deploymentName' => 'Foo',
             '--force' => true,
         ]);
-        $this->deployment->setForceRun(true);
-        $this->assertEquals($this->deployment->getStatus(), Deployment::STATUS_SUCCESS);
-        $this->assertTrue($this->deployment->getForceRun());
     }
 }

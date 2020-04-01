@@ -153,7 +153,7 @@ Content-Type: text/html; charset=UTF-8',
      */
     protected function createTask()
     {
-        return new HttpTestTask();
+        return new HttpTestTask(new Client());
     }
 
     protected function assertNoExceptionThrown(array $options): void

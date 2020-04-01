@@ -11,34 +11,27 @@ namespace TYPO3\Surf\Integration;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Flow\Utility\Files;
-use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
-use TYPO3\Surf\Command\DeployCommand;
-use TYPO3\Surf\Command\DescribeCommand;
-use TYPO3\Surf\Command\RollbackCommand;
-use TYPO3\Surf\Command\SelfUpdateCommand;
-use TYPO3\Surf\Command\ShowCommand;
-use TYPO3\Surf\Command\SimulateCommand;
-use TYPO3\Surf\Domain\Filesystem\Filesystem;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\FailedDeployment;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
-class Factory implements FactoryInterface
+class Factory implements FactoryInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var OutputInterface
      */
     protected $output;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     protected $logger;
 
@@ -47,43 +40,10 @@ class Factory implements FactoryInterface
      */
     protected $filesystem;
 
-    public function __construct(FilesystemInterface $filesystem = null)
+    public function __construct(FilesystemInterface $filesystem, Logger $logger)
     {
-        $this->filesystem = $filesystem ?? new Filesystem();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createCommands(): array
-    {
-        return [
-            new ShowCommand(),
-            new SimulateCommand(),
-            new DescribeCommand(),
-            new DeployCommand(),
-            new RollbackCommand(),
-            new SelfUpdateCommand(),
-        ];
-    }
-
-    public function createOutput(): OutputInterface
-    {
-        if ($this->output === null) {
-            $this->output = new ConsoleOutput();
-            $this->output->getFormatter()->setStyle('b', new OutputFormatterStyle(null, null, ['bold']));
-            $this->output->getFormatter()->setStyle('i', new OutputFormatterStyle('black', 'white'));
-            $this->output->getFormatter()->setStyle('u', new OutputFormatterStyle(null, null, ['underscore']));
-            $this->output->getFormatter()->setStyle('em', new OutputFormatterStyle(null, null, ['reverse']));
-            $this->output->getFormatter()->setStyle('strike', new OutputFormatterStyle(null, null, ['conceal']));
-            $this->output->getFormatter()->setStyle('success', new OutputFormatterStyle('green'));
-            $this->output->getFormatter()->setStyle('warning', new OutputFormatterStyle('black', 'yellow'));
-            $this->output->getFormatter()->setStyle('notice', new OutputFormatterStyle('yellow'));
-            $this->output->getFormatter()->setStyle('info', new OutputFormatterStyle('white', null, ['bold']));
-            $this->output->getFormatter()->setStyle('debug', new OutputFormatterStyle('white'));
-        }
-
-        return $this->output;
+        $this->filesystem = $filesystem;
+        $this->logger = $logger;
     }
 
     public function getDeployment(string $deploymentName, string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment
@@ -92,9 +52,9 @@ class Factory implements FactoryInterface
         if ($deployment->getLogger() === null) {
             if (! $simulateDeployment) {
                 $logFilePath = Files::concatenatePaths([$this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log']);
-                $this->createLogger()->pushHandler(new StreamHandler($logFilePath));
+                $this->logger()->pushHandler(new StreamHandler($logFilePath));
             }
-            $deployment->setLogger($this->createLogger());
+            $deployment->setLogger($this->logger());
         }
 
         $deployment->setForceRun($forceDeployment);
@@ -190,6 +150,7 @@ class Factory implements FactoryInterface
         $deploymentPathAndFilename = Files::concatenatePaths([$deploymentConfigurationPath, $deploymentName . '.php']);
         if ($this->filesystem->fileExists($deploymentPathAndFilename)) {
             $deployment = new Deployment($deploymentName);
+            $deployment->setContainer($this->container);
             $deployment->setDeploymentBasePath($deploymentConfigurationPath);
             $deployment->setWorkspacesBasePath($workspacesBasePath);
             $tempPath = Files::concatenatePaths([$workspacesBasePath, $deploymentName]);
@@ -198,7 +159,7 @@ class Factory implements FactoryInterface
 
             require($deploymentPathAndFilename);
         } else {
-            $this->createLogger()->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
+            $this->logger()->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
             $deployment = new FailedDeployment();
         }
 
@@ -235,13 +196,8 @@ class Factory implements FactoryInterface
         return $home;
     }
 
-    protected function createLogger(): Logger
+    protected function logger(): Logger
     {
-        if ($this->logger === null) {
-            $consoleHandler = new ConsoleHandler($this->createOutput());
-            $this->logger = new Logger('TYPO3 Surf', [$consoleHandler]);
-        }
-
         return $this->logger;
     }
 

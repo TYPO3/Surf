@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
+use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Task\Composer\InstallTask;
 
 class FlowTest extends TestCase
@@ -90,7 +91,7 @@ class FlowTest extends TestCase
     public function registerComposerInstallTask(): void
     {
         $deployment = $this->prophesize(Deployment::class);
-        $workflow = new SimpleWorkflow();
+        $workflow = new SimpleWorkflow($this->prophesize(TaskManager::class)->reveal());
         $this->subject->setOption('updateMethod', 'composer');
         $this->subject->registerTasks($workflow, $deployment->reveal());
         $tasks = $workflow->getTasks();

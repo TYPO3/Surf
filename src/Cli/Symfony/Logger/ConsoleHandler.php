@@ -29,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConsoleHandler extends AbstractProcessingHandler
 {
     /**
-     * @var OutputInterface|null
+     * @var OutputInterface
      */
     private $output;
 
@@ -43,16 +43,7 @@ class ConsoleHandler extends AbstractProcessingHandler
         OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
     ];
 
-    /**
-     * Constructor.
-     *
-     * @param OutputInterface|null $output            The console output to use (the handler remains disabled when passing null
-     *                                                until the output is set, e.g. by using console events)
-     * @param bool                 $bubble            Whether the messages that are handled can bubble up the stack
-     * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
-     *                                                level (leave empty to use the default mapping)
-     */
-    public function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = [])
+    public function __construct(OutputInterface $output, bool $bubble = true, array $verbosityLevelMap = [])
     {
         parent::__construct(Logger::DEBUG, $bubble);
         $this->output = $output;
@@ -73,7 +64,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
         // we have to update the logging level each time because the verbosity of the
         // console output might have changed in the meantime (it is not immutable)
@@ -81,17 +72,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Sets the console output to use for printing logs.
-     *
-     * @param OutputInterface $output The console output to use
-     */
-    public function setOutput(OutputInterface $output)
-    {
-        $this->output = $output;
-    }
-
-    /**
-     * Disables the output.
+     * {@inheritdoc}
      */
     public function close()
     {
@@ -103,7 +84,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record)
+    protected function write(array $record): void
     {
         $this->output->write((string)$record['formatted']);
     }
@@ -118,10 +99,8 @@ class ConsoleHandler extends AbstractProcessingHandler
 
     /**
      * Updates the logging level based on the verbosity setting of the console output.
-     *
-     * @return bool Whether the handler is enabled and verbosity is not set to quiet.
      */
-    private function updateLevel()
+    private function updateLevel(): bool
     {
         if (null === $this->output || OutputInterface::VERBOSITY_QUIET === $verbosity = $this->output->getVerbosity()) {
             return false;

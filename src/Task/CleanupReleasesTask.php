@@ -48,12 +48,8 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
      */
     private $clock;
 
-    public function __construct(ClockInterface $clock = null)
+    public function __construct(ClockInterface $clock)
     {
-        if (null === $clock) {
-            $clock = new SystemClock();
-        }
-
         $this->clock = $clock;
     }
 

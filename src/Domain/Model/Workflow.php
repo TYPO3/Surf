@@ -27,9 +27,9 @@ abstract class Workflow
      */
     protected $tasks = [];
 
-    public function __construct(TaskManager $taskManager = null)
+    public function __construct(TaskManager $taskManager)
     {
-        $this->taskManager = $taskManager ?: new TaskManager();
+        $this->taskManager = $taskManager;
     }
 
     public function run(Deployment $deployment)

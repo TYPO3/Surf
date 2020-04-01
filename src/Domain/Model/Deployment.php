@@ -11,6 +11,8 @@ namespace TYPO3\Surf\Domain\Model;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
@@ -19,8 +21,10 @@ use TYPO3\Surf\Exception as SurfException;
  * This is the base object exposed to a deployment configuration script and serves as a configuration builder and
  * model for an actual deployment.
  */
-class Deployment implements LoggerAwareInterface
+class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     public const STATUS_SUCCESS = 0;
     public const STATUS_FAILED = 1;
     public const STATUS_CANCELLED = 2;
@@ -116,12 +120,6 @@ class Deployment implements LoggerAwareInterface
      */
     private $deploymentLockIdentifier;
 
-    /**
-     * Constructor
-     *
-     * @param string $name
-     * @param string|null $deploymentLockIdentifier
-     */
     public function __construct($name, $deploymentLockIdentifier = null)
     {
         $this->name = $name;
@@ -146,7 +144,7 @@ class Deployment implements LoggerAwareInterface
             throw new SurfException('Already initialized', 1335976472);
         }
         if ($this->workflow === null) {
-            $this->workflow = new SimpleWorkflow();
+            $this->workflow = $this->container->get(SimpleWorkflow::class);
         }
 
         foreach ($this->applications as $application) {
@@ -530,19 +528,11 @@ class Deployment implements LoggerAwareInterface
         return $this->temporaryPath;
     }
 
-    /**
-     * Rollback a deployment
-     *
-     * @param bool $dryRun
-     *
-     * @throws SurfException
-     * @throws SurfException\InvalidConfigurationException
-     */
-    public function rollback($dryRun = false)
+    public function rollback(bool $dryRun = false)
     {
         $this->logger->notice('Rollback deployment ' . $this->name . ' (' . $this->releaseIdentifier . ')');
 
-        $this->setWorkflow(new RollbackWorkflow());
+        $this->setWorkflow($this->container->get(RollbackWorkflow::class));
         $this->initialize();
         if ($dryRun) {
             $this->setDryRun(true);

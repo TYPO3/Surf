@@ -14,23 +14,29 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\Surf\Integration\FactoryAwareInterface;
-use TYPO3\Surf\Integration\FactoryAwareTrait;
+use TYPO3\Surf\Integration\FactoryInterface;
 
-/**
- * Surf deploy command
- */
-class DeployCommand extends Command implements FactoryAwareInterface
+class DeployCommand extends Command
 {
-    use FactoryAwareTrait;
+    /**
+     * @var FactoryInterface
+     */
+    private $factory;
 
     /**
-     * Configure
+     * @var string
      */
-    protected function configure()
+    protected static $defaultName = 'deploy';
+
+    public function __construct(FactoryInterface $factory)
     {
-        $this->setName('deploy')
-             ->setDescription('Deploys the application with the given name')
+        parent::__construct();
+        $this->factory = $factory;
+    }
+
+    protected function configure(): void
+    {
+        $this->setDescription('Deploys the application with the given name')
              ->addArgument(
                  'deploymentName',
                  InputArgument::OPTIONAL,
@@ -50,10 +56,7 @@ class DeployCommand extends Command implements FactoryAwareInterface
              );
     }
 
-    /**
-     * @return int|null null or 0 if everything went fine, or an error code
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configurationPath = $input->getOption('configurationPath');
         $deploymentName = $input->getArgument('deploymentName');

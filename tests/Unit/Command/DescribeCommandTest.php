@@ -23,9 +23,11 @@ use TYPO3\Surf\Integration\FactoryInterface;
 use TYPO3\Surf\Task\LocalShellTask;
 use TYPO3\Surf\Task\Transfer\RsyncTask;
 use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class DescribeCommandTest extends TestCase
 {
+    use KernelAwareTrait;
 
     /**
      * @var Deployment
@@ -45,11 +47,12 @@ class DescribeCommandTest extends TestCase
     protected function setUp()
     {
         $this->deployment = new Deployment('TestDeployment');
+        $this->deployment->setContainer(static::getKernel()->getContainer());
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
     }
 
-    protected function setUpCustomApplication()
+    protected function setUpCustomApplication(): void
     {
         $this->application = new Application('TestApplication');
         $this->application->setOption('rsyncExcludes', ['.git', 'web/fileadmin', 'web/uploads']);
@@ -105,13 +108,12 @@ class DescribeCommandTest extends TestCase
      * @test
      * @throws Exception
      */
-    public function describeCustomApplication()
+    public function describeCustomApplication(): void
     {
         $this->setUpCustomApplication();
         $factory = $this->createMock(FactoryInterface::class);
         $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
-        $command = new DescribeCommand();
-        $command->setFactory($factory);
+        $command = new DescribeCommand($factory);
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
@@ -174,7 +176,7 @@ Applications:
      * @return string
      * @throws Exception
      */
-    protected function getDescriptionOfPredefinedApplication($application, $options = [])
+    protected function getDescriptionOfPredefinedApplication($application, $options = []): string
     {
         $this->application = $application;
         $this->application->addNode($this->node);
@@ -184,8 +186,7 @@ Applications:
         $this->deployment->addApplication($this->application)->initialize();
         $factory = $this->createMock(FactoryInterface::class);
         $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
-        $command = new DescribeCommand();
-        $command->setFactory($factory);
+        $command = new DescribeCommand($factory);
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
@@ -196,7 +197,7 @@ Applications:
     /**
      * @test
      */
-    public function describeTypo3Cms()
+    public function describeTypo3Cms(): void
     {
         $application = new CMS();
         $application->addSymlink(
@@ -282,7 +283,7 @@ Applications:
     /**
      * @test
      */
-    public function describeNeosNeos()
+    public function describeNeosNeos(): void
     {
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
@@ -354,7 +355,7 @@ Applications:
     /**
      * @test
      */
-    public function describeBaseApplication()
+    public function describeBaseApplication(): void
     {
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
@@ -417,7 +418,7 @@ Applications:
     /**
      * @test
      */
-    public function describeBaseApplicationWithoutLock()
+    public function describeBaseApplicationWithoutLock(): void
     {
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
@@ -477,7 +478,7 @@ Applications:
     /**
      * @test
      */
-    public function describeBaseApplicationWithForceParameter()
+    public function describeBaseApplicationWithForceParameter(): void
     {
         $this->deployment->setForceRun(true);
         $this->assertEquals('<success>Deployment TestDeployment</success>

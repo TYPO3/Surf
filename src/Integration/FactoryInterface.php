@@ -8,19 +8,10 @@ namespace TYPO3\Surf\Integration;
  * file that was distributed with this source code.
  */
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\Surf\Domain\Model\Deployment;
 
 interface FactoryInterface
 {
-    /**
-     * @return Command[]
-     */
-    public function createCommands(): array;
-
-    public function createOutput(): OutputInterface;
-
     public function getDeployment(string $deploymentName, string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment;
 
     /**

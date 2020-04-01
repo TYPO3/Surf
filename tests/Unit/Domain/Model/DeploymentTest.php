@@ -14,19 +14,24 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
+use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 /**
  * Unit test for Deployment
  */
 class DeploymentTest extends TestCase
 {
+    use KernelAwareTrait;
+
     /**
      * @test
      */
     public function initializeUsesSimpleWorkflowAsDefault()
     {
         $deployment = new Deployment('Test deployment');
+        $deployment->setContainer(static::getKernel()->getContainer());
         $deployment->initialize();
 
         $this->assertInstanceOf(SimpleWorkflow::class, $deployment->getWorkflow());
@@ -38,6 +43,7 @@ class DeploymentTest extends TestCase
     public function getNodesReturnsNodesFromApplicationsAsSet()
     {
         $deployment = new Deployment('Test deployment');
+        $deployment->setContainer(static::getKernel()->getContainer());
         $application1 = new Application('Test application 1');
         $application2 = new Application('Test application 2');
 
@@ -66,7 +72,7 @@ class DeploymentTest extends TestCase
     public function constructorCreatesReleaseIdentifier()
     {
         $deployment = new Deployment('Test deployment');
-
+        $deployment->setContainer(static::getKernel()->getContainer());
         $releaseIdentifier = $deployment->getReleaseIdentifier();
         $this->assertNotEmpty($releaseIdentifier);
     }
@@ -74,10 +80,10 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function initializeIsAllowedOnlyOnce()
+    public function initializeIsAllowedOnlyOnce(): void
     {
         $this->expectException(Exception::class);
-        $workflow = new SimpleWorkflow();
+        $workflow = new SimpleWorkflow($this->prophesize(TaskManager::class)->reveal());
         $deployment = new Deployment('Test deployment');
         $deployment->setWorkflow($workflow);
         $deployment->initialize();
@@ -91,17 +97,17 @@ class DeploymentTest extends TestCase
      *
      * @param mixed $deploymentLockIdentifier
      */
-    public function deploymentHasDefaultLockIdentifierIfNoIdentifierIsGiven($deploymentLockIdentifier)
+    public function deploymentHasDefaultLockIdentifierIfNoIdentifierIsGiven($deploymentLockIdentifier): void
     {
         $deployment = new Deployment('Some name', $deploymentLockIdentifier);
-
+        $deployment->setContainer(static::getKernel()->getContainer());
         $this->assertEquals($deployment->getReleaseIdentifier(), $deployment->getDeploymentLockIdentifier());
     }
 
     /**
      * @test
      */
-    public function deploymentHasDefinedLockIdentifier()
+    public function deploymentHasDefinedLockIdentifier(): void
     {
         $deploymentLockIdentifier = 'Deployment lock identifier';
         $deployment = new Deployment('Some name', $deploymentLockIdentifier);
@@ -112,7 +118,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function deploymentHasLockIdentifierDefinedByEnvironmentVariable()
+    public function deploymentHasLockIdentifierDefinedByEnvironmentVariable(): void
     {
         $deploymentLockIdentifier = 'Deployment lock identifier';
         putenv(sprintf('SURF_DEPLOYMENT_LOCK_IDENTIFIER=%s', $deploymentLockIdentifier));
@@ -123,7 +129,7 @@ class DeploymentTest extends TestCase
     /**
      * @return array
      */
-    public function wrongDeploymentLockIdentifiersProvided()
+    public function wrongDeploymentLockIdentifiersProvided(): array
     {
         return [
             [null],

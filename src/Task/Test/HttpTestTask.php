@@ -39,16 +39,8 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     private $client;
 
-    /**
-     * HttpTestTask constructor.
-     *
-     * @param ClientInterface|null $client
-     */
-    public function __construct(ClientInterface $client = null)
+    public function __construct(ClientInterface $client)
     {
-        if (! $client instanceof ClientInterface) {
-            $client = new Client();
-        }
         $this->client = $client;
     }
 

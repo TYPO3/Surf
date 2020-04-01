@@ -119,10 +119,7 @@ class SimpleWorkflow extends Workflow
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'Simple workflow';
     }

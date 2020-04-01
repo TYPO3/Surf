@@ -3,9 +3,13 @@
 
 requireAutoloader();
 
-$app = new \TYPO3\Surf\Cli\Symfony\ConsoleApplication('TYPO3 Surf', '3.0.0-alpha');
-$app->setFactory(new \TYPO3\Surf\Integration\Factory());
-$app->run();
+$kernel = new \TYPO3\Surf\Cli\Symfony\ConsoleKernel('prod', false);
+$kernel->boot();
+/* @var \Symfony\Component\DependencyInjection\Container $container */
+$container = $kernel->getContainer();
+
+$application = $container->get(\TYPO3\Surf\Cli\Symfony\ConsoleApplication::class);
+$application->run();
 
 function requireAutoloader()
 {

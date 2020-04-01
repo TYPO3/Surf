@@ -18,16 +18,10 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\FailedDeployment;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Domain\Model\Workflow;
-use TYPO3\Surf\Integration\FactoryAwareInterface;
-use TYPO3\Surf\Integration\FactoryAwareTrait;
+use TYPO3\Surf\Integration\FactoryInterface;
 
-/**
- * Surf describe command
- */
-class DescribeCommand extends Command implements FactoryAwareInterface
+class DescribeCommand extends Command
 {
-    use FactoryAwareTrait;
-
     /**
      * @var InputInterface
      */
@@ -38,10 +32,25 @@ class DescribeCommand extends Command implements FactoryAwareInterface
      */
     protected $output;
 
+    /**
+     * @var FactoryInterface
+     */
+    private $factory;
+
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'describe';
+
+    public function __construct(FactoryInterface $factory)
+    {
+        parent::__construct();
+        $this->factory = $factory;
+    }
+
     protected function configure()
     {
-        $this->setName('describe')
-            ->setDescription('Describes the flow for the given name')
+        $this->setDescription('Describes the flow for the given name')
             ->addArgument(
                 'deploymentName',
                 InputArgument::REQUIRED,
@@ -55,7 +64,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->input = $input;
         $this->output = $output;

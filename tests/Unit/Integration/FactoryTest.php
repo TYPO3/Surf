@@ -9,17 +9,20 @@ namespace TYPO3\Surf\Tests\Unit\Integration;
  * file that was distributed with this source code.
  */
 
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Integration\Factory;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class FactoryTest extends TestCase
 {
+    use KernelAwareTrait;
+
     /**
      * @var Factory
      */
@@ -40,26 +43,17 @@ class FactoryTest extends TestCase
      */
     protected $runTestInSeparateProcess = true;
 
+    /**
+     * @var Logger|ObjectProphecy
+     */
+    private $logger;
+
     protected function setUp()
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
-        $this->subject = new Factory($this->filesystem->reveal());
-    }
-
-    /**
-     * @test
-     */
-    public function createCommands(): void
-    {
-        $this->assertCount(6, $this->subject->createCommands());
-    }
-
-    /**
-     * @test
-     */
-    public function createOutput(): void
-    {
-        $this->assertInstanceOf(ConsoleOutput::class, $this->subject->createOutput());
+        $this->logger = $this->prophesize(Logger::class);
+        $this->subject = new Factory($this->filesystem->reveal(), $this->logger->reveal());
+        $this->subject->setContainer(static::getKernel()->getContainer());
     }
 
     /**
