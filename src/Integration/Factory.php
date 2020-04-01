@@ -49,12 +49,10 @@ class Factory implements FactoryInterface, ContainerAwareInterface
     public function getDeployment(string $deploymentName, string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment
     {
         $deployment = $this->createDeployment($deploymentName, $configurationPath);
-        if ($deployment->getLogger() === null) {
-            if (! $simulateDeployment) {
-                $logFilePath = Files::concatenatePaths([$this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log']);
-                $this->logger()->pushHandler(new StreamHandler($logFilePath));
-            }
-            $deployment->setLogger($this->logger());
+
+        if (! $simulateDeployment) {
+            $logFilePath = Files::concatenatePaths([$this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log']);
+            $this->logger->pushHandler(new StreamHandler($logFilePath));
         }
 
         $deployment->setForceRun($forceDeployment);
@@ -148,20 +146,24 @@ class Factory implements FactoryInterface, ContainerAwareInterface
         }
 
         $deploymentPathAndFilename = Files::concatenatePaths([$deploymentConfigurationPath, $deploymentName . '.php']);
-        if ($this->filesystem->fileExists($deploymentPathAndFilename)) {
-            $deployment = new Deployment($deploymentName);
-            $deployment->setContainer($this->container);
-            $deployment->setDeploymentBasePath($deploymentConfigurationPath);
-            $deployment->setWorkspacesBasePath($workspacesBasePath);
-            $tempPath = Files::concatenatePaths([$workspacesBasePath, $deploymentName]);
-            $this->ensureDirectoryExists($tempPath);
-            $deployment->setTemporaryPath($tempPath);
-
-            require($deploymentPathAndFilename);
-        } else {
-            $this->logger()->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
+        if (! $this->filesystem->fileExists($deploymentPathAndFilename)) {
+            $this->logger->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
             $deployment = new FailedDeployment();
+            $deployment->setLogger($this->logger);
+
+            return $deployment;
         }
+
+        $deployment = new Deployment($deploymentName);
+        $deployment->setLogger($this->logger);
+        $deployment->setContainer($this->container);
+        $deployment->setDeploymentBasePath($deploymentConfigurationPath);
+        $deployment->setWorkspacesBasePath($workspacesBasePath);
+        $tempPath = Files::concatenatePaths([$workspacesBasePath, $deploymentName]);
+        $this->ensureDirectoryExists($tempPath);
+        $deployment->setTemporaryPath($tempPath);
+
+        require($deploymentPathAndFilename);
 
         return $deployment;
     }
@@ -194,11 +196,6 @@ class Factory implements FactoryInterface, ContainerAwareInterface
         $this->ensureDirectoryExists($home);
 
         return $home;
-    }
-
-    protected function logger(): Logger
-    {
-        return $this->logger;
     }
 
     protected function ensureDirectoryExists(string $directory): void

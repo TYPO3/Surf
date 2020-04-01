@@ -9,12 +9,14 @@ namespace TYPO3\Surf\Tests\Unit\Integration;
  * file that was distributed with this source code.
  */
 
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
+use TYPO3\Surf\Domain\Model\FailedDeployment;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Integration\Factory;
 use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
@@ -232,6 +234,22 @@ class FactoryTest extends TestCase
     /**
      * @test
      */
+    public function getDeploymentWithoutSimulation(): void
+    {
+        putenv('HOME=' . __DIR__ . '/Fixtures');
+        $files = [getenv('HOME') . '/.surf/deployments/deploy.php'];
+        $this->filesystem->getRealPath('./.surf')->willReturn('foo');
+        $this->filesystem->isDirectory('foo')->willReturn(false);
+        $this->filesystem->fileExists(Argument::any())->willReturn(true);
+        $deployment = $this->subject->getDeployment('deploy', null, false);
+        $this->logger->pushHandler(new StreamHandler(getenv('HOME') . '/.surf/workspace/logs/deploy.log'))->shouldBeCalledOnce();
+        $this->assertFalse($deployment->getForceRun());
+        $this->assertTrue($deployment->isInitialized());
+    }
+
+    /**
+     * @test
+     */
     public function getFirstAndOnlyDeployment(): void
     {
         putenv('HOME=' . __DIR__ . '/Fixtures');
@@ -260,5 +278,26 @@ class FactoryTest extends TestCase
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
         $deployment = $this->subject->getDeployment('');
+    }
+
+    /**
+     * @test
+     */
+    public function getFailedDeployment(): void
+    {
+        putenv('HOME=' . __DIR__ . '/Fixtures');
+
+        $this->filesystem->getRealPath('./.surf')->willReturn('foo');
+        $this->filesystem->isDirectory('foo')->willReturn(true);
+        $this->filesystem->fileExists('foo')->willReturn(true);
+        $this->filesystem->fileExists(getenv('HOME') . '/.surf')->willReturn(true);
+        $this->filesystem->fileExists(getenv('HOME') . '/.surf/workspace')->willReturn(true);
+        $this->filesystem->fileExists('foo/foo.php')->willReturn(false);
+
+        $this->logger->error("The deployment file foo/foo.php does not exist.\n")->shouldBeCalledOnce();
+
+        $deployment = $this->subject->getDeployment('foo');
+        $this->assertSame($this->logger->reveal(), $deployment->getLogger());
+        $this->assertInstanceOf(FailedDeployment::class, $deployment);
     }
 }
