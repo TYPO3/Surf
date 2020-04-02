@@ -9,11 +9,9 @@ namespace TYPO3\Surf\Tests\Unit\Command;
  * file that was distributed with this source code.
  */
 
-use Prophecy\Argument;
-use Symfony\Component\Console\Tester\CommandTester;
-use TYPO3\Surf\Command\DescribeCommand;
-use TYPO3\Surf\Command\ShowCommand;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Tester\CommandTester;
+use TYPO3\Surf\Command\ShowCommand;
 use TYPO3\Surf\Integration\FactoryInterface;
 
 class ShowCommandTest extends TestCase
