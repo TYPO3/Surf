@@ -58,9 +58,11 @@ class SimulateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configurationPath = $input->getOption('configurationPath');
-        $deploymentName = $input->getArgument('deploymentName');
-        $deployment = $this->factory->getDeployment((string)$deploymentName, $configurationPath, true, true, $input->getOption('force'));
+        $configurationPath = (string)$input->getOption('configurationPath');
+        $deploymentName = (string)$input->getArgument('deploymentName');
+        $force = (bool)$input->getOption('force');
+
+        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath, true, true, $force);
         $deployment->simulate();
 
         return $deployment->getStatus();
