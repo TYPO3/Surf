@@ -57,10 +57,12 @@ class RollbackCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configurationPath = $input->getOption('configurationPath');
-        $deploymentName = $input->getArgument('deploymentName');
-        $deployment = $this->factory->getDeployment((string)$deploymentName, $configurationPath, $input->getOption('simulate'), false);
-        $deployment->rollback($input->getOption('simulate'));
+        $configurationPath = (string)$input->getOption('configurationPath');
+        $deploymentName = (string)$input->getArgument('deploymentName');
+        $simulate = (bool)$input->getOption('simulate');
+
+        $deployment = $this->factory->getDeployment($deploymentName, $configurationPath, $simulate, false);
+        $deployment->rollback($simulate);
 
         return $deployment->getStatus();
     }
