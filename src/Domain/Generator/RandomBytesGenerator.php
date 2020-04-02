@@ -9,15 +9,12 @@ namespace TYPO3\Surf\Domain\Generator;
  * file that was distributed with this source code.
  */
 
+/**
+ * @codeCoverageIgnore
+ */
 class RandomBytesGenerator implements RandomBytesGeneratorInterface
 {
-
-    /**
-     * @param int $length
-     *
-     * @return string
-     */
-    public function generate($length)
+    public function generate(int $length): string
     {
         return random_bytes($length);
     }

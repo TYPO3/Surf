@@ -10,6 +10,9 @@ namespace TYPO3\Surf\Domain\Generator;
  * file that was distributed with this source code.
  */
 
+/**
+ * @codeCoverageIgnore
+ */
 final class IdGenerator implements IdGeneratorInterface
 {
     public function generate(string $prefix): string

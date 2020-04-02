@@ -74,16 +74,6 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function close()
-    {
-        $this->output = null;
-
-        parent::close();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function write(array $record): void
     {
         $this->output->write((string)$record['formatted']);
