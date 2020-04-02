@@ -9,14 +9,14 @@ namespace TYPO3\Surf\Domain\Filesystem;
  * file that was distributed with this source code.
  */
 
+/**
+ * @codeCoverageIgnore
+ */
 class Filesystem implements FilesystemInterface
 {
 
     /**
-     * @param string $filename
-     * @param string $content
-     *
-     * @return bool|int
+     * @inheritDoc
      */
     public function put($filename, $content)
     {
@@ -24,11 +24,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * @param string $filename
-     * @param bool $includePath
-     * @param resource|null $streamContext
-     *
-     * @return false|string
+     * @inheritDoc
      */
     public function get($filename, $includePath = false, $streamContext = null)
     {
