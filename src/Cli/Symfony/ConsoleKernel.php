@@ -49,13 +49,13 @@ final class ConsoleKernel extends Kernel
             ContainerAwareInterface::class
         )->addMethodCall(
             'setContainer',
-                [new Reference(ContainerInterface::class)]
+            [new Reference(ContainerInterface::class)]
         );
         $containerBuilder->registerForAutoconfiguration(
             ShellCommandServiceAwareInterface::class
         )->addMethodCall(
             'setShellCommandService',
-                [new Reference(ShellCommandService::class)]
+            [new Reference(ShellCommandService::class)]
         );
     }
 }

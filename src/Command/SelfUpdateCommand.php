@@ -33,12 +33,12 @@ class SelfUpdateCommand extends Command
     protected function configure(): void
     {
         $this->addOption(
-                 'stability',
-                 null,
-                 InputOption::VALUE_OPTIONAL,
-                 'GitHub stability value (' . GithubStrategy::STABLE . ', ' . GithubStrategy::UNSTABLE . ', ' . GithubStrategy::ANY . ')',
-                 GithubStrategy::STABLE
-             )->addOption(
+            'stability',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'GitHub stability value (' . GithubStrategy::STABLE . ', ' . GithubStrategy::UNSTABLE . ', ' . GithubStrategy::ANY . ')',
+            GithubStrategy::STABLE
+        )->addOption(
                  'check',
                  null,
                  InputOption::VALUE_NONE,
