@@ -39,16 +39,16 @@ class SelfUpdateCommand extends Command
             'GitHub stability value (' . GithubStrategy::STABLE . ', ' . GithubStrategy::UNSTABLE . ', ' . GithubStrategy::ANY . ')',
             GithubStrategy::STABLE
         )->addOption(
-                 'check',
-                 null,
-                 InputOption::VALUE_NONE,
-                 'Check for new version'
-             )->addOption(
-                 'rollback',
-                 null,
-                 InputOption::VALUE_NONE,
-                 'Rolls back to previous version'
-             )->setDescription(sprintf('Update %s to most recent stable build', $this->getLocalPharName()));
+            'check',
+            null,
+            InputOption::VALUE_NONE,
+            'Check for new version'
+        )->addOption(
+            'rollback',
+            null,
+            InputOption::VALUE_NONE,
+            'Rolls back to previous version'
+        )->setDescription(sprintf('Update %s to most recent stable build', $this->getLocalPharName()));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
