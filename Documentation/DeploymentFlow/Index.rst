@@ -82,10 +82,10 @@ If you like to add your own tasks to a specific stage of the flow, you can just 
     $workflow->beforeStage('YourTask', 'cleanup');
 
    // Add tasks that shall be executed before the given task
-   $workflow->beforeTask(CreatePackageStatesTask::class, 'YourTask');
+   $workflow->beforeTask(AnotherTask::class, 'YourTask');
 
    // Add tasks that shall be executed after the given task
-   $workflow->afterTask(CreatePackageStatesTask::class, 'YourTask');
+   $workflow->afterTask(AnotherTask::class, 'YourTask');
 
 If you like to remove certain tasks from the flow, just do it like that::
 
