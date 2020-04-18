@@ -257,7 +257,6 @@ Applications:
           <success>TYPO3\Surf\Task\Transfer\RsyncTask</success> (for application TYPO3 CMS)
         after:
           <success>TYPO3\Surf\Task\Generic\CreateSymlinksTask</success> (for application TYPO3 CMS)
-          <success>TYPO3\Surf\Task\TYPO3\CMS\CreatePackageStatesTask</success> (for application TYPO3 CMS)
       update:
         after:
           <success>TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask</success> (for application TYPO3 CMS)

@@ -120,7 +120,7 @@ Besides specifying the execution point via a stage, you can also give an existin
 
     ...
 
-    $workflow->beforeTask(CreatePackageStatesTask::class,
+    $workflow->beforeTask(SomeTask::class,
         [
             'CopyEnvFileTask'
         ]
