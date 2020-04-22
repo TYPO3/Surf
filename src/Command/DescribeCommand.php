@@ -98,6 +98,7 @@ class DescribeCommand extends Command
         $this->output->writeln('Nodes:' . PHP_EOL);
         foreach ($nodes as $node) {
             $this->output->writeln('  <success>' . $node->getName() . '</success> <info>(' . $node->getHostname() . ')</info>');
+            $this->printOptions($node);
         }
     }
 
@@ -108,18 +109,7 @@ class DescribeCommand extends Command
             $this->output->writeln('  <success>' . $application->getName() . ':</success>');
             $this->output->writeln('    <comment>Deployment path</comment>: <success>' . $application->getDeploymentPath() . '</success>');
             $this->output->writeln('    <comment>Options</comment>:');
-            foreach ($application->getOptions() as $key => $value) {
-                if (is_array($value)) {
-                    $this->output->writeln('      ' . $key . ' =>');
-                    foreach ($value as $itemKey => $itemValue) {
-                        $itemOutput = is_string($itemKey) ? sprintf('%s => %s', $itemKey, $itemValue) : $itemValue;
-                        $this->output->writeln(sprintf('        <success>%s</success>', $itemOutput));
-                    }
-                } else {
-                    $printableValue = is_scalar($value) ? $value : gettype($value);
-                    $this->output->writeln('      ' . $key . ' => <success>' . $printableValue . '</success>');
-                }
-            }
+            $this->printOptions($application);
             $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(', ', $application->getNodes()) . '</success>');
 
             if ($workflow instanceof SimpleWorkflow) {
@@ -172,6 +162,27 @@ class DescribeCommand extends Command
                 foreach ($tasks[$step][$name][$task] as $beforeAfterTask) {
                     $output .= '          <success>Task ' . $beforeAfterTask . ' ' . $step . ' ' . $task . '</success> <info>(' . $label . ')</info>' . PHP_EOL;
                 }
+            }
+        }
+    }
+
+    /**
+     * Print all options for the source given
+     *
+     * @param object $source
+     */
+    protected function printOptions($source)
+    {
+        foreach ($source->getOptions() as $key => $value) {
+            if (is_array($value)) {
+                $this->output->writeln('      ' . $key . ' =>');
+                foreach ($value as $itemKey => $itemValue) {
+                    $itemOutput = is_string($itemKey) ? sprintf('%s => %s', $itemKey, $itemValue) : $itemValue;
+                    $this->output->writeln(sprintf('        <success>%s</success>', $itemOutput));
+                }
+            } else {
+                $printableValue = is_scalar($value) ? $value : gettype($value);
+                $this->output->writeln('      ' . $key . ' => <success>' . $printableValue . '</success>');
             }
         }
     }
