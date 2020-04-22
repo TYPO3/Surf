@@ -128,7 +128,7 @@ Nodes:
 
   <success>TestNode</success> (hostname)
     Options:
-      hostname: <success>hostname</success>
+      hostname => <success>hostname</success>
 
 Applications:
 
@@ -215,7 +215,7 @@ Nodes:
 
   <success>TestNode</success> (hostname)
     Options:
-      hostname: <success>hostname</success>
+      hostname => <success>hostname</success>
 
 Applications:
 
@@ -297,7 +297,7 @@ Nodes:
 
   <success>TestNode</success> (hostname)
     Options:
-      hostname: <success>hostname</success>
+      hostname => <success>hostname</success>
 
 Applications:
 
@@ -371,7 +371,7 @@ Nodes:
 
   <success>TestNode</success> (hostname)
     Options:
-      hostname: <success>hostname</success>
+      hostname => <success>hostname</success>
 
 Applications:
 
@@ -436,7 +436,7 @@ Nodes:
 
   <success>TestNode</success> (hostname)
     Options:
-      hostname: <success>hostname</success>
+      hostname => <success>hostname</success>
 
 Applications:
 
@@ -499,7 +499,7 @@ Nodes:
 
   <success>TestNode</success> (hostname)
     Options:
-      hostname: <success>hostname</success>
+      hostname => <success>hostname</success>
 
 Applications:
 
@@ -573,11 +573,11 @@ Nodes:
 
   <success>TestNode</success> (hostname)
     Options:
-      hostname: <success>hostname</success>
+      hostname => <success>hostname</success>
   <success>SecondTestNode</success> (secondHostname)
     Options:
-      hostname: <success>secondHostname</success>
-      customNodeOption: <success>nice</success>
+      hostname => <success>secondHostname</success>
+      customNodeOption => <success>nice</success>
 
 Applications:
 
