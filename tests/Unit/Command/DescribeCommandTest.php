@@ -555,7 +555,7 @@ Applications:
         $application = new BaseApplication('My App');
         $application->addNode($this->node);
         $application->addNode($node2);
-        $this->getDescriptionOfPredefinedApplication($application);
+        $actual = $this->getDescriptionOfPredefinedApplication($application);
 
         $this->assertEquals('<success>Deployment TestDeployment</success>
 
