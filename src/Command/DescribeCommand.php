@@ -108,7 +108,6 @@ class DescribeCommand extends Command
         foreach ($applications as $application) {
             $this->output->writeln('  <success>' . $application->getName() . ':</success>');
             $this->output->writeln('    <comment>Deployment path</comment>: <success>' . $application->getDeploymentPath() . '</success>');
-            $this->output->writeln('    <comment>Options</comment>:');
             $this->printOptions($application);
             $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(', ', $application->getNodes()) . '</success>');
 
@@ -173,6 +172,7 @@ class DescribeCommand extends Command
      */
     protected function printOptions($source)
     {
+        $this->output->writeln('    <comment>Options</comment>:');
         foreach ($source->getOptions() as $key => $value) {
             if (is_array($value)) {
                 $this->output->writeln('      ' . $key . ' =>');
