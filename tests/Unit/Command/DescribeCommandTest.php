@@ -594,7 +594,7 @@ Applications:
       deploymentPath => <success></success>
       releasesPath => <success>/releases</success>
       sharedPath => <success>/shared</success>
-    Nodes: <success>TestNode</success>
+    Nodes: <success>TestNode, SecondTestNode</success>
     Detailed workflow:
       initialize:
         tasks:
