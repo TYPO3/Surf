@@ -127,6 +127,8 @@ Workflow: <success>Simple workflow</success>
 Nodes:
 
   <success>TestNode</success> (hostname)
+    Options:
+      hostname: <success>hostname</success>
 
 Applications:
 
@@ -212,7 +214,8 @@ Workflow: <success>Simple workflow</success>
 Nodes:
 
   <success>TestNode</success> (hostname)
-    hostname: <success>hostname</success>
+    Options:
+      hostname: <success>hostname</success>
 
 Applications:
 
@@ -293,7 +296,8 @@ Workflow: <success>Simple workflow</success>
 Nodes:
 
   <success>TestNode</success> (hostname)
-    hostname: <success>hostname</success>
+    Options:
+      hostname: <success>hostname</success>
 
 Applications:
 
@@ -366,7 +370,8 @@ Workflow: <success>Simple workflow</success>
 Nodes:
 
   <success>TestNode</success> (hostname)
-    hostname: <success>hostname</success>
+    Options:
+      hostname: <success>hostname</success>
 
 Applications:
 
@@ -430,7 +435,8 @@ Workflow: <success>Simple workflow</success>
 Nodes:
 
   <success>TestNode</success> (hostname)
-    hostname: <success>hostname</success>
+    Options:
+      hostname: <success>hostname</success>
 
 Applications:
 
@@ -492,7 +498,8 @@ Workflow: <success>Simple workflow</success>
 Nodes:
 
   <success>TestNode</success> (hostname)
-    hostname: <success>hostname</success>
+    Options:
+      hostname: <success>hostname</success>
 
 Applications:
 
@@ -565,10 +572,12 @@ Workflow: <success>Simple workflow</success>
 Nodes:
 
   <success>TestNode</success> (hostname)
-    hostname: <success>hostname</success>
+    Options:
+      hostname: <success>hostname</success>
   <success>SecondTestNode</success> (secondHostname)
-    hostname: <success>secondHostname</success>
-    customNodeOption: <success>nice</success>
+    Options:
+      hostname: <success>secondHostname</success>
+      customNodeOption: <success>nice</success>
 
 Applications:
 
