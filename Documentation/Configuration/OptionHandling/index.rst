@@ -15,29 +15,29 @@ Priority ascending:
 With the same key, options in higher priority will overwrite those with lower priority.
 The options are resolved at runtime ``$this->configureOptions();``
 
-DeploymentOptions
-=================
-can be set as follows::
-
-    $deployment->setOption($optionName,$optionValue);
-
-NodeOptions
-===========
-can be set as follows::
-
-    $node->setOption($optionName,$optionValue);
-
-ApplicationOptions
+Deployment Options
 ==================
+can be set as follows::
+
+    $deployment->setOption($optionName, $optionValue);
+
+Node Options
+============
+can be set as follows::
+
+    $node->setOption($optionName, $optionValue);
+
+Application Options
+===================
 can be set as follows::
 
     // multiple options as array with
     $application->setOptions($options);
     // single option with
-    $application->setOption($optionName,$value);
+    $application->setOption($optionName, $value);
 
-TaskOptions
-===========
+Task Options
+============
 can be set as follows::
 
     // while defining a new task with
@@ -45,9 +45,9 @@ can be set as follows::
     // or merge(overwrite) existing task-options with
     $workflow->setTaskOptions($taskName, $options);
 
-OptionNames
+Option Name
 ===========
-Depending on the UseCase of the option you have to choose the option name:
+Depending on the use case of the option you have to choose the option name:
 
 Options for specific Tasks:
 these would be combinations of the **fully qualified class name** and **option name** in sqare brackets::
