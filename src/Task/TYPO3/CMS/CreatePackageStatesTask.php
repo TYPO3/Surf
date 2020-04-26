@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  */
 
 use TYPO3\Surf\Application\TYPO3\CMS;
+use TYPO3\Surf\DeprecationMessageFactory;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -28,6 +29,8 @@ class CreatePackageStatesTask extends AbstractCliTask
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        $deployment->getLogger()->warning(DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__));
+
         $this->ensureApplicationIsTypo3Cms($application);
         if (!$this->packageStatesFileExists($node, $application, $deployment, $options)) {
             try {
