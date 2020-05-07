@@ -56,7 +56,7 @@ class FlushCachesTask extends AbstractCliTask
     {
         switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
             case 'typo3_console':
-                return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush', '--force'];
+                return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush'];
             case 'coreapi':
                 $deployment->getLogger()->warning(DeprecationMessageFactory::createDeprecationWarningForCoreApiUsage());
                 return [$this->getCliDispatchScriptFileName($options), 'extbase', 'cacheapi:clearallcaches'];
