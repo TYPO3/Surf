@@ -24,9 +24,12 @@
         "phpstan/phpstan-webmozart-assert": "^0.12.2",
         "phpunit/phpunit": "^7.0"
     },
-    "scripts": {
-        "release-phar": "bin/box build",
-        "phpstan": "vendor/bin/phpstan analyse --ansi"
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "7.2.5"
+        },
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
@@ -49,11 +52,8 @@
     "bin": [
         "bin/surf"
     ],
-    "config": {
-        "optimize-autoloader": true,
-        "sort-packages": true,
-        "platform": {
-            "php": "7.2.5"
-        }
+    "scripts": {
+        "phpstan": "vendor/bin/phpstan analyse --ansi",
+        "release-phar": "bin/box build"
     }
 }
