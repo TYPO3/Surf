@@ -1,3 +1,4 @@
+![Tests](https://github.com/TYPO3/Surf/workflows/Tests/badge.svg?branch=master&event=push)
 [![Coverage Status](https://img.shields.io/coveralls/TYPO3/Surf/master.svg?style=flat-square)](https://coveralls.io/github/TYPO3/Surf?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/TYPO3/Surf.svg?style=flat-square)](https://packagist.org/packages/TYPO3/Surf)
 
