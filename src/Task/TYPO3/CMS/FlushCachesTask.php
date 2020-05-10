@@ -22,7 +22,12 @@ class FlushCachesTask extends AbstractCliTask
 {
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+
+        /** @var $application CMS */
         Assert::isInstanceOf($application, CMS::class);
+
+        $options = $this->configureOptions($options);
+
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
             $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure it is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
@@ -37,11 +42,11 @@ class FlushCachesTask extends AbstractCliTask
         );
     }
 
-    protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = [])
+    protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = []): ?array
     {
         switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
             case 'typo3_console':
-                return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush', '--force'];
+                return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush'];
             default:
                 return [];
         }

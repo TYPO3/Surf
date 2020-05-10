@@ -8,7 +8,6 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  * file that was distributed with this source code.
  */
 
-use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -42,7 +41,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     protected function executeCliCommand(array $cliArguments, Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
-        $phpBinaryPathAndFilename = isset($options['phpBinaryPathAndFilename']) ? $options['phpBinaryPathAndFilename'] : 'php';
+        $phpBinaryPathAndFilename = $options['phpBinaryPathAndFilename'] ?? 'php';
         $commandPrefix = '';
         if (isset($options['context'])) {
             $commandPrefix = 'TYPO3_CONTEXT=' . escapeshellarg($options['context']) . ' ';
@@ -62,7 +61,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         $this->execute($node, $application, $deployment, $options);
     }
 
-    protected function determineWorkingDirectoryAndTargetNode(Node $node, Application $application, Deployment $deployment, array $options = [])
+    protected function determineWorkingDirectoryAndTargetNode(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         if (!isset($this->workingDirectory, $this->targetNode)) {
             if (isset($options['useApplicationWorkspace']) && $options['useApplicationWorkspace'] === true) {
@@ -75,66 +74,34 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         }
     }
 
-    /**
-     * @return string
-     */
-    protected function getAvailableCliPackage(Node $node, CMS $application, Deployment $deployment, array $options = [])
+    protected function getAvailableCliPackage(Node $node, CMS $application, Deployment $deployment, array $options = []): ?string
     {
         try {
             $this->getConsoleScriptFileName($node, $application, $deployment, $options);
             return 'typo3_console';
         } catch (InvalidConfigurationException $e) {
+            return null;
         }
-        return null;
     }
 
-    /**
-     * @return string
-     */
-    protected function getConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = [])
+    protected function getConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = []): string
     {
-        if (isset($options['scriptFileName']) && strpos($options['scriptFileName'], 'typo3cms') !== false && $this->fileExists($options['scriptFileName'], $node, $application, $deployment, $options)) {
-            return $options['scriptFileName'];
+        if (!isset($options['scriptFileName'])) {
+            throw InvalidConfigurationException::createTypo3ConsoleScriptNotFound(get_class($this));
         }
-        throw new InvalidConfigurationException('TYPO3 Console script was not found. Make sure it is available in your project and you set the "scriptFileName" option correctly. Alternatively you can remove this task (' . get_class($this) . ') in your deployment configuration.', 1481489230);
+
+        if (false === strpos($options['scriptFileName'], 'typo3cms')) {
+            throw InvalidConfigurationException::createTypo3ConsoleScriptNotFound(get_class($this));
+        }
+
+        if (false === $this->fileExists($options['scriptFileName'], $node, $application, $deployment, $options)) {
+            throw InvalidConfigurationException::createTypo3ConsoleScriptNotFound(get_class($this));
+        }
+
+        return $options['scriptFileName'];
     }
 
-    /**
-     * Checks if a package exists in the packages directory
-     *
-     * @param string $packageKey
-     * @param Node $node
-     * @param CMS $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @return bool
-     */
-    protected function packageExists($packageKey, Node $node, CMS $application, Deployment $deployment, array $options = [])
-    {
-        $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') : '';
-        return $this->directoryExists($webDirectory . '/typo3conf/ext/' . $packageKey, $node, $application, $deployment, $options);
-    }
-
-    /**
-     * Checks if a given directory exists.
-     *
-     * @param string $directory
-     * @return bool
-     */
-    protected function directoryExists($directory, Node $node, CMS $application, Deployment $deployment, array $options = [])
-    {
-        $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
-        $directory = Files::concatenatePaths([$this->workingDirectory, $directory]);
-        return $this->shell->executeOrSimulate('test -d ' . escapeshellarg($directory), $this->targetNode, $deployment, true) !== false;
-    }
-
-    /**
-     * Checks if a given file exists.
-     *
-     * @param string $pathAndFileName
-     * @return bool
-     */
-    protected function fileExists($pathAndFileName, Node $node, CMS $application, Deployment $deployment, array $options = [])
+    protected function fileExists(string $pathAndFileName, Node $node, CMS $application, Deployment $deployment, array $options = []): bool
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
         $pathAndFileName = $this->workingDirectory . '/' . $pathAndFileName;

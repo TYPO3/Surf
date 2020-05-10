@@ -33,6 +33,7 @@ class CompareDatabaseTask extends AbstractCliTask
 {
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        /** @var $application CMS */
         Assert::isInstanceOf($application, CMS::class);
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
@@ -51,7 +52,7 @@ class CompareDatabaseTask extends AbstractCliTask
     protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         if ($this->getAvailableCliPackage($node, $application, $deployment, $options) === 'typo3_console') {
-            $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '*.add,*.change';
+            $databaseCompareMode = $options['databaseCompareMode'] ?? '*.add,*.change';
             return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'database:updateschema', $databaseCompareMode];
         }
 

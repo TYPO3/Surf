@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
+use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -60,7 +61,7 @@ abstract class BaseTaskTest extends TestCase
     protected $deployment;
 
     /**
-     * @var LoggerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|ObjectProphecy
      */
     protected $mockLogger;
 
@@ -110,9 +111,8 @@ abstract class BaseTaskTest extends TestCase
         $this->node->setHostname('hostname');
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
-        /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
-        $this->mockLogger = $this->createMock(LoggerInterface::class);
-        $this->deployment->setLogger($this->mockLogger);
+        $this->mockLogger = $this->prophesize(LoggerInterface::class);
+        $this->deployment->setLogger($this->mockLogger->reveal());
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
         $this->application = new Application('TestApplication');
 
