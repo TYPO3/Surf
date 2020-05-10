@@ -11,6 +11,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
 use Prophecy\Argument;
 use TYPO3\Surf\Application\TYPO3\CMS;
+use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -38,12 +39,34 @@ class FlushCachesTaskTest extends BaseTaskTest
     /**
      * @test
      */
+    public function executeFlushCacheCommandWithWrongOptionsType(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $application = new CMS();
+        $options = ['scriptFileName' => 'typo3cms', 'flushCacheOptions' => 1];
+        $this->task->execute($this->node, $application, $this->deployment, $options);
+    }
+
+    /**
+     * @test
+     */
     public function executeFlushCacheCommandSuccessfully(): void
     {
         $application = new CMS();
         $options = ['scriptFileName' => 'typo3cms'];
         $this->task->execute($this->node, $application, $this->deployment, $options);
-        $this->assertCommandExecuted('/php \'typo3cms\' \'cache:flush\'$/');
+        $this->assertCommandExecuted('/php \'typo3cms\' \'cache:flush\' \'--files-only\'$/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeFlushCacheWithCustomOptionsCommandSuccessfully(): void
+    {
+        $application = new CMS();
+        $options = ['scriptFileName' => 'typo3cms', 'flushCacheOptions' => ['--foo-bar-baz', '--foo-qux']];
+        $this->task->execute($this->node, $application, $this->deployment, $options);
+        $this->assertCommandExecuted('/php \'typo3cms\' \'cache:flush\' \'--foo-bar-baz --foo-qux\'$/');
     }
 
     protected function createTask()
