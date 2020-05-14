@@ -16,6 +16,7 @@ namespace TYPO3\Surf\Task\Composer;
  * * composerCommandPath - The path where composer is located.
  * * nodeName - The name of the node where composer should install the packages.
  * * useApplicationWorkspace (optional) - If true Surf uses the workspace path, else it uses the release path of the application.
+ * * projectRootPath (optional) - The path, relative to the composerRootPath (derived from workspacePath or ApplicationReleasePath), if composer.json is not stored in the projects root folder
  *
  * Example:
  *  $workflow

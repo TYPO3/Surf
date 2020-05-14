@@ -58,6 +58,10 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
             $composerRootPath = $deployment->getApplicationReleasePath($application);
         }
 
+        if (isset($options['projectRootPath']) && $options['projectRootPath'] !== null) {
+            $composerRootPath = Files::concatenatePaths([$composerRootPath, $options['projectRootPath']]);
+        }
+
         if ($options['nodeName'] !== null) {
             $node = $deployment->getNode($options['nodeName']);
             if ($node === null) {
@@ -130,6 +134,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
 
         $resolver->setDefault('useApplicationWorkspace', false);
         $resolver->setDefault('nodeName', null);
+        $resolver->setDefault('projectRootPath', null);
         $resolver->setAllowedTypes('additionalArguments', ['array', 'string']);
     }
 }
