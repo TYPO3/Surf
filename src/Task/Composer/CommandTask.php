@@ -28,6 +28,7 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  * * additionalArguments (optional) - Array of additional arguments to pass to composer and keep default arguments
  * * suffix (optional) - Array, string or null with the suffix command, either `['2>&1']`, `[]`, `'2>&1'`, `''` or `null`
  * * useApplicationWorkspace (optional) - If true Surf uses the workspace path, else it uses the release path of the application.
+ * * projectRootPath (optional) - The path, relative to the composerRootPath (derived from workspacePath or ApplicationReleasePath), if composer.json is not stored in the projects root folder
  *
  * Example:
  *  $workflow->defineTask('My\\Distribution\\DefinedTask\\RunBuildScript', \TYPO3\Surf\Task\Composer\CommandTask::class, [
