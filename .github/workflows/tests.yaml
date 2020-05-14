@@ -1,10 +1,6 @@
 name: Tests
 
-on:
-    pull_request: null
-    push:
-        branches:
-            - master
+on: [push, pull_request]
 
 jobs:
     tests:
@@ -28,5 +24,5 @@ jobs:
                 with:
                     php-version: ${{ matrix.php }}
                     coverage: none # disable xdebug, pcov
-            -   run: composer install --no-progress
+            -   run: composer install --no-suggest --no-progress
             -   run: vendor/bin/phpunit
