@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\Surf\Tests\Unit\Task\Composer;
 
 /*
@@ -8,6 +9,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Composer;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Composer\InstallTask;
@@ -76,6 +78,23 @@ class InstallTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted('/^composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative \'--ignore-platform-reqs\' 2>&1$/');
+    }
+
+
+    /**
+     * @test
+     */
+    public function executeWithConfiguredComposerProjectRootPath()
+    {
+        $options = [
+            'composerCommandPath' => 'composer',
+            'projectRootPath' => '/var/www/projectRootPath',
+            'useApplicationWorkspace' => false,
+        ];
+
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $expectedCommand = escapeshellarg(sprintf('%s/composer.json', Files::concatenatePaths([$this->deployment->getApplicationReleasePath($this->application), $options['projectRootPath']])));
+        $this->assertCommandExecuted('/^test -f '.preg_quote($expectedCommand, '/').'$/');
     }
 
     /**

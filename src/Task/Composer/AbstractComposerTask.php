@@ -58,7 +58,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
             $composerRootPath = $deployment->getApplicationReleasePath($application);
         }
 
-        if (isset($options['projectRootPath']) && $options['projectRootPath'] !== null) {
+        if ($options['projectRootPath'] !== null) {
             $composerRootPath = Files::concatenatePaths([$composerRootPath, $options['projectRootPath']]);
         }
 
