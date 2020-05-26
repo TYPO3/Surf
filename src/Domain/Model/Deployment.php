@@ -13,6 +13,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
@@ -102,6 +103,13 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      * @var string
      */
     protected $workspacesBasePath;
+
+    /**
+     * The relative base path to the project root (for example 'htdocs')
+     *
+     * @var string
+     */
+    protected $relativeProjectRootPath = '';
 
     /**
      * The base path to a temporary directory
@@ -201,7 +209,11 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      */
     public function getApplicationReleasePath(Application $application)
     {
-        return $application->getReleasesPath() . '/' . $this->getReleaseIdentifier();
+        return Files::concatenatePaths([
+            $application->getReleasesPath(),
+            $this->getReleaseIdentifier(),
+            $this->relativeProjectRootPath
+        ]);
     }
 
     /**
@@ -342,6 +354,18 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     public function getReleaseIdentifier()
     {
         return $this->releaseIdentifier;
+    }
+
+    public function setRelativeProjectRootPath($relativeProjectRootPath)
+    {
+        $this->relativeProjectRootPath = $relativeProjectRootPath;
+
+        return $this;
+    }
+
+    public function getRelativeProjectRootPath()
+    {
+        return $this->relativeProjectRootPath;
     }
 
     /**
