@@ -1,5 +1,5 @@
 <?php
-return array (
+return [
   'typo3.surf:cleanupreleases' => 'TYPO3\\Surf\\Task\\CleanupReleasesTask',
   'typo3.surf:composer:download' => 'TYPO3\\Surf\\Task\\Composer\\DownloadTask',
   'typo3.surf:composer:install' => 'TYPO3\\Surf\\Task\\Composer\\InstallTask',
@@ -54,4 +54,4 @@ return array (
   'createtargzdistribution' => 'TYPO3\\Surf\\DefinedTask\\CreateTarGzDistributionTask',
   'createtarbz2distribution' => 'TYPO3\\Surf\\DefinedTask\\CreateTarBz2DistributionTask',
   'pushtags' => 'TYPO3\\Surf\\DefinedTask\\Git\\PushTagsTask',
-);
+];

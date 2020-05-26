@@ -129,7 +129,7 @@ class DescribeCommand extends Command implements FactoryAwareInterface
             }
             $this->output->writeln('    <comment>Nodes</comment>: <success>' . implode(
                 ', ',
-                    $application->getNodes()
+                $application->getNodes()
             ) . '</success>');
 
             if ($workflow instanceof SimpleWorkflow) {

@@ -53,7 +53,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     protected function executeCliCommand(array $cliArguments, Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
-        $phpBinaryPathAndFilename = isset($options['phpBinaryPathAndFilename']) ? $options['phpBinaryPathAndFilename'] : 'php';
+        $phpBinaryPathAndFilename = $options['phpBinaryPathAndFilename'] ?? 'php';
         $commandPrefix = '';
         if (isset($options['context'])) {
             $commandPrefix = 'TYPO3_CONTEXT=' . escapeshellarg($options['context']) . ' ';
