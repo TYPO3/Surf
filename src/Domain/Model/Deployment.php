@@ -11,6 +11,7 @@ namespace TYPO3\Surf\Domain\Model;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
@@ -100,6 +101,13 @@ class Deployment implements LoggerAwareInterface
     protected $workspacesBasePath;
 
     /**
+     * The relative base path to the project root (for example 'htdocs')
+     *
+     * @var string
+     */
+    protected $relativeProjectRootPath = '';
+
+    /**
      * The base path to a temporary directory
      *
      * @var string
@@ -116,12 +124,6 @@ class Deployment implements LoggerAwareInterface
      */
     private $deploymentLockIdentifier;
 
-    /**
-     * Constructor
-     *
-     * @param string $name
-     * @param string|null $deploymentLockIdentifier
-     */
     public function __construct($name, $deploymentLockIdentifier = null)
     {
         $this->name = $name;
@@ -203,7 +205,11 @@ class Deployment implements LoggerAwareInterface
      */
     public function getApplicationReleasePath(Application $application)
     {
-        return $application->getReleasesPath() . '/' . $this->getReleaseIdentifier();
+        return Files::concatenatePaths([
+            $application->getReleasesPath(),
+            $this->getReleaseIdentifier(),
+            $this->relativeProjectRootPath
+        ]);
     }
 
     /**
@@ -263,7 +269,7 @@ class Deployment implements LoggerAwareInterface
         }
         $nodes = $this->getNodes();
 
-        return isset($nodes[$name]) ? $nodes[$name] : null;
+        return $nodes[$name] ?? null;
     }
 
     /**
@@ -344,6 +350,18 @@ class Deployment implements LoggerAwareInterface
     public function getReleaseIdentifier()
     {
         return $this->releaseIdentifier;
+    }
+
+    public function setRelativeProjectRootPath($relativeProjectRootPath)
+    {
+        $this->relativeProjectRootPath = $relativeProjectRootPath;
+
+        return $this;
+    }
+
+    public function getRelativeProjectRootPath()
+    {
+        return $this->relativeProjectRootPath;
     }
 
     /**

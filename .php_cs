@@ -16,7 +16,6 @@ $finder = PhpCsFixer\Finder::create()
                            ->exclude('.github')
                            ->exclude('Configuration')
                            ->exclude('Documentation')
-                           ->exclude('Migrations')
                            ->exclude('Resources')
                            ->exclude('vendor')
                            ->in(__DIR__);
