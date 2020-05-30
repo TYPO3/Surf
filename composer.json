@@ -3,7 +3,7 @@
     "description": "TYPO3 Surf is a deployment tool, suited for a wide variety of applications",
     "license": "GPL-3.0-or-later",
     "require": {
-        "php": "^5.6 || >=7.0 <7.4",
+        "php": "^5.6 || >=7.0 <7.5",
         "monolog/monolog": "^1.17",
         "neos/utility-files": "^3.0",
         "padraic/phar-updater": "1.0.5",

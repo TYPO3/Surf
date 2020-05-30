@@ -1,0 +1,28 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.2', '7.3', '7.4']
+
+    name: PHP ${{ matrix.php }} tests
+    steps:
+      -   uses: actions/checkout@v2.0.0
+      -   id: composer-cache
+          run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      -   uses: actions/cache@v1
+          with:
+            path: ${{ steps.composer-cache.outputs.dir }}
+            key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+            restore-keys: |
+              ${{ runner.os }}-composer-
+      -   uses: shivammathur/setup-php@v1
+          with:
+            php-version: ${{ matrix.php }}
+            coverage: none # disable xdebug, pcov
+      -   run: composer install --no-suggest --no-progress
+      -   run: vendor/bin/phpunit
