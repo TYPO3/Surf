@@ -207,11 +207,23 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return string
      */
-    public function getApplicationReleasePath(Application $application)
+    public function getApplicationReleaseBasePath(Application $application)
     {
         return Files::concatenatePaths([
             $application->getReleasesPath(),
-            $this->getReleaseIdentifier(),
+            $this->getReleaseIdentifier()
+        ]);
+    }
+
+    /**
+     * @param Application $application
+     *
+     * @return string
+     */
+    public function getApplicationReleasePath(Application $application)
+    {
+        return Files::concatenatePaths([
+            $this->getApplicationReleaseBasePath($application),
             $this->relativeProjectRootPath
         ]);
     }
@@ -529,7 +541,11 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      */
     public function getDeploymentConfigurationPath()
     {
-        return $this->getDeploymentBasePath() . '/' . $this->getName() . '/Configuration';
+        return Files::concatenatePaths([
+            $this->getDeploymentBasePath(),
+            $this->getName(),
+            'Configuration'
+        ]);
     }
 
     /**
@@ -541,7 +557,26 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      */
     public function getWorkspacePath(Application $application)
     {
-        return $this->workspacesBasePath . '/' . $this->getName() . '/' . $application->getName();
+        return Files::concatenatePaths([
+            $this->workspacesBasePath,
+            $this->getName(),
+            $application->getName()
+        ]);
+    }
+
+    /**
+     * Get a local workspace directory for the application
+     *
+     * @param Application $application
+     *
+     * @return string
+     */
+    public function getWorkspaceWithProjectRootPath(Application $application)
+    {
+        return Files::concatenatePaths([
+            $this->getWorkspacePath($application),
+            $this->relativeProjectRootPath
+        ]);
     }
 
     /**
@@ -594,7 +629,9 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     private function setDeploymentLockIdentifier($deploymentLockIdentifier = null)
     {
         if (! is_string($deploymentLockIdentifier) || $deploymentLockIdentifier === '') {
-            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') : $this->releaseIdentifier;
+            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false
+                ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER')
+                : $this->releaseIdentifier;
         }
         $this->deploymentLockIdentifier = $deploymentLockIdentifier;
     }
