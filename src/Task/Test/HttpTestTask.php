@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Task\Test;
  * file that was distributed with this source code.
  */
 
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
