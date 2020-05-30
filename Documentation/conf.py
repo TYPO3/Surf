@@ -26,9 +26,9 @@ copyright = u'2020, Surf Team'
 author = u'Surf Team'
 
 # The short X.Y version
-version = u'2.0'
+version = u'2.1'
 # The full version, including alpha/beta/rc tags
-release = u'2.0.2'
+release = u'2.1.0'
 
 
 # -- General configuration ---------------------------------------------------
