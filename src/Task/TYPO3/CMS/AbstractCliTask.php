@@ -49,8 +49,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         }
         $commandPrefix .= $phpBinaryPathAndFilename . ' ';
 
-        $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
-
         return $this->shell->executeOrSimulate([
             'cd ' . escapeshellarg($this->workingDirectory),
             $commandPrefix . implode(' ', array_map('escapeshellarg', $cliArguments))
