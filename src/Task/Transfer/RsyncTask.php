@@ -38,7 +38,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $options = $this->configureOptions($options);
 
         $localPackagePath = $deployment->getWorkspacePath($application);
-        $releasePath = $deployment->getApplicationReleasePath($application);
+        $releasePath = $deployment->getApplicationReleaseBasePath($application);
 
         if ($options['webDirectory'] !== null) {
             $this->replacePaths['{webDirectory}'] = $options['webDirectory'];

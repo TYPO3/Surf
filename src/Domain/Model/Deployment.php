@@ -13,6 +13,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Exception as SurfException;
 
 /**
@@ -102,6 +103,13 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      * @var string
      */
     protected $workspacesBasePath;
+
+    /**
+     * The relative base path to the project root (for example 'htdocs')
+     *
+     * @var string
+     */
+    protected $relativeProjectRootPath = '';
 
     /**
      * The base path to a temporary directory
@@ -199,9 +207,25 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return string
      */
+    public function getApplicationReleaseBasePath(Application $application)
+    {
+        return Files::concatenatePaths([
+            $application->getReleasesPath(),
+            $this->getReleaseIdentifier()
+        ]);
+    }
+
+    /**
+     * @param Application $application
+     *
+     * @return string
+     */
     public function getApplicationReleasePath(Application $application)
     {
-        return $application->getReleasesPath() . '/' . $this->getReleaseIdentifier();
+        return Files::concatenatePaths([
+            $this->getApplicationReleaseBasePath($application),
+            $this->relativeProjectRootPath
+        ]);
     }
 
     /**
@@ -342,6 +366,18 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     public function getReleaseIdentifier()
     {
         return $this->releaseIdentifier;
+    }
+
+    public function setRelativeProjectRootPath($relativeProjectRootPath)
+    {
+        $this->relativeProjectRootPath = $relativeProjectRootPath;
+
+        return $this;
+    }
+
+    public function getRelativeProjectRootPath()
+    {
+        return $this->relativeProjectRootPath;
     }
 
     /**
@@ -505,7 +541,11 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      */
     public function getDeploymentConfigurationPath()
     {
-        return $this->getDeploymentBasePath() . '/' . $this->getName() . '/Configuration';
+        return Files::concatenatePaths([
+            $this->getDeploymentBasePath(),
+            $this->getName(),
+            'Configuration'
+        ]);
     }
 
     /**
@@ -517,7 +557,26 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      */
     public function getWorkspacePath(Application $application)
     {
-        return $this->workspacesBasePath . '/' . $this->getName() . '/' . $application->getName();
+        return Files::concatenatePaths([
+            $this->workspacesBasePath,
+            $this->getName(),
+            $application->getName()
+        ]);
+    }
+
+    /**
+     * Get a local workspace directory for the application
+     *
+     * @param Application $application
+     *
+     * @return string
+     */
+    public function getWorkspaceWithProjectRootPath(Application $application)
+    {
+        return Files::concatenatePaths([
+            $this->getWorkspacePath($application),
+            $this->relativeProjectRootPath
+        ]);
     }
 
     /**
@@ -570,7 +629,9 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     private function setDeploymentLockIdentifier($deploymentLockIdentifier = null)
     {
         if (! is_string($deploymentLockIdentifier) || $deploymentLockIdentifier === '') {
-            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') : $this->releaseIdentifier;
+            $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false
+                ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER')
+                : $this->releaseIdentifier;
         }
         $this->deploymentLockIdentifier = $deploymentLockIdentifier;
     }
