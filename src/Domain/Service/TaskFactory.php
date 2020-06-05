@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace TYPO3\Surf\Domain\Service;
 
@@ -29,7 +29,7 @@ class TaskFactory implements ContainerAwareInterface
     {
         $task = $this->createTask($taskName);
 
-        if ( ! $task instanceof Task) {
+        if (! $task instanceof Task) {
             throw new SurfException(sprintf('The task %s is not a subclass of %s but of class %s', $taskName, Task::class, get_class($task)), 1451210811);
         }
 
@@ -41,7 +41,7 @@ class TaskFactory implements ContainerAwareInterface
      */
     private function createTask(string $taskName)
     {
-        if ( ! $this->container->has($taskName)) {
+        if (! $this->container->has($taskName)) {
             $task = new $taskName();
             if ($task instanceof ShellCommandServiceAwareInterface) {
                 $task->setShellCommandService(new ShellCommandService());
@@ -51,5 +51,5 @@ class TaskFactory implements ContainerAwareInterface
         }
 
         return $task;
-}
+    }
 }
