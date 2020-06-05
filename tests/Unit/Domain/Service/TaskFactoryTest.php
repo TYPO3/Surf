@@ -10,34 +10,32 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
  */
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Domain\Service\TaskFactory;
 use TYPO3\Surf\Exception as SurfException;
+use TYPO3\Surf\Task\CreateArchiveTask;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class TaskFactoryTest extends TestCase
 {
+    use KernelAwareTrait;
+
     /**
      * @var TaskFactory
      */
     protected $subject;
 
-    /**
-     * @var ContainerInterface|ObjectProphecy
-     */
-    private $container;
-
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $container = self::getKernel()->getContainer();
         $this->subject = new TaskFactory();
-        $this->subject->setContainer($this->container->reveal());
+        $this->subject->setContainer($container);
     }
 
     /**
@@ -45,33 +43,18 @@ class TaskFactoryTest extends TestCase
      */
     public function createTaskInstance(): void
     {
-        $task = new class extends Task {
-            public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
-            {
-            }
-        };
-        $this->container->get(get_class($task))->willReturn($task);
-
-        $this->assertEquals($task, $this->subject->createTaskInstance(get_class($task)));
+        $this->assertInstanceOf(CreateArchiveTask::class, $this->subject->createTaskInstance(CreateArchiveTask::class));
     }
 
     /**
      * @test
      */
-    public function createTaskInstanceImplementingShellCommandServiceAwareInterface(): void
+    public function createSyntheticServiceIfNotExists(): void
     {
-        $task = new class extends Task implements ShellCommandServiceAwareInterface {
-            public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
-            {
-            }
-
-            public function setShellCommandService(ShellCommandService $shellCommandService): void
-            {
-            }
-        };
-        $this->container->get(get_class($task))->willReturn($task);
-
-        $this->assertEquals($task, $this->subject->createTaskInstance(get_class($task)));
+        /** @var CustomTask $customTask */
+        $customTask = $this->subject->createTaskInstance(CustomTask::class);
+        $this->assertNotNull($customTask->getShell());
+        $this->assertInstanceOf(CustomTask::class, $customTask);
     }
 
     /**
@@ -81,8 +64,21 @@ class TaskFactoryTest extends TestCase
     {
         $task = new class {
         };
-        $this->container->get(get_class($task))->willReturn($task);
         $this->expectException(SurfException::class);
         $this->subject->createTaskInstance(get_class($task));
+    }
+}
+
+class CustomTask extends Task implements ShellCommandServiceAwareInterface
+{
+    use ShellCommandServiceAwareTrait;
+
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    {
+    }
+
+    public function getShell(): ShellCommandService
+    {
+        return $this->shell;
     }
 }
