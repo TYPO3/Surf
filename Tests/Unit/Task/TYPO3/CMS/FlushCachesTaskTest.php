@@ -48,4 +48,30 @@ class FlushCachesTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("/php 'vendor\/bin\/typo3cms' 'cache:flush' '--force'$/");
     }
+
+    /**
+     * @test
+     */
+    public function executeWithEmptyArgumentsExecutesCacheFlushWithoutArguments()
+    {
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'arguments' => []
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("/php 'vendor\/bin\/typo3cms' 'cache:flush'$/");
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithFilesOnlyArgumentExecutesCacheFlushWithFilesOnlyArgument()
+    {
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'arguments' => ['--files-only']
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("/php 'vendor\/bin\/typo3cms' 'cache:flush' '--files-only'$/");
+    }
 }
