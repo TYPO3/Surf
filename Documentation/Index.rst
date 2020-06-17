@@ -68,5 +68,4 @@ If you find an error or something is missing, please:
      CliUsage/Index
      SmokeTesting/Index
      Examples/Index
-     ApiReference/index
      Migration/Index
