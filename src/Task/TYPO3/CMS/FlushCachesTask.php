@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
@@ -47,10 +48,7 @@ class FlushCachesTask extends AbstractCliTask
     {
         switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
             case 'typo3_console':
-                if ($options['flushCacheOptions'] !== []) {
-                    return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush', implode(' ', $options['flushCacheOptions'])];
-                }
-                return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush'];
+                return array_merge([$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush'], $options['arguments']);
             default:
                 return [];
         }
@@ -58,7 +56,10 @@ class FlushCachesTask extends AbstractCliTask
 
     protected function resolveOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('flushCacheOptions', ['--files-only']);
-        $resolver->setAllowedTypes('flushCacheOptions', ['array']);
+        $resolver->setDefault('arguments', [])
+            ->setAllowedTypes('arguments', ['array', 'string'])
+            ->setNormalizer('arguments', function (Options $options, $value) {
+                return (array)$value;
+            });
     }
 }

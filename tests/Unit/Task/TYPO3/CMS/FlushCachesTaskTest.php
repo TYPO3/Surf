@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
  */
 
 use Prophecy\Argument;
+use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
@@ -18,22 +19,23 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 class FlushCachesTaskTest extends BaseTaskTest
 {
     /**
-     * @test
+     * @var FlushCachesTask
      */
-    public function wrongApplicationTypeGivenThrowsException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->task->execute($this->node, $this->application, $this->deployment, []);
-    }
+    protected $task;
 
     /**
-     * @test
+     * @return FlushCachesTask
      */
-    public function noSuitableCliArgumentsGiven(): void
+    protected function createTask(): FlushCachesTask
     {
-        $application = new CMS();
-        $this->task->execute($this->node, $application, $this->deployment, []);
-        $this->mockLogger->warning(Argument::any())->shouldBeCalledOnce();
+        return new FlushCachesTask();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->application = new CMS('TestApplication');
+        $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
@@ -42,35 +44,80 @@ class FlushCachesTaskTest extends BaseTaskTest
     public function executeFlushCacheCommandWithWrongOptionsType(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $application = new CMS();
-        $options = ['scriptFileName' => 'typo3cms', 'flushCacheOptions' => 1];
-        $this->task->execute($this->node, $application, $this->deployment, $options);
+        $options = [
+            'scriptFileName' => 'typo3cms',
+            'arguments' => 1
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
     }
 
     /**
      * @test
      */
-    public function executeFlushCacheCommandSuccessfully(): void
+    public function wrongApplicationTypeGivenThrowsException(): void
     {
-        $application = new CMS();
-        $options = ['scriptFileName' => 'typo3cms'];
-        $this->task->execute($this->node, $application, $this->deployment, $options);
-        $this->assertCommandExecuted('/php \'typo3cms\' \'cache:flush\' \'--files-only\'$/');
+        $invalidApplication = new BaseApplication('Hello world app');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->task->execute($this->node, $invalidApplication, $this->deployment, []);
     }
 
     /**
      * @test
      */
-    public function executeFlushCacheWithCustomOptionsCommandSuccessfully(): void
+    public function noSuitableCliArgumentsGiven(): void
     {
-        $application = new CMS();
-        $options = ['scriptFileName' => 'typo3cms', 'flushCacheOptions' => ['--foo-bar-baz', '--foo-qux']];
-        $this->task->execute($this->node, $application, $this->deployment, $options);
-        $this->assertCommandExecuted('/php \'typo3cms\' \'cache:flush\' \'--foo-bar-baz --foo-qux\'$/');
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
+        $this->mockLogger->warning(Argument::any())->shouldBeCalledOnce();
     }
 
-    protected function createTask()
+    /**
+     * @test
+     */
+    public function executeWithoutArgumentsExecutesCacheFlushWithoutArguments(): void
     {
-        return new FlushCachesTask();
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms'
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("/php 'vendor\/bin\/typo3cms' 'cache:flush'$/");
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithEmptyArgumentsExecutesCacheFlushWithoutArguments(): void
+    {
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'arguments' => []
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("/php 'vendor\/bin\/typo3cms' 'cache:flush'$/");
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithFilesOnlyArgumentExecutesCacheFlushWithFilesOnlyArgument(): void
+    {
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'arguments' => ['--files-only']
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("/php 'vendor\/bin\/typo3cms' 'cache:flush' '--files-only'$/");
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithMultipleArgumentExecutesCacheFlushWithArguments(): void
+    {
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'arguments' => ['--files-only', '--force']
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("/php 'vendor\/bin\/typo3cms' 'cache:flush' '--files-only' '--force'$/");
     }
 }
