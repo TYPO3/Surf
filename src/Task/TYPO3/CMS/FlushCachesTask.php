@@ -24,7 +24,7 @@ class FlushCachesTask extends AbstractCliTask
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
 
-        /** @var $application CMS */
+        /** @var CMS $application */
         Assert::isInstanceOf($application, CMS::class);
 
         $options = $this->configureOptions($options);

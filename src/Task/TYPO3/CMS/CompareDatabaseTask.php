@@ -33,7 +33,7 @@ class CompareDatabaseTask extends AbstractCliTask
 {
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        /** @var $application CMS */
+        /** @var CMS $application */
         Assert::isInstanceOf($application, CMS::class);
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
