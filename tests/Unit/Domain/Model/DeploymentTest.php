@@ -28,7 +28,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function initializeUsesSimpleWorkflowAsDefault()
+    public function initializeUsesSimpleWorkflowAsDefault(): void
     {
         $deployment = new Deployment('Test deployment');
         $deployment->setContainer(static::getKernel()->getContainer());
@@ -40,7 +40,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function getNodesReturnsNodesFromApplicationsAsSet()
+    public function getNodesReturnsNodesFromApplicationsAsSet(): void
     {
         $deployment = new Deployment('Test deployment');
         $deployment->setContainer(static::getKernel()->getContainer());
@@ -58,7 +58,7 @@ class DeploymentTest extends TestCase
             ->addApplication($application2);
 
         $nodes = $deployment->getNodes();
-        $nodeNames = array_map(function ($node) {
+        $nodeNames = array_map(static function (Node $node) {
             return $node->getName();
         }, $nodes);
         sort($nodeNames);
@@ -69,7 +69,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function constructorCreatesReleaseIdentifier()
+    public function constructorCreatesReleaseIdentifier(): void
     {
         $deployment = new Deployment('Test deployment');
         $deployment->setContainer(static::getKernel()->getContainer());
@@ -124,6 +124,43 @@ class DeploymentTest extends TestCase
         putenv(sprintf('SURF_DEPLOYMENT_LOCK_IDENTIFIER=%s', $deploymentLockIdentifier));
         $deployment = new Deployment('Some name');
         $this->assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
+    }
+
+    /**
+     * @test
+     */
+    public function deploymentContainsRelativeProjectRootPathForApplicationReleasePath(): void
+    {
+        $deployment = new Deployment('Some name');
+
+        $application = new Application('Test application 1');
+        $application->setDeploymentPath('/deployment/path');
+
+        $releaseIdentifier = $deployment->getReleaseIdentifier();
+
+        $this->assertEquals(
+            '/deployment/path/releases/' . $releaseIdentifier,
+            $deployment->getApplicationReleasePath($application)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function deploymentContainsChangedRelativeProjectRootPathForApplicationReleasePath(): void
+    {
+        $deployment = new Deployment('Some name');
+        $deployment->setRelativeProjectRootPath('htdocs');
+
+        $application = new Application('Test application 1');
+        $application->setDeploymentPath('/deployment/path');
+
+        $releaseIdentifier = $deployment->getReleaseIdentifier();
+
+        $this->assertEquals(
+            '/deployment/path/releases/' . $releaseIdentifier . '/htdocs',
+            $deployment->getApplicationReleasePath($application)
+        );
     }
 
     /**
