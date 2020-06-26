@@ -30,11 +30,21 @@ class FlushCacheListTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function requiredOptionFlushCacheListNotGivenThrowsException()
+    public function requiredOptionFlushCacheListWithEmptyStringThrowsException()
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => '']);
+    }
+
+    /**
+     * @test
+     */
+    public function requiredOptionFlushCacheListWithEmptyArrayThrowsException()
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->application = new Flow();
+        $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => []]);
     }
 
     /**
@@ -51,10 +61,20 @@ class FlushCacheListTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeSuccessfully()
+    public function executeSuccessfullyWithString()
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => 'list']);
+        $this->assertCommandExecuted(sprintf('cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:flushone \'--identifier\' \'list\'', $this->deployment->getReleaseIdentifier()));
+    }
+
+    /**
+     * @test
+     */
+    public function executeSuccessfullyWithArray()
+    {
+        $this->application = new Flow();
+        $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => ['list']]);
         $this->assertCommandExecuted(sprintf('cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:flushone \'--identifier\' \'list\'', $this->deployment->getReleaseIdentifier()));
     }
 

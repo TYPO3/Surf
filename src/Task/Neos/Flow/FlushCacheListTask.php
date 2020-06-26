@@ -91,14 +91,20 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
      */
     protected function resolveOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired('flushCacheList');
-        $resolver->setAllowedValues('flushCacheList', static function ($value) {
-            return trim($value) !== '';
-        });
-
-        $resolver->setNormalizer('flushCacheList', static function (Options $options, $value) {
-            return is_array($value) ? $value : explode(',', $value);
-        });
+        $resolver->setRequired('flushCacheList')
+            ->setAllowedTypes('flushCacheList', ['array', 'string'])
+            ->setNormalizer('flushCacheList', static function (Options $options, $value) {
+                return is_array($value) ? $value : explode(',', $value);
+            })
+            ->setAllowedValues('flushCacheList', static function ($value) {
+                if (is_array($value)) {
+                    return !empty($value);
+                }
+                if (is_string($value)) {
+                    return trim($value) !== '';
+                }
+                return false;
+            });
 
         $resolver->setDefault('phpBinaryPathAndFilename', 'php')
             ->setAllowedTypes('phpBinaryPathAndFilename', 'string');
