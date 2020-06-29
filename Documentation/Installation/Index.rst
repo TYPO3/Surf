@@ -18,13 +18,14 @@ Download phar archive
 
 To install Surf as phar archive, run the following commands::
 
-    curl -L https://github.com/TYPO3/Surf/releases/download/2.1.1/surf.phar -o surf.phar
-    chmod +x surf.phar
-    mv surf.phar /usr/local/bin/surf
+    mkdir /usr/local/surf
+    curl -L https://github.com/TYPO3/Surf/releases/download/2.1.1/surf.phar -o /usr/local/surf/surf.phar
+    chmod +x /usr/local/surf/surf.phar
+    ln -s /usr/local/surf/surf.phar /usr/local/bin/surf
 
 You may need extended privileges e.g. `sudo`.
 
-This way, you can add `/usr/local/bin/surf` to `PHP Include Paths` of your IDE.
+This way, you can add `/usr/local/surf` to `PHP Include Paths` of your IDE.
 
 Upgrading Surf
 ~~~~~~~~~~~~~~
