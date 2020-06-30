@@ -1,9 +1,9 @@
 .. -*- coding: utf-8 -*- with BOM.
 .. include:: ../Includes.txt
 
-=============================
-Migration from 0.9.x to 2.0.0
-=============================
+===========================
+Migration from 0.9.x to 2.0
+===========================
 
 1. Move deployment scripts form `Build/Surf` to `~/.surf/deployments`
 #. Rename task or use migrate command to switch to new task names

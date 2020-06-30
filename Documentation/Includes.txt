@@ -5,10 +5,8 @@
 .. role:: html(code)
 .. role:: js(code)
 .. role:: php(code)
-.. role:: typoscript(code)
-
-.. role:: ts(typoscript)
-   :class: typoscript
 
 .. default-role:: code
 .. highlight:: php
+
+.. |copyright| replace:: 2020
