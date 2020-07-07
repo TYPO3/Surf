@@ -32,8 +32,8 @@ jobs:
         -   name: Install Composer Dependencies
             run: composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative
 
-        -   name: Build Phar with Box
-            run: box build
+        -   name: Compile Phar with Box
+            run: box compile
 
         -   name: Run surf.phar once
             run: release/surf.phar --version
