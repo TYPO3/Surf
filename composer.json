@@ -11,6 +11,7 @@
         "symfony/config": "^5.0",
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^5.0",
+        "symfony/finder": "^5.1",
         "symfony/http-kernel": "^4.0",
         "symfony/options-resolver": "^4.0",
         "symfony/process": "^4.0",
