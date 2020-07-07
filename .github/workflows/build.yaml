@@ -39,7 +39,7 @@ jobs:
             run: release/surf.phar --version
 
         -   name: Upload Surf Phar
-                uses: actions/upload-artifact@v1
-                with:
-                    name: Surf Phar
-                    path: release/surf.phar
+            uses: actions/upload-artifact@v1
+            with:
+                name: Surf Phar
+                path: release/surf.phar
