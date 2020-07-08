@@ -50,10 +50,12 @@ This way, you can add `~/.composer/vendor/typo3/surf` to `PHP Include Paths` of 
 Building a Surf phar from source
 --------------------------------
 
-Surf is built using the `box project <https://box-project.github.io/box2/>`_ and the process is simple:
+Surf is built using `humbug/box <https://github.com/humbug/box/>`_ and the process is simple:
 
-* Download the latest `box.phar` and put in an executable directory
-* `cd your/surf/clone`
-* `composer install --no-dev && php box.phar build`
+* Install humbug/box as described in its documentation
+* Clone or download the desired branch of typo3/surf
+* `cd your/surf/folder`
+* `composer install --no-dev`
+* `path/to/box compile`
 
-The generated `surf.phar` should work as expected.
+The generated `surf.phar` in the folder `release` should work as expected.

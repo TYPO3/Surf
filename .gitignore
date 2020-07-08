@@ -7,3 +7,4 @@ sphpdox.phar
 _Output/
 Documentation/.doctrees
 var/
+/release/

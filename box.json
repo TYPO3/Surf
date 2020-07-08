@@ -2,7 +2,8 @@
   "output": "release/surf.phar",
   "files": [
     "LICENSE.txt",
-    "Resources/Private/Scripts/PasswordSshLogin.expect"
+    "Resources/Private/Scripts/PasswordSshLogin.expect",
+    "Resources/services.yaml"
   ],
   "finder": [
     {

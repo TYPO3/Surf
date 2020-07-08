@@ -54,7 +54,6 @@
         "bin/surf"
     ],
     "scripts": {
-        "phpstan": "vendor/bin/phpstan analyse --ansi",
-        "release-phar": "bin/box build"
+        "phpstan": "vendor/bin/phpstan analyse --ansi"
     }
 }
