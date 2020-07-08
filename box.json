@@ -1,7 +1,5 @@
 {
-  "output": "bin/surf.phar",
-  "main": "surf",
-  "chmod": "0755",
+  "output": "release/surf.phar",
   "files": [
     "LICENSE.txt",
     "Resources/Private/Scripts/PasswordSshLogin.expect"
@@ -13,6 +11,5 @@
       "in": ["src", "vendor", "Migrations", "Resources"]
     }
   ],
-  "git-commit": "git-commit",
-  "stub": true
+  "git-commit": "git-commit"
 }
