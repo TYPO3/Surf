@@ -94,3 +94,10 @@ If you like to remove certain tasks from the flow, just do it like that::
 
    // Only remove the task for a specific application
    $workflow->removeTask(FlushCachesTask::class, $application);
+
+The workflow can only be changed within a callback during the initialization of the deployment::
+
+   $deployment->onInitialize(function () use ($deployment, $application) {
+       $deployment->getWorkflow()
+           ->addTask('YourTask', 'cleanup');
+   });
