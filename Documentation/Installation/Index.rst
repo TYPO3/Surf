@@ -55,7 +55,9 @@ To install Surf within your project via composer, run the following command::
 
     composer require typo3/surf:^2.0
 
-The advantage of this method is that you can directly inspect the source files of surf without any further configuration in your IDE.
+The advantage of this method is that you can directly inspect the source files of surf without any further configuration in your IDE. 
+
+.. note:: Because of surf's dependencies it could be that you can't install surf in your project root. In that case you should install surf in a sub directory.
 
 .. _installation-build-phar:
 
