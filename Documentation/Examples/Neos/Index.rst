@@ -39,3 +39,4 @@ If you would like to deploy a Neos Application a good starting point is to use N
                   ->afterStage('switch', TYPO3\Surf\Task\Neos\Flow\FlushCacheListTask::class);
          }
       );
+

@@ -49,3 +49,4 @@ If you would like to deploy a TYPO3 Website a good starting point is to use TYPO
                    ->removeTask(\TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask::class, $application);
            }
        );
+
