@@ -49,7 +49,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $configurationFileExtension = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'yaml';
+        $configurationFileExtension = $options['configurationFileExtension'] ?? 'yaml';
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
         $configurationPath = $deployment->getDeploymentConfigurationPath();
         if (!is_dir($configurationPath)) {
@@ -74,7 +74,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
                 $expect = '';
                 if ($node->hasOption('password')) {
                     $sshOptions .= '-o PubkeyAuthentication=no ';
-                    $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(dirname(__DIR__)))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
+                    $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(__DIR__, 4), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
                     if (Phar::running() !== '') {
                         $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
                         $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([$deployment->getTemporaryPath(), 'PasswordSshLogin.expect']);

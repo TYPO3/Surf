@@ -61,17 +61,17 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $quietFlag = (isset($options['verbose']) && $options['verbose']) ? '' : '-q';
         $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $noPubkeyAuthentication . $port . $key . '" ');
 
-        $rsyncExcludes = isset($options['rsyncExcludes']) ? $options['rsyncExcludes'] : ['.git'];
+        $rsyncExcludes = $options['rsyncExcludes'] ?? ['.git'];
         $excludeFlags = $this->getExcludeFlags($rsyncExcludes);
 
-        $rsyncFlags = (isset($options['rsyncFlags']) ? $options['rsyncFlags'] : '--recursive --times --perms --links --delete --delete-excluded') . $excludeFlags;
+        $rsyncFlags = ($options['rsyncFlags'] ?? '--recursive --times --perms --links --delete --delete-excluded') . $excludeFlags;
 
         $destinationArgument = ($node->isLocalhost() ? $remotePath : "{$username}{$hostname}:{$remotePath}");
 
         $command = "rsync {$quietFlag} --compress {$rshFlag} {$rsyncFlags} " . escapeshellarg($localPackagePath . '/.') . ' ' . escapeshellarg($destinationArgument);
 
         if ($node->hasOption('password')) {
-            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
+            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(__DIR__, 3), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
             if (Phar::running() !== '') {
                 $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
                 $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([$deployment->getTemporaryPath(), 'PasswordSshLogin.expect']);

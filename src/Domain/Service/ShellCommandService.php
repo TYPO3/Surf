@@ -143,7 +143,7 @@ class ShellCommandService
         $sshCommand = 'ssh ' . implode(' ', $sshOptions) . ' ' . escapeshellarg($username . $hostname) . ' ' . escapeshellarg($command);
 
         if ($node->hasOption('password')) {
-            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
+            $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(__DIR__, 3), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
             if (\Phar::running() !== '') {
                 $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
                 $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([$deployment->getTemporaryPath(), 'PasswordSshLogin.expect']);

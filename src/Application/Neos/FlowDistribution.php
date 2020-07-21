@@ -115,10 +115,8 @@ class FlowDistribution extends Flow
             }
         }
 
-        if ($this->hasOption('releaseHost')) {
-            if (!$this->hasOption('releaseHostSitePath')) {
-                throw new InvalidConfigurationException('"releaseHostSitePath" option needs to be specified', 1321545975);
-            }
+        if ($this->hasOption('releaseHost') && !$this->hasOption('releaseHostSitePath')) {
+            throw new InvalidConfigurationException('"releaseHostSitePath" option needs to be specified', 1321545975);
         }
         if ($this->hasOption('releaseHost') && $this->hasOption('enableSourceforgeUpload') && $this->getOption('enableSourceforgeUpload') === true) {
             if (!$this->hasOption('releaseDownloadLabel')) {

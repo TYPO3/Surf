@@ -68,11 +68,11 @@ class CompareDatabaseTask extends AbstractCliTask
     {
         switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
             case 'typo3_console':
-                $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '*.add,*.change';
+                $databaseCompareMode = $options['databaseCompareMode'] ?? '*.add,*.change';
                 return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'database:updateschema', $databaseCompareMode];
             case 'coreapi':
                 $deployment->getLogger()->warning(DeprecationMessageFactory::createDeprecationWarningForCoreApiUsage());
-                $databaseCompareMode = isset($options['databaseCompareMode']) ? $options['databaseCompareMode'] : '2,4';
+                $databaseCompareMode = $options['databaseCompareMode'] ?? '2,4';
                 return [$this->getCliDispatchScriptFileName($options), 'extbase', 'databaseapi:databasecompare', $databaseCompareMode];
             default:
                 return [];
