@@ -11,9 +11,6 @@ namespace TYPO3\Surf\Tests\Unit;
 use InvalidArgumentException;
 use PHPUnit\Framework\Constraint\Constraint;
 
-if (!class_exists(Constraint::class)) {
-    class_alias('PHPUnit_Framework_Constraint', Constraint::class);
-}
 /**
  * Class AssertCommandExecuted
  */
