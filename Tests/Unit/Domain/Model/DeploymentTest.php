@@ -23,7 +23,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function initializeUsesSimpleWorkflowAsDefault(): void
+    public function initializeUsesSimpleWorkflowAsDefault()
     {
         $deployment = new Deployment('Test deployment');
         $deployment->initialize();
@@ -34,7 +34,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function getNodesReturnsNodesFromApplicationsAsSet(): void
+    public function getNodesReturnsNodesFromApplicationsAsSet()
     {
         $deployment = new Deployment('Test deployment');
         $application1 = new Application('Test application 1');
@@ -62,7 +62,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function constructorCreatesReleaseIdentifier(): void
+    public function constructorCreatesReleaseIdentifier()
     {
         $deployment = new Deployment('Test deployment');
 
@@ -122,7 +122,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function deploymentContainsRelativeProjectRootPathForApplicationReleasePath(): void
+    public function deploymentContainsRelativeProjectRootPathForApplicationReleasePath()
     {
         $deployment = new Deployment('Some name');
 
@@ -140,7 +140,7 @@ class DeploymentTest extends TestCase
     /**
      * @test
      */
-    public function deploymentContainsChangedRelativeProjectRootPathForApplicationReleasePath(): void
+    public function deploymentContainsChangedRelativeProjectRootPathForApplicationReleasePath()
     {
         $deployment = new Deployment('Some name');
         $deployment->setRelativeProjectRootPath('htdocs');
