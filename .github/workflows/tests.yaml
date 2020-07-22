@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.2', '7.3', '7.4']
+        php: ['7.0', '7.1', '7.2', '7.3', '7.4']
     name: PHP ${{ matrix.php }} unittests
     steps:
     - uses: actions/checkout@v2.0.0
