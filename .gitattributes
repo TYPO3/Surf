@@ -10,5 +10,6 @@
 /box.json.dist export-ignore
 /Documentation export-ignore
 /phpunit.xml.dist export-ignore
+/rector.php export-ignore
 /README.md export-ignore
 /Tests export-ignore
