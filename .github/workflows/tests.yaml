@@ -40,3 +40,19 @@ jobs:
         coverage: none # disable xdebug, pcov
     - run: composer install --no-suggest --no-progress
     - run: vendor/bin/phpunit
+
+  rector_checkstyle:
+    name: Rector Checkstyle
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.2
+        coverage: none
+        tools: cs2pr
+    - name: Install rector/rector
+      run: composer global require "rector/rector:^0.7.52" --no-ansi --no-interaction --no-progress --classmap-authoritative
+    - name: Run rector
+      run: rector process --ansi --dry-run --output-format=checkstyle | cs2pr

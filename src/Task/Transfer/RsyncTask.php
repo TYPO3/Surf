@@ -41,6 +41,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        $passwordSshLoginScriptPathAndFilename = '';
         $localPackagePath = $deployment->getWorkspacePath($application);
         $releasePath = $deployment->getApplicationReleaseBasePath($application);
 

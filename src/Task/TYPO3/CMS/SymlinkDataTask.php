@@ -37,6 +37,7 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
+        $commands = [];
         $options = $this->configureOptions($options);
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
         $webDirectory = $options['webDirectory'];
