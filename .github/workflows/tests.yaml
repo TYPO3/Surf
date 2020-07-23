@@ -24,7 +24,7 @@ jobs:
       matrix:
         php: ['7.0', '7.1', '7.2', '7.3', '7.4']
         update: [true, false]
-    name: PHP ${{ matrix.php }} unittests
+    name: PHP ${{ matrix.php }} unittests update ${{ matrix.update }}
     steps:
     - uses: actions/checkout@v2.0.0
     - id: composer-cache
