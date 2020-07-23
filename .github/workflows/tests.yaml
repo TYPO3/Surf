@@ -23,6 +23,7 @@ jobs:
     strategy:
       matrix:
         php: ['7.0', '7.1', '7.2', '7.3', '7.4']
+        update: [true, false]
     name: PHP ${{ matrix.php }} unittests
     steps:
     - uses: actions/checkout@v2.0.0
@@ -39,6 +40,8 @@ jobs:
         php-version: ${{ matrix.php }}
         coverage: none # disable xdebug, pcov
     - run: composer install --no-suggest --no-progress
+    - run: composer update --no-suggest --no-progress
+      if: ${{ matrix.update }}
     - run: vendor/bin/phpunit
 
   rector_checkstyle:
