@@ -101,3 +101,4 @@ typo3context.php::
 		}
 	}
 	putenv('TYPO3_CONTEXT=' . $context);
+

@@ -53,3 +53,4 @@ Add something like this to ~/.ssh/config to reuse existing SSH connections::
    ControlMaster auto
    ControlPath /tmp/ssh_mux_%h_%p_%r
    ControlPersist 600
+

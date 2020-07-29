@@ -43,7 +43,7 @@ class CopyConfigurationTask extends \TYPO3\Surf\Task\Neos\Flow\CopyConfiguration
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $deployment->getLogger()->warning(DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__));
-        $options['configurationFileExtension'] = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'php';
+        $options['configurationFileExtension'] = $options['configurationFileExtension'] ?? 'php';
         parent::execute($node, $application, $deployment, $options);
     }
 }

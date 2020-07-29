@@ -7,6 +7,9 @@ How to deploy Neos websites
 
 If you would like to deploy a Neos Application a good starting point is to use Neos Application class provided by Surf::
 
+   <?php
+   /** @var \TYPO3\Surf\Domain\Model\Deployment $deployment */
+
    $node = new TYPO3\Surf\Domain\Model\Node('production');
    $node
       ->setHostname('my.node.com')
@@ -25,7 +28,7 @@ If you would like to deploy a Neos Application a good starting point is to use N
       ])
       ->setDeploymentPath('/var/www/vhosts/my.node.com')
       ->addNode($node);
-   /** @var $deployment TYPO3\Surf\Domain\Model\Deployment "injected" into this script from Surf */
+
    $deployment
       ->addApplication($application)
       ->onInitialize(
@@ -36,3 +39,4 @@ If you would like to deploy a Neos Application a good starting point is to use N
                   ->afterStage('switch', TYPO3\Surf\Task\Neos\Flow\FlushCacheListTask::class);
          }
       );
+

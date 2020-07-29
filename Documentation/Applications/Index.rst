@@ -37,3 +37,4 @@ Example::
       'git cherry-pick FETCH_HEAD'
    ]
    ));
+

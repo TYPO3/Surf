@@ -30,7 +30,7 @@ final class SystemClock implements ClockInterface
      */
     public function stringToTime($string, $time = null)
     {
-        $time = isset($time) ? $time : time();
+        $time = $time ?? time();
         $timestamp = strtotime($string, $time);
 
         if ($timestamp === false) {

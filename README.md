@@ -5,7 +5,7 @@
 Surf package is a complete automated deployment tool. It is best used but by far not limited to deploy TYPO3 CMS and Flow applications. It's inspired by some
 features of Capistrano (thanks) concerning the Git workflow.
 
-Some of the features of the Surf package:
+Some features of TYPO3 Surf:
 
 * Remote checkout of Git repositories with submodules (sorry, no SVN yet)
 * Flexible, declarative configuration of deployments

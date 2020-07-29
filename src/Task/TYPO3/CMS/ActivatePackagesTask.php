@@ -51,7 +51,7 @@ class ActivatePackagesTask extends AbstractCliTask
             return;
         }
         $deployment->getLogger()->warning('This task has been deprecated and will be removed in Surf 2.1. Please use SetUpExtensionsTask instead.');
-        $activePackages = isset($options['activePackages']) ? $options['activePackages'] : [];
+        $activePackages = $options['activePackages'] ?? [];
         foreach ($activePackages as $packageKey) {
             $this->executeCliCommand(
                 [$scriptFileName, 'extension:activate', $packageKey],

@@ -94,22 +94,21 @@ Add task to the deployment flow
 So we have seen how to create custom tasks in different ways. In the following we will see how we add these tasks to the deployment flow::
 
     <?php
+    /** @var \TYPO3\Surf\Domain\Model\Deployment $deployment */
 
-    ...
+    //...
 
     $application = new \TYPO3\Surf\Application\TYPO3\CMS();
-    $deployment->addApplication($application);
-    $workflow = $deployment->getWorkflow();
 
-    $workflow->defineTask('CopyEnvFileTask', \TYPO3\Surf\Task\ShellTask::class, [
-        'command' => [
-            "cp {sharedPath}/.env {releasePath}/.env",
-            "cd {releasePath}",
-        ]
-    ]);
-
-    $deployment->onInitialize(function() use ($workflow, $application) {
-        $workflow->afterStage('transfer', 'CopyEnvFileTask', $application);
+    $deployment->onInitialize(function () use ($deployment, $application) {
+        $deployment->getWorkflow()
+            ->defineTask('CopyEnvFileTask', \TYPO3\Surf\Task\ShellTask::class, [
+                'command' => [
+                    "cp {sharedPath}/.env {releasePath}/.env",
+                    "cd {releasePath}",
+                ]
+            ])
+            ->afterStage('transfer', 'CopyEnvFileTask', $application);
     });
 
 This will execute the new task after the stage transfer only for the application referenced by $application.
@@ -117,14 +116,15 @@ This will execute the new task after the stage transfer only for the application
 Besides specifying the execution point via a stage, you can also give an existing task as an anchor and specify the task execution with **afterTask** or **beforeTask**::
 
     <?php
+    /** @var \TYPO3\Surf\Domain\Model\Deployment $deployment */
 
-    ...
-
-    $workflow->beforeTask(SomeTask::class,
-        [
-            'CopyEnvFileTask'
-        ]
-    );
+    //...
+    $deployment->onInitialize(function () use ($deployment, $application) {
+        $deployment->getWorkflow()
+            ->beforeTask(SomeTask::class, [
+                'CopyEnvFileTask'
+            ]);
+    });
 
 
 The following table shows all the methods to manipulate the tasks in the deployment flow (part of the abstract Workflow class):

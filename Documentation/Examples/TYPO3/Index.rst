@@ -31,6 +31,7 @@ If you would like to deploy a TYPO3 Website a good starting point is to use TYPO
            $application->getOption('webDirectory') . '/fileadmin',
            'packages/**.sass'
        ])
+       ->setOption(TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask::class . '[arguments]', [])
        ->addSymlink($application->getOption('webDirectory') . '/typo3conf/LocalConfiguration.php', '../../../../shared/Configuration/LocalConfiguration.php')
        ->addNode($node);
 
@@ -48,3 +49,4 @@ If you would like to deploy a TYPO3 Website a good starting point is to use TYPO
                    ->removeTask(\TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask::class, $application);
            }
        );
+

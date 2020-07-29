@@ -110,6 +110,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     {
         $this->clockMock->method('currentTime')->willReturn($currentTime);
 
+        $folderStructure = [];
         $folderStructure['.'] = '.';
         $timestampMap = [];
         foreach ($identifiers as $time) {
