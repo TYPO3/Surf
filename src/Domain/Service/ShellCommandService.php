@@ -113,7 +113,7 @@ class ShellCommandService
      */
     protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = true)
     {
-        $passwordSshLoginScriptPathAndFilename = '';
+        $passwordSshLoginScriptPathAndFilename = null;
         $command = $this->prepareCommand($command);
         $deployment->getLogger()->debug('$' . $node->getName() . ': "' . $command . '"');
 
