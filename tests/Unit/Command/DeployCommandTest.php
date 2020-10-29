@@ -44,6 +44,7 @@ final class DeployCommandTest extends TestCase
         $deployment = $this->prophesize(Deployment::class);
         $deployment->deploy()->shouldBeCalledOnce();
         $deployment->getStatus()->willReturn(Deployment::STATUS_SUCCESS);
+
         $this->factory->getDeployment(
             'Foo',
             Argument::exact(null),
