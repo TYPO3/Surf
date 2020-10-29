@@ -22,9 +22,11 @@ class ConsoleHandlerTest extends TestCase
      */
     public function constructor(): void
     {
+        /* @var OutputInterface|\Prophecy\Prophecy\ObjectProphecy $output */
         $output = $this->prophesize(OutputInterface::class);
+
         $handler = new ConsoleHandler($output->reveal(), false);
-        $this->assertFalse($handler->getBubble(), 'the bubble parameter gets propagated');
+        self::assertFalse($handler->getBubble(), 'the bubble parameter gets propagated');
     }
 
     /**
@@ -32,10 +34,12 @@ class ConsoleHandlerTest extends TestCase
      */
     public function isHandlingReturnsTrue(): void
     {
+        /* @var OutputInterface|\Prophecy\Prophecy\ObjectProphecy $output */
         $output = $this->prophesize(OutputInterface::class);
         $output->getVerbosity()->willReturn(OutputInterface::VERBOSITY_DEBUG)->shouldBeCalled();
+
         $handler = new ConsoleHandler($output->reveal());
-        $this->assertTrue($handler->isHandling(['level' => Logger::ERROR]));
+        self::assertTrue($handler->isHandling(['level' => Logger::ERROR]));
     }
 
     /**
@@ -43,10 +47,12 @@ class ConsoleHandlerTest extends TestCase
      */
     public function isHandlingReturnsFalseIfOutputIsQuiet(): void
     {
+        /* @var OutputInterface|\Prophecy\Prophecy\ObjectProphecy $output */
         $output = $this->prophesize(OutputInterface::class);
         $output->getVerbosity()->willReturn(OutputInterface::VERBOSITY_QUIET)->shouldBeCalled();
+
         $handler = new ConsoleHandler($output->reveal());
-        $this->assertFalse($handler->isHandling(['level' => Logger::ERROR]));
+        self::assertFalse($handler->isHandling(['level' => Logger::ERROR]));
     }
 
     /**
@@ -54,8 +60,10 @@ class ConsoleHandlerTest extends TestCase
      */
     public function getFormatter(): void
     {
+        /* @var OutputInterface|\Prophecy\Prophecy\ObjectProphecy $output */
         $output = $this->prophesize(OutputInterface::class);
+
         $handler = new ConsoleHandler($output->reveal());
-        $this->assertInstanceOf(ConsoleFormatter::class, $handler->getFormatter());
+        self::assertInstanceOf(ConsoleFormatter::class, $handler->getFormatter());
     }
 }

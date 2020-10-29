@@ -20,7 +20,7 @@ class SystemClockTest extends TestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new SystemClock();
     }
@@ -30,7 +30,7 @@ class SystemClockTest extends TestCase
      */
     public function currentTime(): void
     {
-        $this->assertInternalType('int', $this->subject->currentTime());
+        self::assertIsInt($this->subject->currentTime());
     }
 
     /**
@@ -38,7 +38,7 @@ class SystemClockTest extends TestCase
      */
     public function stringToTime(): void
     {
-        $this->assertInternalType('int', $this->subject->stringToTime('yesterday'));
+        self::assertIsInt($this->subject->stringToTime('yesterday'));
     }
 
     /**
@@ -55,7 +55,7 @@ class SystemClockTest extends TestCase
      */
     public function createTimestampFromFormat(): void
     {
-        $this->assertInternalType('int', $this->subject->createTimestampFromFormat('d.m.Y', '20.12.2002'));
+        self::assertIsInt($this->subject->createTimestampFromFormat('d.m.Y', '20.12.2002'));
     }
 
     /**
@@ -64,6 +64,7 @@ class SystemClockTest extends TestCase
     public function createTimestampFromFormatThrowsException(): void
     {
         $this->expectException(ClockException::class);
-        $this->assertInternalType('int', $this->subject->createTimestampFromFormat('d.m.Y', 'foobarbaz'));
+
+        self::assertIsInt($this->subject->createTimestampFromFormat('d.m.Y', 'foobarbaz'));
     }
 }

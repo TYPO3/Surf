@@ -30,8 +30,13 @@ class ShellCommandServiceTest extends TestCase
      * @param int $port
      * @param string $privateKey
      */
-    public function executeRemoteCommandRespectsOptionsInSshCommand($expectedCommandArguments, $username = null, $password = null, $port = null, $privateKey = null)
-    {
+    public function executeRemoteCommandRespectsOptionsInSshCommand(
+        $expectedCommandArguments,
+        $username = null,
+        $password = null,
+        $port = null,
+        $privateKey = null
+    ) {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $service */
         $service = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
@@ -54,12 +59,17 @@ class ShellCommandServiceTest extends TestCase
         }
 
         $deployment = new Deployment('TestDeployment');
+
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
         $expectedCommand = $expectedCommandArguments . ' \'echo "Hello World"\'';
-        $service->expects($this->once())->method('executeProcess')->with($this->anything(), $expectedCommand)->will($this->returnValue([0, 'Hello World']));
+        $service
+            ->expects(self::once())
+            ->method('executeProcess')
+            ->with(self::anything(), $expectedCommand)
+            ->will(self::returnValue([0, 'Hello World']));
 
         $service->executeOrSimulate('echo "Hello World"', $node, $deployment);
     }
@@ -69,7 +79,7 @@ class ShellCommandServiceTest extends TestCase
      *
      * @return array
      */
-    public function commandOptionDataProvider()
+    public function commandOptionDataProvider(): array
     {
         $resourcesPath = realpath(__DIR__ . '/../../../../Resources');
         return [
@@ -110,7 +120,7 @@ class ShellCommandServiceTest extends TestCase
     /**
      * @test
      */
-    public function executeRemoteCommandRespectsRemoteCommandExecutionHandler()
+    public function executeRemoteCommandRespectsRemoteCommandExecutionHandler(): void
     {
         $shellCommandService = new ShellCommandService();
 
@@ -124,13 +134,15 @@ class ShellCommandServiceTest extends TestCase
         });
 
         $deployment = new Deployment('TestDeployment');
-        $mockLogger = $this->createMock(LoggerInterface::class);
+
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
         $response = $shellCommandService->execute('foo command', $node, $deployment);
-        $this->assertEquals('Hello World', $response);
-        $this->assertSame([
+
+        self::assertEquals('Hello World', $response);
+        self::assertSame([
             $shellCommandService,
             'foo command',
             $node,
@@ -142,7 +154,7 @@ class ShellCommandServiceTest extends TestCase
     /**
      * @test
      */
-    public function executeOnRemoteNodeJoinsCommandsWithAndOperator()
+    public function executeOnRemoteNodeJoinsCommandsWithAndOperator(): void
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
@@ -151,24 +163,29 @@ class ShellCommandServiceTest extends TestCase
         $node->setHostname('asdf');
 
         $deployment = new Deployment('TestDeployment');
+
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
-        $shellCommandService->expects($this->any())->method('executeProcess')->with(
-            $deployment,
-            $this->stringContains('bin/false && ls -al')
-        )->will($this->returnValue([0, 'Foo']));
+        $shellCommandService
+            ->expects(self::any())
+            ->method('executeProcess')
+            ->with(
+                $deployment,
+                $this->stringContains('bin/false && ls -al')
+            )
+            ->will(self::returnValue([0, 'Foo']));
 
         $response = $shellCommandService->execute(['bin/false', 'ls -al'], $node, $deployment);
 
-        $this->assertEquals('Foo', $response);
+        self::assertEquals('Foo', $response);
     }
 
     /**
      * @test
      */
-    public function executeOnLocalNodeJoinsCommandsWithAndOperator()
+    public function executeOnLocalNodeJoinsCommandsWithAndOperator(): void
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
@@ -177,18 +194,23 @@ class ShellCommandServiceTest extends TestCase
         $node->onLocalhost();
 
         $deployment = new Deployment('TestDeployment');
+
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
-        $shellCommandService->expects($this->any())->method('executeProcess')->with(
-            $deployment,
-            $this->stringContains('bin/false && ls -al')
-        )->will($this->returnValue([0, 'Foo']));
+        $shellCommandService
+            ->expects(self::any())
+            ->method('executeProcess')
+            ->with(
+                $deployment,
+                $this->stringContains('bin/false && ls -al')
+            )
+            ->will(self::returnValue([0, 'Foo']));
 
         $response = $shellCommandService->execute(['bin/false', 'ls -al'], $node, $deployment);
 
-        $this->assertEquals('Foo', $response);
+        self::assertEquals('Foo', $response);
     }
 
     /**
@@ -202,10 +224,8 @@ class ShellCommandServiceTest extends TestCase
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
-        $mockLogger->expects($this->at(0))->method('debug')
-            ->with('$ out');
-        $mockLogger->expects($this->at(1))->method('error')
-            ->with('$ err');
+        $mockLogger->expects(self::at(0))->method('debug')->with('$ out');
+        $mockLogger->expects(self::at(1))->method('error')->with('$ err');
 
         $shellCommandService->executeProcess($deployment, 'echo "out" ; echo "err" >&2 ', true, '$ ');
     }

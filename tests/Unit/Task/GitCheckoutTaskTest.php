@@ -17,7 +17,7 @@ use TYPO3\Surf\Task\GitCheckoutTask;
  */
 class GitCheckoutTaskTest extends BaseTaskTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -107,7 +107,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithFetachAllTagsOptionExecutesFetchTags(): void
+    public function executeWithFetchAllTagsOptionExecutesFetchTags(): void
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
@@ -127,6 +127,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     public function executeWithEmptyOptionsAndInvalidSha1ThrowsException(): void
     {
         $this->expectException(TaskExecutionException::class);
+
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git'
         ];
@@ -137,7 +138,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
         try {
             $this->task->execute($this->node, $this->application, $this->deployment, $options);
         } catch (TaskExecutionException $exception) {
-            $this->assertEquals(1335974926, $exception->getCode());
+            self::assertEquals(1335974926, $exception->getCode());
             throw $exception;
         }
     }

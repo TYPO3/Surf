@@ -25,7 +25,7 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function optionBaseUrlIsNotProvidedThrowsException()
+    public function optionBaseUrlIsNotProvidedThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, []);
@@ -34,7 +34,7 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function optionScriptIdentifierIsNotProvidedThrowsException()
+    public function optionScriptIdentifierIsNotProvidedThrowsException(): void
     {
         $options = [
             'baseUrl' => 'https://domain.com/',
@@ -47,10 +47,10 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function resultIsNotSuccessfulThrowsException()
+    public function resultIsNotSuccessfulThrowsException(): void
     {
-        $this->filesystem->expects($this->once())->method('get')->willReturn('failure');
-        $this->expectException(TaskExecutionException::class);
+        $this->filesystem->expects(self::once())->method('get')->willReturn('failure');
+
         $options = [
             'baseUrl' => 'https://domain.com/',
             'scriptIdentifier' => 'script-identifier',
@@ -64,9 +64,14 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function resultIsSuccessfulWithoutStreamContext()
+    public function resultIsSuccessfulWithoutStreamContext(): void
     {
-        $this->filesystem->expects($this->once())->method('get')->with('https://domain.com/surf-opcache-reset-script-identifier.php', false, null)->willReturn('success');
+        $this->filesystem
+            ->expects(self::once())
+            ->method('get')
+            ->with('https://domain.com/surf-opcache-reset-script-identifier.php', false, null)
+            ->willReturn('success');
+
         $options = [
             'baseUrl' => 'https://domain.com/',
             'scriptIdentifier' => 'script-identifier',
@@ -80,9 +85,14 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function resultIsSuccessfulWithStreamContext()
+    public function resultIsSuccessfulWithStreamContext(): void
     {
-        $this->filesystem->expects($this->once())->method('get')->with('https://domain.com/surf-opcache-reset-script-identifier.php', false)->willReturn('success');
+        $this->filesystem
+            ->expects(self::once())
+            ->method('get')
+            ->with('https://domain.com/surf-opcache-reset-script-identifier.php', false)
+            ->willReturn('success');
+
         $options = [
             'baseUrl' => 'https://domain.com/',
             'scriptIdentifier' => 'script-identifier',

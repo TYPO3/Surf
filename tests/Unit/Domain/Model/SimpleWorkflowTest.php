@@ -26,7 +26,7 @@ class SimpleWorkflowTest extends TestCase
     /**
      * @test
      */
-    public function deploymentMustBeInitializedBeforeRunning()
+    public function deploymentMustBeInitializedBeforeRunning(): void
     {
         $this->expectException(SurfException::class);
         $deployment = $this->buildDeployment();
@@ -38,7 +38,7 @@ class SimpleWorkflowTest extends TestCase
     /**
      * @test
      */
-    public function runFailsIfNoApplicationIsConfigured()
+    public function runFailsIfNoApplicationIsConfigured(): void
     {
         $this->expectException(SurfException::class);
         $deployment = $this->buildDeployment();
@@ -49,7 +49,7 @@ class SimpleWorkflowTest extends TestCase
         try {
             $workflow->run($deployment);
         } catch (SurfException $exception) {
-            $this->assertEquals(1334652420, $exception->getCode());
+            self::assertEquals(1334652420, $exception->getCode());
             throw $exception;
         }
     }
@@ -57,7 +57,7 @@ class SimpleWorkflowTest extends TestCase
     /**
      * @test
      */
-    public function runFailsIfNoNodesAreConfigured()
+    public function runFailsIfNoNodesAreConfigured(): void
     {
         $this->expectException(SurfException::class);
         $deployment = $this->buildDeployment();
@@ -70,7 +70,7 @@ class SimpleWorkflowTest extends TestCase
         try {
             $workflow->run($deployment);
         } catch (SurfException $exception) {
-            $this->assertEquals(1334652427, $exception->getCode());
+            self::assertEquals(1334652427, $exception->getCode());
             throw $exception;
         }
     }
@@ -82,10 +82,9 @@ class SimpleWorkflowTest extends TestCase
      *
      * @return array
      */
-    public function globalTaskDefinitions()
+    public function globalTaskDefinitions(): array
     {
         return [
-
             [
                 'Just one global task in stage initialize',
                 static function (Workflow $workflow, Application $application) {
@@ -105,7 +104,6 @@ class SimpleWorkflowTest extends TestCase
                     ]
                 ]
             ],
-
             [
                 'Add multiple tasks with afterTask',
                 function (Workflow $workflow, Application $application) {
@@ -151,7 +149,6 @@ class SimpleWorkflowTest extends TestCase
                     ]
                 ]
             ],
-
             [
                 'Tasks in different stages',
                 static function (Workflow $workflow, Application $application) {
@@ -189,7 +186,6 @@ class SimpleWorkflowTest extends TestCase
                     ]
                 ]
             ]
-
         ];
     }
 
@@ -201,8 +197,11 @@ class SimpleWorkflowTest extends TestCase
      * @param \Closure $initializeCallback
      * @param array $expectedExecutions
      */
-    public function globalTaskDefinitionsAreExecutedCorrectly($message, $initializeCallback, array $expectedExecutions)
-    {
+    public function globalTaskDefinitionsAreExecutedCorrectly(
+        $message,
+        $initializeCallback,
+        array $expectedExecutions
+    ): void {
         $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
@@ -217,7 +216,7 @@ class SimpleWorkflowTest extends TestCase
 
         $workflow->run($deployment);
 
-        $this->assertEquals($expectedExecutions, $executedTasks, $message);
+        self::assertEquals($expectedExecutions, $executedTasks, $message);
     }
 
     /**
@@ -227,14 +226,13 @@ class SimpleWorkflowTest extends TestCase
      *
      * @return array
      */
-    public function applicationTaskDefinitions()
+    public function applicationTaskDefinitions(): array
     {
         return [
-
             [
                 'Specific tasks for applications',
                 function ($workflow, $applications) {
-                    list($flowApplication, $typo3Application) = $applications;
+                    [$flowApplication, $typo3Application] = $applications;
 
                     return function () use ($workflow, $flowApplication, $typo3Application) {
                         $workflow
@@ -294,7 +292,6 @@ class SimpleWorkflowTest extends TestCase
                     ]
                 ]
             ]
-
         ];
     }
 
@@ -306,8 +303,11 @@ class SimpleWorkflowTest extends TestCase
      * @param \Closure $initializeCallback
      * @param array $expectedExecutions
      */
-    public function applicationTaskDefinitionsAreExecutedCorrectly($message, $initializeCallback, array $expectedExecutions)
-    {
+    public function applicationTaskDefinitionsAreExecutedCorrectly(
+        $message,
+        $initializeCallback,
+        array $expectedExecutions
+    ): void {
         $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
@@ -316,6 +316,7 @@ class SimpleWorkflowTest extends TestCase
         $flowApplication
             ->addNode(new Node('flow-1.example.com'))
             ->addNode(new Node('flow-2.example.com'));
+
         $neosApplication = new Application('TYPO3 Neos Application');
         $neosApplication
             ->addNode(new Node('neos.example.com'));
@@ -329,7 +330,7 @@ class SimpleWorkflowTest extends TestCase
 
         $workflow->run($deployment);
 
-        $this->assertEquals($expectedExecutions, $executedTasks, $message);
+        self::assertEquals($expectedExecutions, $executedTasks, $message);
     }
 
     /**
@@ -344,15 +345,25 @@ class SimpleWorkflowTest extends TestCase
         $deployment = new Deployment('Test deployment');
         $mockLogger = $this->createMock(LoggerInterface::class);
         // Enable log to console to debug tests
-        // $mockLogger->expects($this->any())->method('log')->will($this->returnCallback(function($message) {
+        // $mockLogger->expects(self::any())->method('log')->will($this->returnCallback(function($message) {
         // 	echo $message . chr(10);
         // }));
         $deployment->setLogger($mockLogger);
 
         $mockTaskManager = $this->createMock(TaskManager::class);
-        $mockTaskManager->expects($this->any())->method('execute')->will($this->returnCallback(function ($task, Node $node, Application $application, Deployment $deployment, $stage, array $options = []) use (&$executedTasks) {
-            $executedTasks[] = ['task' => $task, 'node' => $node->getName(), 'application' => $application->getName(), 'deployment' => $deployment->getName(), 'stage' => $stage, 'options' => $options];
-        }));
+        $mockTaskManager
+            ->expects(self::any())
+            ->method('execute')
+            ->will(self::returnCallback(function ($task, Node $node, Application $application, Deployment $deployment, $stage, array $options = []) use (&$executedTasks) {
+                $executedTasks[] = [
+                    'task' => $task,
+                    'node' => $node->getName(),
+                    'application' => $application->getName(),
+                    'deployment' => $deployment->getName(),
+                    'stage' => $stage,
+                    'options' => $options
+                ];
+            }));
 
         $workflow = new SimpleWorkflow($mockTaskManager);
         $deployment->setWorkflow($workflow);
@@ -363,7 +374,7 @@ class SimpleWorkflowTest extends TestCase
     /**
      * @test
      */
-    public function tasksAreExecutedInTheRightOrder()
+    public function tasksAreExecutedInTheRightOrder(): void
     {
         $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
@@ -475,13 +486,13 @@ class SimpleWorkflowTest extends TestCase
             ]
         ];
 
-        $this->assertEquals($expected, $executedTasks);
+        self::assertEquals($expected, $executedTasks);
     }
 
     /**
      * @return array
      */
-    public function taskRegistrationExamples()
+    public function taskRegistrationExamples(): array
     {
         return [
             'remove task in stage' => [
@@ -562,7 +573,7 @@ class SimpleWorkflowTest extends TestCase
     /**
      * @return array
      */
-    public function taskRegistrationExamplesForDifferentApplications()
+    public function taskRegistrationExamplesForDifferentApplications(): array
     {
         return [
             'remove task in stage for specific application' => [
@@ -636,8 +647,10 @@ class SimpleWorkflowTest extends TestCase
      * @throws SurfException
      * @throws SurfException\InvalidConfigurationException
      */
-    public function removeTaskRemovesTaskFromStagesForSpecificApplication(array $applications, array $expectedTasks)
-    {
+    public function removeTaskRemovesTaskFromStagesForSpecificApplication(
+        array $applications,
+        array $expectedTasks
+    ): void {
         $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
         $workflow = $deployment->getWorkflow();
@@ -653,7 +666,7 @@ class SimpleWorkflowTest extends TestCase
 
         $workflow->run($deployment);
 
-        $this->assertEquals($expectedTasks, $executedTasks);
+        self::assertEquals($expectedTasks, $executedTasks);
     }
 
     /**
@@ -666,7 +679,7 @@ class SimpleWorkflowTest extends TestCase
      * @throws SurfException
      * @throws SurfException\InvalidConfigurationException
      */
-    public function removeTaskRemovesTaskFromStages($callback, $expectedTasks)
+    public function removeTaskRemovesTaskFromStages($callback, $expectedTasks): void
     {
         $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
@@ -674,6 +687,7 @@ class SimpleWorkflowTest extends TestCase
 
         $flowApplication = new Application('Neos Flow Application');
         $flowApplication->addNode(new Node('flow-1.example.com'));
+
         $deployment->addApplication($flowApplication);
         $deployment->initialize();
 
@@ -681,13 +695,13 @@ class SimpleWorkflowTest extends TestCase
 
         $workflow->run($deployment);
 
-        $this->assertEquals($expectedTasks, $executedTasks);
+        self::assertEquals($expectedTasks, $executedTasks);
     }
 
     /**
      * @return array
      */
-    public function stageStepExamples()
+    public function stageStepExamples(): array
     {
         return [
             'task in stage for specific application, task after stage for any application' => [
@@ -721,7 +735,7 @@ class SimpleWorkflowTest extends TestCase
      * @test
      * @dataProvider stageStepExamples
      */
-    public function beforeAndAfterStageStepsAreIndependentOfApplications($callback, $expectedTasks)
+    public function beforeAndAfterStageStepsAreIndependentOfApplications($callback, $expectedTasks): void
     {
         $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
@@ -729,6 +743,7 @@ class SimpleWorkflowTest extends TestCase
 
         $flowApplication = new Application('Neos Flow Application');
         $flowApplication->addNode(new Node('flow-1.example.com'));
+
         $deployment->addApplication($flowApplication);
         $deployment->initialize();
 
@@ -736,6 +751,6 @@ class SimpleWorkflowTest extends TestCase
 
         $workflow->run($deployment);
 
-        $this->assertEquals($expectedTasks, $executedTasks);
+        self::assertEquals($expectedTasks, $executedTasks);
     }
 }

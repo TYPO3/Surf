@@ -17,7 +17,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class TagTaskTest extends BaseTaskTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

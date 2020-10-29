@@ -17,11 +17,10 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class RunCommandTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function noFlowApplicationGivenThrowsException()
+    public function noFlowApplicationGivenThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
@@ -30,7 +29,7 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function requiredOptionCommandNotGivenThrowsException()
+    public function requiredOptionCommandNotGivenThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->application = new Flow();
@@ -44,7 +43,7 @@ class RunCommandTaskTest extends BaseTaskTest
      * @param string $expectedCommand
      * @param array $options
      */
-    public function executeSuccessfully($expectedCommand, array $options = [])
+    public function executeSuccessfully($expectedCommand, array $options = []): void
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -54,12 +53,15 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @return array
      */
-    public function executeWithDifferentOptions()
+    public function executeWithDifferentOptions(): array
     {
         return [
             [
                 'cd /releases/%s && FLOW_CONTEXT=Production php ./flow vendor.package:example:command \'Some longer argument needing "escaping"\'',
-                ['command' => 'vendor.package:example:command', 'arguments' => 'Some longer argument needing "escaping"']
+                [
+                    'command' => 'vendor.package:example:command',
+                    'arguments' => 'Some longer argument needing "escaping"'
+                ]
             ],
             [
                 'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:package:activate \'--package-key\' \'Vendor.Package\'',

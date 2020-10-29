@@ -15,11 +15,10 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 final class RollbackTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function executeSuccessfully()
+    public function executeSuccessfully(): void
     {
         $releasesPath = $this->application->getReleasesPath();
         $previousReleasePath = $releasesPath . '/previous';
@@ -57,8 +56,10 @@ current
 previous',
         ];
         $this->mockLogger->notice('No more releases you can revert to.')->shouldBeCalledOnce();
+
         $this->task->execute($this->node, $this->application, $this->deployment);
-        $this->assertCount(1, $this->commands['executed']);
+
+        self::assertCount(1, $this->commands['executed']);
     }
 
     /**

@@ -20,7 +20,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
 {
-
     /**
      * @var FilesystemInterface|PHPUnit_Framework_MockObject_MockObject
      */
@@ -34,17 +33,29 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function createScriptByRandomString()
+    public function createScriptByRandomString(): void
     {
         $randomBytes = random_bytes(32);
         $expectedScriptIdentifier = bin2hex($randomBytes);
 
-        $expectedScriptIdentifierPath = sprintf('%s/surf-opcache-reset-%s.php', Files::concatenatePaths([$this->deployment->getWorkspacePath($this->application), 'public']), $expectedScriptIdentifier);
-        $this->filesystem->expects($this->once())->method('put')->with($expectedScriptIdentifierPath)->willReturn(true);
-        $this->randomBytesGenerator->expects($this->once())->method('generate')->willReturn($randomBytes);
+        $expectedScriptIdentifierPath = sprintf(
+            '%s/surf-opcache-reset-%s.php',
+            Files::concatenatePaths([$this->deployment->getWorkspacePath($this->application), 'public']),
+            $expectedScriptIdentifier
+        );
+        $this->filesystem
+            ->expects(self::once())
+            ->method('put')
+            ->with($expectedScriptIdentifierPath)
+            ->willReturn(true);
+
+        $this->randomBytesGenerator->expects(self::once())->method('generate')->willReturn($randomBytes);
         $this->task->execute($this->node, $this->application, $this->deployment);
 
-        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]'));
+        self::assertSame(
+            $expectedScriptIdentifier,
+            $this->application->getOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]')
+        );
     }
 
     /**
@@ -56,43 +67,68 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
         $randomBytes = random_bytes(32);
         $expectedScriptIdentifier = bin2hex($randomBytes);
 
-        $expectedScriptIdentifierPath = sprintf('%s/surf-opcache-reset-%s.php', Files::concatenatePaths([$this->deployment->getWorkspacePath($this->application), 'public']), $expectedScriptIdentifier);
-        $this->filesystem->expects($this->once())->method('put')->with($expectedScriptIdentifierPath)->willReturn(true);
-        $this->randomBytesGenerator->expects($this->once())->method('generate')->willReturn($randomBytes);
+        $expectedScriptIdentifierPath = sprintf(
+            '%s/surf-opcache-reset-%s.php',
+            Files::concatenatePaths([$this->deployment->getWorkspacePath($this->application), 'public']),
+            $expectedScriptIdentifier
+        );
+        $this->filesystem->expects(self::once())
+            ->method('put')
+            ->with($expectedScriptIdentifierPath)
+            ->willReturn(true);
+
+        $this->randomBytesGenerator->expects(self::once())->method('generate')->willReturn($randomBytes);
         $this->task->execute($this->node, $this->application, $this->deployment);
 
-        $this->assertSame($expectedScriptIdentifier, $this->application->getOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]'));
+        self::assertSame(
+            $expectedScriptIdentifier,
+            $this->application->getOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]')
+        );
     }
 
     /**
      * @test
      */
-    public function createScriptByDefinedIdentifier()
+    public function createScriptByDefinedIdentifier(): void
     {
         $scriptIdentifier = '123456';
-        $expectedScriptIdentifierPath = sprintf('%s/surf-opcache-reset-%s.php', Files::concatenatePaths([$this->deployment->getWorkspacePath($this->application), 'public']), $scriptIdentifier);
-        $this->filesystem->expects($this->once())->method('put')->with($expectedScriptIdentifierPath)->willReturn(true);
-        $this->randomBytesGenerator->expects($this->never())->method('generate');
-        $this->task->execute($this->node, $this->application, $this->deployment, ['scriptIdentifier' => $scriptIdentifier]);
+        $expectedScriptIdentifierPath = sprintf(
+            '%s/surf-opcache-reset-%s.php',
+            Files::concatenatePaths([$this->deployment->getWorkspacePath($this->application), 'public']),
+            $scriptIdentifier
+        );
+        $this->filesystem->expects(self::once())
+            ->method('put')
+            ->with($expectedScriptIdentifierPath)
+            ->willReturn(true);
+
+        $this->randomBytesGenerator->expects(self::never())->method('generate');
+
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['scriptIdentifier' => $scriptIdentifier]
+        );
     }
 
     /**
      * @test
      */
-    public function createNothingInDryRunMode()
+    public function createNothingInDryRunMode(): void
     {
         $this->deployment->setDryRun(true);
-        $this->filesystem->expects($this->never())->method('put');
+        $this->filesystem->expects(self::never())->method('put');
         $this->task->execute($this->node, $this->application, $this->deployment);
     }
 
     /**
      * @test
      */
-    public function throwExceptionIfFileCanNotBeWritten()
+    public function throwExceptionIfFileCanNotBeWritten(): void
     {
         $this->expectException(TaskExecutionException::class);
-        $this->filesystem->expects($this->once())->method('put')->willReturn(false);
+        $this->filesystem->expects(self::once())->method('put')->willReturn(false);
         $this->task->execute($this->node, $this->application, $this->deployment);
     }
 

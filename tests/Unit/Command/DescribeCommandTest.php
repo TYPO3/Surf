@@ -44,7 +44,7 @@ class DescribeCommandTest extends TestCase
      */
     protected $node;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
@@ -112,14 +112,14 @@ class DescribeCommandTest extends TestCase
     {
         $this->setUpCustomApplication();
         $factory = $this->createMock(FactoryInterface::class);
-        $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
+        $factory->expects(self::once())->method('getDeployment')->willReturn($this->deployment);
         $command = new DescribeCommand($factory);
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
         ]);
 
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -185,7 +185,7 @@ Applications:
         }
         $this->deployment->addApplication($this->application)->initialize();
         $factory = $this->createMock(FactoryInterface::class);
-        $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
+        $factory->expects(self::once())->method('getDeployment')->willReturn($this->deployment);
         $command = new DescribeCommand($factory);
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -204,7 +204,7 @@ Applications:
             'public/typo3conf/LocalConfiguration.php',
             '../../../../shared/Configuration/LocalConfiguration.php'
         );
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -284,7 +284,7 @@ Applications:
      */
     public function describeNeosNeos(): void
     {
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -356,7 +356,7 @@ Applications:
      */
     public function describeBaseApplication(): void
     {
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -419,7 +419,7 @@ Applications:
      */
     public function describeBaseApplicationWithoutLock(): void
     {
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -471,7 +471,7 @@ Applications:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application My App)
       unlock:
 ', $this->getDescriptionOfPredefinedApplication(new BaseApplication('My App'), ['lockDeployment' => false]));
-        $this->assertEquals(false, $this->application->getOption('lockDeployment'));
+        self::assertEquals(false, $this->application->getOption('lockDeployment'));
     }
 
     /**
@@ -480,7 +480,7 @@ Applications:
     public function describeBaseApplicationWithForceParameter(): void
     {
         $this->deployment->setForceRun(true);
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true

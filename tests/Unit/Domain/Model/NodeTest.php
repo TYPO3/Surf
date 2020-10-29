@@ -14,25 +14,26 @@ use TYPO3\Surf\Domain\Model\Node;
 
 class NodeTest extends TestCase
 {
-
     /**
      * @test
      */
-    public function isLocalhost()
+    public function isLocalhost(): void
     {
         $node = new Node('Node');
         $node->onLocalhost();
-        $this->assertTrue($node->isLocalhost());
+
+        self::assertTrue($node->isLocalhost());
     }
 
     /**
      * @test
      */
-    public function setPort()
+    public function setPort(): void
     {
         $node = new Node('Node');
         $node->setPort(222);
-        $this->assertEquals(222, $node->getPort());
+
+        self::assertEquals(222, $node->getPort());
     }
 
     /**
@@ -42,6 +43,7 @@ class NodeTest extends TestCase
     {
         $node = new Node('Node');
         $node->setUsername('username');
-        $this->assertEquals('username', $node->getUsername());
+
+        self::assertEquals('username', $node->getUsername());
     }
 }

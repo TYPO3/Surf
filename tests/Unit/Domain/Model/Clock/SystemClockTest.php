@@ -15,13 +15,12 @@ use TYPO3\Surf\Domain\Clock\SystemClock;
 
 class SystemClockTest extends TestCase
 {
-
     /**
      * @var SystemClock
      */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new SystemClock();
     }
@@ -32,7 +31,7 @@ class SystemClockTest extends TestCase
      * @test
      * @dataProvider invalidStringsCannotBeConvertedToTimestamp
      */
-    public function stringCouldNotBeConvertedCorrectlyExceptionIsThrown($string)
+    public function stringCouldNotBeConvertedCorrectlyExceptionIsThrown($string): void
     {
         $this->expectException(ClockException::class);
         $this->subject->stringToTime($string);
@@ -44,9 +43,9 @@ class SystemClockTest extends TestCase
      * @test
      * @dataProvider validStringCanBeConvertedToTimestamp
      */
-    public function stringCanBeConvertedToValidTimestamp($string, $base)
+    public function stringCanBeConvertedToValidTimestamp($string, $base): void
     {
-        $this->assertEquals(strtotime($string, $base), $this->subject->stringToTime($string, $base));
+        self::assertEquals(strtotime($string, $base), $this->subject->stringToTime($string, $base));
     }
 
     /**
@@ -56,15 +55,15 @@ class SystemClockTest extends TestCase
      * @test
      * @dataProvider validFormatCanBeConvertedToTimestamp
      */
-    public function successFullyCreateTimestampFromFormat($format, $time, $expected)
+    public function successFullyCreateTimestampFromFormat($format, $time, $expected): void
     {
-        $this->assertEquals($expected, $this->subject->createTimestampFromFormat($format, $time));
+        self::assertEquals($expected, $this->subject->createTimestampFromFormat($format, $time));
     }
 
     /**
      * @return array
      */
-    public function validFormatCanBeConvertedToTimestamp()
+    public function validFormatCanBeConvertedToTimestamp(): array
     {
         return [
             ['YmdHis', strftime('%Y%m%d%H%M%S', 1535216980), 1535216980],
@@ -74,7 +73,7 @@ class SystemClockTest extends TestCase
     /**
      * @return array
      */
-    public function validStringCanBeConvertedToTimestamp()
+    public function validStringCanBeConvertedToTimestamp(): array
     {
         return [
             ['1 day ago', 1535216980],
@@ -86,7 +85,7 @@ class SystemClockTest extends TestCase
     /**
      * @return array
      */
-    public function invalidStringsCannotBeConvertedToTimestamp()
+    public function invalidStringsCannotBeConvertedToTimestamp(): array
     {
         return [
             ['2 apples ago'],

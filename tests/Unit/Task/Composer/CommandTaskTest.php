@@ -18,7 +18,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class CommandTaskTest extends BaseTaskTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +28,7 @@ class CommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeUserConfiguredComposerCommand()
+    public function executeUserConfiguredComposerCommand(): void
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
@@ -37,13 +37,15 @@ class CommandTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/');
+        $this->assertCommandExecuted(
+            '/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithoutCommandThrowsException()
+    public function executeWithoutCommandThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $options = [
@@ -57,7 +59,7 @@ class CommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithSupportedSuffixAsArray()
+    public function executeWithSupportedSuffixAsArray(): void
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
@@ -67,13 +69,15 @@ class CommandTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/');
+        $this->assertCommandExecuted(
+            '/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithSupportedSuffixAsString()
+    public function executeWithSupportedSuffixAsString(): void
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
@@ -83,13 +87,15 @@ class CommandTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/');
+        $this->assertCommandExecuted(
+            '/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\' 2>&1$/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithSupportedEmptySuffixAsArray()
+    public function executeWithSupportedEmptySuffixAsArray(): void
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
@@ -99,13 +105,15 @@ class CommandTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/');
+        $this->assertCommandExecuted(
+            '/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithSupportedEmptySuffixAsString()
+    public function executeWithSupportedEmptySuffixAsString(): void
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
@@ -115,13 +123,15 @@ class CommandTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/');
+        $this->assertCommandExecuted(
+            '/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithSupportedEmptySuffixAsNull()
+    public function executeWithSupportedEmptySuffixAsNull(): void
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
@@ -131,13 +141,15 @@ class CommandTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/');
+        $this->assertCommandExecuted(
+            '/^\/my\/path\/to\/composer.phar \'run-script\' \'--no-ansi\' \'--no-interaction\' \'my-script\'$/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithUnsupportedSuffixThrowsException()
+    public function executeWithUnsupportedSuffixThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $options = [
@@ -153,7 +165,7 @@ class CommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeUserConfiguredComposerUpdateCommand()
+    public function executeUserConfiguredComposerUpdateCommand(): void
     {
         $options = [
             'composerCommandPath' => 'composer',
@@ -168,7 +180,9 @@ class CommandTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^composer \'update\' \'--no-ansi\' \'--no-interaction\' \'--no-dev\' \'--no-progress\' \'--classmap-authoritative\' 2>&1$/');
+        $this->assertCommandExecuted(
+            '/^composer \'update\' \'--no-ansi\' \'--no-interaction\' \'--no-dev\' \'--no-progress\' \'--classmap-authoritative\' 2>&1$/'
+        );
     }
 
     /**

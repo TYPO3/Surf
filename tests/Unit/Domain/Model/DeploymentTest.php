@@ -26,6 +26,14 @@ class DeploymentTest extends TestCase
     use KernelAwareTrait;
 
     /**
+     * Reset global state
+     */
+    protected function tearDown(): void
+    {
+        putenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER');
+    }
+
+    /**
      * @test
      */
     public function initializeUsesSimpleWorkflowAsDefault(): void
@@ -34,7 +42,7 @@ class DeploymentTest extends TestCase
         $deployment->setContainer(static::getKernel()->getContainer());
         $deployment->initialize();
 
-        $this->assertInstanceOf(SimpleWorkflow::class, $deployment->getWorkflow());
+        self::assertInstanceOf(SimpleWorkflow::class, $deployment->getWorkflow());
     }
 
     /**
@@ -63,7 +71,7 @@ class DeploymentTest extends TestCase
         }, $nodes);
         sort($nodeNames);
 
-        $this->assertEquals(['test1.example.com', 'test2.example.com'], $nodeNames);
+        self::assertEquals(['test1.example.com', 'test2.example.com'], $nodeNames);
     }
 
     /**
@@ -73,8 +81,10 @@ class DeploymentTest extends TestCase
     {
         $deployment = new Deployment('Test deployment');
         $deployment->setContainer(static::getKernel()->getContainer());
+
         $releaseIdentifier = $deployment->getReleaseIdentifier();
-        $this->assertNotEmpty($releaseIdentifier);
+
+        self::assertNotEmpty($releaseIdentifier);
     }
 
     /**
@@ -83,7 +93,9 @@ class DeploymentTest extends TestCase
     public function initializeIsAllowedOnlyOnce(): void
     {
         $this->expectException(Exception::class);
+
         $workflow = new SimpleWorkflow($this->prophesize(TaskManager::class)->reveal());
+
         $deployment = new Deployment('Test deployment');
         $deployment->setWorkflow($workflow);
         $deployment->initialize();
@@ -101,7 +113,8 @@ class DeploymentTest extends TestCase
     {
         $deployment = new Deployment('Some name', $deploymentLockIdentifier);
         $deployment->setContainer(static::getKernel()->getContainer());
-        $this->assertEquals($deployment->getReleaseIdentifier(), $deployment->getDeploymentLockIdentifier());
+
+        self::assertEquals($deployment->getReleaseIdentifier(), $deployment->getDeploymentLockIdentifier());
     }
 
     /**
@@ -112,7 +125,7 @@ class DeploymentTest extends TestCase
         $deploymentLockIdentifier = 'Deployment lock identifier';
         $deployment = new Deployment('Some name', $deploymentLockIdentifier);
 
-        $this->assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
+        self::assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
     }
 
     /**
@@ -122,8 +135,10 @@ class DeploymentTest extends TestCase
     {
         $deploymentLockIdentifier = 'Deployment lock identifier';
         putenv(sprintf('SURF_DEPLOYMENT_LOCK_IDENTIFIER=%s', $deploymentLockIdentifier));
+
         $deployment = new Deployment('Some name');
-        $this->assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
+
+        self::assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
     }
 
     /**
@@ -138,7 +153,7 @@ class DeploymentTest extends TestCase
 
         $releaseIdentifier = $deployment->getReleaseIdentifier();
 
-        $this->assertEquals(
+        self::assertEquals(
             '/deployment/path/releases/' . $releaseIdentifier,
             $deployment->getApplicationReleasePath($application)
         );
@@ -157,7 +172,7 @@ class DeploymentTest extends TestCase
 
         $releaseIdentifier = $deployment->getReleaseIdentifier();
 
-        $this->assertEquals(
+        self::assertEquals(
             '/deployment/path/releases/' . $releaseIdentifier . '/htdocs',
             $deployment->getApplicationReleasePath($application)
         );
@@ -176,13 +191,5 @@ class DeploymentTest extends TestCase
             [''],
             [new \stdClass()],
         ];
-    }
-
-    /**
-     * Reset global state
-     */
-    protected function tearDown()
-    {
-        putenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER');
     }
 }
