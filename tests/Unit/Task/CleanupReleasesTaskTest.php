@@ -101,10 +101,10 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             ['20171108132211', '20171109193135'],
             function ($carry, $folder) {
                 return $carry . sprintf(
-                        'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
-                        $this->application->getReleasesPath(),
-                        $folder
-                    );
+                    'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
+                    $this->application->getReleasesPath(),
+                    $folder
+                );
             },
             ''
         );
@@ -154,10 +154,10 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             ),
             function ($command, $folder) {
                 return $command . sprintf(
-                        'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
-                        $this->application->getReleasesPath(),
-                        $folder
-                    );
+                    'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
+                    $this->application->getReleasesPath(),
+                    $folder
+                );
             },
             ''
         );

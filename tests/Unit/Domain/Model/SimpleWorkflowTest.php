@@ -363,7 +363,7 @@ class SimpleWorkflowTest extends TestCase
                     'stage' => $stage,
                     'options' => $options
                 ];
-        }));
+            }));
 
         $workflow = new SimpleWorkflow($mockTaskManager);
         $deployment->setWorkflow($workflow);
