@@ -168,7 +168,7 @@ Content-Type: text/html; charset=UTF-8',
             $exception = $e;
         }
 
-        $this->assertNull($exception);
+        self::assertNull($exception);
     }
 
     protected function mockClient(Response $response): void
@@ -177,6 +177,7 @@ Content-Type: text/html; charset=UTF-8',
         $mock = new MockHandler([$response]);
 
         $handler = HandlerStack::create($mock);
+
         $client = new Client(['handler' => $handler]);
         $this->task->setClient($client);
     }

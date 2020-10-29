@@ -45,7 +45,12 @@ class CreateArchiveTaskTest extends BaseTaskTest
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(false);
-        $this->task->execute($this->node, $this->application, $this->deployment, ['sourceDirectory' => self::SOURCE_DIRECTORY]);
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['sourceDirectory' => self::SOURCE_DIRECTORY]
+        );
     }
 
     /**
@@ -55,7 +60,12 @@ class CreateArchiveTaskTest extends BaseTaskTest
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(true);
-        $this->task->execute($this->node, $this->application, $this->deployment, ['sourceDirectory' => self::SOURCE_DIRECTORY]);
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['sourceDirectory' => self::SOURCE_DIRECTORY]
+        );
     }
 
     /**
@@ -65,7 +75,12 @@ class CreateArchiveTaskTest extends BaseTaskTest
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(true);
-        $this->task->execute($this->node, $this->application, $this->deployment, ['sourceDirectory' => self::SOURCE_DIRECTORY, 'targetFile' => 'file.txt']);
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['sourceDirectory' => self::SOURCE_DIRECTORY, 'targetFile' => 'file.txt']
+        );
     }
 
     /**
@@ -75,7 +90,12 @@ class CreateArchiveTaskTest extends BaseTaskTest
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(true);
-        $this->task->execute($this->node, $this->application, $this->deployment, ['sourceDirectory' => self::SOURCE_DIRECTORY, 'targetFile' => 'file.zip']);
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['sourceDirectory' => self::SOURCE_DIRECTORY, 'targetFile' => 'file.zip']
+        );
     }
 
     /**
@@ -83,7 +103,11 @@ class CreateArchiveTaskTest extends BaseTaskTest
      */
     public function executeSuccessfullyForTarGz(): void
     {
-        $options = ['sourceDirectory' => self::SOURCE_DIRECTORY, 'targetFile' => 'file.tar.gz', 'baseDirectory' => self::SOURCE_DIRECTORY];
+        $options = [
+            'sourceDirectory' => self::SOURCE_DIRECTORY,
+            'targetFile' => 'file.tar.gz',
+            'baseDirectory' => self::SOURCE_DIRECTORY
+        ];
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(true);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -106,7 +130,12 @@ class CreateArchiveTaskTest extends BaseTaskTest
      */
     public function executeSuccessfullyForZip(): void
     {
-        $options = ['exclude' => ['foo'], 'sourceDirectory' => self::SOURCE_DIRECTORY, 'targetFile' => 'file.zip', 'baseDirectory' => self::SOURCE_DIRECTORY];
+        $options = [
+            'exclude' => ['foo'],
+            'sourceDirectory' => self::SOURCE_DIRECTORY,
+            'targetFile' => 'file.zip',
+            'baseDirectory' => self::SOURCE_DIRECTORY
+        ];
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(true);
         $this->filesystem->getTemporaryDirectory()->willReturn('tmp');
         $this->idGenerator->generate('f3_deploy')->willReturn('12345');
@@ -123,7 +152,11 @@ class CreateArchiveTaskTest extends BaseTaskTest
             sprintf('rm -f %1$s; mkdir -p ' . dirname('%1$s'), $options['targetFile']),
             sprintf('tar %s || gnutar %s', $tarOptions, $tarOptions),
             'mkdir -p tmp/12345',
-            sprintf('cd %s; tar -xf out.tar; rm out.tar; zip --quiet -9 -r out %s', 'tmp/12345', $options['baseDirectory']),
+            sprintf(
+                'cd %s; tar -xf out.tar; rm out.tar; zip --quiet -9 -r out %s',
+                'tmp/12345',
+                $options['baseDirectory']
+            ),
             sprintf('mv %s/out.zip %s; rm -Rf %s', 'tmp/12345', $options['targetFile'], 'tmp/12345')
         ];
 
@@ -137,7 +170,11 @@ class CreateArchiveTaskTest extends BaseTaskTest
      */
     public function executeSuccessfullyForTarBz2(): void
     {
-        $options = ['sourceDirectory' => self::SOURCE_DIRECTORY, 'targetFile' => 'file.tar.bz2', 'baseDirectory' => self::SOURCE_DIRECTORY];
+        $options = [
+            'sourceDirectory' => self::SOURCE_DIRECTORY,
+            'targetFile' => 'file.tar.bz2',
+            'baseDirectory' => self::SOURCE_DIRECTORY
+        ];
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(true);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 

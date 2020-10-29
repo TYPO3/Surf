@@ -16,11 +16,10 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SetFilePermissionsTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function noFlowApplicationGivenThrowsException()
+    public function noFlowApplicationGivenThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
@@ -33,7 +32,7 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
      * @param string $expectedCommand
      * @param array $options
      */
-    public function executeSuccessfully($expectedCommand, array $options = [])
+    public function executeSuccessfully($expectedCommand, array $options = []): void
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -43,7 +42,7 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
     /**
      * @return array
      */
-    public function executeWithDifferentOptions()
+    public function executeWithDifferentOptions(): array
     {
         return [
             [

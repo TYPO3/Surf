@@ -17,11 +17,10 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class FlushCacheListTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function noFlowApplicationGivenThrowsException()
+    public function noFlowApplicationGivenThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
@@ -30,7 +29,7 @@ class FlushCacheListTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function requiredOptionFlushCacheListWithEmptyStringThrowsException()
+    public function requiredOptionFlushCacheListWithEmptyStringThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->application = new Flow();
@@ -40,9 +39,10 @@ class FlushCacheListTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function requiredOptionFlushCacheListWithEmptyArrayThrowsException()
+    public function requiredOptionFlushCacheListWithEmptyArrayThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
+
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => []]);
     }
@@ -50,9 +50,10 @@ class FlushCacheListTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function tooLowFlowVersionThrowsException()
+    public function tooLowFlowVersionThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
+
         $this->application = new Flow();
         $this->application->setVersion('1.0');
         $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => 'list']);
@@ -61,21 +62,31 @@ class FlushCacheListTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeSuccessfullyWithString()
+    public function executeSuccessfullyWithString(): void
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => 'list']);
-        $this->assertCommandExecuted(sprintf('cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:flushone \'--identifier\' \'list\'', $this->deployment->getReleaseIdentifier()));
+        $this->assertCommandExecuted(
+            sprintf(
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:flushone \'--identifier\' \'list\'',
+                $this->deployment->getReleaseIdentifier()
+            )
+        );
     }
 
     /**
      * @test
      */
-    public function executeSuccessfullyWithArray()
+    public function executeSuccessfullyWithArray(): void
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => ['list']]);
-        $this->assertCommandExecuted(sprintf('cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:flushone \'--identifier\' \'list\'', $this->deployment->getReleaseIdentifier()));
+        $this->assertCommandExecuted(
+            sprintf(
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:flushone \'--identifier\' \'list\'',
+                $this->deployment->getReleaseIdentifier()
+            )
+        );
     }
 
     /**

@@ -18,13 +18,12 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class RunCommandTaskTest extends BaseTaskTest
 {
-
     /**
      * @var RunCommandTask
      */
     protected $task;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
@@ -33,9 +32,10 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function exceptionThrownBecauseApplicationIsNotOfTypeCMS()
+    public function exceptionThrownBecauseApplicationIsNotOfTypeCMS(): void
     {
         $this->expectException(InvalidArgumentException::class);
+
         $wrongApplication = $this->getMockBuilder(BaseApplication::class)->disableOriginalConstructor()->getMock();
         $this->task->execute($this->node, $wrongApplication, $this->deployment);
     }
@@ -43,25 +43,27 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function exceptionThrownBecauseNoCommandOptionDefined()
+    public function exceptionThrownBecauseNoCommandOptionDefined(): void
     {
         $this->expectException(InvalidConfigurationException::class);
+
         $this->task->execute($this->node, $this->application, $this->deployment, []);
     }
 
     /**
      * @test
      */
-    public function exceptionThrownBecauseNoScriptFileNameOptionDefined()
+    public function exceptionThrownBecauseNoScriptFileNameOptionDefined(): void
     {
         $this->expectException(InvalidConfigurationException::class);
+
         $this->task->execute($this->node, $this->application, $this->deployment, ['command' => 'command']);
     }
 
     /**
      * @test
      */
-    public function executeWithCommandAndScriptFileName()
+    public function executeWithCommandAndScriptFileName(): void
     {
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
@@ -74,7 +76,7 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithCommandAndScriptFileNameAndArgument()
+    public function executeWithCommandAndScriptFileNameAndArgument(): void
     {
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
@@ -88,7 +90,7 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function phpBinaryIsConfigurable()
+    public function phpBinaryIsConfigurable(): void
     {
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
@@ -102,7 +104,7 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function contextIsAddedIfConfigured()
+    public function contextIsAddedIfConfigured(): void
     {
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',

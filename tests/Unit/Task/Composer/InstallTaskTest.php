@@ -18,7 +18,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class InstallTaskTest extends BaseTaskTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,11 +28,10 @@ class InstallTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function noComposerCommandPathGivenThrowsException()
+    public function noComposerCommandPathGivenThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $options = [
-        ];
+        $options = [];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
     }
@@ -40,20 +39,22 @@ class InstallTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeUserConfiguredComposerCommand()
+    public function executeUserConfiguredComposerCommand(): void
     {
         $options = [
             'composerCommandPath' => '/my/path/to/composer.phar',
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^\/my\/path\/to\/composer.phar install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative 2>&1$/');
+        $this->assertCommandExecuted(
+            '/^\/my\/path\/to\/composer.phar install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative 2>&1$/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeUserConfiguredComposerCommandWithAdditionalArguments()
+    public function executeUserConfiguredComposerCommandWithAdditionalArguments(): void
     {
         $options = [
             'composerCommandPath' => 'composer',
@@ -61,13 +62,15 @@ class InstallTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative \'--ignore-platform-reqs\' \'--no-scripts\' 2>&1$/');
+        $this->assertCommandExecuted(
+            '/^composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative \'--ignore-platform-reqs\' \'--no-scripts\' 2>&1$/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeUserConfiguredComposerCommandWithAdditionalArgumentsAsString()
+    public function executeUserConfiguredComposerCommandWithAdditionalArgumentsAsString(): void
     {
         $options = [
             'composerCommandPath' => 'composer',
@@ -75,7 +78,9 @@ class InstallTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted('/^composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative \'--ignore-platform-reqs\' 2>&1$/');
+        $this->assertCommandExecuted(
+            '/^composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative \'--ignore-platform-reqs\' 2>&1$/'
+        );
     }
 
     /**

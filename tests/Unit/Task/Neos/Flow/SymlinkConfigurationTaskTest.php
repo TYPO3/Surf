@@ -22,7 +22,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
      */
     protected $application;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -33,7 +33,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithFlowApplicationRespectsContext()
+    public function executeWithFlowApplicationRespectsContext(): void
     {
         $this->application->setContext('Development');
         $this->task->execute($this->node, $this->application, $this->deployment, []);
@@ -46,7 +46,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithFlowApplicationRespectsSubContext()
+    public function executeWithFlowApplicationRespectsSubContext(): void
     {
         $this->application->setContext('Production/Foo');
         $this->task->execute($this->node, $this->application, $this->deployment, []);

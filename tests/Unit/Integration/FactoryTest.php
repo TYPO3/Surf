@@ -53,7 +53,9 @@ class FactoryTest extends TestCase
     protected function setUp()
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
+
         $this->logger = $this->prophesize(Logger::class);
+
         $this->subject = new Factory($this->filesystem->reveal(), $this->logger->reveal());
         $this->subject->setContainer(static::getKernel()->getContainer());
     }
@@ -64,10 +66,12 @@ class FactoryTest extends TestCase
     public function getDeploymentsBasePath(): void
     {
         $expectedDeploymentPath = '/var/www/html/.surf';
+
         $this->filesystem->getRealPath('./.surf')->willReturn($expectedDeploymentPath);
         $this->filesystem->isDirectory($expectedDeploymentPath)->willReturn(true);
         $this->filesystem->fileExists($expectedDeploymentPath)->willReturn(true);
-        $this->assertEquals($expectedDeploymentPath, $this->subject->getDeploymentsBasePath());
+
+        self::assertEquals($expectedDeploymentPath, $this->subject->getDeploymentsBasePath());
     }
 
     /**
@@ -76,11 +80,14 @@ class FactoryTest extends TestCase
     public function getDeploymentsBasePathThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
+
         $expectedDeploymentPath = '/var/www/html/.surf';
+
         $this->filesystem->getRealPath('./.surf')->willReturn($expectedDeploymentPath);
         $this->filesystem->isDirectory($expectedDeploymentPath)->willReturn(true, false);
         $this->filesystem->fileExists($expectedDeploymentPath)->willReturn(false);
         $this->filesystem->createDirectory($expectedDeploymentPath)->willReturn(false);
+
         $this->subject->getDeploymentsBasePath();
     }
 
@@ -90,9 +97,11 @@ class FactoryTest extends TestCase
     public function getDeploymentsBasePathFromGivenPath(): void
     {
         $expectedDeploymentPath = '/var/www/html/.surf';
+
         $this->filesystem->getRealPath('./.surf')->willReturn($expectedDeploymentPath);
         $this->filesystem->fileExists($expectedDeploymentPath)->willReturn(true);
-        $this->assertEquals($expectedDeploymentPath, $this->subject->getDeploymentsBasePath($expectedDeploymentPath));
+
+        self::assertEquals($expectedDeploymentPath, $this->subject->getDeploymentsBasePath($expectedDeploymentPath));
     }
 
     /**
@@ -101,11 +110,13 @@ class FactoryTest extends TestCase
     public function getDeploymentsBasePathFromDefinedSurfHomeDirectory(): void
     {
         putenv('SURF_HOME=foo');
+
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists('foo')->willReturn(true);
         $this->filesystem->fileExists('foo/deployments')->willReturn(true);
-        $this->assertEquals('foo/deployments', $this->subject->getDeploymentsBasePath());
+
+        self::assertEquals('foo/deployments', $this->subject->getDeploymentsBasePath());
     }
 
     /**
@@ -114,11 +125,13 @@ class FactoryTest extends TestCase
     public function getDeploymentsBasePathFromHomeDirectory(): void
     {
         putenv('HOME=foo');
+
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists('foo/.surf')->willReturn(true);
         $this->filesystem->fileExists('foo/.surf/deployments')->willReturn(true);
-        $this->assertEquals('foo/.surf/deployments', $this->subject->getDeploymentsBasePath());
+
+        self::assertEquals('foo/.surf/deployments', $this->subject->getDeploymentsBasePath());
     }
 
     /**
@@ -129,8 +142,10 @@ class FactoryTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         putenv('HOME');
+
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
+
         $this->subject->getDeploymentsBasePath();
     }
 
@@ -140,9 +155,12 @@ class FactoryTest extends TestCase
     public function getDeploymentsBasePathFromThrowsExceptionNoAppDataEnvironmentVariableDefined(): void
     {
         $this->expectException(RuntimeException::class);
+
         define('PHP_WINDOWS_VERSION_MAJOR', 'foo');
+
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
+
         $this->subject->getDeploymentsBasePath();
     }
 
@@ -153,11 +171,13 @@ class FactoryTest extends TestCase
     {
         define('PHP_WINDOWS_VERSION_MAJOR', 'foo');
         putenv('APPDATA=foo');
+
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists('foo/Surf')->willReturn(true);
         $this->filesystem->fileExists('foo/Surf/deployments')->willReturn(true);
-        $this->assertEquals('foo/Surf/deployments', $this->subject->getDeploymentsBasePath());
+
+        self::assertEquals('foo/Surf/deployments', $this->subject->getDeploymentsBasePath());
     }
 
     /**
@@ -166,14 +186,19 @@ class FactoryTest extends TestCase
     public function getDeploymentNames(): void
     {
         $expectedDeploymentPath = '/var/www/html/.surf';
+
         $this->filesystem->getRealPath('./.surf')->willReturn($expectedDeploymentPath);
         $this->filesystem->isDirectory($expectedDeploymentPath)->willReturn(true);
         $this->filesystem->fileExists($expectedDeploymentPath)->willReturn(true);
+
         $files = [$expectedDeploymentPath . '/deployment.php'];
+
         $this->filesystem->glob($expectedDeploymentPath . '/*.php')->willReturn($files);
+
         $deploymentNames = $this->subject->getDeploymentNames();
-        $this->assertCount(1, $deploymentNames);
-        $this->assertContains('deployment', $deploymentNames);
+
+        self::assertCount(1, $deploymentNames);
+        self::assertContains('deployment', $deploymentNames);
     }
 
     /**
@@ -182,8 +207,10 @@ class FactoryTest extends TestCase
     public function getWorkspacesBasePathFromSurfWorkspaceEnvironmentVariable(): void
     {
         putenv('SURF_WORKSPACE=.surf');
+
         $this->filesystem->fileExists('.surf')->willReturn(true);
-        $this->assertEquals('.surf', $this->subject->getWorkspacesBasePath());
+
+        self::assertEquals('.surf', $this->subject->getWorkspacesBasePath());
     }
 
     /**
@@ -192,7 +219,8 @@ class FactoryTest extends TestCase
     public function getWorkspacesBasePathFromPath(): void
     {
         $this->filesystem->fileExists('/var/www/html/workspace')->willReturn(true);
-        $this->assertEquals('/var/www/html/workspace', $this->subject->getWorkspacesBasePath('/var/www/html/'));
+
+        self::assertEquals('/var/www/html/workspace', $this->subject->getWorkspacesBasePath('/var/www/html/'));
     }
 
     /**
@@ -201,8 +229,10 @@ class FactoryTest extends TestCase
     public function getWorkspacesBasePathFromPathWithDefinedConstant(): void
     {
         define('PHP_WINDOWS_VERSION_MAJOR', 'foo');
+
         $this->filesystem->fileExists('/var/www/html/workspace')->willReturn(true);
-        $this->assertEquals('/var/www/html/workspace', $this->subject->getWorkspacesBasePath('/var/www/html/'));
+
+        self::assertEquals('/var/www/html/workspace', $this->subject->getWorkspacesBasePath('/var/www/html/'));
     }
 
     /**
@@ -212,8 +242,10 @@ class FactoryTest extends TestCase
     {
         putenv('LOCALAPPDATA=/var/www/html/');
         define('PHP_WINDOWS_VERSION_MAJOR', 'foo');
+
         $this->filesystem->fileExists('/var/www/html/Surf')->willReturn(true);
-        $this->assertEquals('/var/www/html/Surf', $this->subject->getWorkspacesBasePath('/var/www/html/'));
+
+        self::assertEquals('/var/www/html/Surf', $this->subject->getWorkspacesBasePath('/var/www/html/'));
     }
 
     /**
@@ -222,13 +254,17 @@ class FactoryTest extends TestCase
     public function getDeployment(): void
     {
         putenv('HOME=' . __DIR__ . '/Fixtures');
+
         $files = [getenv('HOME') . '/.surf/deployments/deploy.php'];
+
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
+
         $deployment = $this->subject->getDeployment('deploy');
-        $this->assertFalse($deployment->getForceRun());
-        $this->assertTrue($deployment->isInitialized());
+
+        self::assertFalse($deployment->getForceRun());
+        self::assertTrue($deployment->isInitialized());
     }
 
     /**
@@ -237,14 +273,19 @@ class FactoryTest extends TestCase
     public function getDeploymentWithoutSimulation(): void
     {
         putenv('HOME=' . __DIR__ . '/Fixtures');
+
         $files = [getenv('HOME') . '/.surf/deployments/deploy.php'];
+
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
+
         $deployment = $this->subject->getDeployment('deploy', null, false);
+
         $this->logger->pushHandler(new StreamHandler(getenv('HOME') . '/.surf/workspace/logs/deploy.log'))->shouldBeCalledOnce();
-        $this->assertFalse($deployment->getForceRun());
-        $this->assertTrue($deployment->isInitialized());
+
+        self::assertFalse($deployment->getForceRun());
+        self::assertTrue($deployment->isInitialized());
     }
 
     /**
@@ -253,11 +294,14 @@ class FactoryTest extends TestCase
     public function getFirstAndOnlyDeployment(): void
     {
         putenv('HOME=' . __DIR__ . '/Fixtures');
+
         $files = [getenv('HOME') . '/.surf/deployments/deploy.php'];
+
         $this->filesystem->glob(getenv('HOME') . '/.surf/deployments/*.php')->willReturn($files);
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
+
         $this->subject->getDeployment('');
     }
 
@@ -267,6 +311,7 @@ class FactoryTest extends TestCase
     public function getDeploymentImplicitlyThrowsException(): void
     {
         putenv('HOME=' . __DIR__ . '/Fixtures');
+
         $this->expectException(InvalidConfigurationException::class);
 
         $files = [
@@ -277,7 +322,8 @@ class FactoryTest extends TestCase
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
-        $deployment = $this->subject->getDeployment('');
+
+        $this->subject->getDeployment('');
     }
 
     /**
@@ -297,7 +343,8 @@ class FactoryTest extends TestCase
         $this->logger->error("The deployment file foo/foo.php does not exist.\n")->shouldBeCalledOnce();
 
         $deployment = $this->subject->getDeployment('foo');
-        $this->assertSame($this->logger->reveal(), $deployment->getLogger());
-        $this->assertInstanceOf(FailedDeployment::class, $deployment);
+
+        self::assertSame($this->logger->reveal(), $deployment->getLogger());
+        self::assertInstanceOf(FailedDeployment::class, $deployment);
     }
 }

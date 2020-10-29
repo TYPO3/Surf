@@ -14,13 +14,19 @@ use TYPO3\Surf\DeprecationMessageFactory;
 
 class DeprecationMessageFactoryTest extends TestCase
 {
-
     /**
      * @test
      */
     public function createGenericDeprecationWarningForTaskMessage()
     {
-        $expectedMessage = sprintf('The usage of %s is deprecated and will be removed in TYPO3 Surf Version %s', __CLASS__, '4.0.0');
-        $this->assertEquals($expectedMessage, DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__, '4.0.0'));
+        $expectedMessage = sprintf(
+            'The usage of %s is deprecated and will be removed in TYPO3 Surf Version %s', __CLASS__,
+            '4.0.0'
+        );
+
+        self::assertEquals(
+            $expectedMessage,
+            DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__, '4.0.0')
+        );
     }
 }

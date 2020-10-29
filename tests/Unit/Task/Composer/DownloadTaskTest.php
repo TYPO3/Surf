@@ -14,11 +14,10 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class DownloadTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function executeWithDefaultComposerDownloadCommand()
+    public function executeWithDefaultComposerDownloadCommand(): void
     {
         $applicationReleasePath = $this->deployment->getApplicationReleasePath($this->application);
         $this->task->execute($this->node, $this->application, $this->deployment, []);
@@ -28,7 +27,7 @@ class DownloadTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithCustomComposerDownloadCommand()
+    public function executeWithCustomComposerDownloadCommand(): void
     {
         $applicationReleasePath = $this->deployment->getApplicationReleasePath($this->application);
         $options = ['composerDownloadCommand' => 'curl -s https://custom.domain.org/installer | php'];

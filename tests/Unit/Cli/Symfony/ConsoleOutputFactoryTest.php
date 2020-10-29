@@ -21,6 +21,6 @@ class ConsoleOutputFactoryTest extends TestCase
     public function createOutput(): void
     {
         $consoleOutputFactory = new ConsoleOutputFactory();
-        $this->assertInstanceOf(ConsoleOutput::class, $consoleOutputFactory->createOutput());
+        self::assertInstanceOf(ConsoleOutput::class, $consoleOutputFactory->createOutput());
     }
 }

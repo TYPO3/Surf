@@ -71,7 +71,7 @@ abstract class BaseTaskTest extends TestCase
      * This sets up a stubbed shell command service to record command executions
      * and return predefined command responses.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commands = ['executed' => []];
         $commands = &$this->commands;
@@ -80,28 +80,34 @@ abstract class BaseTaskTest extends TestCase
 
         /** @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createMock(ShellCommandService::class);
-        $shellCommandService->expects($this->any())->method('execute')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
-            if (is_array($command)) {
-                $commands['executed'] = array_merge($commands['executed'], $command);
-            } else {
-                $commands['executed'][] = $command;
-                if (isset($responses[$command])) {
-                    return $responses[$command];
+        $shellCommandService
+            ->expects(self::any())
+            ->method('execute')
+            ->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
+                if (is_array($command)) {
+                    $commands['executed'] = array_merge($commands['executed'], $command);
+                } else {
+                    $commands['executed'][] = $command;
+                    if (isset($responses[$command])) {
+                        return $responses[$command];
+                    }
                 }
-            }
-            return '';
-        }));
-        $shellCommandService->expects($this->any())->method('executeOrSimulate')->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
-            if (is_array($command)) {
-                $commands['executed'] = array_merge($commands['executed'], $command);
-            } else {
-                $commands['executed'][] = $command;
-                if (isset($responses[$command])) {
-                    return $responses[$command];
+                return '';
+            }));
+        $shellCommandService
+            ->expects(self::any())
+            ->method('executeOrSimulate')
+            ->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
+                if (is_array($command)) {
+                    $commands['executed'] = array_merge($commands['executed'], $command);
+                } else {
+                    $commands['executed'][] = $command;
+                    if (isset($responses[$command])) {
+                        return $responses[$command];
+                    }
                 }
-            }
-            return '';
-        }));
+                return '';
+            }));
         $this->task = $this->createTask();
         if ($this->task instanceof ShellCommandServiceAwareInterface) {
             $this->task->setShellCommandService($shellCommandService);
@@ -109,11 +115,15 @@ abstract class BaseTaskTest extends TestCase
 
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
+
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
+
         $this->mockLogger = $this->prophesize(LoggerInterface::class);
+
         $this->deployment->setLogger($this->mockLogger->reveal());
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
+
         $this->application = new Application('TestApplication');
 
         $this->deployment->initialize();
@@ -127,9 +137,9 @@ abstract class BaseTaskTest extends TestCase
      *
      * @param string $commandSubstring A command substring that was expected to be executed or a PREG pattern (e.g. "/git init .* -q/")
      */
-    protected function assertCommandExecuted($commandSubstring)
+    protected function assertCommandExecuted(string $commandSubstring): void
     {
-        $this->assertThat($this->commands['executed'], new AssertCommandExecuted($commandSubstring));
+        self::assertThat($this->commands['executed'], new AssertCommandExecuted($commandSubstring));
     }
 
     /**

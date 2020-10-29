@@ -30,7 +30,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
         return new SetUpExtensionsTask();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
@@ -40,16 +40,21 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithoutOptionExecutesSetUpActive()
+    public function executeWithoutOptionExecutesSetUpActive(): void
     {
-        $this->task->execute($this->node, $this->application, $this->deployment, ['scriptFileName' => 'vendor/bin/typo3cms']);
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['scriptFileName' => 'vendor/bin/typo3cms']
+        );
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setupactive'");
     }
 
     /**
      * @test
      */
-    public function executeWithOptionExecutesSetUpWithOption()
+    public function executeWithOptionExecutesSetUpWithOption(): void
     {
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
@@ -62,7 +67,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function consoleIsFoundInCorrectPathWithoutAppDirectory()
+    public function consoleIsFoundInCorrectPathWithoutAppDirectory(): void
     {
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
@@ -76,7 +81,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function consoleIsFoundInCorrectPathWithWebDirectoryAndSlashesAreTrimmed()
+    public function consoleIsFoundInCorrectPathWithWebDirectoryAndSlashesAreTrimmed(): void
     {
         $options = [
             'extensionKeys' => ['foo', 'bar'],
@@ -85,7 +90,9 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
-        $this->assertCommandExecuted("test -f '{$this->deployment->getApplicationReleasePath($this->application)}/vendor/bin/typo3cms'");
+        $this->assertCommandExecuted(
+            "test -f '{$this->deployment->getApplicationReleasePath($this->application)}/vendor/bin/typo3cms'"
+        );
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' 'foo,bar'");
     }
 }

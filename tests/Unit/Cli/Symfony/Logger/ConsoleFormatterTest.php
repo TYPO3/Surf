@@ -20,6 +20,20 @@ class ConsoleFormatterTest extends TestCase
      */
     protected $subject;
 
+    protected function setUp(): void
+    {
+        $this->subject = new ConsoleFormatter();
+    }
+
+    /**
+     * @test
+     * @dataProvider records
+     */
+    public function format(array $record, string $expectedOutput): void
+    {
+        self::assertEquals($expectedOutput, $this->subject->format($record));
+    }
+
     public function records(): array
     {
         return [
@@ -56,19 +70,5 @@ class ConsoleFormatterTest extends TestCase
                 "<debug>%message%</debug>\n"
             ],
         ];
-    }
-
-    protected function setUp()
-    {
-        $this->subject = new ConsoleFormatter();
-    }
-
-    /**
-     * @test
-     * @dataProvider records
-     */
-    public function format(array $record, string $expectedOutput): void
-    {
-        $this->assertEquals($expectedOutput, $this->subject->format($record));
     }
 }

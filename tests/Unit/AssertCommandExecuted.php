@@ -53,10 +53,8 @@ class AssertCommandExecuted extends Constraint
                 if (preg_match($this->expectedCommand, $command)) {
                     return true;
                 }
-            } else {
-                if (strpos($command, $this->expectedCommand) !== false) {
-                    return true;
-                }
+            } elseif (strpos($command, $this->expectedCommand) !== false) {
+                return true;
             }
         }
 

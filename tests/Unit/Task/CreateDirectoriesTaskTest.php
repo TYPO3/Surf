@@ -13,7 +13,6 @@ use TYPO3\Surf\Task\CreateDirectoriesTask;
 
 class CreateDirectoriesTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */

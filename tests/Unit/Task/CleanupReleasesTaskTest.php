@@ -39,7 +39,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     private $clockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
         $this->shellCommandService = $this->createMock(ShellCommandService::class);
@@ -50,8 +50,10 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
+
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
+
         /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);
@@ -78,27 +80,36 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function doNothingJustLogDebugIfOptionKeepReleasesIsNotDefined()
+    public function doNothingJustLogDebugIfOptionKeepReleasesIsNotDefined(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $logger */
         $logger = $this->deployment->getLogger();
-        $logger->expects($this->once())->method('debug');
-        $this->assertNull($this->task->execute($this->node, $this->application, $this->deployment, []));
+        $logger->expects(self::once())->method('debug');
+
+        self::assertNull($this->task->execute($this->node, $this->application, $this->deployment, []));
     }
 
     /**
      * @test
      */
-    public function removeReleases()
+    public function removeReleases(): void
     {
         $folders = array_keys($this->folderStructure);
-        $this->shellCommandService->expects($this->at(1))->method('execute')->willReturn(implode(' ', $folders));
+        $this->shellCommandService->expects(self::at(1))->method('execute')->willReturn(implode(' ', $folders));
 
-        $command = array_reduce(['20171108132211', '20171109193135'], function ($carry, $folder) {
-            return $carry . sprintf('rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;', $this->application->getReleasesPath(), $folder);
-        }, '');
+        $command = array_reduce(
+            ['20171108132211', '20171109193135'],
+            function ($carry, $folder) {
+                return $carry . sprintf(
+                        'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
+                        $this->application->getReleasesPath(),
+                        $folder
+                    );
+            },
+            ''
+        );
 
-        $this->shellCommandService->expects($this->once())->method('executeOrSimulate')->with($command);
+        $this->shellCommandService->expects(self::once())->method('executeOrSimulate')->with($command);
         $this->task->execute($this->node, $this->application, $this->deployment, ['keepReleases' => 1]);
     }
 
@@ -111,8 +122,12 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      * @param int $stringToTime
      * @param array $expectedFoldersToBeRemoved
      */
-    public function removeReleasesByAge($currentTime, array $identifiers, $stringToTime, array $expectedFoldersToBeRemoved)
-    {
+    public function removeReleasesByAge(
+        $currentTime,
+        array $identifiers,
+        $stringToTime,
+        array $expectedFoldersToBeRemoved
+    ): void {
         $this->clockMock->method('currentTime')->willReturn($currentTime);
 
         $folderStructure['.'] = '.';
@@ -123,28 +138,44 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             $folderStructure[strftime('%Y%m%d%H%M%S', $timestampForCurrentFolder)] = ['index.php'];
         }
 
-        $this->clockMock->method('createTimestampFromFormat')->will($this->onConsecutiveCalls(...$timestampMap));
+        $this->clockMock->method('createTimestampFromFormat')->will(self::onConsecutiveCalls(...$timestampMap));
         $this->clockMock->method('stringToTime')->willReturn(strtotime($stringToTime, $currentTime));
 
         $folders = array_keys($folderStructure);
 
-        $this->shellCommandService->expects($this->at(1))->method('execute')->willReturn(implode(' ', $folders));
+        $this->shellCommandService->expects(self::at(1))->method('execute')->willReturn(implode(' ', $folders));
 
-        $command = array_reduce(array_map(function ($expectedFolderToBeRemoved) use ($currentTime) {
-            return strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime));
-        }, $expectedFoldersToBeRemoved), function ($command, $folder) {
-            return $command . sprintf('rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;', $this->application->getReleasesPath(), $folder);
-        }, '');
+        $command = array_reduce(
+            array_map(
+                function ($expectedFolderToBeRemoved) use ($currentTime) {
+                    return strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime));
+                },
+                $expectedFoldersToBeRemoved
+            ),
+            function ($command, $folder) {
+                return $command . sprintf(
+                        'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
+                        $this->application->getReleasesPath(),
+                        $folder
+                    );
+            },
+            ''
+        );
 
-        $this->shellCommandService->expects($this->once())->method('executeOrSimulate')->with($command);
+        $this->shellCommandService->expects(self::once())->method('executeOrSimulate')->with($command);
 
-        $this->task->execute($this->node, $this->application, $this->deployment, ['onlyRemoveReleasesOlderThan' => 'foo']);
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['onlyRemoveReleasesOlderThan' => 'foo']
+        );
     }
 
     /**
      * @return array
      */
-    public function keepReleasesByAgeDataProvider()
+    public function keepReleasesByAgeDataProvider(): array
     {
         return [
             // Remove folders older than 121 seconds

@@ -16,11 +16,10 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class UnitTestTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function noFlowApplicationGivenThrowsException()
+    public function noFlowApplicationGivenThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
@@ -29,11 +28,16 @@ class UnitTestTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeSuccessfully()
+    public function executeSuccessfully(): void
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment);
-        $this->assertCommandExecuted(sprintf('cd /releases/%s && phpunit -c Build/BuildEssentials/PhpUnit/UnitTests.xml', $this->deployment->getReleaseIdentifier()));
+        $this->assertCommandExecuted(
+            sprintf(
+                'cd /releases/%s && phpunit -c Build/BuildEssentials/PhpUnit/UnitTests.xml',
+                $this->deployment->getReleaseIdentifier()
+            )
+        );
     }
 
     /**

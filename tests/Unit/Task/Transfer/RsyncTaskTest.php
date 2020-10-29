@@ -19,7 +19,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class RsyncTaskTest extends BaseTaskTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -30,7 +30,7 @@ class RsyncTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithUsernameAndDefaultOptionsCreatesDirectoryAndTransfersAndCopiesFiles()
+    public function executeWithUsernameAndDefaultOptionsCreatesDirectoryAndTransfersAndCopiesFiles(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $this->node->setOption('username', 'jdoe');
@@ -38,14 +38,18 @@ class RsyncTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('mkdir -p /home/jdoe/app/cache/transfer');
-        $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
-        $this->assertCommandExecuted('/cp -RPp \/home\/jdoe\/app\/cache\/transfer\/. \/home\/jdoe\/app\/releases\/[0-9]+/');
+        $this->assertCommandExecuted(
+            '/rsync -q --compress --rsh="ssh"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/'
+        );
+        $this->assertCommandExecuted(
+            '/cp -RPp \/home\/jdoe\/app\/cache\/transfer\/. \/home\/jdoe\/app\/releases\/[0-9]+/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithUsernameAndPasswordAndDefaultOptionsCreatesDirectoryAndTransfersAndCopiesFiles()
+    public function executeWithUsernameAndPasswordAndDefaultOptionsCreatesDirectoryAndTransfersAndCopiesFiles(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $this->node->setOption('username', 'jdoe');
@@ -54,14 +58,18 @@ class RsyncTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('mkdir -p /home/jdoe/app/cache/transfer');
-        $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh -o PubkeyAuthentication=no"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
-        $this->assertCommandExecuted('/cp -RPp \/home\/jdoe\/app\/cache\/transfer\/. \/home\/jdoe\/app\/releases\/[0-9]+/');
+        $this->assertCommandExecuted(
+            '/rsync -q --compress --rsh="ssh -o PubkeyAuthentication=no"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/'
+        );
+        $this->assertCommandExecuted(
+            '/cp -RPp \/home\/jdoe\/app\/cache\/transfer\/. \/home\/jdoe\/app\/releases\/[0-9]+/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithPrivateKeyAddsFlagToSshCommand()
+    public function executeWithPrivateKeyAddsFlagToSshCommand(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $this->node->setOption('username', 'jdoe');
@@ -70,27 +78,33 @@ class RsyncTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $this->assertCommandExecuted('mkdir -p /home/jdoe/app/cache/transfer');
-        $this->assertCommandExecuted('/rsync -q --compress --rsh="ssh -i \'~\/.ssh\/foo\'"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/');
-        $this->assertCommandExecuted('/cp -RPp \/home\/jdoe\/app\/cache\/transfer\/. \/home\/jdoe\/app\/releases\/[0-9]+/');
+        $this->assertCommandExecuted(
+            '/rsync -q --compress --rsh="ssh -i \'~\/.ssh\/foo\'"  --recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' \'.*\/Data\/Surf\/TestDeployment\/TestApplication\/.\' \'jdoe@myserver.local:\/home\/jdoe\/app\/cache\/transfer\'/'
+        );
+        $this->assertCommandExecuted(
+            '/cp -RPp \/home\/jdoe\/app\/cache\/transfer\/. \/home\/jdoe\/app\/releases\/[0-9]+/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithDefaultExcludeList()
+    public function executeWithDefaultExcludeList(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.git\'/');
+        $this->assertCommandExecuted(
+            '/--recursive --times --perms --links --delete --delete-excluded --exclude \'.git\'/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithEmptyExcludeList()
+    public function executeWithEmptyExcludeList(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
@@ -99,9 +113,9 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertThat(
+        self::assertThat(
             $this->commands['executed'],
-            $this->logicalNot(
+            self::logicalNot(
                 new AssertCommandExecuted('/--exclude/')
             )
         );
@@ -110,7 +124,7 @@ class RsyncTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithCustomExcludeList()
+    public function executeWithCustomExcludeList(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
@@ -123,13 +137,15 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/');
+        $this->assertCommandExecuted(
+            '/--recursive --times --perms --links --delete --delete-excluded --exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithCustomRsyncFlags()
+    public function executeWithCustomRsyncFlags(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
@@ -138,13 +154,15 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --append-verify --exclude \'.git\'/');
+        $this->assertCommandExecuted(
+            '/--recursive --times --perms --links --delete --delete-excluded --append-verify --exclude \'.git\'/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithCustomRsyncFlagsAndCustomExcludeList()
+    public function executeWithCustomRsyncFlagsAndCustomExcludeList(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $options = [
@@ -158,13 +176,15 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --append-verify --exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/');
+        $this->assertCommandExecuted(
+            '/--recursive --times --perms --links --delete --delete-excluded --append-verify --exclude \'.git\' --exclude \'.gitmodules\' --exclude \'\/Deploy\'/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithoutUsernameDoesNotAppendUsernameToRsyncTarget()
+    public function executeWithoutUsernameDoesNotAppendUsernameToRsyncTarget(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
 
@@ -176,7 +196,7 @@ class RsyncTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithTypo3Cms()
+    public function executeWithTypo3Cms(): void
     {
         $this->application = new CMS();
         $this->node->setOption('hostname', 'myserver.local');
@@ -184,13 +204,15 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'public\/fileadmin\' --exclude \'public\/uploads\'/');
+        $this->assertCommandExecuted(
+            '/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'public\/fileadmin\' --exclude \'public\/uploads\'/'
+        );
     }
 
     /**
      * @test
      */
-    public function executeWithTypo3CmsAndCustomWebDirectory()
+    public function executeWithTypo3CmsAndCustomWebDirectory(): void
     {
         $this->application = new CMS();
         $this->application->setOption('webDirectory', 'web');
@@ -199,7 +221,9 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted('/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'web\/fileadmin\' --exclude \'web\/uploads\'/');
+        $this->assertCommandExecuted(
+            '/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'web\/fileadmin\' --exclude \'web\/uploads\'/'
+        );
     }
 
     /**

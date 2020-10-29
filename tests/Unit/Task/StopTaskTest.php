@@ -19,18 +19,20 @@ class StopTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeThrowsStopWorkflowException()
+    public function executeThrowsStopWorkflowException(): void
     {
         $this->expectException(StopWorkflowException::class);
+
         $this->task->execute($this->node, $this->application, $this->deployment);
     }
 
     /**
      * @test
      */
-    public function simulateThrowsStopWorkflowException()
+    public function simulateThrowsStopWorkflowException(): void
     {
         $this->expectException(StopWorkflowException::class);
+
         $this->task->simulate($this->node, $this->application, $this->deployment);
     }
 

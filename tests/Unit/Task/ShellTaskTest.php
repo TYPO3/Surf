@@ -23,9 +23,10 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeThrowsExceptionNoCommandGiven()
+    public function executeThrowsExceptionNoCommandGiven(): void
     {
         $this->expectException(InvalidConfigurationException::class);
+
         $this->task->execute($this->node, $this->application, $this->deployment, []);
     }
 
@@ -38,7 +39,7 @@ class ShellTaskTest extends BaseTaskTest
      * @throws InvalidConfigurationException
      * @throws TaskExecutionException
      */
-    public function executeSomeCommandSuccessfully($command, $expectedCommand)
+    public function executeSomeCommandSuccessfully($command, $expectedCommand): void
     {
         $this->task->execute(
             $this->node,
@@ -52,9 +53,9 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function rollbackReturnVoidNoRollbackCommandGiven()
+    public function rollbackReturnVoidNoRollbackCommandGiven(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->task->rollback($this->node, $this->application, $this->deployment, ['command' => 'someCommand'])
         );
     }
@@ -68,7 +69,7 @@ class ShellTaskTest extends BaseTaskTest
      * @test
      * @dataProvider commands
      */
-    public function rollbackSomeCommandSuccessfully($command, $expectedCommand)
+    public function rollbackSomeCommandSuccessfully($command, $expectedCommand): void
     {
         $this->task->rollback(
             $this->node,
@@ -82,7 +83,7 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @return array
      */
-    public function commands()
+    public function commands(): array
     {
         return [
             ['ln -s {sharedPath}', sprintf('ln -s %s', escapeshellarg('/shared'))],

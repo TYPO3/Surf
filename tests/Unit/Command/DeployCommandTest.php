@@ -19,7 +19,6 @@ use TYPO3\Surf\Integration\FactoryInterface;
 
 final class DeployCommandTest extends TestCase
 {
-
     /**
      * @var DeployCommand
      */
@@ -30,7 +29,7 @@ final class DeployCommandTest extends TestCase
      */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factory = $this->prophesize(FactoryInterface::class);
         $this->subject = new DeployCommand($this->factory->reveal());
@@ -41,10 +40,17 @@ final class DeployCommandTest extends TestCase
      */
     public function executeForceRun(): void
     {
+        /* @var Deployment|\Prophecy\Prophecy\ObjectProphecy $deployment */
         $deployment = $this->prophesize(Deployment::class);
         $deployment->deploy()->shouldBeCalledOnce();
         $deployment->getStatus()->willReturn(Deployment::STATUS_SUCCESS);
-        $this->factory->getDeployment('Foo', Argument::exact(null), Argument::exact(false), Argument::exact(true), Argument::exact(true))->willReturn($deployment);
+        $this->factory->getDeployment(
+            'Foo',
+            Argument::exact(null),
+            Argument::exact(false),
+            Argument::exact(true),
+            Argument::exact(true)
+        )->willReturn($deployment);
 
         $commandTester = new CommandTester($this->subject);
         $commandTester->execute([
