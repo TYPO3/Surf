@@ -1,39 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit
-        backupGlobals="true"
-        backupStaticAttributes="false"
-        bootstrap="vendor/autoload.php"
-        colors="true"
-        convertErrorsToExceptions="true"
-        convertWarningsToExceptions="true"
-        forceCoversAnnotation="false"
-        processIsolation="false"
-        stopOnError="false"
-        stopOnFailure="false"
-        stopOnIncomplete="false"
-        stopOnSkipped="false"
-        verbose="false"
-        beStrictAboutTestsThatDoNotTestAnything="false"
-        failOnRisky="true"
-        failOnWarning="true"
+    backupGlobals="true"
+    backupStaticAttributes="false"
+    bootstrap="vendor/autoload.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertWarningsToExceptions="true"
+    forceCoversAnnotation="false"
+    processIsolation="false"
+    stopOnError="false"
+    stopOnFailure="false"
+    stopOnIncomplete="false"
+    stopOnSkipped="false"
+    verbose="false"
+    beStrictAboutTestsThatDoNotTestAnything="false"
+    failOnRisky="true"
+    failOnWarning="true"
 >
     <testsuites>
         <testsuite name="Surf Test Suite">
-            <directory>./Tests/</directory>
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Migrations</directory>
-                <directory>./Documentation</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
         </whitelist>
     </filter>
 </phpunit>
