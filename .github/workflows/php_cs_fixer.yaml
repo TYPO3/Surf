@@ -1,47 +1,47 @@
 name: Format (PHP)
 
 on:
-    pull_request:
-        branches:
-            - master
-            - 2.0
+  pull_request:
+    branches:
+      - master
+      - 2.0
 
 jobs:
-    php-cs-fixer:
-        runs-on: ubuntu-latest
-        # dont run jobs on forks, because we are not allowed to commit
-        if: github.event.pull_request.draft == false && github.repository == 'TYPO3/Surf'
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+    # dont run jobs on forks, because we are not allowed to commit
+    if: github.event.pull_request.draft == false && github.repository == 'TYPO3/Surf'
 
-        steps:
-            -   uses: actions/checkout@v2
-                with:
-                    token: ${{ secrets.PHP_CS_FIXER }}
-                    ref: ${{ github.head_ref }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PHP_CS_FIXER }}
+          ref: ${{ github.head_ref }}
 
-            -   name: Get Composer Cache Directory
-                id: composer-cache
-                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: 7.2
-                    coverage: none # disable xdebug, pcov
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.2
+          coverage: none # disable xdebug, pcov
 
-            -   name: Cache Composer Dependencies
-                uses: actions/cache@v1
-                with:
-                    path: ${{ steps.composer-cache.outputs.dir }}
-                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: ${{ runner.os }}-composer-
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
-            -   name: Install Composer Dependencies
-                run: composer install --no-progress
+      - name: Install Composer Dependencies
+        run: composer install --no-progress
 
-            -   name: Run php-cs-fixer
-                run: vendor/bin/php-cs-fixer fix --config=./.php_cs --diff
+      - name: Run php-cs-fixer
+        run: vendor/bin/php-cs-fixer fix --config=./.php_cs --diff
 
-            -   name: Commit changed files
-                uses: stefanzweifel/git-auto-commit-action@v4
-                with:
-                    commit_message: Apply php-cs-fixer changes
-                    branch: ${{ github.head_ref }}
+      - name: Commit changed files
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply php-cs-fixer changes
+          branch: ${{ github.head_ref }}
