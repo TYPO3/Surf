@@ -55,7 +55,7 @@ scenarios do not work with public key authentication. Surf also supports
 password-based SSH authentication. For that, you need to specify the password
 as follows::
 
-$node->setOption('password', 'yourSshPasswordHere');
+   $node->setOption('password', 'yourSshPasswordHere');
 
 Authentication with passwords needs the ``expect`` unix tool which is installed
 by default in most Linux distributions.
@@ -103,17 +103,17 @@ If everything looks right, you can run the deployment::
 
 To include extra details in the output, you can increase verbosity with the --verbose option:
 
-   - -v for normal output,
-   - -vv for more verbose output,
-   - -vvv for debug.
+* -v for normal output,
+* -vv for more verbose output,
+* -vvv for debug.
 
 Surf is going to create the following directories on the deployment host:
 
-   - releases contains releases dirs,
-   - shared contains shared files and dirs,
-   - releases/next (temporarily)
-   - releases/current symlink to current release
-   - releases/previous (optional)
+* releases contains releases dirs,
+* shared contains shared files and dirs,
+* releases/next (temporarily)
+* releases/current symlink to current release
+* releases/previous (optional)
 
 Configure your hosts to serve your public directory from current.
 

@@ -50,12 +50,10 @@ This is the official documentation to discover the main features and concepts of
 If you find an error or something is missing, please:
 `Report a Problem <https://github.com/TYPO3/Surf/issues/new>`__
 
-**Table of Contents**
-
 .. toctree::
+     :hidden:
      :maxdepth: 2
      :titlesonly:
-     :glob:
 
      Introduction/Index
      Installation/Index
@@ -68,4 +66,10 @@ If you find an error or something is missing, please:
      CliUsage/Index
      SmokeTesting/Index
      Examples/Index
+
+.. toctree::
+     :caption: Migration
+     :hidden:
+     :maxdepth: 2
+
      Migration/Index

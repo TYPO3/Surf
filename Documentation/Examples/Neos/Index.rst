@@ -1,17 +1,22 @@
 .. -*- coding: utf-8 -*- with BOM.
 .. include:: ../../Includes.txt
+.. index:: Neos, Flow
 
 ===========================
 How to deploy Neos websites
 ===========================
 
-If you would like to deploy a Neos Application a good starting point is to use Neos Application class provided by Surf::
+If you would like to deploy a Neos website a good starting point is to use the Neos Application class provided by Surf::
 
-   $node = new TYPO3\Surf\Domain\Model\Node('production');
+   <?php
+   /** @var \TYPO3\Surf\Domain\Model\Deployment $deployment */
+
+   $node = new \TYPO3\Surf\Domain\Model\Node('production');
    $node
       ->setHostname('my.node.com')
       ->setOption('username', 'myuser');
-   $application = new TYPO3\Surf\Application\Neos\Neos('My Node');
+
+   $application = new \TYPO3\Surf\Application\Neos\Neos('My Node');
    $application
       ->setOption('keepReleases', 3)
       ->setOption('composerCommandPath', 'composer')
@@ -25,14 +30,15 @@ If you would like to deploy a Neos Application a good starting point is to use N
       ])
       ->setDeploymentPath('/var/www/vhosts/my.node.com')
       ->addNode($node);
-   /** @var $deployment TYPO3\Surf\Domain\Model\Deployment "injected" into this script from Surf */
+
    $deployment
       ->addApplication($application)
       ->onInitialize(
          function () use ($deployment, $application) {
                $deployment->getWorkflow()
-                  ->beforeStage('transfer', TYPO3\Surf\Task\Php\WebOpcacheResetCreateScriptTask::class)
-                  ->afterStage('switch', TYPO3\Surf\Task\Php\WebOpcacheResetExecuteTask::class)
-                  ->afterStage('switch', TYPO3\Surf\Task\Neos\Flow\FlushCacheListTask::class);
+                  ->beforeStage('transfer', \TYPO3\Surf\Task\Php\WebOpcacheResetCreateScriptTask::class)
+                  ->afterStage('switch', \TYPO3\Surf\Task\Php\WebOpcacheResetExecuteTask::class)
+                  ->afterStage('switch', \TYPO3\Surf\Task\Neos\Flow\FlushCacheListTask::class);
          }
       );
+

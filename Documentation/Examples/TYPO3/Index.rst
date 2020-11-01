@@ -1,11 +1,12 @@
 .. -*- coding: utf-8 -*- with BOM.
 .. include:: ../../Includes.txt
+.. index:: TYPO3
 
 ============================
 How to deploy TYPO3 websites
 ============================
 
-If you would like to deploy a TYPO3 Website a good starting point is to use TYPO3\CMS Application class provided by Surf::
+If you would like to deploy a TYPO3 website a good starting point is to use TYPO3\CMS Application class provided by Surf::
 
    <?php
    /** @var \TYPO3\Surf\Domain\Model\Deployment $deployment */

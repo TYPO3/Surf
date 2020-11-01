@@ -6,8 +6,9 @@ Deployment Recipes
 ==================
 
 .. toctree::
-   :maxdepth: 5
    :titlesonly:
 
-   Neos/Index
    TYPO3/Index
+   Neos/Index
+   Flow/Index
+   Other/Index
