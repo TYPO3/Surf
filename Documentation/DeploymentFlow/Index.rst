@@ -19,47 +19,47 @@ In the list below you can see all the 9 steps defined by the SimpleWorkflow:
 initialize
    This is normally used only for an initial deployment to an instance. At this stage you may prefill certain directories for example.
 
-   Example Task: \TYPO3\Surf\Task\CreateDirectoriesTask
+   Example Task: `\TYPO3\Surf\Task\CreateDirectoriesTask`
 
 package
    This stage is where you normally package all files and assets, which will be transferred to the next stage.
 
-   Example Task: \TYPO3\Surf\Task\Package\GitTask
+   Example Task: `\TYPO3\Surf\Task\Package\GitTask`
 
 transfer
    Here all tasks are located which serve to transfer the assets from your local computer to the node, where the application runs.
 
-   Example Task: \TYPO3\Surf\Task\Transfer\RsyncTask
+   Example Task: `\TYPO3\Surf\Task\Transfer\RsyncTask`
 
 update
    If necessary, the transferred assets can be updated at this stage on the foreign instance.
 
-   Example Task: \TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask
+   Example Task: `\TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask`
 
 migrate
    Here you can define tasks to do some database updates / migrations. Be careful and do not delete old tables or columns, because the old code, relying on these, is still live.
 
-   Example Task: \TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask
+   Example Task: `\TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask`
 
 finalize
    This stage is meant for tasks, that should be done short before going live, like cache warm ups and so on.
 
-   Example Task: \TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask
+   Example Task: `\TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask`
 
 test
    In the test stage you can make tests, to check if everything is fine before switching the releases.
 
-   Example Task: \TYPO3\Surf\Task\Test\HttpTestTask
+   Example Task: `\TYPO3\Surf\Task\Test\HttpTestTask`
 
 switch
    This is the crucial stage. Here the old live instance is switched with the new prepared instance. Normally the new instance is symlinked.
 
-   Example Task: \TYPO3\Surf\Task\SymlinkReleaseTask
+   Example Task: `\TYPO3\Surf\Task\SymlinkReleaseTask`
 
 cleanup
    At this stage you would cleanup old releases or remove other unused stuff.
 
-   Example Task: \TYPO3\Surf\Task\CleanupReleasesTask
+   Example Task: `\TYPO3\Surf\Task\CleanupReleasesTask`
 
 
 You can create your own workflow if you like. In order to do so you have to extend the abstract Workflow class.

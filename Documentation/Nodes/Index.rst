@@ -9,7 +9,8 @@ A node is basically a deployment target representing a server for an application
 
 A simple node configuration looks like this::
 
-   ...
+   <?php
+
    $node = new \TYPO3\Surf\Domain\Model\Node('example');
    $node->setHostname('example.com');
    $node->setOption('username', 'myuser');
@@ -23,12 +24,16 @@ The preferred way of connecting to the remote host is via SSH Public-Key authent
 
 However, due to constraints in the infrastructure setup, sometimes, deployment scenarios do not work with public key authentication. Surf also supports password-based SSH authentication. For that, you need to specify the password as follows::
 
+   <?php
+
    $node->setOption('password', 'yourSshPasswordHere');
 
 Custom Connection
 -----------------
 
 In case you need to connect to the remote host via more esoteric protocols, you can also implement your own remote host connection: In this case, set the option remoteCommandExecutionHandler on the node::
+
+   <?php
 
    $node->setOption('remoteCommandExecutionHandler', function(ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput = TRUE) {
       // Now, do what you need to do in order to connect to $node and execute $command.
