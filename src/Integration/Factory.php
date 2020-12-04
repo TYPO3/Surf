@@ -163,6 +163,8 @@ class Factory implements FactoryInterface, ContainerAwareInterface
         $this->ensureDirectoryExists($tempPath);
         $deployment->setTemporaryPath($tempPath);
 
+        $container = $this->container;
+
         require($deploymentPathAndFilename);
 
         return $deployment;
