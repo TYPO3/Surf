@@ -20,7 +20,7 @@ Download phar archive
 To install Surf as phar archive, run the following commands::
 
     mkdir /usr/local/surf
-    curl -L https://github.com/TYPO3/Surf/releases/download/2.1.1/surf.phar -o /usr/local/surf/surf.phar
+    curl -L https://github.com/TYPO3/Surf/releases/download/2.2.1/surf.phar -o /usr/local/surf/surf.phar
     chmod +x /usr/local/surf/surf.phar
     ln -s /usr/local/surf/surf.phar /usr/local/bin/surf
 
@@ -55,7 +55,7 @@ To install Surf within your project via composer, run the following command::
 
     composer require typo3/surf:^2.0
 
-The advantage of this method is that you can directly inspect the source files of surf without any further configuration in your IDE. 
+The advantage of this method is that you can directly inspect the source files of surf without any further configuration in your IDE.
 
 .. note:: Because of surf's dependencies it could be that you can't install surf in your project root. In that case you should install surf in a sub directory.
 

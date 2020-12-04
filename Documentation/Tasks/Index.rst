@@ -67,8 +67,8 @@ We will show you another convenient and often used way to customize the deployme
 
     $workflow->defineTask('CopyEnvFileTask', \TYPO3\Surf\Task\ShellTask::class, [
         'command' => [
-            "cp {sharedPath}/.env {releasePath}/.env",
-            "cd {releasePath}",
+            'cp {sharedPath}/.env {releasePath}/.env',
+            'cd {releasePath}',
         ]
     ]);
 
@@ -94,8 +94,7 @@ Add task to the deployment flow
 So we have seen how to create custom tasks in different ways. In the following we will see how we add these tasks to the deployment flow::
 
     <?php
-
-    ...
+    /** @var \TYPO3\Surf\Domain\Model\Deployment $deployment */
 
     $application = new \TYPO3\Surf\Application\TYPO3\CMS();
     $deployment->addApplication($application);
@@ -103,8 +102,8 @@ So we have seen how to create custom tasks in different ways. In the following w
 
     $workflow->defineTask('CopyEnvFileTask', \TYPO3\Surf\Task\ShellTask::class, [
         'command' => [
-            "cp {sharedPath}/.env {releasePath}/.env",
-            "cd {releasePath}",
+            'cp {sharedPath}/.env {releasePath}/.env',
+            'cd {releasePath}',
         ]
     ]);
 
@@ -118,8 +117,6 @@ Besides specifying the execution point via a stage, you can also give an existin
 
     <?php
 
-    ...
-
     $workflow->beforeTask(SomeTask::class,
         [
             'CopyEnvFileTask'
@@ -129,15 +126,15 @@ Besides specifying the execution point via a stage, you can also give an existin
 
 The following table shows all the methods to manipulate the tasks in the deployment flow (part of the abstract Workflow class):
 
-====================== ================================= ===================================================================================
+====================== ================================= ===============================================================================
 Method                 Arguments                         Description
-====================== ================================= ===================================================================================
+====================== ================================= ===============================================================================
 defineTask             $taskName, $taskType, ($options)  Defines a new task with name $taskName based on $taskType with custom options.
 addTask                $tasks, $stage, ($application)    Add one or more tasks to the workflow that should run in the given stage.
 removeTask             $taskName                         Removes the task with the given name from all stages and applications.
 afterTask              $taskName, $tasks, ($application) Adds one or more tasks that should run *after* the given task name.
 beforeTask             $taskName, $tasks, ($application) Adds one or more tasks that should run *before* the given task name.
-====================== ================================= ===================================================================================
+====================== ================================= ===============================================================================
 
 Options for Task
 ----------------
@@ -148,19 +145,15 @@ In order to customize options of existing tasks you can do it the following ways
 
     use TYPO3\Surf\Task\Transfer\RsyncTask;
 
-    ...
-
     // Customize the option for the task only for a specific application
     $application->setOption(RsyncTask::class . '[rsyncExcludes]', [
         '.git',
-        'web/fileadmin',
-        'web/uploads',
+        'public/fileadmin',
     ]);
 
     // Customize the option for the task only for a specific node
     $node->setOption(RsyncTask::class . '[rsyncExcludes]', [
-        'web/fileadmin',
-        'web/uploads',
+        'public/fileadmin',
     ]);
 
     // Customize the option for the whole deployment
