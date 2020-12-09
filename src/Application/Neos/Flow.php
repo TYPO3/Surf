@@ -18,6 +18,8 @@ use TYPO3\Surf\Task\Neos\Flow\MigrateTask;
 use TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask;
 use TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask;
 use TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask;
+use TYPO3\Surf\Task\Neos\Flow\WarmUpCacheTask;
+use TYPO3\Surf\Task\SymlinkReleaseTask;
 
 /**
  * A Neos Flow application template
@@ -43,6 +45,11 @@ class Flow extends BaseApplication
     public function __construct($name = 'Neos Flow')
     {
         parent::__construct($name);
+
+        $this->options = array_merge($this->options, [
+            'enableCacheWarmupBeforeSwitchingToNewRelease' => false,
+            'enableCacheWarmupAfterSwitchingToNewRelease' => false,
+        ]);
     }
 
     /**
@@ -64,6 +71,13 @@ class Flow extends BaseApplication
             ], $this)
             ->addTask(MigrateTask::class, 'migrate', $this)
             ->addTask(PublishResourcesTask::class, 'finalize', $this);
+
+        if ($this->getOption('enableCacheWarmupBeforeSwitchingToNewRelease') === true) {
+            $workflow->addTask(WarmUpCacheTask::class, 'finalize', $this);
+        }
+        if ($this->getOption('enableCacheWarmupAfterSwitchingToNewRelease') === true) {
+            $workflow->afterTask(SymlinkReleaseTask::class, WarmUpCacheTask::class, $this);
+        }
     }
 
     /**
@@ -178,8 +192,12 @@ class Flow extends BaseApplication
      * @param string $phpBinaryPathAndFilename the path to the php binary
      * @return string
      */
-    public function buildCommand($targetPath, $command, array $arguments = [], $phpBinaryPathAndFilename = 'php')
-    {
+    public function buildCommand(
+        $targetPath,
+        $command,
+        array $arguments = [],
+        $phpBinaryPathAndFilename = 'php'
+    ) {
         if (strpos($command, '.') === false) {
             $command = $this->getCommandPackageKey($command) . ':' . $command;
         }
