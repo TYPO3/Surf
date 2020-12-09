@@ -244,7 +244,7 @@ class BaseApplication extends Application
 
     /**
      * @param \TYPO3\Surf\Domain\Model\Workflow $workflow
-     * @param string $packageMethod
+     * @param string|null $packageMethod
      */
     protected function registerTasksForPackageMethod(Workflow $workflow, $packageMethod)
     {
