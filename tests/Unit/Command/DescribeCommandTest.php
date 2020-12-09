@@ -308,6 +308,8 @@ Applications:
       transferMethod => <success>rsync</success>
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
+      enableCacheWarmupBeforeSwitchingToNewRelease => <success></success>
+      enableCacheWarmupAfterSwitchingToNewRelease => <success></success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success>NULL</success>
@@ -354,6 +356,160 @@ Applications:
         tasks:
           <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application Neos)
 ', $this->getDescriptionOfPredefinedApplication(new Neos()));
+    }
+
+    /**
+     * @test
+     */
+    public function describeNeosNeosWithWarmUpBeforeSymlink()
+    {
+        $application = new Neos();
+        $application->setOption('enableCacheWarmupBeforeSwitchingToNewRelease', true);
+
+        self::assertEquals('<success>Deployment TestDeployment</success>
+
+Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
+
+Nodes:
+
+  <success>TestNode</success> (hostname)
+
+Applications:
+
+  <success>Neos:</success>
+    Deployment path: <success></success>
+    Options:
+      packageMethod => <success>git</success>
+      transferMethod => <success>rsync</success>
+      updateMethod => <success>NULL</success>
+      lockDeployment => <success>1</success>
+      enableCacheWarmupBeforeSwitchingToNewRelease => <success>1</success>
+      enableCacheWarmupAfterSwitchingToNewRelease => <success></success>
+      TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
+      TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
+      deploymentPath => <success>NULL</success>
+      releasesPath => <success>/releases</success>
+      sharedPath => <success>/shared</success>
+    Nodes: <success>TestNode</success>
+    Detailed workflow:
+      initialize:
+        tasks:
+          <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\Task\Generic\CreateDirectoriesTask after TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\CreateDirectoriesTask</success> (for application Neos)
+      lock:
+        tasks:
+          <success>TYPO3\Surf\Task\LockDeploymentTask</success> (for application Neos)
+      package:
+        tasks:
+          <success>TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\DefinedTask\Composer\LocalInstallTask after TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
+      transfer:
+        tasks:
+          <success>TYPO3\Surf\Task\Transfer\RsyncTask</success> (for application Neos)
+        after:
+          <success>TYPO3\Surf\Task\Generic\CreateSymlinksTask</success> (for application Neos)
+      update:
+        after:
+          <success>TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask</success> (for application Neos)
+      migrate:
+        tasks:
+          <success>TYPO3\Surf\Task\Neos\Flow\MigrateTask</success> (for application Neos)
+      finalize:
+        tasks:
+          <success>TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\WarmUpCacheTask</success> (for application Neos)
+      test:
+      switch:
+        tasks:
+          <success>TYPO3\Surf\Task\SymlinkReleaseTask</success> (for application Neos)
+      cleanup:
+        tasks:
+          <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application Neos)
+      unlock:
+        tasks:
+          <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application Neos)
+', $this->getDescriptionOfPredefinedApplication($application));
+    }
+
+    /**
+     * @test
+     */
+    public function describeNeosNeosWithWarmUpAfterSymlink()
+    {
+        $application = new Neos();
+        $application->setOption('enableCacheWarmupAfterSwitchingToNewRelease', true);
+
+        self::assertEquals('<success>Deployment TestDeployment</success>
+
+Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
+
+Nodes:
+
+  <success>TestNode</success> (hostname)
+
+Applications:
+
+  <success>Neos:</success>
+    Deployment path: <success></success>
+    Options:
+      packageMethod => <success>git</success>
+      transferMethod => <success>rsync</success>
+      updateMethod => <success>NULL</success>
+      lockDeployment => <success>1</success>
+      enableCacheWarmupBeforeSwitchingToNewRelease => <success></success>
+      enableCacheWarmupAfterSwitchingToNewRelease => <success>1</success>
+      TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
+      TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
+      deploymentPath => <success>NULL</success>
+      releasesPath => <success>/releases</success>
+      sharedPath => <success>/shared</success>
+    Nodes: <success>TestNode</success>
+    Detailed workflow:
+      initialize:
+        tasks:
+          <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\Task\Generic\CreateDirectoriesTask after TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\CreateDirectoriesTask</success> (for application Neos)
+      lock:
+        tasks:
+          <success>TYPO3\Surf\Task\LockDeploymentTask</success> (for application Neos)
+      package:
+        tasks:
+          <success>TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\DefinedTask\Composer\LocalInstallTask after TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
+      transfer:
+        tasks:
+          <success>TYPO3\Surf\Task\Transfer\RsyncTask</success> (for application Neos)
+        after:
+          <success>TYPO3\Surf\Task\Generic\CreateSymlinksTask</success> (for application Neos)
+      update:
+        after:
+          <success>TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask</success> (for application Neos)
+      migrate:
+        tasks:
+          <success>TYPO3\Surf\Task\Neos\Flow\MigrateTask</success> (for application Neos)
+      finalize:
+        tasks:
+          <success>TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask</success> (for application Neos)
+      test:
+      switch:
+        tasks:
+          <success>TYPO3\Surf\Task\SymlinkReleaseTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\Task\Neos\Flow\WarmUpCacheTask after TYPO3\Surf\Task\SymlinkReleaseTask</success> (for application Neos)
+      cleanup:
+        tasks:
+          <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application Neos)
+      unlock:
+        tasks:
+          <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application Neos)
+', $this->getDescriptionOfPredefinedApplication($application));
     }
 
     /**
