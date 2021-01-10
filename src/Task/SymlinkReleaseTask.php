@@ -26,7 +26,11 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $command = sprintf('cd %s && rm -rf ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./%s ./current && rm -rf ./next', $application->getReleasesPath(), $deployment->getReleaseIdentifier());
+        $command = sprintf(
+            'cd %s && rm -rf ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./%s ./current && rm -rf ./next',
+            $application->getReleasesPath(),
+            $deployment->getReleaseIdentifier()
+        );
 
         $this->shell->executeOrSimulate($command, $node, $deployment);
         $deployment->getLogger()->notice('<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>');
