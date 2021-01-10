@@ -56,7 +56,7 @@ class SymlinkReleaseTaskTest extends BaseTaskTest
     private function expectedCommand(): string
     {
         return 'cd ' . $this->application->getReleasesPath()
-            . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./'
-            . $this->deployment->getReleaseIdentifier() . ' ./current && rm -f ./next';
+            . ' && rm -rf ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./'
+            . $this->deployment->getReleaseIdentifier() . ' ./current && rm -rf ./next';
     }
 }
