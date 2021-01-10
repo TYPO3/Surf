@@ -16,11 +16,10 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class FunctionalTestTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function noFlowApplicationGivenThrowsException()
+    public function noFlowApplicationGivenThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
@@ -29,11 +28,16 @@ class FunctionalTestTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeSuccessfully()
+    public function executeSuccessfully(): void
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, ['flushCacheList' => 'list']);
-        $this->assertCommandExecuted(sprintf('cd /releases/%s && phpunit -c Build/BuildEssentials/PhpUnit/FunctionalTests.xml', $this->deployment->getReleaseIdentifier()));
+        $this->assertCommandExecuted(
+            sprintf(
+                'cd /releases/%s && phpunit -c Build/BuildEssentials/PhpUnit/FunctionalTests.xml',
+                $this->deployment->getReleaseIdentifier()
+            )
+        );
     }
 
     /**

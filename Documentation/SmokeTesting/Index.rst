@@ -15,14 +15,16 @@ be used for testing.
 
 Then, add a test as follows to the deployment configuration::
 
+	<?php
+
 	$workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
-	$smokeTestOptions = array(
-		'url' => 'http://your/website/which/you/want/to/test',
-		'remote' => TRUE,
+	$smokeTestOptions = [
+		'url' => 'http://your-website.com',
+		'remote' => true,
 		'expectedStatus' => 200,
 		'expectedRegexp' => '/somethingYouExpectOnThePage/'
-	);
+	];
 	$workflow->defineTask('MyCompany\\MyPackage\\SmokeTest', \TYPO3\Surf\Task\Test\HttpTestTask::class, $smokeTestOptions);
 
 	$workflow->addTask('MyCompany\\MyPackage\\SmokeTest', 'test', $application);
@@ -94,6 +96,7 @@ typo3context.php::
 	// Set the application context in this file because it is not possible to set environment variables
 	// via .htaccess e.g. on domainFACTORY/jweiland.net servers
 	$context = 'Production';
+
 	// detect application context by domain
 	if (array_key_exists('HTTP_HOST', $_SERVER)) {
 		if (0 === strpos($_SERVER['HTTP_HOST'], 'next.')) {
@@ -101,3 +104,4 @@ typo3context.php::
 		}
 	}
 	putenv('TYPO3_CONTEXT=' . $context);
+

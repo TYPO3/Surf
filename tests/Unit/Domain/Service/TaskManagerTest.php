@@ -51,6 +51,7 @@ class TaskManagerTest extends TestCase
         $this->node = new Node('Test node');
         $this->application = new Application('Test application');
         $this->deployment = new Deployment('Test deployment');
+
         $logger = $this->prophesize(LoggerInterface::class);
         $this->deployment->setLogger($logger->reveal());
         $this->task = $this->prophesize(Task::class);
@@ -71,10 +72,22 @@ class TaskManagerTest extends TestCase
         ];
         $this->deployment->setOptions($globalOptions);
 
-        $this->task->execute($this->node, $this->application, $this->deployment, Argument::withEntry('taskOption', 'Foo'))->shouldBeCalledOnce();
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            Argument::withEntry('taskOption', 'Foo')
+        )->shouldBeCalledOnce();
 
         $localOptions = [];
-        $this->subject->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
+        $this->subject->execute(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask',
+            $this->node,
+            $this->application,
+            $this->deployment,
+            'test',
+            $localOptions
+        );
     }
 
     /**
@@ -87,10 +100,22 @@ class TaskManagerTest extends TestCase
         ];
         $this->node->setOptions($nodeOptions);
 
-        $this->task->execute($this->node, $this->application, $this->deployment, Argument::withEntry('ssh[username]', 'jdoe'))->shouldBeCalledOnce();
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            Argument::withEntry('ssh[username]', 'jdoe')
+        )->shouldBeCalledOnce();
 
         $localOptions = [];
-        $this->subject->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
+        $this->subject->execute(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask',
+            $this->node,
+            $this->application,
+            $this->deployment,
+            'test',
+            $localOptions
+        );
     }
 
     /**
@@ -103,10 +128,22 @@ class TaskManagerTest extends TestCase
         ];
         $this->application->setOptions($applicationOptions);
 
-        $this->task->execute($this->node, $this->application, $this->deployment, Argument::withEntry('repositoryUrl', 'ssh://review.typo3.org/foo'))->shouldBeCalledOnce();
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            Argument::withEntry('repositoryUrl', 'ssh://review.typo3.org/foo')
+        )->shouldBeCalledOnce();
 
         $localOptions = [];
-        $this->subject->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions);
+        $this->subject->execute(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask',
+            $this->node,
+            $this->application,
+            $this->deployment,
+            'test',
+            $localOptions
+        );
     }
 
     /**
@@ -119,10 +156,23 @@ class TaskManagerTest extends TestCase
         ];
         $this->deployment->setOptions($globalOptions);
 
-        $this->task->execute($this->node, $this->application, $this->deployment, Argument::not(Argument::withKey('taskOption')))->shouldBeCalledOnce();
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            Argument::not(Argument::withKey('taskOption'))
+        )->shouldBeCalledOnce();
 
         $localOptions = [];
-        $this->subject->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions, 'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask');
+        $this->subject->execute(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask',
+            $this->node,
+            $this->application,
+            $this->deployment,
+            'test',
+            $localOptions,
+            'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask'
+        );
     }
 
     /**
@@ -135,10 +185,23 @@ class TaskManagerTest extends TestCase
         ];
         $this->deployment->setOptions($globalOptions);
 
-        $this->task->execute($this->node, $this->application, $this->deployment, Argument::withEntry('taskOption', 'Foo'))->shouldBeCalledOnce();
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            Argument::withEntry('taskOption', 'Foo')
+        )->shouldBeCalledOnce();
 
         $localOptions = [];
-        $this->subject->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test', $localOptions, 'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask');
+        $this->subject->execute(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask',
+            $this->node,
+            $this->application,
+            $this->deployment,
+            'test',
+            $localOptions,
+            'MyVendor\\MyPackage\\DefinedTask\\TaskGroup\\MyTask'
+        );
     }
 
     /**
@@ -148,7 +211,14 @@ class TaskManagerTest extends TestCase
     {
         $this->task->rollback($this->node, $this->application, $this->deployment, Argument::any())->shouldBeCalledOnce();
         $this->task->execute($this->node, $this->application, $this->deployment, Argument::any())->shouldBeCalledOnce();
-        $this->subject->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test');
+
+        $this->subject->execute(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask',
+            $this->node,
+            $this->application,
+            $this->deployment,
+            'test'
+        );
         $this->subject->rollback();
     }
 
@@ -159,9 +229,27 @@ class TaskManagerTest extends TestCase
     {
         $this->deployment->setDryRun(true);
 
-        $this->task->rollback($this->node, $this->application, $this->deployment, Argument::any())->shouldNotHaveBeenCalled();
-        $this->task->simulate($this->node, $this->application, $this->deployment, Argument::any())->shouldBeCalledOnce();
-        $this->subject->execute('MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask', $this->node, $this->application, $this->deployment, 'test');
+        $this->task->rollback(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            Argument::any()
+        )->shouldNotHaveBeenCalled();
+
+        $this->task->simulate(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            Argument::any()
+        )->shouldBeCalledOnce();
+
+        $this->subject->execute(
+            'MyVendor\\MyPackage\\Task\\TaskGroup\\MyTask',
+            $this->node,
+            $this->application,
+            $this->deployment,
+            'test'
+        );
         $this->subject->rollback();
     }
 }

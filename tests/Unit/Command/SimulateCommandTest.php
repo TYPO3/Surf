@@ -32,6 +32,6 @@ class SimulateCommandTest extends TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute(['deploymentName' => 'foo', '--configurationPath' => '.surf', '--force' => true]);
 
-        $this->assertEquals('', $commandTester->getDisplay());
+        self::assertEquals('', $commandTester->getDisplay());
     }
 }

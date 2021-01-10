@@ -13,7 +13,7 @@ use TYPO3\Surf\Task\UnlockDeploymentTask;
 
 final class UnlockDeploymentTaskTest extends BaseTaskTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->application->setDeploymentPath('/home/jdoe/app');
@@ -22,20 +22,24 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function unlockSuccessfully()
+    public function unlockSuccessfully(): void
     {
         $this->task->execute($this->node, $this->application, $this->deployment);
-        $this->assertCommandExecuted(sprintf('rm %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock')));
+        $this->assertCommandExecuted(
+            sprintf('rm %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock'))
+        );
     }
 
     /**
      * @test
      */
-    public function unlockSuccessfullyForForceRun()
+    public function unlockSuccessfullyForForceRun(): void
     {
         $this->deployment->setForceRun(true);
         $this->task->execute($this->node, $this->application, $this->deployment);
-        $this->assertCommandExecuted(sprintf('rm -f %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock')));
+        $this->assertCommandExecuted(
+            sprintf('rm -f %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock'))
+        );
     }
 
     /**

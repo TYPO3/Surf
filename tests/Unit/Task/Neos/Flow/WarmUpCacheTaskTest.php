@@ -9,42 +9,32 @@ namespace TYPO3\Surf\Tests\Unit\Task\Neos\Flow;
  * file that was distributed with this source code.
  */
 
-use InvalidArgumentException;
 use TYPO3\Surf\Application\Neos\Flow;
-use TYPO3\Surf\Task\Neos\Flow\MigrateTask;
+use TYPO3\Surf\Task\Neos\Flow\WarmUpCacheTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-class MigrateTaskTest extends BaseTaskTest
+class WarmUpCacheTaskTest extends BaseTaskTest
 {
-    /**
-     * @test
-     */
-    public function noFlowApplicationGivenThrowsException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->task->execute($this->node, $this->application, $this->deployment);
-    }
-
     /**
      * @test
      */
     public function executeSuccessfully(): void
     {
         $this->application = new Flow();
-        $this->task->execute($this->node, $this->application, $this->deployment);
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
         $this->assertCommandExecuted(
             sprintf(
-                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:doctrine:migrate',
+                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:cache:warmup',
                 $this->deployment->getReleaseIdentifier()
             )
         );
     }
 
     /**
-     * @return MigrateTask
+     * @return WarmUpCacheTask
      */
     protected function createTask()
     {
-        return new MigrateTask();
+        return new WarmUpCacheTask();
     }
 }

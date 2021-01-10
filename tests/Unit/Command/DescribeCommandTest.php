@@ -44,10 +44,11 @@ class DescribeCommandTest extends TestCase
      */
     protected $node;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
+
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
     }
@@ -112,14 +113,14 @@ class DescribeCommandTest extends TestCase
     {
         $this->setUpCustomApplication();
         $factory = $this->createMock(FactoryInterface::class);
-        $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
+        $factory->expects(self::once())->method('getDeployment')->willReturn($this->deployment);
         $command = new DescribeCommand($factory);
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'deploymentName' => $this->deployment->getName(),
         ]);
 
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -185,7 +186,7 @@ Applications:
         }
         $this->deployment->addApplication($this->application)->initialize();
         $factory = $this->createMock(FactoryInterface::class);
-        $factory->expects($this->once())->method('getDeployment')->willReturn($this->deployment);
+        $factory->expects(self::once())->method('getDeployment')->willReturn($this->deployment);
         $command = new DescribeCommand($factory);
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -204,7 +205,7 @@ Applications:
             'public/typo3conf/LocalConfiguration.php',
             '../../../../shared/Configuration/LocalConfiguration.php'
         );
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -284,7 +285,7 @@ Applications:
      */
     public function describeNeosNeos(): void
     {
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -303,6 +304,8 @@ Applications:
       updateMethod => <success>NULL</success>
       lockDeployment => <success>1</success>
       webDirectory => <success>Web</success>
+      enableCacheWarmupBeforeSwitchingToNewRelease => <success></success>
+      enableCacheWarmupAfterSwitchingToNewRelease => <success></success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
       deploymentPath => <success></success>
@@ -354,9 +357,165 @@ Applications:
     /**
      * @test
      */
+    public function describeNeosNeosWithWarmUpBeforeSymlink(): void
+    {
+        $application = new Neos();
+        $application->setOption('enableCacheWarmupBeforeSwitchingToNewRelease', true);
+
+        self::assertEquals('<success>Deployment TestDeployment</success>
+
+Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
+
+Nodes:
+
+  <success>TestNode</success> (hostname)
+
+Applications:
+
+  <success>Neos:</success>
+    Deployment path: <success></success>
+    Options:
+      packageMethod => <success>git</success>
+      transferMethod => <success>rsync</success>
+      updateMethod => <success>NULL</success>
+      lockDeployment => <success>1</success>
+      webDirectory => <success>Web</success>
+      enableCacheWarmupBeforeSwitchingToNewRelease => <success>1</success>
+      enableCacheWarmupAfterSwitchingToNewRelease => <success></success>
+      TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
+      TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
+      deploymentPath => <success></success>
+      releasesPath => <success>/releases</success>
+      sharedPath => <success>/shared</success>
+    Nodes: <success>TestNode</success>
+    Detailed workflow:
+      initialize:
+        tasks:
+          <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\Task\Generic\CreateDirectoriesTask after TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\CreateDirectoriesTask</success> (for application Neos)
+      lock:
+        tasks:
+          <success>TYPO3\Surf\Task\LockDeploymentTask</success> (for application Neos)
+      package:
+        tasks:
+          <success>TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\DefinedTask\Composer\LocalInstallTask after TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
+      transfer:
+        tasks:
+          <success>TYPO3\Surf\Task\Transfer\RsyncTask</success> (for application Neos)
+        after:
+          <success>TYPO3\Surf\Task\Generic\CreateSymlinksTask</success> (for application Neos)
+      update:
+        after:
+          <success>TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask</success> (for application Neos)
+      migrate:
+        tasks:
+          <success>TYPO3\Surf\Task\Neos\Flow\MigrateTask</success> (for application Neos)
+      finalize:
+        tasks:
+          <success>TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\WarmUpCacheTask</success> (for application Neos)
+      test:
+      switch:
+        tasks:
+          <success>TYPO3\Surf\Task\SymlinkReleaseTask</success> (for application Neos)
+      cleanup:
+        tasks:
+          <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application Neos)
+      unlock:
+        tasks:
+          <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application Neos)
+', $this->getDescriptionOfPredefinedApplication($application));
+    }
+
+    /**
+     * @test
+     */
+    public function describeNeosNeosWithWarmUpAfterSymlink(): void
+    {
+        $application = new Neos();
+        $application->setOption('enableCacheWarmupAfterSwitchingToNewRelease', true);
+
+        self::assertEquals('<success>Deployment TestDeployment</success>
+
+Workflow: <success>Simple workflow</success>
+    Rollback enabled: true
+
+Nodes:
+
+  <success>TestNode</success> (hostname)
+
+Applications:
+
+  <success>Neos:</success>
+    Deployment path: <success></success>
+    Options:
+      packageMethod => <success>git</success>
+      transferMethod => <success>rsync</success>
+      updateMethod => <success>NULL</success>
+      lockDeployment => <success>1</success>
+      webDirectory => <success>Web</success>
+      enableCacheWarmupBeforeSwitchingToNewRelease => <success></success>
+      enableCacheWarmupAfterSwitchingToNewRelease => <success>1</success>
+      TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
+      TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
+      deploymentPath => <success></success>
+      releasesPath => <success>/releases</success>
+      sharedPath => <success>/shared</success>
+    Nodes: <success>TestNode</success>
+    Detailed workflow:
+      initialize:
+        tasks:
+          <success>TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\Task\Generic\CreateDirectoriesTask after TYPO3\Surf\Task\CreateDirectoriesTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\CreateDirectoriesTask</success> (for application Neos)
+      lock:
+        tasks:
+          <success>TYPO3\Surf\Task\LockDeploymentTask</success> (for application Neos)
+      package:
+        tasks:
+          <success>TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\DefinedTask\Composer\LocalInstallTask after TYPO3\Surf\Task\Package\GitTask</success> (for application Neos)
+      transfer:
+        tasks:
+          <success>TYPO3\Surf\Task\Transfer\RsyncTask</success> (for application Neos)
+        after:
+          <success>TYPO3\Surf\Task\Generic\CreateSymlinksTask</success> (for application Neos)
+      update:
+        after:
+          <success>TYPO3\Surf\Task\Neos\Flow\SymlinkDataTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask</success> (for application Neos)
+          <success>TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask</success> (for application Neos)
+      migrate:
+        tasks:
+          <success>TYPO3\Surf\Task\Neos\Flow\MigrateTask</success> (for application Neos)
+      finalize:
+        tasks:
+          <success>TYPO3\Surf\Task\Neos\Flow\PublishResourcesTask</success> (for application Neos)
+      test:
+      switch:
+        tasks:
+          <success>TYPO3\Surf\Task\SymlinkReleaseTask</success> (for application Neos)
+          <success>Task TYPO3\Surf\Task\Neos\Flow\WarmUpCacheTask after TYPO3\Surf\Task\SymlinkReleaseTask</success> (for application Neos)
+      cleanup:
+        tasks:
+          <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application Neos)
+      unlock:
+        tasks:
+          <success>TYPO3\Surf\Task\UnlockDeploymentTask</success> (for application Neos)
+', $this->getDescriptionOfPredefinedApplication($application));
+    }
+
+    /**
+     * @test
+     */
     public function describeBaseApplication(): void
     {
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -419,7 +578,7 @@ Applications:
      */
     public function describeBaseApplicationWithoutLock(): void
     {
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -471,7 +630,7 @@ Applications:
           <success>TYPO3\Surf\Task\CleanupReleasesTask</success> (for application My App)
       unlock:
 ', $this->getDescriptionOfPredefinedApplication(new BaseApplication('My App'), ['lockDeployment' => false]));
-        $this->assertEquals(false, $this->application->getOption('lockDeployment'));
+        self::assertEquals(false, $this->application->getOption('lockDeployment'));
     }
 
     /**
@@ -480,7 +639,7 @@ Applications:
     public function describeBaseApplicationWithForceParameter(): void
     {
         $this->deployment->setForceRun(true);
-        $this->assertEquals('<success>Deployment TestDeployment</success>
+        self::assertEquals('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true

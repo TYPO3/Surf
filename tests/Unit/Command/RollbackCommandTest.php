@@ -25,12 +25,14 @@ class RollbackCommandTest extends TestCase
         $deployment = $this->prophesize(Deployment::class);
         $deployment->getStatus()->willReturn(Deployment::STATUS_SUCCESS)->shouldBeCalledOnce();
         $deployment->rollback(false)->shouldBeCalledOnce();
+
         $factory = $this->prophesize(FactoryInterface::class);
         $factory->getDeployment('foo', '.surf', false, false)->willReturn($deployment);
+
         $command = new RollbackCommand($factory->reveal());
         $commandTester = new CommandTester($command);
         $commandTester->execute(['deploymentName' => 'foo', '--configurationPath' => '.surf', '--simulate' => false]);
 
-        $this->assertEquals('', $commandTester->getDisplay());
+        self::assertEquals('', $commandTester->getDisplay());
     }
 }

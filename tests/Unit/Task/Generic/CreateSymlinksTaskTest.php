@@ -17,13 +17,12 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class CreateSymlinksTaskTest extends BaseTaskTest
 {
-
     /**
      * @var CreateSymlinksTask
      */
     protected $task;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
@@ -44,7 +43,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
      *
      * @test
      */
-    public function createsSymlinkInApplicationReleasePath()
+    public function createsSymlinkInApplicationReleasePath(): void
     {
         $options = ['symlinks' => ['media' => '../media']];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -59,7 +58,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
      *
      * @test
      */
-    public function createsSymlinkInConfiguredBasePath()
+    public function createsSymlinkInConfiguredBasePath(): void
     {
         $options = [
             'symlinks' => ['media' => '../media'],
@@ -76,7 +75,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
      *
      * @test
      */
-    public function createsMultipleSymlinks()
+    public function createsMultipleSymlinks(): void
     {
         $options = [
             'symlinks' => [

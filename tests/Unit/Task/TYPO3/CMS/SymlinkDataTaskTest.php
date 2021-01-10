@@ -22,7 +22,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
      */
     protected $task;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
@@ -40,7 +40,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function withoutOptionsCreatesCorrectLinks()
+    public function withoutOptionsCreatesCorrectLinks(): void
     {
         $options = [
             'webDirectory' => '',
@@ -61,7 +61,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function disableCreationOfUploadsFolder()
+    public function disableCreationOfUploadsFolder(): void
     {
         $options = [
             'webDirectory' => '',
@@ -72,8 +72,8 @@ class SymlinkDataTaskTest extends BaseTaskTest
 
         $releasePath = $this->deployment->getApplicationReleasePath($this->application);
         $dataPath = '../../shared/Data';
-        $this->assertNotContains("mkdir -p '{$dataPath}/uploads'", $this->commands['executed']);
-        $this->assertNotContains("ln -sf '{$dataPath}/uploads' '{$releasePath}/uploads'", $this->commands['executed']);
+        self::assertNotContains("mkdir -p '{$dataPath}/uploads'", $this->commands['executed']);
+        self::assertNotContains("ln -sf '{$dataPath}/uploads' '{$releasePath}/uploads'", $this->commands['executed']);
 
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("mkdir -p '{$dataPath}/fileadmin'");
@@ -83,7 +83,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function withAdditionalDirectoriesCreatesCorrectLinks()
+    public function withAdditionalDirectoriesCreatesCorrectLinks(): void
     {
         $options = [
             'directories' => ['pictures', 'test/assets'],
@@ -108,7 +108,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function withApplicationRootCreatesCorrectLinks()
+    public function withApplicationRootCreatesCorrectLinks(): void
     {
         $options = [
             'webDirectory' => 'web/'
@@ -128,7 +128,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function withAdditionalDirectoriesAndApplicationRootCreatesCorrectLinks()
+    public function withAdditionalDirectoriesAndApplicationRootCreatesCorrectLinks(): void
     {
         $options = [
             'webDirectory' => 'web/',

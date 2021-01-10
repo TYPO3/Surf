@@ -43,7 +43,10 @@ class TaskFactoryTest extends TestCase
      */
     public function createTaskInstance(): void
     {
-        $this->assertInstanceOf(CreateArchiveTask::class, $this->subject->createTaskInstance(CreateArchiveTask::class));
+        self::assertInstanceOf(
+            CreateArchiveTask::class,
+            $this->subject->createTaskInstance(CreateArchiveTask::class)
+        );
     }
 
     /**
@@ -53,8 +56,9 @@ class TaskFactoryTest extends TestCase
     {
         /** @var CustomTask $customTask */
         $customTask = $this->subject->createTaskInstance(CustomTask::class);
-        $this->assertNotNull($customTask->getShell());
-        $this->assertInstanceOf(CustomTask::class, $customTask);
+
+        self::assertNotNull($customTask->getShell());
+        self::assertInstanceOf(CustomTask::class, $customTask);
     }
 
     /**
@@ -64,7 +68,9 @@ class TaskFactoryTest extends TestCase
     {
         $task = new class {
         };
+
         $this->expectException(SurfException::class);
+
         $this->subject->createTaskInstance(get_class($task));
     }
 }

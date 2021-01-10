@@ -23,7 +23,7 @@ class CMSTest extends TestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new CMS();
     }
@@ -34,7 +34,7 @@ class CMSTest extends TestCase
     public function setContextSuccessfully(): void
     {
         $this->subject->setContext('Production');
-        $this->assertSame($this->subject->getContext(), 'Production');
+        self::assertSame($this->subject->getContext(), 'Production');
     }
 
     /**
@@ -42,7 +42,10 @@ class CMSTest extends TestCase
      */
     public function registerTasks(): void
     {
+        /* @var Deployment|\Prophecy\Prophecy\ObjectProphecy $workflow */
         $deployment = $this->prophesize(Deployment::class);
+
+        /* @var Workflow|\Prophecy\Prophecy\ObjectProphecy $workflow */
         $workflow = $this->prophesize(Workflow::class);
         $workflow->addTask(Argument::any(), Argument::any(), $this->subject)->will(new FluidPromise());
         $workflow->afterTask(Argument::any(), Argument::any(), $this->subject)->will(new FluidPromise());

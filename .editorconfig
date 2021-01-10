@@ -1,14 +1,21 @@
-; top-most EditorConfig file
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
 root = true
 
-; Unix-style newlines
+# Unix-style newlines with a newline ending every file
 [*]
 charset = utf-8
 end_of_line = lf
-insert_final_newline = true
-trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
 
+# ReST-Files
 [*.rst]
 indent_size = 3
+max_line_length = 80
+
+[*.{yaml,yml}]
+indent_size = 2

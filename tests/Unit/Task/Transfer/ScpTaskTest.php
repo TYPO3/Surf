@@ -15,7 +15,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class ScpTaskTest extends BaseTaskTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->application = new Flow('TestApplication');
@@ -33,7 +33,7 @@ class ScpTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithoutExcludes()
+    public function executeWithoutExcludes(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $this->node->setOption('username', 'jdoe');
@@ -43,9 +43,18 @@ class ScpTaskTest extends BaseTaskTest
         $expectedCommands = [
             'mkdir -p /home/jdoe/app/cache/transfer',
             'rm -rf ./Data/Surf/TestDeployment/TestApplication/*.tar.gz',
-            sprintf('cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" --exclude="%1$s.tar.gz" -czf %1$s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .', $releaseIdentifier),
-            sprintf('scp ./Data/Surf/TestDeployment/TestApplication/%s.tar.gz jdoe@myserver.local:/home/jdoe/app/cache/transfer', $releaseIdentifier),
-            sprintf('tar -xzf /home/jdoe/app/cache/transfer/%1$s.tar.gz -C /home/jdoe/app/releases/%1$s', $releaseIdentifier),
+            sprintf(
+                'cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" --exclude="%1$s.tar.gz" -czf %1$s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .',
+                $releaseIdentifier
+            ),
+            sprintf(
+                'scp ./Data/Surf/TestDeployment/TestApplication/%s.tar.gz jdoe@myserver.local:/home/jdoe/app/cache/transfer',
+                $releaseIdentifier
+            ),
+            sprintf(
+                'tar -xzf /home/jdoe/app/cache/transfer/%1$s.tar.gz -C /home/jdoe/app/releases/%1$s',
+                $releaseIdentifier
+            ),
             sprintf('rm -f /home/jdoe/app/cache/transfer/%s.tar.gz', $releaseIdentifier),
             sprintf('rm -f ./Data/Surf/TestDeployment/TestApplication/%s.tar.gz', $releaseIdentifier),
         ];
@@ -60,7 +69,7 @@ class ScpTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithAdditionalExcludes()
+    public function executeWithAdditionalExcludes(): void
     {
         $this->node->setOption('hostname', 'myserver.local');
         $this->node->setOption('username', 'jdoe');
@@ -69,6 +78,11 @@ class ScpTaskTest extends BaseTaskTest
 
         $this->task->execute($this->node, $this->application, $this->deployment, ['scpExcludes' => ['file.txt']]);
 
-        $this->assertCommandExecuted(sprintf('cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" --exclude="%1$s.tar.gz" --exclude="file.txt" -czf %1$s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .', $releaseIdentifier));
+        $this->assertCommandExecuted(
+            sprintf(
+                'cd ./Data/Surf/TestDeployment/TestApplication/; tar --exclude=".git" --exclude="%1$s.tar.gz" --exclude="file.txt" -czf %1$s.tar.gz -C ./Data/Surf/TestDeployment/TestApplication .',
+                $releaseIdentifier
+            )
+        );
     }
 }

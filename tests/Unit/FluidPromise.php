@@ -16,7 +16,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 final class FluidPromise implements PromiseInterface
 {
-
     /**
      * @inheritDoc
      */

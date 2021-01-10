@@ -19,7 +19,6 @@ use TYPO3\Surf\Task\VarnishPurgeTask;
 
 class VarnishPurgeTaskTest extends BaseTaskTest
 {
-
     /**
      * @var VarnishPurgeTask
      */
@@ -28,7 +27,7 @@ class VarnishPurgeTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithDefaultOptions()
+    public function executeWithDefaultOptions(): void
     {
         $this->task->execute($this->node, $this->application, $this->deployment, []);
         $this->assertCommandExecuted("/\/usr\/bin\/varnishadm -S \/etc\/varnish\/secret -T 127.0.0.1:6082 url.purge ./");
@@ -37,7 +36,7 @@ class VarnishPurgeTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeOverridingDefaultOptions()
+    public function executeOverridingDefaultOptions(): void
     {
         $options = [
             'varnishadm' => 'varnishadm',
@@ -51,7 +50,7 @@ class VarnishPurgeTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function simulateWithDefaultOptions()
+    public function simulateWithDefaultOptions(): void
     {
         $this->task->simulate($this->node, $this->application, $this->deployment, []);
         $this->assertCommandExecuted("/\/usr\/bin\/varnishadm -S \/etc\/varnish\/secret -T 127.0.0.1:6082 status/");
@@ -60,7 +59,7 @@ class VarnishPurgeTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function simulateOverridingDefaultOptions()
+    public function simulateOverridingDefaultOptions(): void
     {
         $options = [
             'varnishadm' => 'varnishadm',

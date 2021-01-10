@@ -13,13 +13,12 @@ use TYPO3\Surf\Task\RsyncFoldersTask;
 
 class RsyncFoldersTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function emptyFoldersOptionsReturnsVoid()
+    public function emptyFoldersOptionsReturnsVoid(): void
     {
-        $this->assertNull($this->task->execute($this->node, $this->application, $this->deployment));
+        self::assertNull($this->task->execute($this->node, $this->application, $this->deployment));
     }
 
     /**
@@ -30,7 +29,7 @@ class RsyncFoldersTaskTest extends BaseTaskTest
      * @param array|string $expectedCommands
      * @param array $options
      */
-    public function executeSuccessfully($expectedCommands, array $options)
+    public function executeSuccessfully($expectedCommands, array $options): void
     {
         if (isset($options['port'])) {
             $this->node->setPort($options['port']);
@@ -46,7 +45,7 @@ class RsyncFoldersTaskTest extends BaseTaskTest
     /**
      * @return array
      */
-    public function executeWithDifferentOptions()
+    public function executeWithDifferentOptions(): array
     {
         return [
             [

@@ -24,7 +24,7 @@ class ImportSiteTaskTest extends BaseTaskTest
      */
     protected $application;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->application = new Neos('TestApplication');
@@ -41,7 +41,7 @@ class ImportSiteTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function useCorrectCommandPackageKeyForNeosWithFlowVersion4()
+    public function useCorrectCommandPackageKeyForNeosWithFlowVersion4(): void
     {
         $this->useCorrectCommandPackageKey();
     }
@@ -49,7 +49,7 @@ class ImportSiteTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function useCorrectCommandPackageKeyForNeosWithFlowVersion3()
+    public function useCorrectCommandPackageKeyForNeosWithFlowVersion3(): void
     {
         $this->useCorrectCommandPackageKey('3.0', 'typo3.neos');
     }
@@ -58,7 +58,7 @@ class ImportSiteTaskTest extends BaseTaskTest
      * @param string $version
      * @param string $commandPackageKey
      */
-    public function useCorrectCommandPackageKey($version = '4.0', $commandPackageKey = 'neos.neos')
+    public function useCorrectCommandPackageKey($version = '4.0', $commandPackageKey = 'neos.neos'): void
     {
         $this->application->setVersion($version);
         $options = [

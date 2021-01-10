@@ -16,11 +16,10 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class PublishResourcesTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
-    public function noFlowApplicationGivenThrowsException()
+    public function noFlowApplicationGivenThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
@@ -29,7 +28,7 @@ class PublishResourcesTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function tooLowFlowVersionReturnsNull()
+    public function tooLowFlowVersionReturnsNull(): void
     {
         $this->application = new Flow();
         $this->application->setVersion('2.9');

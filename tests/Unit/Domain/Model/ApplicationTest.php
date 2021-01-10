@@ -22,10 +22,11 @@ class ApplicationTest extends TestCase
      *
      * @test
      */
-    public function getSharedDirectoryReturnsDefaultIfNoOptionsGiven()
+    public function getSharedDirectoryReturnsDefaultIfNoOptionsGiven(): void
     {
         $application = new Application('TestApplication');
-        $this->assertEquals('shared', $application->getSharedDirectory());
+
+        self::assertEquals('shared', $application->getSharedDirectory());
     }
 
     /**
@@ -34,11 +35,12 @@ class ApplicationTest extends TestCase
      *
      * @test
      */
-    public function getSharedDirectoryReturnsContentOfOptionIfConfigured()
+    public function getSharedDirectoryReturnsContentOfOptionIfConfigured(): void
     {
         $application = new Application('TestApplication');
         $application->setOption('sharedDirectory', 'sharedAssets');
-        $this->assertEquals('sharedAssets', $application->getSharedDirectory());
+
+        self::assertEquals('sharedAssets', $application->getSharedDirectory());
     }
 
     /**
@@ -47,9 +49,10 @@ class ApplicationTest extends TestCase
      *
      * @test
      */
-    public function getSharedDirectoryThrowsExceptionOnRelativePaths()
+    public function getSharedDirectoryThrowsExceptionOnRelativePaths(): void
     {
         $this->expectException(InvalidConfigurationException::class);
+
         $application = new Application('TestApplication');
         $application->setOption('sharedDirectory', '../sharedAssets');
         $application->getSharedDirectory();

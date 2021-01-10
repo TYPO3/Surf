@@ -10,22 +10,24 @@ services:
         bind:
             $name: '%name%'
             $version: '%version%'
+    GuzzleHttp\Client: ~
+    GuzzleHttp\ClientInterface: '@GuzzleHttp\Client'
+    Psr\Log\LoggerInterface:
+        factory: ['@TYPO3\Surf\Cli\Symfony\Logger\LoggerFactory', 'createLogger']
+    Symfony\Component\Console\Application: ~
+    Symfony\Component\Console\Output\OutputInterface:
+        factory: ['@TYPO3\Surf\Cli\Symfony\ConsoleOutputFactory', 'createOutput']
     TYPO3\Surf\:
         resource: '../src/*'
         exclude: '../src/{Cli,Application,Exception,Domain/Model,DeprecationMessageFactory.php,Exception.php,functions.php}'
-    Symfony\Component\Console\Output\OutputInterface:
-        factory: ['@TYPO3\Surf\Cli\Symfony\ConsoleOutputFactory', 'createOutput']
-    Psr\Log\LoggerInterface:
-        factory: ['@TYPO3\Surf\Cli\Symfony\Logger\LoggerFactory', 'createLogger']
+    TYPO3\Surf\Cli\Symfony\ConsoleApplication: ~
+    TYPO3\Surf\Cli\Symfony\ConsoleOutputFactory: ~
+    TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler: ~
+    TYPO3\Surf\Cli\Symfony\Logger\LoggerFactory: ~
+    TYPO3\Surf\Domain\Model\RollbackWorkflow:
+        shared: false
+    TYPO3\Surf\Domain\Model\SimpleWorkflow:
+        shared: false
     TYPO3\Surf\Integration\Factory:
         arguments: ['@TYPO3\Surf\Domain\Filesystem\FilesystemInterface', '@Psr\Log\LoggerInterface']
     TYPO3\Surf\Integration\FactoryInterface: '@TYPO3\Surf\Integration\Factory'
-    GuzzleHttp\Client: ~
-    GuzzleHttp\ClientInterface: '@GuzzleHttp\Client'
-    TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler: ~
-    TYPO3\Surf\Cli\Symfony\ConsoleApplication: ~
-    Symfony\Component\Console\Application: ~
-    TYPO3\Surf\Domain\Model\SimpleWorkflow:
-        shared: false
-    TYPO3\Surf\Cli\Symfony\ConsoleOutputFactory: ~
-    TYPO3\Surf\Cli\Symfony\Logger\LoggerFactory: ~

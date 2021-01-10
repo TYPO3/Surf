@@ -3,26 +3,69 @@ name: Tests
 on: [push, pull_request]
 
 jobs:
-    tests:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                php: ['7.2', '7.3', '7.4']
+  lint:
+    name: Lint PHP
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.0.0
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+      - name: Install overtrue/phplint
+        run: composer global require "overtrue/phplint:^2.0" --no-ansi --no-interaction --no-progress --classmap-authoritative
+      - name: Run overtrue/phplint
+        run: phplint ./
 
-        name: PHP ${{ matrix.php }} tests
-        steps:
-            -   uses: actions/checkout@v2.0.0
-            -   id: composer-cache
-                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-            -   uses: actions/cache@v1
-                with:
-                    path: ${{ steps.composer-cache.outputs.dir }}
-                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-composer-
-            -   uses: shivammathur/setup-php@v1
-                with:
-                    php-version: ${{ matrix.php }}
-                    coverage: none # disable xdebug, pcov
-            -   run: composer install --no-suggest --no-progress
-            -   run: vendor/bin/phpunit
+  unittests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.2', '7.3', '7.4']
+        dependencies: ['locked', 'latest']
+
+    name: PHP ${{ matrix.php }} unittests with ${{ matrix.dependencies }} deps
+    steps:
+      - uses: actions/checkout@v2.0.0
+
+      - id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none # disable xdebug, pcov
+
+      - run: composer install --no-interaction --no-suggest --no-progress
+
+      - run: composer update --no-interaction --no-suggest --no-progress
+        if: matrix.dependencies == 'latest'
+
+      - run: vendor/bin/phpunit
+
+  rector_checkstyle:
+    name: Rector Checkstyle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+          tools: cs2pr
+
+      - name: Install Composer dependencies
+        run: composer install --ansi --no-interaction --no-progress
+
+      - name: Run rector
+        run: vendor/bin/rector process --ansi --dry-run --output-format=checkstyle | cs2pr

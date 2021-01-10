@@ -13,7 +13,6 @@ use TYPO3\Surf\Task\SymlinkReleaseTask;
 
 class SymlinkReleaseTaskTest extends BaseTaskTest
 {
-
     /**
      * @test
      */
@@ -38,7 +37,9 @@ class SymlinkReleaseTaskTest extends BaseTaskTest
     public function rollbackSuccessfully(): void
     {
         $this->task->rollback($this->node, $this->application, $this->deployment);
-        $this->assertCommandExecuted('cd ' . $this->application->getReleasesPath() . ' && rm -f ./current && mv ./previous ./current');
+        $this->assertCommandExecuted(
+            'cd ' . $this->application->getReleasesPath() . ' && rm -f ./current && mv ./previous ./current'
+        );
     }
 
     /**
@@ -54,6 +55,8 @@ class SymlinkReleaseTaskTest extends BaseTaskTest
      */
     private function expectedCommand(): string
     {
-        return 'cd ' . $this->application->getReleasesPath() . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./' . $this->deployment->getReleaseIdentifier() . ' ./current && rm -f ./next';
+        return 'cd ' . $this->application->getReleasesPath()
+            . ' && rm -f ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./'
+            . $this->deployment->getReleaseIdentifier() . ' ./current && rm -f ./next';
     }
 }

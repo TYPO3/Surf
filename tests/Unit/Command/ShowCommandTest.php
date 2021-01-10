@@ -28,7 +28,7 @@ class ShowCommandTest extends TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute(['--configurationPath' => '.surf']);
 
-        $this->assertEquals('
+        self::assertEquals('
 <u>Deployments in "./surf":</u>
 
   foo

@@ -17,13 +17,12 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class CreateDirectoriesTaskTest extends BaseTaskTest
 {
-
     /**
      * @var CreateDirectoriesTask
      */
     protected $task;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
@@ -41,7 +40,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function createsDirectoriesInReleasePath()
+    public function createsDirectoriesInReleasePath(): void
     {
         $options = ['directories' => ['media']];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -53,7 +52,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function createsDirectoriesInCustomPath()
+    public function createsDirectoriesInCustomPath(): void
     {
         $options = ['directories' => ['media'], 'baseDirectory' => '/foo/bar'];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);

@@ -18,7 +18,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
  */
 class CopyConfigurationTaskTest extends BaseTaskTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -29,7 +29,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeOnLocalhostFindsConfigurationRecursively()
+    public function executeOnLocalhostFindsConfigurationRecursively(): void
     {
         $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
@@ -50,7 +50,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeFindsFilesWithExtensionSpecified()
+    public function executeFindsFilesWithExtensionSpecified(): void
     {
         $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
@@ -72,7 +72,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeOnRemoteHostFindsConfigurationRecursively()
+    public function executeOnRemoteHostFindsConfigurationRecursively(): void
     {
         $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
@@ -93,7 +93,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeOnRemoteHostFindsConfigurationRecursivelyWithSSHPassword()
+    public function executeOnRemoteHostFindsConfigurationRecursivelyWithSSHPassword(): void
     {
         $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);
@@ -115,7 +115,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeOnRemoteHostCorrectlyAppliesSshOptions()
+    public function executeOnRemoteHostCorrectlyAppliesSshOptions(): void
     {
         $deployBasePath = __DIR__ . '/Fixtures/DeploymentConfigurations';
         $this->deployment->setDeploymentBasePath($deployBasePath);

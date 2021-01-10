@@ -2,10 +2,13 @@
 * text=auto eol=lf
 
 # Ignore these files in GitHub dists and `git archive` actions.
+/.github export-ignore
+/tests export-ignore
 /.editorconfig export-ignore
 /.gitattributes export-ignore
-/.github export-ignore
 /.gitignore export-ignore
-/phpunit.xml export-ignore
 /.php_cs export-ignore
-/tests export-ignore
+/box.json export-ignore
+/composer.lock export-ignore
+/phpstan.neon export-ignore
+/phpunit.xml export-ignore

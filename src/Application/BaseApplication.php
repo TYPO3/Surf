@@ -183,7 +183,7 @@ class BaseApplication extends Application
         return $this;
     }
 
-    protected function registerTasksForPackageMethod(Workflow $workflow, string $packageMethod): void
+    protected function registerTasksForPackageMethod(Workflow $workflow, ?string $packageMethod): void
     {
         switch ($packageMethod) {
             case 'git':

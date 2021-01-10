@@ -45,7 +45,7 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        Assert::isInstanceOf($application, FlowApplication::class, sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)));
+        Assert::isInstanceOf($application, FlowApplication::class, sprintf('Flow application needed for FlushCacheListTask, got "%s"', get_class($application)));
         Assert::greaterThanEq($application->getVersion(), '2.3', sprintf('FlushCacheListTask is available since Flow Framework 2.3, your application version is "%s"', $application->getVersion()));
 
         $options = $this->configureOptions($options);

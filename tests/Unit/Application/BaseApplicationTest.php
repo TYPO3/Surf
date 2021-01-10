@@ -39,8 +39,9 @@ class BaseApplicationTest extends TestCase
     {
         $directories = ['dir1', 'dir2'];
         $this->subject->addDirectories($directories);
-        $this->assertContains('dir1', $this->subject->getDirectories());
-        $this->assertContains('dir2', $this->subject->getDirectories());
+
+        self::assertContains('dir1', $this->subject->getDirectories());
+        self::assertContains('dir2', $this->subject->getDirectories());
     }
 
     /**
@@ -50,7 +51,8 @@ class BaseApplicationTest extends TestCase
     {
         $symlinks = ['toPath' => 'symlink1'];
         $this->subject->setSymlinks($symlinks);
-        $this->assertSame($this->subject->getSymlinks(), $symlinks);
+
+        self::assertSame($this->subject->getSymlinks(), $symlinks);
     }
 
     /**
@@ -60,7 +62,8 @@ class BaseApplicationTest extends TestCase
     {
         $directories = ['dir1', 'dir2'];
         $this->subject->setDirectories($directories);
-        $this->assertSame($this->subject->getDirectories(), $directories);
+
+        self::assertSame($this->subject->getDirectories(), $directories);
     }
 
     /**
@@ -72,6 +75,7 @@ class BaseApplicationTest extends TestCase
 
         $workflow->addTask(GitCheckoutTask::class, 'transfer', $this->subject)->shouldBeCalledOnce();
         $deployment = $this->prophesize(Deployment::class);
+
         $this->subject->setOption('transferMethod', 'git');
         $this->subject->registerTasks($workflow->reveal(), $deployment->reveal());
     }
@@ -85,6 +89,7 @@ class BaseApplicationTest extends TestCase
 
         $workflow->addTask(ScpTask::class, 'transfer', $this->subject)->shouldBeCalledOnce();
         $deployment = $this->prophesize(Deployment::class);
+
         $this->subject->setOption('transferMethod', 'scp');
         $this->subject->registerTasks($workflow->reveal(), $deployment->reveal());
     }
@@ -95,7 +100,8 @@ class BaseApplicationTest extends TestCase
     public function addSymlink(): void
     {
         $this->subject->addSymlink('toPath', 'fromPath');
-        $this->assertContains('fromPath', $this->subject->getSymlinks());
+
+        self::assertContains('fromPath', $this->subject->getSymlinks());
     }
 
     /**
@@ -105,7 +111,8 @@ class BaseApplicationTest extends TestCase
     {
         $symlinks = ['toPath' => 'fromPath'];
         $this->subject->addSymlinks($symlinks);
-        $this->assertContains('fromPath', $this->subject->getSymlinks());
+
+        self::assertContains('fromPath', $this->subject->getSymlinks());
     }
 
     /**
@@ -114,7 +121,7 @@ class BaseApplicationTest extends TestCase
     public function addDirectory(): void
     {
         $this->subject->addDirectory('toPath');
-        $this->assertContains('toPath', $this->subject->getDirectories());
+        self::assertContains('toPath', $this->subject->getDirectories());
     }
 
     /**

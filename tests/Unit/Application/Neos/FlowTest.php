@@ -23,6 +23,54 @@ class FlowTest extends TestCase
      */
     protected $subject;
 
+    protected function setUp(): void
+    {
+        $this->subject = new Flow();
+    }
+
+    /**
+     * @test
+     * @dataProvider commandPackageKeyProvider
+     */
+    public function getCommandPackageKey(string $version, string $expectedCommandPackageKey): void
+    {
+        $this->subject->setVersion($version);
+        self::assertEquals($expectedCommandPackageKey, $this->subject->getCommandPackageKey());
+    }
+
+    /**
+     * @test
+     * @dataProvider essentialsDirectoryNameProvider
+     */
+    public function getBuildEssentialsDirectoryName(string $version, string $expectedEssentialsDirectoryName): void
+    {
+        $this->subject->setVersion($version);
+        self::assertEquals($expectedEssentialsDirectoryName, $this->subject->getBuildEssentialsDirectoryName());
+    }
+
+    /**
+     * @test
+     * @dataProvider flowScriptNameProvider
+     */
+    public function getFlowScriptName(string $version, string $expectedFlowScriptName): void
+    {
+        $this->subject->setVersion($version);
+        self::assertEquals($expectedFlowScriptName, $this->subject->getFlowScriptName());
+    }
+
+    /**
+     * @test
+     */
+    public function registerComposerInstallTask(): void
+    {
+        $deployment = $this->prophesize(Deployment::class);
+        $workflow = new SimpleWorkflow($this->prophesize(TaskManager::class)->reveal());
+        $this->subject->setOption('updateMethod', 'composer');
+        $this->subject->registerTasks($workflow, $deployment->reveal());
+        $tasks = $workflow->getTasks();
+        self::assertContains(InstallTask::class, $tasks['stage'][$this->subject->getName()]['update']['tasks']);
+    }
+
     public function commandPackageKeyProvider(): array
     {
         return [
@@ -48,53 +96,5 @@ class FlowTest extends TestCase
             ['1.1', 'Common'],
             ['1.2', 'BuildEssentials']
         ];
-    }
-
-    protected function setUp()
-    {
-        $this->subject = new Flow();
-    }
-
-    /**
-     * @test
-     * @dataProvider commandPackageKeyProvider
-     */
-    public function getCommandPackageKey(string $version, string $expectedCommandPackageKey): void
-    {
-        $this->subject->setVersion($version);
-        $this->assertEquals($expectedCommandPackageKey, $this->subject->getCommandPackageKey());
-    }
-
-    /**
-     * @test
-     * @dataProvider essentialsDirectoryNameProvider
-     */
-    public function getBuildEssentialsDirectoryName(string $version, string $expectedEssentialsDirectoryName): void
-    {
-        $this->subject->setVersion($version);
-        $this->assertEquals($expectedEssentialsDirectoryName, $this->subject->getBuildEssentialsDirectoryName());
-    }
-
-    /**
-     * @test
-     * @dataProvider flowScriptNameProvider
-     */
-    public function getFlowScriptName(string $version, string $expectedFlowScriptName): void
-    {
-        $this->subject->setVersion($version);
-        $this->assertEquals($expectedFlowScriptName, $this->subject->getFlowScriptName());
-    }
-
-    /**
-     * @test
-     */
-    public function registerComposerInstallTask(): void
-    {
-        $deployment = $this->prophesize(Deployment::class);
-        $workflow = new SimpleWorkflow($this->prophesize(TaskManager::class)->reveal());
-        $this->subject->setOption('updateMethod', 'composer');
-        $this->subject->registerTasks($workflow, $deployment->reveal());
-        $tasks = $workflow->getTasks();
-        $this->assertContains(InstallTask::class, $tasks['stage'][$this->subject->getName()]['update']['tasks']);
     }
 }
