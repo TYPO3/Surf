@@ -21,7 +21,8 @@ class SymlinkDataTaskTest extends BaseTaskTest
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     protected function createTask(): SymlinkDataTask
@@ -41,7 +42,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasePath = $this->deployment->getApplicationReleasePath($this->node);
         $dataPath = '../../shared/Data';
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("mkdir -p '{$dataPath}/fileadmin'");
@@ -62,7 +63,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasePath = $this->deployment->getApplicationReleasePath($this->node);
         $dataPath = '../../shared/Data';
         self::assertNotContains("mkdir -p '{$dataPath}/uploads'", $this->commands['executed']);
         self::assertNotContains("ln -sf '{$dataPath}/uploads' '{$releasePath}/uploads'", $this->commands['executed']);
@@ -84,7 +85,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasePath = $this->deployment->getApplicationReleasePath($this->node);
         $dataPath = '../../shared/Data';
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("mkdir -p '{$dataPath}/fileadmin'");
@@ -108,7 +109,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasePath = $this->deployment->getApplicationReleasePath($this->node);
         $dataPath = '../../shared/Data';
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("mkdir -p '{$dataPath}/fileadmin'");
@@ -129,7 +130,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $options = $this->mergeOptions($options);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $releasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasePath = $this->deployment->getApplicationReleasePath($this->node);
         $dataPath = '../../shared/Data';
         $this->assertCommandExecuted("cd '{$releasePath}'");
         $this->assertCommandExecuted("mkdir -p '{$dataPath}/fileadmin'");

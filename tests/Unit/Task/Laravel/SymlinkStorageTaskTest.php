@@ -26,7 +26,7 @@ class SymlinkStorageTaskTest extends BaseTaskTest
     {
         parent::setUp();
         $this->application = new Laravel('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
@@ -35,8 +35,8 @@ class SymlinkStorageTaskTest extends BaseTaskTest
     public function executeWithoutArgumentsExecutesViewCacheWithoutArguments(): void
     {
         $this->task->execute($this->node, $this->application, $this->deployment);
-        $this->assertCommandExecuted("cd '{$this->application->getReleasesPath()}/{$this->deployment->getReleaseIdentifier()}'");
+        $this->assertCommandExecuted("cd '{$this->node->getReleasesPath()}/{$this->deployment->getReleaseIdentifier()}'");
         $this->assertCommandExecuted("{ [ -d '../../shared/storage' ] || mkdir -p '../../shared/storage' ; }");
-        $this->assertCommandExecuted("ln -sf '../../shared/storage' '{$this->application->getReleasesPath()}/{$this->deployment->getReleaseIdentifier()}/storage'");
+        $this->assertCommandExecuted("ln -sf '../../shared/storage' '{$this->node->getReleasesPath()}/{$this->deployment->getReleaseIdentifier()}/storage'");
     }
 }

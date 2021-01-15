@@ -14,12 +14,12 @@ If you would like to deploy a TYPO3 website a good starting point is to use TYPO
    $node = new \TYPO3\Surf\Domain\Model\Node('my.node.com');
    $node
        ->setHostname($node->getName())
+       ->setDeploymentPath('/httpdocs')
        ->setOption('username', 'myuser')
        ->setOption('phpBinaryPathAndFilename', '/usr/local/bin/php_cli');
 
    $application = new \TYPO3\Surf\Application\TYPO3\CMS();
    $application
-       ->setDeploymentPath('/httpdocs')
        ->setOption('baseUrl', 'https://my.node.com/')
        ->setOption('webDirectory', 'public')
        ->setOption('symlinkDataFolders', ['fileadmin'])

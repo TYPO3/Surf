@@ -26,7 +26,7 @@ class EnvAwareTaskTest extends BaseTaskTest
     {
         parent::setUp();
         $this->application = new Laravel('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
@@ -35,7 +35,7 @@ class EnvAwareTaskTest extends BaseTaskTest
     public function executeWithoutArgumentsExecutesViewCacheWithoutArguments(): void
     {
         $this->task->execute($this->node, $this->application, $this->deployment);
-        $this->assertCommandExecuted("test -f {$this->application->getSharedPath()}/.env");
-        $this->assertCommandExecuted("cp '{$this->application->getSharedPath()}/.env' '{$this->application->getReleasesPath()}/{$this->deployment->getReleaseIdentifier()}/.env'");
+        $this->assertCommandExecuted("test -f {$this->node->getSharedPath()}/.env");
+        $this->assertCommandExecuted("cp '{$this->node->getSharedPath()}/.env' '{$this->node->getReleasesPath()}/{$this->deployment->getReleaseIdentifier()}/.env'");
     }
 }

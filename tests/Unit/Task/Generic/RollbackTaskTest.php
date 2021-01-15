@@ -26,7 +26,7 @@ final class RollbackTaskTest extends BaseTaskTest
      */
     public function executeSuccessfully(): void
     {
-        $releasesPath = $this->application->getReleasesPath();
+        $releasesPath = $this->node->getReleasesPath();
         $previousReleasePath = $releasesPath . '/previous';
         $currentReleasePath = $releasesPath . '/current';
 
@@ -53,7 +53,7 @@ previous',
      */
     public function canNotRollbackTooFewReleasesExist(): void
     {
-        $releasesPath = $this->application->getReleasesPath();
+        $releasesPath = $this->node->getReleasesPath();
 
         $this->responses = [
             sprintf('if [ -d %1$s/. ]; then find %1$s/. -maxdepth 1 -type d -exec basename {} \; ; fi', $releasesPath) => '.

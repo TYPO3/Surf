@@ -27,7 +27,7 @@ class CreateDirectoriesTask extends \TYPO3\Surf\Task\Generic\CreateDirectoriesTa
                 'shared/storage/framework/testing',
                 'shared/storage/framework/views',
             ],
-            'baseDirectory' => $application->getDeploymentPath()
+            'baseDirectory' => $node->getDeploymentPath()
         ];
         parent::execute($node, $application, $deployment, $options);
     }

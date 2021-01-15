@@ -22,11 +22,11 @@ with name **MyDeployment**::
    <?php
    $node = new \TYPO3\Surf\Domain\Model\Node('example');
    $node->setHostname('example.com');
+   $node->setDeploymentPath('/home/my-flow-app/app');
    $node->setOption('username', 'myuser');
 
    $application = new \TYPO3\Surf\Application\Neos\Flow();
    $application->setVersion('4.0');
-   $application->setDeploymentPath('/home/my-flow-app/app');
    $application->setOption('repositoryUrl', 'git@github.com:myuser/my-flow-app.git');
    $application->addNode($node);
 
@@ -35,7 +35,9 @@ with name **MyDeployment**::
 That's a very basic deployment based on the default Flow application template ``TYPO3\Surf\Application\Neos\Flow``.
 The deployment object is available to the script as the variable ``$deployment``. A *node* is basically a deployment
 target representing a server for an application. The node is assigned to the applications for the deployment. Finally
-the application is added to the deployment.
+the application is added to the deployment. Depending on the usecase, the deployment path can also be set in the application
+object which is then set for all nodes. This is especially useful if you have several applications which you want to deploy
+to the same node for example a backend and frontend application.
 
 Each application resembles a repository with code. So a more complex deployment could both deploy a Flow application
 and release an extension for a TYPO3 CMS website. Also different roles can be expressed using applications, since every

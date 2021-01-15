@@ -20,7 +20,7 @@ final class LockDeploymentTaskTest extends BaseTaskTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->application->setDeploymentPath('/home/jdoe/app');
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     protected function createTask(): LockDeploymentTask
@@ -41,7 +41,7 @@ final class LockDeploymentTaskTest extends BaseTaskTest
     {
         $testIfDeploymentLockFileExists = sprintf(
             'if [ -f %s ]; then echo 1; else echo 0; fi',
-            escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock')
+            escapeshellarg($this->node->getDeploymentPath() . '/.surf/deploy.lock')
         );
         $this->responses = [
             $testIfDeploymentLockFileExists => false,
@@ -57,7 +57,7 @@ final class LockDeploymentTaskTest extends BaseTaskTest
     {
         $testIfDeploymentLockFileExists = sprintf(
             'if [ -f %s ]; then echo 1; else echo 0; fi',
-            escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock')
+            escapeshellarg($this->node->getDeploymentPath() . '/.surf/deploy.lock')
         );
         $this->responses = [
             $testIfDeploymentLockFileExists => true,

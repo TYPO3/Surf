@@ -110,7 +110,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             ['20171108132211', '20171109193135'],
             fn ($carry, $folder): string => $carry . sprintf(
                 'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
-                $this->application->getReleasesPath(),
+                $this->node->getReleasesPath(),
                 $folder
             ),
             ''
@@ -159,7 +159,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             ),
             fn ($command, $folder): string => $command . sprintf(
                 'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
-                $this->application->getReleasesPath(),
+                $this->node->getReleasesPath(),
                 $folder
             ),
             ''

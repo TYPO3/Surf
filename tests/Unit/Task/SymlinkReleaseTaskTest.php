@@ -45,13 +45,13 @@ class SymlinkReleaseTaskTest extends BaseTaskTest
     {
         $this->task->rollback($this->node, $this->application, $this->deployment);
         $this->assertCommandExecuted(
-            'cd ' . $this->application->getReleasesPath() . ' && rm -f ./current && mv ./previous ./current'
+            'cd ' . $this->node->getReleasesPath() . ' && rm -f ./current && mv ./previous ./current'
         );
     }
 
     private function expectedCommand(): string
     {
-        return 'cd ' . $this->application->getReleasesPath()
+        return 'cd ' . $this->node->getReleasesPath()
             . ' && rm -rf ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./'
             . $this->deployment->getReleaseIdentifier() . ' ./current && rm -rf ./next';
     }

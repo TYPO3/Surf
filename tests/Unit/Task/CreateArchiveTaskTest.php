@@ -120,7 +120,7 @@ class CreateArchiveTaskTest extends BaseTaskTest
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(true);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $sourcePath = $this->deployment->getApplicationReleasePath($this->application);
+        $sourcePath = $this->deployment->getApplicationReleasePath($this->node);
         $tarOptions = sprintf(' --transform="s,^%s,%s," ', ltrim($sourcePath, '/'), $options['baseDirectory']);
         $tarOptions .= sprintf(' -czf %s %s', $options['targetFile'], $sourcePath);
 
@@ -150,7 +150,7 @@ class CreateArchiveTaskTest extends BaseTaskTest
         $this->idGenerator->generate('f3_deploy')->willReturn('12345');
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $sourcePath = $this->deployment->getApplicationReleasePath($this->application);
+        $sourcePath = $this->deployment->getApplicationReleasePath($this->node);
         $tarOptions = sprintf(' --transform="s,^%s,%s," ', ltrim($sourcePath, '/'), $options['baseDirectory']);
         foreach ($options['exclude'] as $excludePattern) {
             $tarOptions .= sprintf(' --exclude="%s" ', $excludePattern);
@@ -187,7 +187,7 @@ class CreateArchiveTaskTest extends BaseTaskTest
         $this->filesystem->isDirectory(self::SOURCE_DIRECTORY)->willReturn(true);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $sourcePath = $this->deployment->getApplicationReleasePath($this->application);
+        $sourcePath = $this->deployment->getApplicationReleasePath($this->node);
         $tarOptions = sprintf(' --transform="s,^%s,%s," ', ltrim($sourcePath, '/'), $options['baseDirectory']);
         $tarOptions .= sprintf(' -cjf %s %s', $options['targetFile'], $sourcePath);
 

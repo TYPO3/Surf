@@ -38,7 +38,7 @@ class WarmUpCacheTask extends Task implements ShellCommandServiceAwareInterface
 
         $options = $this->configureOptions($options);
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
 
         $this->shell->executeOrSimulate(
             $application->buildCommand($targetPath, 'cache:warmup', [], $options['phpBinaryPathAndFilename']),

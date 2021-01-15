@@ -31,7 +31,7 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
     {
         $command = sprintf(
             'cd %s && rm -rf ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./%s ./current && rm -rf ./next',
-            $application->getReleasesPath(),
+            $node->getReleasesPath(),
             $deployment->getReleaseIdentifier()
         );
 
@@ -49,7 +49,7 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
 
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
-        $command = sprintf('cd %s && rm -f ./current && mv ./previous ./current', $application->getReleasesPath());
+        $command = sprintf('cd %s && rm -f ./current && mv ./previous ./current', $node->getReleasesPath());
 
         $this->shell->execute($command, $node, $deployment, true);
     }

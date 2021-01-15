@@ -26,7 +26,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
     {
         parent::setUp();
         $this->application = new Laravel('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
@@ -35,7 +35,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
     public function executeWithoutArgumentsExecutesViewCacheWithoutArguments(): void
     {
         $this->task->execute($this->node, $this->application, $this->deployment);
-        $this->assertCommandExecuted("cd {$this->application->getDeploymentPath()}");
+        $this->assertCommandExecuted("cd {$this->node->getDeploymentPath()}");
         $this->assertCommandExecuted('mkdir -p shared/storage/framework/cache/data');
         $this->assertCommandExecuted('mkdir -p shared/storage/framework/sessions');
         $this->assertCommandExecuted('mkdir -p shared/storage/framework/testing');
