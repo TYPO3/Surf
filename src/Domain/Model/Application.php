@@ -102,12 +102,24 @@ class Application
 
         $this->nodes = $nodes;
 
+        // If deployment path is set in application, set it for all nodes where path is not set
+        array_map(function (Node $node) {
+            if ($node->getDeploymentPath() === '') {
+                $node->setDeploymentPath($this->deploymentPath);
+            }
+        }, $this->nodes);
+
         return $this;
     }
 
     public function addNode(Node $node): self
     {
         $this->nodes[$node->getName()] = $node;
+
+        // If deployment path is set in application, set it for all nodes where path is not set
+        if ($node->getDeploymentPath() === '') {
+            $node->setDeploymentPath($this->deploymentPath);
+        }
 
         return $this;
     }
@@ -168,6 +180,13 @@ class Application
     public function setDeploymentPath(string $deploymentPath): self
     {
         $this->deploymentPath = rtrim($deploymentPath, '/');
+
+        // If deployment path is set in application, set it for all nodes where path is not set
+        array_map(function (Node $node) {
+            if ($node->getDeploymentPath() === '') {
+                $node->setDeploymentPath($this->deploymentPath);
+            }
+        }, $this->nodes);
 
         return $this;
     }

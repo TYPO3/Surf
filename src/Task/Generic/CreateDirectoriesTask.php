@@ -56,7 +56,7 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
             return;
         }
 
-        $baseDirectory = $options['baseDirectory'] ?: $deployment->getApplicationReleasePath($application);
+        $baseDirectory = $options['baseDirectory'] ?: $deployment->getApplicationReleasePath($node);
 
         $commands = array_map(fn ($directory): string => sprintf('mkdir -p %s', $directory), $options['directories']);
 

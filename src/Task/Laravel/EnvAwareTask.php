@@ -35,8 +35,8 @@ class EnvAwareTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $sharedPath = $application->getSharedPath();
-        $releasePath = $deployment->getApplicationReleasePath($application);
+        $sharedPath = $node->getSharedPath();
+        $releasePath = $deployment->getApplicationReleasePath($node);
 
         $result = $this->shell->execute(sprintf('test -f %s/.env', $sharedPath), $node, $deployment, true);
         if ($result === false) {

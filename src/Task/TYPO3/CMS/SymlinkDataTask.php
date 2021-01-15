@@ -33,7 +33,7 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
     {
         $commands = [];
         $options = $this->configureOptions($options);
-        $targetReleasePath = $deployment->getApplicationReleasePath($application);
+        $targetReleasePath = $deployment->getApplicationReleasePath($node);
         $webDirectory = $options['webDirectory'];
         $relativeDataPath = $relativeDataPathFromWeb = '../../shared/Data';
         if ($webDirectory !== '') {

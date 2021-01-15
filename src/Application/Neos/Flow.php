@@ -15,7 +15,6 @@ use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
-use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask;
 use TYPO3\Surf\Task\Neos\Flow\CreateDirectoriesTask;
 use TYPO3\Surf\Task\Neos\Flow\MigrateTask;
@@ -69,18 +68,6 @@ class Flow extends BaseApplication
         }
         if ($this->provideBoolOption('enableCacheWarmupAfterSwitchingToNewRelease')) {
             $workflow->afterTask(SymlinkReleaseTask::class, WarmUpCacheTask::class, $this);
-        }
-    }
-
-    protected function registerTasksForUpdateMethod(Workflow $workflow, string $updateMethod): void
-    {
-        switch ($updateMethod) {
-            case 'composer':
-                $workflow->addTask(InstallTask::class, SimpleWorkflowStage::STEP_05_UPDATE, $this);
-                break;
-            default:
-                parent::registerTasksForUpdateMethod($workflow, $updateMethod);
-                break;
         }
     }
 

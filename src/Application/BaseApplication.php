@@ -183,7 +183,7 @@ class BaseApplication extends Application
 
     protected function registerTasksForPackageMethod(Workflow $workflow, ?string $packageMethod): void
     {
-        if ($packageMethod == 'git') {
+        if ($packageMethod === 'git') {
             $workflow->addTask(GitTask::class, SimpleWorkflowStage::STEP_03_PACKAGE, $this);
             $workflow->defineTask(
                 $localInstallTask = 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
@@ -215,5 +215,8 @@ class BaseApplication extends Application
 
     protected function registerTasksForUpdateMethod(Workflow $workflow, string $updateMethod): void
     {
+        if ($updateMethod === 'composer') {
+            $workflow->addTask(InstallTask::class, SimpleWorkflowStage::STEP_05_UPDATE, $this);
+        }
     }
 }

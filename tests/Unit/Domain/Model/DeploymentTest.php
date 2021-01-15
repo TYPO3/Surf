@@ -148,14 +148,14 @@ class DeploymentTest extends TestCase
     {
         $deployment = new Deployment('Some name');
 
-        $application = new Application('Test application 1');
-        $application->setDeploymentPath('/deployment/path');
+        $node = new Node('Node');
+        $node->setDeploymentPath('/deployment/path');
 
         $releaseIdentifier = $deployment->getReleaseIdentifier();
 
         self::assertSame(
             '/deployment/path/releases/' . $releaseIdentifier,
-            $deployment->getApplicationReleasePath($application)
+            $deployment->getApplicationReleasePath($node)
         );
     }
 
@@ -167,14 +167,14 @@ class DeploymentTest extends TestCase
         $deployment = new Deployment('Some name');
         $deployment->setRelativeProjectRootPath('htdocs');
 
-        $application = new Application('Test application 1');
-        $application->setDeploymentPath('/deployment/path');
+        $node = new Node('Node');
+        $node->setDeploymentPath('/deployment/path');
 
         $releaseIdentifier = $deployment->getReleaseIdentifier();
 
         self::assertSame(
             '/deployment/path/releases/' . $releaseIdentifier . '/htdocs',
-            $deployment->getApplicationReleasePath($application)
+            $deployment->getApplicationReleasePath($node)
         );
     }
 

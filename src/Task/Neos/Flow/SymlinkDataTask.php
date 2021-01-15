@@ -30,7 +30,7 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $releaseIdentifier = $deployment->getReleaseIdentifier();
-        $releasesPath = $application->getReleasesPath();
+        $releasesPath = $node->getReleasesPath();
         $commands = [
             "mkdir -p $releasesPath/$releaseIdentifier/Data",
             "cd $releasesPath/$releaseIdentifier",

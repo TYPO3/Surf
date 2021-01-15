@@ -23,7 +23,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandService;
  */
 function findAllReleases(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): array
 {
-    $releasesPath = $application->getReleasesPath();
+    $releasesPath = $node->getReleasesPath();
     $allReleasesList = $shell->execute("if [ -d $releasesPath/. ]; then find $releasesPath/. -maxdepth 1 -type d -exec basename {} \; ; fi", $node, $deployment);
 
     $allReleases = preg_split('/\s+/', $allReleasesList, -1, PREG_SPLIT_NO_EMPTY);
@@ -40,7 +40,7 @@ function findAllReleases(Deployment $deployment, Node $node, Application $applic
  */
 function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
 {
-    $previousReleasePath = $application->getReleasesPath() . '/previous';
+    $previousReleasePath = $node->getReleasesPath() . '/previous';
     return trim($shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment) ?? '');
 }
 
@@ -49,6 +49,6 @@ function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Appli
  */
 function findCurrentReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
 {
-    $currentReleasePath = $application->getReleasesPath() . '/current';
+    $currentReleasePath = $node->getReleasesPath() . '/current';
     return trim($shell->execute("if [ -h $currentReleasePath ]; then basename `readlink $currentReleasePath` ; fi", $node, $deployment));
 }

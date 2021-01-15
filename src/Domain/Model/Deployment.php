@@ -21,8 +21,6 @@ use TYPO3\Surf\Exception as SurfException;
 use UnexpectedValueException;
 
 /**
- * A Deployment
- *
  * This is the base object exposed to a deployment configuration script and serves as a configuration builder and
  * model for an actual deployment.
  */
@@ -179,18 +177,18 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         $this->getWorkflow()->run($this);
     }
 
-    public function getApplicationReleaseBasePath(Application $application): string
+    public function getApplicationReleaseBasePath(Node $node): string
     {
         return Files::concatenatePaths([
-            $application->getReleasesPath(),
+            $node->getReleasesPath(),
             $this->getReleaseIdentifier()
         ]);
     }
 
-    public function getApplicationReleasePath(Application $application): string
+    public function getApplicationReleasePath(Node $node): string
     {
         return Files::concatenatePaths([
-            $this->getApplicationReleaseBasePath($application),
+            $this->getApplicationReleaseBasePath($node),
             $this->relativeProjectRootPath
         ]);
     }

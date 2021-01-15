@@ -44,7 +44,7 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
-        $command = $this->replacePaths($application, $deployment, $options['command']);
+        $command = $this->replacePaths($node, $application, $deployment, $options['command']);
         $this->shell->executeOrSimulate($command, $node, $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
 
@@ -64,7 +64,7 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
             return;
         }
 
-        $command = $this->replacePaths($application, $deployment, $options['rollbackCommand']);
+        $command = $this->replacePaths($node, $application, $deployment, $options['rollbackCommand']);
         $this->shell->execute($command, $node, $deployment, true);
     }
 
@@ -77,19 +77,20 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
+     * @param Node $node
      * @param Application $application
      * @param Deployment $deployment
      * @param array|string|string[] $command
      * @return array|string|string[]
      */
-    private function replacePaths(Application $application, Deployment $deployment, $command)
+    private function replacePaths(Node $node, Application $application, Deployment $deployment, $command)
     {
         $replacePaths = [
-            '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
-            '{sharedPath}' => escapeshellarg($application->getSharedPath()),
-            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
-            '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
-            '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous'),
+            '{deploymentPath}' => escapeshellarg($node->getDeploymentPath()),
+            '{sharedPath}' => escapeshellarg($node->getSharedPath()),
+            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($node)),
+            '{currentPath}' => escapeshellarg($node->getReleasesPath() . '/current'),
+            '{previousPath}' => escapeshellarg($node->getReleasesPath() . '/previous'),
         ];
 
         return str_replace(array_keys($replacePaths), $replacePaths, $command);

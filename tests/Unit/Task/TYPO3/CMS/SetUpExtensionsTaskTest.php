@@ -21,7 +21,8 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+
+        $this->node->setDeploymentPath('/home/jdoe/app');
         $this->expectTypo3ConsoleVersion('TYPO3 Console 5.8.6');
     }
 
@@ -68,7 +69,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
             'extensionKeys' => ['foo', 'bar']
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->node)}'");
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' 'foo,bar'");
     }
 
@@ -83,9 +84,9 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
             'webDirectory' => '/web/',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->node)}'");
         $this->assertCommandExecuted(
-            "test -f '{$this->deployment->getApplicationReleasePath($this->application)}/vendor/bin/typo3cms'"
+            "test -f '{$this->deployment->getApplicationReleasePath($this->node)}/vendor/bin/typo3cms'"
         );
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' 'foo,bar'");
     }
@@ -102,7 +103,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
             'extensionKeys' => ['foo', 'bar']
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->node)}'");
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' '-e' 'foo' '-e' 'bar'");
     }
 
@@ -118,7 +119,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
             'extensionKeys' => ['foo', 'bar']
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->node)}'");
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' '-e' 'foo' '-e' 'bar'");
     }
 

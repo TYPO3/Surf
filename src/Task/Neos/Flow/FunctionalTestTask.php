@@ -33,7 +33,7 @@ class FunctionalTestTask extends Task implements ShellCommandServiceAwareInterfa
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for FunctionalTestTask, got "%s"', get_class($application)));
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
 
         $command = sprintf('cd %s && phpunit -c Build/%s/PhpUnit/FunctionalTests.xml', $targetPath, $application->getBuildEssentialsDirectoryName());
 

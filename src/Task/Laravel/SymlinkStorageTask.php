@@ -28,10 +28,10 @@ class SymlinkStorageTask extends Task implements ShellCommandServiceAwareInterfa
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $targetReleasePath = $deployment->getApplicationReleasePath($application);
+        $targetReleasePath = $deployment->getApplicationReleasePath($node);
 
-        $deploymentPath = $application->getDeploymentPath();
-        $applicationReleasePath = $deployment->getApplicationReleasePath($application);
+        $deploymentPath = $node->getDeploymentPath();
+        $applicationReleasePath = $deployment->getApplicationReleasePath($node);
         $diffPath = substr($applicationReleasePath, strlen($deploymentPath));
 
         $relativeDataPath = str_repeat('../', substr_count(trim($diffPath, '/'), '/') + 1) . 'shared';

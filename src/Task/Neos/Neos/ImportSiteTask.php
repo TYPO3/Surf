@@ -48,7 +48,7 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
 
         $options = $this->configureOptions($options);
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
         $arguments = [
             '--package-key',
             $options['sitePackageKey']
