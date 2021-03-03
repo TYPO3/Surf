@@ -30,7 +30,7 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  * Example:
  *  $workflow
  *      ->setTaskOptions('TYPO3\Surf\Task\Php\WebOpcacheResetExecuteTask', [
- *              'baseUrl' => '/var/www/outerspace',
+ *              'baseUrl' => 'https://my.node.com/',
  *              'scriptIdentifier' => 'eraseAllHumans',
  *              'stream_context' => [
  *                     'http' => [
