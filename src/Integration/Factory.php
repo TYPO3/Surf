@@ -147,11 +147,15 @@ class Factory implements FactoryInterface, ContainerAwareInterface
 
         $deploymentPathAndFilename = Files::concatenatePaths([$deploymentConfigurationPath, $deploymentName . '.php']);
         if (! $this->filesystem->fileExists($deploymentPathAndFilename)) {
-            $this->logger->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
-            $deployment = new FailedDeployment();
-            $deployment->setLogger($this->logger);
-
-            return $deployment;
+           
+            //Check if file exists in home-dir configurations instead
+            $deploymentPathAndFilename = $deploymentPathAndFilename = Files::concatenatePaths([$this->getHomeDirectory(), 'deployments', $deploymentName . '.php']);
+            if (! $this->filesystem->fileExists($deploymentPathAndFilename)) {
+                $this->logger->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
+                $deployment = new FailedDeployment();
+                $deployment->setLogger($this->logger);
+                return $deployment;
+            }
         }
 
         $deployment = new Deployment($deploymentName);
