@@ -340,7 +340,11 @@ class FactoryTest extends TestCase
         $this->filesystem->fileExists(getenv('HOME') . '/.surf/workspace')->willReturn(true);
         $this->filesystem->fileExists('foo/foo.php')->willReturn(false);
 
-        $this->logger->error("The deployment file foo/foo.php does not exist.\n")->shouldBeCalledOnce();
+        $deploymentFile = getenv('HOME') . '/.surf/deployments/foo.php';
+
+        $this->filesystem->fileExists($deploymentFile)->willReturn(false);
+
+        $this->logger->error(sprintf("The deployment file %s does not exist.\n", $deploymentFile))->shouldBeCalledOnce();
 
         $deployment = $this->subject->getDeployment('foo');
 
