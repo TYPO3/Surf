@@ -224,6 +224,12 @@ class Factory implements FactoryInterface
         }
 
         $deploymentPathAndFilename = Files::concatenatePaths([$deploymentConfigurationPath, $deploymentName . '.php']);
+
+        if (! file_exists($deploymentPathAndFilename)) {
+            // Check if file exists in home-dir configurations instead
+            $deploymentPathAndFilename = Files::concatenatePaths([$this->getHomeDir(), 'deployments', $deploymentName . '.php']);
+        }
+
         if (file_exists($deploymentPathAndFilename)) {
             $deployment = new Deployment($deploymentName);
             $deployment->setDeploymentBasePath($deploymentConfigurationPath);
