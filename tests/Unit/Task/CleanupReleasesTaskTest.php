@@ -41,7 +41,6 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
     protected function setUp(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
         $this->shellCommandService = $this->createMock(ShellCommandService::class);
         $this->task = $this->createTask();
         if ($this->task instanceof ShellCommandServiceAwareInterface) {
