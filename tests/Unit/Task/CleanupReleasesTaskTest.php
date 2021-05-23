@@ -37,7 +37,6 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
     protected function setUp()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\TYPO3\Surf\Domain\Service\ShellCommandService $shellCommandService */
         $this->shellCommandService = $this->createMock(ShellCommandService::class);
         $this->task = $this->createTask();
         if ($this->task instanceof ShellCommandServiceAwareInterface) {
