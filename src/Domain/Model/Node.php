@@ -8,16 +8,38 @@ namespace TYPO3\Surf\Domain\Model;
  * file that was distributed with this source code.
  */
 
-/**
- * A Node
- */
+use TYPO3\Surf\Exception\InvalidConfigurationException;
+
 class Node
 {
+    /**
+     * default directory name for shared directory
+     *
+     * @const
+     */
+    public const DEFAULT_SHARED_DIR = 'shared';
+
+    private const FORBIDDEN_SHARED_REGULAR_EXPRESSION = '/(^|\/)\.\.(\/|$)/';
+
     /**
      * The name
      * @var string
      */
     protected $name;
+
+    /**
+     * The deployment path on the node
+     *
+     * @var string
+     */
+    protected $deploymentPath;
+
+    /**
+     * The relative releases directory on a node
+     *
+     * @var string
+     */
+    protected $releasesDirectory = 'releases';
 
     /**
      * Options for this node
@@ -49,6 +71,77 @@ class Node
         return $this->name;
     }
 
+    public function getDeploymentPath(): ?string
+    {
+        return $this->deploymentPath;
+    }
+
+    public function setDeploymentPath(string $deploymentPath): self
+    {
+        $this->deploymentPath = $deploymentPath;
+        return $this;
+    }
+
+    public function getReleasesDirectory(): string
+    {
+        return $this->releasesDirectory;
+    }
+
+    public function setReleasesDirectory(string $releasesDirectory): self
+    {
+        if (preg_match(self::FORBIDDEN_SHARED_REGULAR_EXPRESSION, $releasesDirectory)) {
+            throw new InvalidConfigurationException(
+                sprintf('"../" is not allowed in the releases directory "%s"', $releasesDirectory),
+                1380870750
+            );
+        }
+        $this->releasesDirectory = trim($releasesDirectory, '/');
+        return $this;
+    }
+
+    /**
+     * Get the path for shared resources for this application
+     *
+     * This path defaults to a directory "shared" below the deployment path.
+     */
+    public function getSharedPath(): string
+    {
+        return $this->getDeploymentPath() . '/' . $this->getSharedDirectory();
+    }
+
+    /**
+     * Returns the shared directory
+     *
+     * takes directory name from option "sharedDirectory"
+     * if option is not set or empty constant DEFAULT_SHARED_DIR "shared" is used
+     */
+    public function getSharedDirectory(): string
+    {
+        $result = self::DEFAULT_SHARED_DIR;
+        if ($this->hasOption('sharedDirectory') && !empty($this->getOption('sharedDirectory'))) {
+            $sharedPath = $this->getOption('sharedDirectory');
+            if (preg_match(self::FORBIDDEN_SHARED_REGULAR_EXPRESSION, $sharedPath)) {
+                throw new InvalidConfigurationException(
+                    sprintf(
+                        'Relative constructs as "../" are not allowed in option "sharedDirectory". Given option: "%s"',
+                        $sharedPath
+                    ),
+                    1490107183141
+                );
+            }
+            $result = rtrim($sharedPath, '/');
+        }
+        return $result;
+    }
+
+    /**
+     * Returns path to the directory with releases
+     */
+    public function getReleasesPath(): string
+    {
+        return rtrim($this->getDeploymentPath() . '/' . $this->getReleasesDirectory(), '/');
+    }
+
     /**
      * Get the Node's hostname
      *
@@ -75,9 +168,13 @@ class Node
      *
      * @return array The Node's options
      */
-    public function getOptions()
+    public function getOptions(): array
     {
-        return $this->options;
+        return array_merge($this->options, [
+            'deploymentPath' => $this->getDeploymentPath(),
+            'releasesPath' => $this->getReleasesPath(),
+            'sharedPath' => $this->getSharedPath()
+        ]);
     }
 
     /**
@@ -96,9 +193,18 @@ class Node
      * @param string $key
      * @return mixed
      */
-    public function getOption($key)
+    public function getOption(string $key)
     {
-        return $this->options[$key];
+        switch ($key) {
+            case 'deploymentPath':
+                return $this->getDeploymentPath();
+            case 'releasesPath':
+                return $this->getReleasesPath();
+            case 'sharedPath':
+                return $this->getSharedPath();
+            default:
+                return $this->options[$key];
+        }
     }
 
     /**

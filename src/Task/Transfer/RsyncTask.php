@@ -38,13 +38,13 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $options = $this->configureOptions($options);
 
         $localPackagePath = $deployment->getWorkspacePath($application);
-        $releasePath = $deployment->getApplicationReleaseBasePath($application);
+        $releasePath = $deployment->getApplicationReleaseBasePath($node);
 
         if ($options['webDirectory'] !== null) {
             $this->replacePaths['{webDirectory}'] = $options['webDirectory'];
         }
 
-        $remotePath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache/transfer']);
+        $remotePath = Files::concatenatePaths([$node->getDeploymentPath(), 'cache', 'transfer']);
         // make sure there is a remote .cache folder
         $command = 'mkdir -p ' . $remotePath;
         $this->shell->executeOrSimulate($command, $node, $deployment);
@@ -96,7 +96,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
 
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $releasePath = $deployment->getApplicationReleasePath($application);
+        $releasePath = $deployment->getApplicationReleasePath($node);
         $this->shell->execute('rm -Rf ' . $releasePath, $node, $deployment, true);
     }
 

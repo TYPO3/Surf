@@ -16,13 +16,6 @@ use Webmozart\Assert\Assert;
  */
 class Application
 {
-    /**
-     * default directory name for shared directory
-     *
-     * @const
-     */
-    public const DEFAULT_SHARED_DIR = 'shared';
-
     public const DEFAULT_WEB_DIRECTORY = 'public';
 
     /**
@@ -40,12 +33,14 @@ class Application
     /**
      * The deployment path for this application on a node
      * @var string
+     * @deprecated
      */
     protected $deploymentPath = '';
 
     /**
      * The relative releases directory for this application on a node
      * @var string
+     * @deprecated
      */
     protected $releasesDirectory = 'releases';
 
@@ -128,6 +123,8 @@ class Application
      * |-- $this->getReleasesDirectory()
      * |-- cache
      * |-- shared
+     *
+     * @deprecated Get path from the node instead
      */
     public function getDeploymentPath(): string
     {
@@ -138,6 +135,8 @@ class Application
      * Get the path for shared resources for this application
      *
      * This path defaults to a directory "shared" below the deployment path.
+     *
+     * @deprecated Get path from the node instead
      */
     public function getSharedPath(): string
     {
@@ -149,10 +148,12 @@ class Application
      *
      * takes directory name from option "sharedDirectory"
      * if option is not set or empty constant DEFAULT_SHARED_DIR "shared" is used
+     *
+     * @deprecated Get path from node instead
      */
     public function getSharedDirectory(): string
     {
-        $result = self::DEFAULT_SHARED_DIR;
+        $result = Node::DEFAULT_SHARED_DIR;
         if ($this->hasOption('sharedDirectory') && !empty($this->getOption('sharedDirectory'))) {
             $sharedPath = $this->getOption('sharedDirectory');
             if (preg_match('/(^|\/)\.\.(\/|$)/', $sharedPath)) {
@@ -169,17 +170,42 @@ class Application
         return $result;
     }
 
+    /**
+     * @param string $deploymentPath
+     * @return $this
+     *
+     * @deprecated Set path in node instead
+     */
     public function setDeploymentPath(string $deploymentPath): self
     {
         $this->deploymentPath = rtrim($deploymentPath, '/');
+
+        // Backwards compatibility if deployment path is set in application, set it for all nodes where path is null
+        // FIXME: can be removed in Surf 4.0
+        array_map(function (Node $node) {
+            if ($node->getDeploymentPath() === null) {
+                $node->setDeploymentPath($this->deploymentPath);
+            }
+        }, $this->nodes);
+
         return $this;
     }
 
+    /**
+     * @return string
+     * @deprecated Get path from node instead
+     */
     public function getReleasesDirectory(): string
     {
         return $this->releasesDirectory;
     }
 
+    /**
+     * @param string $releasesDirectory
+     * @return $this
+     * @throws InvalidConfigurationException
+     * @deprecated Set path in node instead
+     */
     public function setReleasesDirectory(string $releasesDirectory): self
     {
         if (preg_match('/(^|\/)\.\.(\/|$)/', $releasesDirectory)) {
@@ -194,6 +220,7 @@ class Application
 
     /**
      * Returns path to the directory with releases
+     * @deprecated Get path from the node instead
      */
     public function getReleasesPath(): string
     {
@@ -208,11 +235,7 @@ class Application
      */
     public function getOptions(): array
     {
-        return array_merge($this->options, [
-            'deploymentPath' => $this->getDeploymentPath(),
-            'releasesPath' => $this->getReleasesPath(),
-            'sharedPath' => $this->getSharedPath()
-        ]);
+        return $this->options;
     }
 
     /**
@@ -222,16 +245,7 @@ class Application
      */
     public function getOption(string $key)
     {
-        switch ($key) {
-            case 'deploymentPath':
-                return $this->getDeploymentPath();
-            case 'releasesPath':
-                return $this->getReleasesPath();
-            case 'sharedPath':
-                return $this->getSharedPath();
-            default:
-                return $this->options[$key];
-        }
+        return $this->options[$key];
     }
 
     public function hasOption(string $key): bool

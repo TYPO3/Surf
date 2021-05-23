@@ -16,7 +16,7 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->application->setDeploymentPath('/home/jdoe/app');
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
@@ -26,7 +26,7 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
     {
         $this->task->execute($this->node, $this->application, $this->deployment);
         $this->assertCommandExecuted(
-            sprintf('rm %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock'))
+            sprintf('rm %s', escapeshellarg($this->node->getDeploymentPath() . '/.surf/deploy.lock'))
         );
     }
 
@@ -38,7 +38,7 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
         $this->deployment->setForceRun(true);
         $this->task->execute($this->node, $this->application, $this->deployment);
         $this->assertCommandExecuted(
-            sprintf('rm -f %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock'))
+            sprintf('rm -f %s', escapeshellarg($this->node->getDeploymentPath() . '/.surf/deploy.lock'))
         );
     }
 

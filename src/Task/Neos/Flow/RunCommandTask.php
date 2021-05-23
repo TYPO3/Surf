@@ -52,7 +52,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
 
         $options = $this->configureOptions($options);
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
 
         $command = $application->buildCommand($targetPath, $options['command'], $options['arguments'], $options['phpBinaryPathAndFilename']);
 

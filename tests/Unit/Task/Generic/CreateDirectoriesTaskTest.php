@@ -26,7 +26,8 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
@@ -45,7 +46,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
         $options = ['directories' => ['media']];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
+        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->node)}");
         $this->assertCommandExecuted('mkdir -p media');
     }
 

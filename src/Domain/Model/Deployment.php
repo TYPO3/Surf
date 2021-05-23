@@ -203,27 +203,25 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     }
 
     /**
-     * @param Application $application
-     *
+     * @param Node $node
      * @return string
      */
-    public function getApplicationReleaseBasePath(Application $application)
+    public function getApplicationReleaseBasePath(Node $node)
     {
         return Files::concatenatePaths([
-            $application->getReleasesPath(),
+            $node->getReleasesPath(),
             $this->getReleaseIdentifier()
         ]);
     }
 
     /**
-     * @param Application $application
-     *
+     * @param Node $node
      * @return string
      */
-    public function getApplicationReleasePath(Application $application)
+    public function getApplicationReleasePath(Node $node)
     {
         return Files::concatenatePaths([
-            $this->getApplicationReleaseBasePath($application),
+            $this->getApplicationReleaseBasePath($node),
             $this->relativeProjectRootPath
         ]);
     }

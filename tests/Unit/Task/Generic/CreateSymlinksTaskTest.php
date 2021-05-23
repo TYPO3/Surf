@@ -26,7 +26,8 @@ class CreateSymlinksTaskTest extends BaseTaskTest
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
@@ -48,7 +49,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         $options = ['symlinks' => ['media' => '../media']];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
+        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->node)}");
         $this->assertCommandExecuted('ln -s ../media media');
     }
 
@@ -86,7 +87,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
-        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->application)}");
+        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->node)}");
         $this->assertCommandExecuted('ln -s ../media media');
         $this->assertCommandExecuted('ln -s ../log log');
         $this->assertCommandExecuted('ln -s ../var var');

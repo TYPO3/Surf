@@ -32,8 +32,8 @@ class GitCheckoutTask extends AbstractCheckoutTask
     {
         $options = $this->configureOptions($options);
 
-        $releasePath = $deployment->getApplicationReleasePath($application);
-        $checkoutPath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache/transfer']);
+        $releasePath = $deployment->getApplicationReleasePath($node);
+        $checkoutPath = Files::concatenatePaths([$node->getDeploymentPath(), 'cache', 'transfer']);
 
         $sha1 = $this->executeOrSimulateGitCloneOrUpdate($checkoutPath, $node, $deployment, $options);
 
@@ -49,7 +49,7 @@ class GitCheckoutTask extends AbstractCheckoutTask
 
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $releasePath = $deployment->getApplicationReleasePath($application);
+        $releasePath = $deployment->getApplicationReleasePath($node);
         $this->shell->execute('rm -f ' . $releasePath . 'REVISION', $node, $deployment, true);
     }
 

@@ -34,15 +34,15 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $result = $this->shell->execute(sprintf('test -d %s', $application->getDeploymentPath()), $node, $deployment, true);
+        $result = $this->shell->execute(sprintf('test -d %s', $node->getDeploymentPath()), $node, $deployment, true);
         if ($result === false) {
-            throw new TaskExecutionException('Deployment directory "' . $application->getDeploymentPath() . '" does not exist on node ' . $node->getName(), 1311003253);
+            throw new TaskExecutionException('Deployment directory "' . $node->getDeploymentPath() . '" does not exist on node ' . $node->getName(), 1311003253);
         }
         $commands = [
-            sprintf('mkdir -p %s', $application->getReleasesPath()),
-            sprintf('mkdir -p %s', $application->getSharedPath()),
-            sprintf('mkdir -p %s', $deployment->getApplicationReleasePath($application)),
-            sprintf('cd %s;ln -snf ./%s next', $application->getReleasesPath(), $deployment->getReleaseIdentifier())
+            sprintf('mkdir -p %s', $node->getReleasesPath()),
+            sprintf('mkdir -p %s', $node->getSharedPath()),
+            sprintf('mkdir -p %s', $deployment->getApplicationReleasePath($node)),
+            sprintf('cd %s;ln -snf ./%s next', $node->getReleasesPath(), $deployment->getReleaseIdentifier())
         ];
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
@@ -58,8 +58,8 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $commands = [
-            sprintf('rm %s/next', $application->getReleasesPath()),
-            sprintf('rm -rf %s', $deployment->getApplicationReleasePath($application))
+            sprintf('rm %s/next', $node->getReleasesPath()),
+            sprintf('rm -rf %s', $deployment->getApplicationReleasePath($node))
         ];
         $this->shell->execute($commands, $node, $deployment, true);
     }

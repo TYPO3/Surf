@@ -47,7 +47,7 @@ class PushTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted(
             sprintf(
-                'cd ' . $this->deployment->getApplicationReleasePath($this->application) . '; git push -f %s %s',
+                'cd ' . $this->deployment->getApplicationReleasePath($this->node) . '; git push -f %s %s',
                 $options['remote'],
                 $options['refspec']
             )
@@ -65,7 +65,7 @@ class PushTaskTest extends BaseTaskTest
             'recurseIntoSubmodules' => true
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        $targetPath = $this->deployment->getApplicationReleasePath($this->application);
+        $targetPath = $this->deployment->getApplicationReleasePath($this->node);
         $this->assertCommandExecuted(
             sprintf('cd ' . $targetPath . '; git push -f %s %s', $options['remote'], $options['refspec'])
         );

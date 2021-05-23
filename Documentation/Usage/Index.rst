@@ -22,11 +22,11 @@ with name **MyDeployment**::
    <?php
    $node = new \TYPO3\Surf\Domain\Model\Node('example');
    $node->setHostname('example.com');
+   $node->setDeploymentPath('/home/my-flow-app/app');
    $node->setOption('username', 'myuser');
 
    $application = new \TYPO3\Surf\Application\Neos\Flow();
    $application->setVersion('4.0');
-   $application->setDeploymentPath('/home/my-flow-app/app');
    $application->setOption('repositoryUrl', 'git@github.com:myuser/my-flow-app.git');
    $application->addNode($node);
 

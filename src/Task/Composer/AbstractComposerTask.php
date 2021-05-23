@@ -55,7 +55,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         if ($options['useApplicationWorkspace']) {
             $composerRootPath = $deployment->getWorkspaceWithProjectRootPath($application);
         } else {
-            $composerRootPath = $deployment->getApplicationReleasePath($application);
+            $composerRootPath = $deployment->getApplicationReleasePath($node);
         }
 
         if ($options['nodeName'] !== null) {

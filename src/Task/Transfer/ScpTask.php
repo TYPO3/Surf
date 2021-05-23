@@ -31,10 +31,10 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
         $fileName = sprintf('%s.tar.gz', $deployment->getReleaseIdentifier());
 
         $localPackagePath = $deployment->getWorkspacePath($application);
-        $releasePath = Files::concatenatePaths([$application->getReleasesPath(), $deployment->getReleaseIdentifier()]);
+        $releasePath = Files::concatenatePaths([$node->getReleasesPath(), $deployment->getReleaseIdentifier()]);
 
         // Create remote transfer path if not exist
-        $remoteTransferPath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache', 'transfer']);
+        $remoteTransferPath = Files::concatenatePaths([$node->getDeploymentPath(), 'cache', 'transfer']);
         $this->shell->executeOrSimulate(sprintf('mkdir -p %s', $remoteTransferPath), $node, $deployment);
 
         // Create the scp destination command
@@ -101,7 +101,7 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
 
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $releasePath = $deployment->getApplicationReleasePath($application);
+        $releasePath = $deployment->getApplicationReleasePath($node);
         $this->shell->execute(sprintf('rm -rf %s', $releasePath), $node, $deployment, true);
     }
 

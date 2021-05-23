@@ -14,6 +14,7 @@ If you would like to deploy a Neos website a good starting point is to use the N
    $node = new \TYPO3\Surf\Domain\Model\Node('production');
    $node
       ->setHostname('my.node.com')
+      ->setDeploymentPath('/var/www/vhosts/my.node.com')
       ->setOption('username', 'myuser');
 
    $application = new \TYPO3\Surf\Application\Neos\Neos('My Node');
@@ -28,7 +29,6 @@ If you would like to deploy a Neos website a good starting point is to use the N
           'Neos_Fusion_Content',
           'Neos_Neos_Fusion'
       ])
-      ->setDeploymentPath('/var/www/vhosts/my.node.com')
       ->addNode($node);
 
    $deployment

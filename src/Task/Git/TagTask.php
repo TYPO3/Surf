@@ -46,7 +46,7 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
         $this->validateOptions($options);
         $options = $this->processOptions($options, $deployment);
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
         $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git tag -f -a -m %s %s', escapeshellarg($options['description']), escapeshellarg($options['tagName'])), $node, $deployment);
         if (isset($options['recurseIntoSubmodules']) && $options['recurseIntoSubmodules'] === true) {
             $submoduleCommand = escapeshellarg(sprintf('git tag -f -a -m %s %s', escapeshellarg($options['description']), escapeshellarg($options['submoduleTagNamePrefix'] . $options['tagName'])));

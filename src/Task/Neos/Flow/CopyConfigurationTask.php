@@ -38,7 +38,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $configurationFileExtension = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'yaml';
-        $targetReleasePath = $deployment->getApplicationReleasePath($application);
+        $targetReleasePath = $deployment->getApplicationReleasePath($node);
         $configurationPath = $deployment->getDeploymentConfigurationPath();
         if (!is_dir($configurationPath)) {
             return;

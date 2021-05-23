@@ -54,11 +54,11 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
         }
 
         $replacePaths = [
-            '{deploymentPath}' => escapeshellarg($application->getDeploymentPath()),
-            '{sharedPath}' => escapeshellarg($application->getSharedPath()),
-            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($application)),
-            '{currentPath}' => escapeshellarg($application->getReleasesPath() . '/current'),
-            '{previousPath}' => escapeshellarg($application->getReleasesPath() . '/previous'),
+            '{deploymentPath}' => escapeshellarg($node->getDeploymentPath()),
+            '{sharedPath}' => escapeshellarg($node->getSharedPath()),
+            '{releasePath}' => escapeshellarg($deployment->getApplicationReleasePath($node)),
+            '{currentPath}' => escapeshellarg($node->getReleasesPath() . '/current'),
+            '{previousPath}' => escapeshellarg($node->getReleasesPath() . '/previous'),
         ];
 
         // Build commands to transfer folders

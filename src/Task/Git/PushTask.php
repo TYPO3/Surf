@@ -42,7 +42,7 @@ class PushTask extends Task implements ShellCommandServiceAwareInterface
     {
         $options = $this->configureOptions($options);
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
 
         $this->shell->executeOrSimulate(sprintf('cd ' . $targetPath . '; git push -f %s %s', $options['remote'], $options['refspec']), $node, $deployment);
         if ($options['recurseIntoSubmodules']) {

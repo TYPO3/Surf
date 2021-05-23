@@ -24,7 +24,8 @@ class RsyncTaskTest extends BaseTaskTest
         parent::setUp();
 
         $this->application = new Flow('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**

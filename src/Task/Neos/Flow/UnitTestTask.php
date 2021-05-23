@@ -30,7 +30,7 @@ class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for UnitTestTask, got "%s"', get_class($application)));
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
         $this->shell->executeOrSimulate('cd ' . $targetPath . ' && phpunit -c Build/' . $application->getBuildEssentialsDirectoryName() . '/PhpUnit/UnitTests.xml', $node, $deployment);
     }
 

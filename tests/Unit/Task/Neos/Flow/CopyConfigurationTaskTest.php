@@ -23,7 +23,8 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         parent::setUp();
 
         $this->application = new Flow('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**
@@ -39,7 +40,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $configPath = $this->deployment->getDeploymentConfigurationPath();
-        $releasesPath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasesPath = $this->deployment->getApplicationReleasePath($this->node);
 
         $this->assertCommandExecuted("mkdir -p '{$releasesPath}/Configuration/'");
         $this->assertCommandExecuted("cp '{$configPath}/Settings.yaml' '{$releasesPath}/Configuration/'");
@@ -63,7 +64,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $configPath = $this->deployment->getDeploymentConfigurationPath();
-        $releasesPath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasesPath = $this->deployment->getApplicationReleasePath($this->node);
 
         $this->assertCommandExecuted("mkdir -p '{$releasesPath}/Configuration/Production/'");
         $this->assertCommandExecuted("cp '{$configPath}/Production/Settings.php' '{$releasesPath}/Configuration/Production/'");
@@ -82,7 +83,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $configPath = $this->deployment->getDeploymentConfigurationPath();
-        $releasesPath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasesPath = $this->deployment->getApplicationReleasePath($this->node);
 
         $this->assertCommandExecuted("ssh remote \"mkdir -p '{$releasesPath}/Configuration/'\"");
         $this->assertCommandExecuted("scp '{$configPath}/Settings.yaml' remote:\"'{$releasesPath}/Configuration/'\"");
@@ -104,7 +105,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, []);
 
         $configPath = $this->deployment->getDeploymentConfigurationPath();
-        $releasesPath = $this->deployment->getApplicationReleasePath($this->application);
+        $releasesPath = $this->deployment->getApplicationReleasePath($this->node);
 
         $this->assertCommandExecuted("ssh -o PubkeyAuthentication=no remote \"mkdir -p '{$releasesPath}/Configuration/'\"");
         $this->assertCommandExecuted("scp -o PubkeyAuthentication=no '{$configPath}/Settings.yaml' remote:\"'{$releasesPath}/Configuration/'\"");

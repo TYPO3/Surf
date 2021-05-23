@@ -39,7 +39,7 @@ class DownloadTask extends Task implements ShellCommandServiceAwareInterface
     {
         $options = $this->configureOptions($options);
 
-        $command = sprintf('cd %s && %s', escapeshellarg($deployment->getApplicationReleasePath($application)), $options['composerDownloadCommand']);
+        $command = sprintf('cd %s && %s', escapeshellarg($deployment->getApplicationReleasePath($node)), $options['composerDownloadCommand']);
 
         $this->shell->executeOrSimulate($command, $node, $deployment);
     }

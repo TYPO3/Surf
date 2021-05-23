@@ -142,9 +142,6 @@ Applications:
         <success>.git</success>
         <success>web/fileadmin</success>
         <success>web/uploads</success>
-      deploymentPath => <success></success>
-      releasesPath => <success>/releases</success>
-      sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
     Detailed workflow:
       initialize:
@@ -237,9 +234,6 @@ Applications:
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
         <success>public/typo3conf/LocalConfiguration.php => ../../../../shared/Configuration/LocalConfiguration.php</success>
-      deploymentPath => <success></success>
-      releasesPath => <success>/releases</success>
-      sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
     Detailed workflow:
       initialize:
@@ -308,9 +302,6 @@ Applications:
       enableCacheWarmupAfterSwitchingToNewRelease => <success></success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success></success>
-      releasesPath => <success>/releases</success>
-      sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
     Detailed workflow:
       initialize:
@@ -385,9 +376,6 @@ Applications:
       enableCacheWarmupAfterSwitchingToNewRelease => <success></success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success></success>
-      releasesPath => <success>/releases</success>
-      sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
     Detailed workflow:
       initialize:
@@ -463,9 +451,6 @@ Applications:
       enableCacheWarmupAfterSwitchingToNewRelease => <success>1</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success></success>
-      releasesPath => <success>/releases</success>
-      sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
     Detailed workflow:
       initialize:
@@ -536,9 +521,6 @@ Applications:
       webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success></success>
-      releasesPath => <success>/releases</success>
-      sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
     Detailed workflow:
       initialize:
@@ -599,9 +581,6 @@ Applications:
       webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success></success>
-      releasesPath => <success>/releases</success>
-      sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
     Detailed workflow:
       initialize:
@@ -660,9 +639,6 @@ Applications:
       webDirectory => <success>public</success>
       TYPO3\Surf\Task\Generic\CreateDirectoriesTask[directories] =>
       TYPO3\Surf\Task\Generic\CreateSymlinksTask[symlinks] =>
-      deploymentPath => <success></success>
-      releasesPath => <success>/releases</success>
-      sharedPath => <success>/shared</success>
     Nodes: <success>TestNode</success>
     Detailed workflow:
       initialize:

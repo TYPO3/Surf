@@ -31,11 +31,11 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
     {
         if (! $deployment->isDryRun()) {
             // Create .surf directory if not exists
-            $lockDirectory = escapeshellarg($application->getDeploymentPath() . '/.surf');
+            $lockDirectory = escapeshellarg($node->getDeploymentPath() . '/.surf');
             $this->shell->execute(sprintf('[ -d %1$s ] || mkdir %1$s', $lockDirectory), $node, $deployment);
         }
 
-        $deploymentLockFile = escapeshellarg(sprintf('%s/.surf/%s', $application->getDeploymentPath(), self::LOCK_FILE_NAME));
+        $deploymentLockFile = escapeshellarg(sprintf('%s/.surf/%s', $node->getDeploymentPath(), self::LOCK_FILE_NAME));
         $locked = (bool)$this->shell->execute(sprintf('if [ -f %s ]; then echo 1; else echo 0; fi', $deploymentLockFile), $node, $deployment);
         if ($locked) {
             $currentDeploymentLockIdentifier = $this->shell->execute(sprintf('cat %s', $deploymentLockFile), $node, $deployment);

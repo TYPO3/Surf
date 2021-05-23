@@ -23,7 +23,7 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
     {
         $allReleases = \TYPO3\Surf\findAllReleases($deployment, $node, $application, $this->shell);
 
-        $releasesPath = $application->getReleasesPath();
+        $releasesPath = $node->getReleasesPath();
 
         $releases = array_map('trim', array_filter($allReleases, function ($release) {
             return $release !== '.' && $release !== 'current' && $release !== 'previous';
@@ -56,7 +56,7 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
                 $this->shell->executeOrSimulate($symlinkCommand, $node, $deployment);
             } else {
                 // Remove previous symlink
-                $removeCommand = sprintf('rm -rf %1$s/previous', $application->getReleasesPath());
+                $removeCommand = sprintf('rm -rf %1$s/previous', $node->getReleasesPath());
                 $deployment->getLogger()->info(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' previous symlink: ' . $removeCommand);
                 $this->shell->executeOrSimulate($removeCommand, $node, $deployment);
             }

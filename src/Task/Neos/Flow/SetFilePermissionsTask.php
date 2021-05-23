@@ -48,7 +48,7 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for SetFilePermissionsTask, got "%s"', get_class($application)));
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
 
         $options = $this->configureOptions($options);
 

@@ -32,7 +32,7 @@ class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareI
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $targetReleasePath = $deployment->getApplicationReleasePath($application);
+        $targetReleasePath = $deployment->getApplicationReleasePath($node);
 
         $context = $application instanceof Flow ? $application->getContext() : 'Production';
 

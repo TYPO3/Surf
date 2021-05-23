@@ -19,7 +19,7 @@ class DownloadTaskTest extends BaseTaskTest
      */
     public function executeWithDefaultComposerDownloadCommand(): void
     {
-        $applicationReleasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $applicationReleasePath = $this->deployment->getApplicationReleasePath($this->node);
         $this->task->execute($this->node, $this->application, $this->deployment, []);
         $this->assertCommandExecuted(sprintf('cd %s && %s', escapeshellarg($applicationReleasePath), 'curl -s https://getcomposer.org/installer | php'));
     }
@@ -29,7 +29,7 @@ class DownloadTaskTest extends BaseTaskTest
      */
     public function executeWithCustomComposerDownloadCommand(): void
     {
-        $applicationReleasePath = $this->deployment->getApplicationReleasePath($this->application);
+        $applicationReleasePath = $this->deployment->getApplicationReleasePath($this->node);
         $options = ['composerDownloadCommand' => 'curl -s https://custom.domain.org/installer | php'];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted(sprintf('cd %s && %s', escapeshellarg($applicationReleasePath), 'curl -s https://custom.domain.org/installer | php'));

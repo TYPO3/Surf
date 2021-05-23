@@ -22,7 +22,7 @@ class InstallTaskTest extends BaseTaskTest
     {
         parent::setUp();
 
-        $this->application->setDeploymentPath('/home/jdoe/app');
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**

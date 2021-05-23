@@ -35,7 +35,7 @@ class PublishResourcesTask extends Task implements ShellCommandServiceAwareInter
         $options = $this->configureOptions($options);
 
         if ($application->getVersion() >= '3.0') {
-            $targetPath = $deployment->getApplicationReleasePath($application);
+            $targetPath = $deployment->getApplicationReleasePath($node);
             $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'resource:publish', [], $options['phpBinaryPathAndFilename']), $node, $deployment);
         }
     }

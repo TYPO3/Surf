@@ -34,7 +34,7 @@ class MigrateTask extends Task implements ShellCommandServiceAwareInterface
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for MigrateTask, got "%s"', get_class($application)));
         $options = $this->configureOptions($options);
 
-        $targetPath = $deployment->getApplicationReleasePath($application);
+        $targetPath = $deployment->getApplicationReleasePath($node);
         $this->shell->executeOrSimulate($application->buildCommand($targetPath, 'doctrine:migrate', [], $options['phpBinaryPathAndFilename']), $node, $deployment);
     }
 

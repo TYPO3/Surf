@@ -35,7 +35,8 @@ class FlushCachesTaskTest extends BaseTaskTest
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
-        $this->application->setDeploymentPath('/home/jdoe/app');
+
+        $this->node->setDeploymentPath('/home/jdoe/app');
     }
 
     /**

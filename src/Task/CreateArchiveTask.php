@@ -71,7 +71,7 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
         $options = $this->configureOptions($options);
 
         $this->shell->execute('rm -f ' . $options['targetFile'] . '; mkdir -p ' . dirname($options['targetFile']), $node, $deployment);
-        $sourcePath = $deployment->getApplicationReleasePath($application);
+        $sourcePath = $deployment->getApplicationReleasePath($node);
 
         $tarOptions = sprintf(' --transform="s,^%s,%s," ', ltrim($sourcePath, '/'), $options['baseDirectory']);
         foreach ($options['exclude'] as $excludePattern) {

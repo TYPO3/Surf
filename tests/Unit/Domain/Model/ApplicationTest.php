@@ -14,6 +14,7 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 /**
  * Unit test for Application
+ * @deprecated Can be removed in Surf 4.0
  */
 class ApplicationTest extends TestCase
 {

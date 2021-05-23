@@ -44,7 +44,7 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
             return;
         }
 
-        $baseDirectory = $options['genericSymlinksBaseDir'] ?: $deployment->getApplicationReleasePath($application);
+        $baseDirectory = $options['genericSymlinksBaseDir'] ?: $deployment->getApplicationReleasePath($node);
 
         $commands = [
             'cd ' . $baseDirectory,

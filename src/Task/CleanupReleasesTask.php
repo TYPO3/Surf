@@ -61,7 +61,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
             return;
         }
 
-        $releasesPath = $application->getReleasesPath();
+        $releasesPath = $node->getReleasesPath();
         $currentReleaseIdentifier = $deployment->getReleaseIdentifier();
 
         $previousReleaseIdentifier = \TYPO3\Surf\findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
