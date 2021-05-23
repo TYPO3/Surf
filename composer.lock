@@ -4304,33 +4304,29 @@
         },
         {
             "name": "phpstan/phpstan-webmozart-assert",
-            "version": "0.12.4",
+            "version": "0.12.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-webmozart-assert.git",
-                "reference": "714e7a6b936931790855c8da958153dfb25fc953"
+                "reference": "1657403194a43f83b5355bd400aa7fc63f0e6857"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-webmozart-assert/zipball/714e7a6b936931790855c8da958153dfb25fc953",
-                "reference": "714e7a6b936931790855c8da958153dfb25fc953",
+                "url": "https://api.github.com/repos/phpstan/phpstan-webmozart-assert/zipball/1657403194a43f83b5355bd400aa7fc63f0e6857",
+                "reference": "1657403194a43f83b5355bd400aa7fc63f0e6857",
                 "shasum": ""
             },
             "require": {
-                "php": "~7.1",
-                "phpstan/phpstan": "^0.12.6"
+                "php": "^7.1 || ^8.0",
+                "phpstan/phpstan": "^0.12.49"
             },
             "require-dev": {
-                "consistence/coding-standard": "^3.7",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
-                "ergebnis/composer-normalize": "^2.0.2",
-                "jakub-onderka/php-parallel-lint": "^1.0",
-                "phing/phing": "^2.16.0",
+                "phing/phing": "^2.16.3",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpstan/phpstan-phpunit": "^0.12.6",
                 "phpstan/phpstan-strict-rules": "^0.12.1",
-                "phpunit/phpunit": "^7.5.18",
-                "slevomat/coding-standard": "^4.5.2",
-                "webmozart/assert": "^1.7.0"
+                "phpunit/phpunit": "^7.5.20",
+                "webmozart/assert": "^1.9.1"
             },
             "type": "phpstan-extension",
             "extra": {
@@ -4353,7 +4349,11 @@
                 "MIT"
             ],
             "description": "PHPStan webmozart/assert extension",
-            "time": "2020-05-04T08:30:18+00:00"
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan-webmozart-assert/issues",
+                "source": "https://github.com/phpstan/phpstan-webmozart-assert/tree/0.12.12"
+            },
+            "time": "2021-01-31T12:24:28+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
