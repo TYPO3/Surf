@@ -16,7 +16,7 @@ Some features of TYPO3 Surf:
 
 ## Documentation
 
-For further information please read the documentation https://docs.typo3.org/surf/
+For further information please read the documentation https://docs.typo3.org/other/typo3/surf/2.0/en-us/.
 
 ### Contributing to the documentation
 
