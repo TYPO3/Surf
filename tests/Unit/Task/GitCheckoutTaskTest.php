@@ -52,6 +52,45 @@ class GitCheckoutTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('git clean -q -d -x -ff');
     }
 
+
+    /**
+     * @test
+     */
+    public function executeWithTagOptionAndValidSha1FetchesResetsAndCopiesRepository(): void
+    {
+        $options = [
+            'repositoryUrl' => 'ssh://git.example.com/project/path.git',
+            'tag' => 'myTag'
+        ];
+        $this->responses = [
+            'git ls-remote --sort=version:refname ssh://git.example.com/project/path.git \'refs/tags/myTag\' | awk \'{print $1 }\' | tail --lines=1' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('git fetch -q origin');
+        $this->assertCommandExecuted('git reset -q --hard d5b7769852a5faa69574fcd3db0799f4ffbd9eec');
+        $this->assertCommandExecuted('cp -RPp /home/jdoe/app/cache/transfer/. /home/jdoe/app/releases/');
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithTagWildcardOptionAndValidSha1FetchesResetsAndCopiesRepository(): void
+    {
+        $options = [
+            'repositoryUrl' => 'ssh://git.example.com/project/path.git',
+            'tag' => 'staging-*'
+        ];
+        $this->responses = [
+            'git ls-remote --sort=version:refname ssh://git.example.com/project/path.git \'refs/tags/staging-*\' | awk \'{print $1 }\' | tail --lines=1' => 'd5b7769852a5faa69574fcd3db0799f4ffbd9eec'
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('git fetch -q origin');
+        $this->assertCommandExecuted('git reset -q --hard d5b7769852a5faa69574fcd3db0799f4ffbd9eec');
+        $this->assertCommandExecuted('cp -RPp /home/jdoe/app/cache/transfer/. /home/jdoe/app/releases/');
+    }
+
     /**
      * @test
      */
