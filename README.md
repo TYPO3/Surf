@@ -20,7 +20,7 @@ Some of the features of the Surf package:
 
 ## Documentation
 
-For further information please read the documentation https://docs.typo3.org/surf/
+For further information please read the documentation https://docs.typo3.org/other/typo3/surf/master/en-us/.
 
 ### Contributing to the documentation
 
