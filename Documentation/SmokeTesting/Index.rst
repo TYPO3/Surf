@@ -74,7 +74,7 @@ AdditionalConfiguration.php::
 
 .htaccess::
 
-	# Add Rewrite rule near https://github.com/TYPO3/TYPO3.CMS/blob/master/typo3/sysext/install/Resources/Private/FolderStructureTemplateFiles/root-htaccess#L270
+	# Add Rewrite rule near https://github.com/typo3/typo3/blob/master/typo3/sysext/install/Resources/Private/FolderStructureTemplateFiles/root-htaccess#L270
 	RewriteCond %{HTTP_HOST} ^next\.example\.com$
 	RewriteRule .? - [E=TYPO3_CONTEXT:Testing]
 
