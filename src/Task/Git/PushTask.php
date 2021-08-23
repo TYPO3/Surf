@@ -28,7 +28,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
  * Example:
  *  $workflow
  *      ->setTaskOptions('TYPO3\Surf\Task\Git\PushTask', [
- *              'remote' => 'git@github.com:TYPO3/Surf.git',
+ *              'remote' => 'git://github.com/TYPO3/Surf.git',
  *              'refspec' => 'master',
  *              'recurseIntoSubmodules' => true
  *          ]

@@ -27,7 +27,7 @@ with name **MyDeployment**::
    $application = new \TYPO3\Surf\Application\Neos\Flow();
    $application->setVersion('4.0');
    $application->setDeploymentPath('/home/my-flow-app/app');
-   $application->setOption('repositoryUrl', 'git@github.com:myuser/my-flow-app.git');
+   $application->setOption('repositoryUrl', 'git://github.com/myuser/my-flow-app.git');
    $application->addNode($node);
 
    $deployment->addApplication($application);

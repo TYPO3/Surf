@@ -32,7 +32,7 @@ use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
  * Example:
  *  $workflow
  *      ->setTaskOptions('TYPO3\Surf\Task\Package\GitTask', [
- *                  'repositoryUrl' => 'git@github.com:TYPO3/Surf.git',
+ *                  'repositoryUrl' => 'git://github.com/TYPO3/Surf.git',
  *                  'verbose' => true,
  *                  'recursiveSubmodules' => true,
  *                  'fetchAllTags' => true,

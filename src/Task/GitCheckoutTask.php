@@ -24,7 +24,7 @@ use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
  * * hardClean (optional) - If true, the task performs a hard clean. Default is true.
  *
  * Example:
- *  $application->setOption('repositoryUrl', 'git@github.com:TYPO3/Surf.git');
+ *  $application->setOption('repositoryUrl', 'git://github.com/TYPO3/Surf.git');
  */
 class GitCheckoutTask extends AbstractCheckoutTask
 {
