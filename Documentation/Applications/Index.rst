@@ -23,8 +23,93 @@ By default (as long as the application inherits from **\\TYPO3\\Surf\\Applicatio
 
 .. note:: Using rsync can speed up your deployment and doesn't require composer and git on the production server.
 
+
+Application options
+-------------------
+
+This is a (so far) incomplete list of options for :php:`\TYPO3\Surf\Application\BaseApplication`.
+
+Help documenting them all! Click the button "Edit on Github".
+
+.. contents::
+   :local:
+   :depth: 2
+
+Git-related
+~~~~~~~~~~~
+
+
+repositoryUrl
+"""""""""""""
+
+.. rst-class:: dl-parameters
+
+repositoryUrl
+   :sep:`|` :aspect:`Data type:` string
+   :sep:`|`
+
+   Git will clone from this URL, usually in the `package` stage.
+
+   Any URL understood by Git can be used (http, ssh, file).
+
+   **Example:** ::
+
+      $application
+        ->setOption('repositoryUrl', 'file://' . dirname(realpath(__DIR__ . '/../..')))
+        // ...
+
+
+branch
+""""""
+
+.. rst-class:: dl-parameters
+
+branch
+   :sep:`|` :aspect:`Data type:` string
+   :sep:`|`
+
+   A branch name.
+
+   **Example:** ::
+
+      $releaseChannel = 'live';
+
+      $application
+        ->setOption('branch', 'release/' . $releaseChannel)))
+        // ...
+
+
+
+tag
+"""
+
+.. rst-class:: dl-parameters
+
+tag
+   :sep:`|` :aspect:`Data type:` string
+   :sep:`|`
+
+   A tag name or tag glob pattern that is understood by `git ls-remote <https://git-scm.com/docs/git-ls-remote.html>`__.
+
+   Surf uses git (:shell:`ls-remote --sort=version`) to sort the results *versiony* and return the highest matching tag.
+
+   **Example:** ::
+
+      $releaseChannel = 'live';
+
+      $application
+        // this would checkout the commit with highest tag matching "live-*",
+        // for example live-1.2.3
+        ->setOption('tag', $releaseChannel . '-*')))
+        // ...
+
+
+Special Use Cases
+-----------------
+
+
 Applying Cherry-Picks to Git Repositories: Post-Checkout commands
------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you want to execute some commands directly after checkout, such as cherry-picking not-yet-committed bugfixes, you can set the gitPostCheckoutCommands option on the application, being a two-dimensional array.
 
