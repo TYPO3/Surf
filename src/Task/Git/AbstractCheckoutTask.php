@@ -51,7 +51,14 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
                 throw new TaskExecutionException('The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
             }
         } elseif (isset($options['tag'])) {
-            $sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/tags/{$options['tag']} | awk '{print $1 }'", $node, $deployment, true);
+            $sha1 = $this->shell->execute(
+                "git ls-remote --sort=version:refname {$options['repositoryUrl']} 'refs/tags/{$options['tag']}' "
+                    . "| awk '{print $1 }' "
+                    . "| tail --lines=1",
+                $node,
+                $deployment,
+                true
+            );
             if (preg_match('/[a-f0-9]{40}/', $sha1) === 0) {
                 throw new TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
             }

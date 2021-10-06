@@ -2,7 +2,9 @@
    every ReST source file in THIS documentation project (= manual).
 
 .. role:: aspect (emphasis)
+.. role:: sep (strong)
 .. role:: html(code)
+.. role:: shell(code)
 .. role:: js(code)
 .. role:: php(code)
 
