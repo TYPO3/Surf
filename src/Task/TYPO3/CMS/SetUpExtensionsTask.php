@@ -50,7 +50,10 @@ class SetUpExtensionsTask extends AbstractCliTask
             $commandArguments[] = 'extension:setupactive';
         } else {
             $commandArguments[] = 'extension:setup';
-            $commandArguments[] = implode(',', $options['extensionKeys']);
+            foreach ($options['extensionKeys'] as $extensionKey) {
+                $commandArguments[] = '-e';
+                $commandArguments[] = $extensionKey;
+            }
         }
 
         $this->executeCliCommand(
