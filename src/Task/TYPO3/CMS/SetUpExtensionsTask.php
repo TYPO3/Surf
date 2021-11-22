@@ -17,14 +17,21 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 use Webmozart\Assert\Assert;
 
 /**
- * This task sets up extensions using typo3_console.
+ * This task sets up extensions using the TYPO3 Console (typo3_console).
  * Set up means: database migration, files, database data.
  *
  * @param array $extensionKeys=array() Extension keys for extensions that should be set up. If empty, all active non core extensions will be set up.
  */
 class SetUpExtensionsTask extends AbstractCliTask
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    /**
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
+     * @param array $options
+     * @return void
+     */
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, CMS::class);
 
@@ -32,7 +39,10 @@ class SetUpExtensionsTask extends AbstractCliTask
             $scriptFileName = $this->getConsoleScriptFileName($node, $application, $deployment, $options);
             $consoleVersion = $this->getConsoleVersion($scriptFileName, $node, $application, $deployment, $options);
         } catch (InvalidConfigurationException $e) {
-            $deployment->getLogger()->warning('TYPO3 Console script (' . $options['scriptFileName'] . ') was not found! Make sure it is available in your project, you set the "scriptFileName" option correctly or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            $deployment->getLogger()->warning('TYPO3 Console script (' . $options['scriptFileName'] .
+                ') was not found! Make sure it is available in your project, you set the "scriptFileName" option correctly or remove this task (' .
+                __CLASS__ . ') in your deployment configuration!'
+            );
             return;
         }
 
@@ -72,7 +82,11 @@ class SetUpExtensionsTask extends AbstractCliTask
         );
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    /**
+     * @parameter OptionsResolver $resolver
+     * @return void
+     */
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('extensionKeys', []);
         $resolver->setAllowedTypes('extensionKeys', 'array');
@@ -82,17 +96,17 @@ class SetUpExtensionsTask extends AbstractCliTask
      * Get TYPO3 Console version string, e.g. "7.0.0"
      *
      * @param string $scriptFileName
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param CMS|\TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
+     * @param Node $node
+     * @param Application $application
+     * @param Deployment $deployment
      * @param array $options
      * @return string Returns empty string ("") if version could not be determined
      */
     protected function getConsoleVersion(
         string $scriptFileName,
-        \TYPO3\Surf\Domain\Model\Node $node,
-        \TYPO3\Surf\Domain\Model\Application $application,
-        \TYPO3\Surf\Domain\Model\Deployment $deployment,
+        Node $node,
+        Application $application,
+        Deployment $deployment,
         array $options
     ): string {
         $consoleVersionCommandOutput = $this->executeCliCommand(
