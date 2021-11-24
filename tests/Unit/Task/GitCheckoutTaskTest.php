@@ -8,6 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\TaskExecutionException;
 use TYPO3\Surf\Task\GitCheckoutTask;
 
@@ -49,7 +50,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithTagOptionAndValidSha1FetchesResetsAndCopiesRepository(): void
+    public function executeWithTagOptionAndValidSha1FetchesResetsAndCopiesRepository()
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
@@ -68,7 +69,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithTagWildcardOptionAndValidSha1FetchesResetsAndCopiesRepository(): void
+    public function executeWithTagWildcardOptionAndValidSha1FetchesResetsAndCopiesRepository()
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
@@ -155,7 +156,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
 
     /**
      * @test
-     * @expectedException \TYPO3\Surf\Exception\TaskExecutionException
+     * @expectedException TaskExecutionException
      */
     public function executeWithEmptyOptionsAndInvalidSha1ThrowsException()
     {
@@ -175,7 +176,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return \TYPO3\Surf\Domain\Model\Task
+     * @return Task
      */
     protected function createTask()
     {
