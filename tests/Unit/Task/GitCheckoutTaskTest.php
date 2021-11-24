@@ -46,7 +46,6 @@ class GitCheckoutTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('git clean -q -d -x -ff');
     }
 
-
     /**
      * @test
      */
@@ -140,7 +139,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithFetachAllTagsOptionExecutesFetchTags()
+    public function executeWithFetchAllTagsOptionExecutesFetchTags()
     {
         $options = [
             'repositoryUrl' => 'ssh://git.example.com/project/path.git',
@@ -156,7 +155,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
 
     /**
      * @test
-     * @expectedException TaskExecutionException
+     * @expectedException \TYPO3\Surf\Exception\TaskExecutionException
      */
     public function executeWithEmptyOptionsAndInvalidSha1ThrowsException()
     {
