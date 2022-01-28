@@ -53,6 +53,9 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
         ];
 
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
+            // creates empty directory if path does not exist
+            $commands[] = sprintf('mkdir -p %s', $sourcePath);
+
             $commands[] = sprintf('ln -s %s %s', $sourcePath, $linkPath);
         }
 
