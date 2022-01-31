@@ -37,7 +37,7 @@ class ShellCommandServiceTest extends TestCase
         $port = null,
         $privateKey = null
     ) {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $service */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $service */
         $service = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
@@ -60,7 +60,7 @@ class ShellCommandServiceTest extends TestCase
 
         $deployment = new Deployment('TestDeployment');
 
-        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
@@ -135,7 +135,7 @@ class ShellCommandServiceTest extends TestCase
 
         $deployment = new Deployment('TestDeployment');
 
-        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
@@ -156,7 +156,7 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeOnRemoteNodeJoinsCommandsWithAndOperator(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
@@ -164,7 +164,7 @@ class ShellCommandServiceTest extends TestCase
 
         $deployment = new Deployment('TestDeployment');
 
-        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
@@ -187,7 +187,7 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeOnLocalNodeJoinsCommandsWithAndOperator(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
@@ -195,7 +195,7 @@ class ShellCommandServiceTest extends TestCase
 
         $deployment = new Deployment('TestDeployment');
 
-        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
@@ -220,7 +220,7 @@ class ShellCommandServiceTest extends TestCase
     {
         $shellCommandService = new ShellCommandService();
         $deployment = new Deployment('TestDeployment');
-        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $mockLogger */
+        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 

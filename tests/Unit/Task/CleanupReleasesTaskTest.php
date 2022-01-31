@@ -25,7 +25,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     use KernelAwareTrait;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService
+     * @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService
      */
     private $shellCommandService;
 
@@ -35,7 +35,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     private $folderStructure;
 
     /**
-     * @var ClockInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ClockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clockMock;
 
@@ -53,7 +53,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
@@ -81,7 +81,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     public function doNothingJustLogDebugIfOptionKeepReleasesIsNotDefined(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $logger */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface $logger */
         $logger = $this->deployment->getLogger();
         $logger->expects(self::once())->method('debug');
 

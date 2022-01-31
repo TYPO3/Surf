@@ -21,12 +21,12 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
 {
     /**
-     * @var FilesystemInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var FilesystemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|RandomBytesGeneratorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|RandomBytesGeneratorInterface
      */
     private $randomBytesGenerator;
 

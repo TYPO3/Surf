@@ -78,7 +78,7 @@ abstract class BaseTaskTest extends TestCase
         $this->responses = [];
         $responses = &$this->responses;
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createMock(ShellCommandService::class);
         $shellCommandService
             ->expects(self::any())
