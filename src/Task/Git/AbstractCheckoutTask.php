@@ -39,7 +39,7 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
             $sha1 = $this->shell->execute(
                 "git ls-remote --sort=version:refname {$options['repositoryUrl']} 'refs/tags/{$options['tag']}' "
                     . "| awk '{print $1 }' "
-                    . "| tail --lines=1",
+                    . '| tail --lines=1',
                 $node,
                 $deployment,
                 true

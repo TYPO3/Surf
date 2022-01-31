@@ -52,7 +52,6 @@ class GitCheckoutTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('git clean -q -d -x -ff');
     }
 
-
     /**
      * @test
      */
