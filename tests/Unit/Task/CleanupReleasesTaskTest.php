@@ -10,6 +10,8 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  */
 
 use PHPUnit_Framework_MockObject_MockObject;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Clock\ClockInterface;
 use TYPO3\Surf\Domain\Model\Application;
@@ -35,7 +37,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     private $folderStructure;
 
     /**
-     * @var ClockInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ClockInterface|ObjectProphecy
      */
     private $clockMock;
 
@@ -127,18 +129,18 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $stringToTime,
         array $expectedFoldersToBeRemoved
     ): void {
-        $this->clockMock->method('currentTime')->willReturn($currentTime);
+        $this->clockMock->currentTime()->willReturn($currentTime);
 
         $folderStructure['.'] = '.';
-        $timestampMap = [];
         foreach ($identifiers as $time) {
             $timestampForCurrentFolder = strtotime($time, $currentTime);
-            $timestampMap[] = $timestampForCurrentFolder;
-            $folderStructure[strftime('%Y%m%d%H%M%S', $timestampForCurrentFolder)] = ['index.php'];
+            $folderName = strftime('%Y%m%d%H%M%S', $timestampForCurrentFolder);
+            $this->clockMock->createTimestampFromFormat('YmdHis', $folderName)->willReturn($timestampForCurrentFolder);
+            $folderStructure[$folderName] = ['index.php'];
         }
 
-        $this->clockMock->method('createTimestampFromFormat')->will(self::onConsecutiveCalls(...$timestampMap));
-        $this->clockMock->method('stringToTime')->willReturn(strtotime($stringToTime, $currentTime));
+
+        $this->clockMock->stringToTime(Argument::type('string'))->willReturn(strtotime($stringToTime, $currentTime));
 
         $folders = array_keys($folderStructure);
 
@@ -209,8 +211,8 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        $this->clockMock = $this->getMockBuilder(ClockInterface::class)->getMock();
+        $this->clockMock = $this->prophesize(ClockInterface::class);
 
-        return new CleanupReleasesTask($this->clockMock);
+        return new CleanupReleasesTask($this->clockMock->reveal());
     }
 }
