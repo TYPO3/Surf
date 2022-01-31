@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
-use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
@@ -43,6 +42,8 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->shellCommandService = $this->createMock(ShellCommandService::class);
         $this->task = $this->createTask();
         if ($this->task instanceof ShellCommandServiceAwareInterface) {
@@ -138,7 +139,6 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             $this->clockMock->createTimestampFromFormat('YmdHis', $folderName)->willReturn($timestampForCurrentFolder);
             $folderStructure[$folderName] = ['index.php'];
         }
-
 
         $this->clockMock->stringToTime(Argument::type('string'))->willReturn(strtotime($stringToTime, $currentTime));
 

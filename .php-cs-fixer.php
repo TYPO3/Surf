@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+use PhpCsFixer\Config;
+
 if (PHP_SAPI !== 'cli') {
     die('This script supports command line usage only. Please check your command.');
 }
@@ -30,7 +32,7 @@ $finder = PhpCsFixer\Finder::create()
 //  - Remove unused use statements in the PHP source code
 //  - Ensure Concatenation to have at least one whitespace around
 //  - Remove trailing whitespace at the end of blank lines.
-return PhpCsFixer\Config::create()
+return (new Config())
                         ->setUsingCache(true)
                         ->setRiskyAllowed(true)
                         ->setRules(array(
@@ -44,14 +46,14 @@ return PhpCsFixer\Config::create()
                             'ordered_imports' => true,
                             'single_quote' => true,
                             'no_empty_statement' => true,
-                            'no_extra_consecutive_blank_lines' => true,
+                            'no_extra_blank_lines' => true,
                             'phpdoc_no_package' => true,
                             'phpdoc_scalar' => true,
                             'no_blank_lines_after_phpdoc' => true,
                             'array_syntax' => ['syntax' => 'short'],
                             'whitespace_after_comma_in_array' => true,
                             'function_typehint_space' => true,
-                            'hash_to_slash_comment' => true,
+                            'single_line_comment_style' => true,
                             'no_alias_functions' => true,
                             'lowercase_cast' => true,
                             'no_leading_namespace_whitespace' => true,

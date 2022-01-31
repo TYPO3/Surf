@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task\Php;
  * file that was distributed with this source code.
  */
 
-use PHPUnit_Framework_MockObject_MockObject;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Generator\RandomBytesGeneratorInterface;

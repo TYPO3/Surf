@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  */
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
