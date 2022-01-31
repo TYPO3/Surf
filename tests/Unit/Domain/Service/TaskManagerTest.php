@@ -46,7 +46,7 @@ class TaskManagerTest extends TestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->node = new Node('Test node');
         $this->application = new Application('Test application');

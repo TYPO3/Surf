@@ -120,7 +120,7 @@ class DescribeCommandTest extends TestCase
             'deploymentName' => $this->deployment->getName(),
         ]);
 
-        self::assertEquals('<success>Deployment TestDeployment</success>
+        self::assertSame('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -205,7 +205,7 @@ Applications:
             'public/typo3conf/LocalConfiguration.php',
             '../../../../shared/Configuration/LocalConfiguration.php'
         );
-        self::assertEquals('<success>Deployment TestDeployment</success>
+        self::assertSame('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -285,7 +285,7 @@ Applications:
      */
     public function describeNeosNeos(): void
     {
-        self::assertEquals('<success>Deployment TestDeployment</success>
+        self::assertSame('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -362,7 +362,7 @@ Applications:
         $application = new Neos();
         $application->setOption('enableCacheWarmupBeforeSwitchingToNewRelease', true);
 
-        self::assertEquals('<success>Deployment TestDeployment</success>
+        self::assertSame('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -440,7 +440,7 @@ Applications:
         $application = new Neos();
         $application->setOption('enableCacheWarmupAfterSwitchingToNewRelease', true);
 
-        self::assertEquals('<success>Deployment TestDeployment</success>
+        self::assertSame('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -515,7 +515,7 @@ Applications:
      */
     public function describeBaseApplication(): void
     {
-        self::assertEquals('<success>Deployment TestDeployment</success>
+        self::assertSame('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -578,7 +578,7 @@ Applications:
      */
     public function describeBaseApplicationWithoutLock(): void
     {
-        self::assertEquals('<success>Deployment TestDeployment</success>
+        self::assertSame('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true
@@ -639,7 +639,7 @@ Applications:
     public function describeBaseApplicationWithForceParameter(): void
     {
         $this->deployment->setForceRun(true);
-        self::assertEquals('<success>Deployment TestDeployment</success>
+        self::assertSame('<success>Deployment TestDeployment</success>
 
 Workflow: <success>Simple workflow</success>
     Rollback enabled: true

@@ -50,22 +50,3 @@ jobs:
         if: matrix.dependencies == 'latest'
 
       - run: vendor/bin/phpunit
-
-  rector_checkstyle:
-    name: Rector Checkstyle
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-          coverage: none
-          tools: cs2pr
-
-      - name: Install Composer dependencies
-        run: composer install --ansi --no-interaction --no-progress
-
-      - name: Run rector
-        run: vendor/bin/rector process --ansi --dry-run --output-format=checkstyle | cs2pr

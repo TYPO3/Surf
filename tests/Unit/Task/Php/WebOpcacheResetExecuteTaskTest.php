@@ -18,7 +18,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
 {
     /**
-     * @var FilesystemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilesystemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 

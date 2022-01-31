@@ -57,7 +57,7 @@ class SystemClockTest extends TestCase
      */
     public function successFullyCreateTimestampFromFormat($format, $time, $expected): void
     {
-        self::assertEquals($expected, $this->subject->createTimestampFromFormat($format, $time));
+        self::assertSame($expected, $this->subject->createTimestampFromFormat($format, $time));
     }
 
     /**

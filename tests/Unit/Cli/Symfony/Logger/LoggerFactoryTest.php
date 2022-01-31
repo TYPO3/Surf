@@ -21,7 +21,7 @@ class LoggerFactoryTest extends TestCase
      */
     public function createLogger(): void
     {
-        /* @var ConsoleHandler|\Prophecy\Prophecy\ObjectProphecy $output */
+        // @var ConsoleHandler|\Prophecy\Prophecy\ObjectProphecy $output
         $consoleHandler = $this->prophesize(ConsoleHandler::class);
 
         $loggerFactory = new LoggerFactory($consoleHandler->reveal());

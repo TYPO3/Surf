@@ -9,7 +9,8 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
-use PHPUnit_Framework_MockObject_MockObject;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Clock\ClockInterface;
 use TYPO3\Surf\Domain\Model\Application;
@@ -25,7 +26,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     use KernelAwareTrait;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService
+     * @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService
      */
     private $shellCommandService;
 
@@ -35,12 +36,14 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     private $folderStructure;
 
     /**
-     * @var ClockInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ClockInterface|ObjectProphecy
      */
     private $clockMock;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->shellCommandService = $this->createMock(ShellCommandService::class);
         $this->task = $this->createTask();
         if ($this->task instanceof ShellCommandServiceAwareInterface) {
@@ -53,7 +56,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $mockLogger */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
@@ -81,7 +84,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     public function doNothingJustLogDebugIfOptionKeepReleasesIsNotDefined(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface $logger */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface $logger */
         $logger = $this->deployment->getLogger();
         $logger->expects(self::once())->method('debug');
 
@@ -127,18 +130,17 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $stringToTime,
         array $expectedFoldersToBeRemoved
     ): void {
-        $this->clockMock->method('currentTime')->willReturn($currentTime);
+        $this->clockMock->currentTime()->willReturn($currentTime);
 
         $folderStructure['.'] = '.';
-        $timestampMap = [];
         foreach ($identifiers as $time) {
             $timestampForCurrentFolder = strtotime($time, $currentTime);
-            $timestampMap[] = $timestampForCurrentFolder;
-            $folderStructure[strftime('%Y%m%d%H%M%S', $timestampForCurrentFolder)] = ['index.php'];
+            $folderName = strftime('%Y%m%d%H%M%S', $timestampForCurrentFolder);
+            $this->clockMock->createTimestampFromFormat('YmdHis', $folderName)->willReturn($timestampForCurrentFolder);
+            $folderStructure[$folderName] = ['index.php'];
         }
 
-        $this->clockMock->method('createTimestampFromFormat')->will(self::onConsecutiveCalls(...$timestampMap));
-        $this->clockMock->method('stringToTime')->willReturn(strtotime($stringToTime, $currentTime));
+        $this->clockMock->stringToTime(Argument::type('string'))->willReturn(strtotime($stringToTime, $currentTime));
 
         $folders = array_keys($folderStructure);
 
@@ -209,8 +211,8 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     protected function createTask()
     {
-        $this->clockMock = $this->getMockBuilder(ClockInterface::class)->getMock();
+        $this->clockMock = $this->prophesize(ClockInterface::class);
 
-        return new CleanupReleasesTask($this->clockMock);
+        return new CleanupReleasesTask($this->clockMock->reveal());
     }
 }

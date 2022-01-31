@@ -40,7 +40,7 @@ final class DeployCommandTest extends TestCase
      */
     public function executeForceRun(): void
     {
-        /* @var Deployment|\Prophecy\Prophecy\ObjectProphecy $deployment */
+        // @var Deployment|\Prophecy\Prophecy\ObjectProphecy $deployment
         $deployment = $this->prophesize(Deployment::class);
         $deployment->deploy()->shouldBeCalledOnce();
         $deployment->getStatus()->willReturn(Deployment::STATUS_SUCCESS);

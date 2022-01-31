@@ -26,7 +26,7 @@ class ApplicationTest extends TestCase
     {
         $application = new Application('TestApplication');
 
-        self::assertEquals('shared', $application->getSharedDirectory());
+        self::assertSame('shared', $application->getSharedDirectory());
     }
 
     /**
@@ -40,7 +40,7 @@ class ApplicationTest extends TestCase
         $application = new Application('TestApplication');
         $application->setOption('sharedDirectory', 'sharedAssets');
 
-        self::assertEquals('sharedAssets', $application->getSharedDirectory());
+        self::assertSame('sharedAssets', $application->getSharedDirectory());
     }
 
     /**

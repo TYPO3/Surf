@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  */
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
@@ -78,7 +77,7 @@ abstract class BaseTaskTest extends TestCase
         $this->responses = [];
         $responses = &$this->responses;
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|ShellCommandService $shellCommandService */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createMock(ShellCommandService::class);
         $shellCommandService
             ->expects(self::any())

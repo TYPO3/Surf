@@ -49,7 +49,7 @@ class SimpleWorkflowTest extends TestCase
         try {
             $workflow->run($deployment);
         } catch (SurfException $exception) {
-            self::assertEquals(1334652420, $exception->getCode());
+            self::assertSame(1334652420, $exception->getCode());
             throw $exception;
         }
     }
@@ -70,7 +70,7 @@ class SimpleWorkflowTest extends TestCase
         try {
             $workflow->run($deployment);
         } catch (SurfException $exception) {
-            self::assertEquals(1334652427, $exception->getCode());
+            self::assertSame(1334652427, $exception->getCode());
             throw $exception;
         }
     }

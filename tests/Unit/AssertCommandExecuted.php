@@ -30,7 +30,6 @@ class AssertCommandExecuted extends Constraint
             throw new InvalidArgumentException('Expected command should be a string, ' . gettype($expectedCommand) . ' given');
         }
         $this->expectedCommand = $expectedCommand;
-        parent::__construct();
     }
 
     /**
