@@ -1,7 +1,3 @@
-includes:
-    - vendor/phpstan/phpstan-webmozart-assert/extension.neon
-    - vendor/jangregor/phpstan-prophecy/src/extension.neon
-
 parameters:
   level: 2
   paths:
