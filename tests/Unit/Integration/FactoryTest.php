@@ -71,7 +71,7 @@ class FactoryTest extends TestCase
         $this->filesystem->isDirectory($expectedDeploymentPath)->willReturn(true);
         $this->filesystem->fileExists($expectedDeploymentPath)->willReturn(true);
 
-        self::assertEquals($expectedDeploymentPath, $this->subject->getDeploymentsBasePath());
+        self::assertSame($expectedDeploymentPath, $this->subject->getDeploymentsBasePath());
     }
 
     /**
@@ -101,7 +101,7 @@ class FactoryTest extends TestCase
         $this->filesystem->getRealPath('./.surf')->willReturn($expectedDeploymentPath);
         $this->filesystem->fileExists($expectedDeploymentPath)->willReturn(true);
 
-        self::assertEquals($expectedDeploymentPath, $this->subject->getDeploymentsBasePath($expectedDeploymentPath));
+        self::assertSame($expectedDeploymentPath, $this->subject->getDeploymentsBasePath($expectedDeploymentPath));
     }
 
     /**
@@ -116,7 +116,7 @@ class FactoryTest extends TestCase
         $this->filesystem->fileExists('foo')->willReturn(true);
         $this->filesystem->fileExists('foo/deployments')->willReturn(true);
 
-        self::assertEquals('foo/deployments', $this->subject->getDeploymentsBasePath());
+        self::assertSame('foo/deployments', $this->subject->getDeploymentsBasePath());
     }
 
     /**
@@ -131,7 +131,7 @@ class FactoryTest extends TestCase
         $this->filesystem->fileExists('foo/.surf')->willReturn(true);
         $this->filesystem->fileExists('foo/.surf/deployments')->willReturn(true);
 
-        self::assertEquals('foo/.surf/deployments', $this->subject->getDeploymentsBasePath());
+        self::assertSame('foo/.surf/deployments', $this->subject->getDeploymentsBasePath());
     }
 
     /**
@@ -177,7 +177,7 @@ class FactoryTest extends TestCase
         $this->filesystem->fileExists('foo/Surf')->willReturn(true);
         $this->filesystem->fileExists('foo/Surf/deployments')->willReturn(true);
 
-        self::assertEquals('foo/Surf/deployments', $this->subject->getDeploymentsBasePath());
+        self::assertSame('foo/Surf/deployments', $this->subject->getDeploymentsBasePath());
     }
 
     /**
@@ -210,7 +210,7 @@ class FactoryTest extends TestCase
 
         $this->filesystem->fileExists('.surf')->willReturn(true);
 
-        self::assertEquals('.surf', $this->subject->getWorkspacesBasePath());
+        self::assertSame('.surf', $this->subject->getWorkspacesBasePath());
     }
 
     /**
@@ -220,7 +220,7 @@ class FactoryTest extends TestCase
     {
         $this->filesystem->fileExists('/var/www/html/workspace')->willReturn(true);
 
-        self::assertEquals('/var/www/html/workspace', $this->subject->getWorkspacesBasePath('/var/www/html/'));
+        self::assertSame('/var/www/html/workspace', $this->subject->getWorkspacesBasePath('/var/www/html/'));
     }
 
     /**
@@ -232,7 +232,7 @@ class FactoryTest extends TestCase
 
         $this->filesystem->fileExists('/var/www/html/workspace')->willReturn(true);
 
-        self::assertEquals('/var/www/html/workspace', $this->subject->getWorkspacesBasePath('/var/www/html/'));
+        self::assertSame('/var/www/html/workspace', $this->subject->getWorkspacesBasePath('/var/www/html/'));
     }
 
     /**
@@ -245,7 +245,7 @@ class FactoryTest extends TestCase
 
         $this->filesystem->fileExists('/var/www/html/Surf')->willReturn(true);
 
-        self::assertEquals('/var/www/html/Surf', $this->subject->getWorkspacesBasePath('/var/www/html/'));
+        self::assertSame('/var/www/html/Surf', $this->subject->getWorkspacesBasePath('/var/www/html/'));
     }
 
     /**

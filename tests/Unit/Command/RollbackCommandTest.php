@@ -33,6 +33,6 @@ class RollbackCommandTest extends TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute(['deploymentName' => 'foo', '--configurationPath' => '.surf', '--simulate' => false]);
 
-        self::assertEquals('', $commandTester->getDisplay());
+        self::assertSame('', $commandTester->getDisplay());
     }
 }

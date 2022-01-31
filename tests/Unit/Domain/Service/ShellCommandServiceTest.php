@@ -141,7 +141,7 @@ class ShellCommandServiceTest extends TestCase
 
         $response = $shellCommandService->execute('foo command', $node, $deployment);
 
-        self::assertEquals('Hello World', $response);
+        self::assertSame('Hello World', $response);
         self::assertSame([
             $shellCommandService,
             'foo command',
@@ -179,7 +179,7 @@ class ShellCommandServiceTest extends TestCase
 
         $response = $shellCommandService->execute(['bin/false', 'ls -al'], $node, $deployment);
 
-        self::assertEquals('Foo', $response);
+        self::assertSame('Foo', $response);
     }
 
     /**
@@ -210,7 +210,7 @@ class ShellCommandServiceTest extends TestCase
 
         $response = $shellCommandService->execute(['bin/false', 'ls -al'], $node, $deployment);
 
-        self::assertEquals('Foo', $response);
+        self::assertSame('Foo', $response);
     }
 
     /**

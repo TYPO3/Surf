@@ -176,7 +176,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
         try {
             $this->task->execute($this->node, $this->application, $this->deployment, $options);
         } catch (TaskExecutionException $exception) {
-            self::assertEquals(1335974926, $exception->getCode());
+            self::assertSame(1335974926, $exception->getCode());
             throw $exception;
         }
     }

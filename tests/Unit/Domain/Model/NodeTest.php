@@ -33,7 +33,7 @@ class NodeTest extends TestCase
         $node = new Node('Node');
         $node->setPort(222);
 
-        self::assertEquals(222, $node->getPort());
+        self::assertSame(222, $node->getPort());
     }
 
     /**
@@ -44,6 +44,6 @@ class NodeTest extends TestCase
         $node = new Node('Node');
         $node->setUsername('username');
 
-        self::assertEquals('username', $node->getUsername());
+        self::assertSame('username', $node->getUsername());
     }
 }

@@ -35,7 +35,7 @@ class FlowTest extends TestCase
     public function getCommandPackageKey(string $version, string $expectedCommandPackageKey): void
     {
         $this->subject->setVersion($version);
-        self::assertEquals($expectedCommandPackageKey, $this->subject->getCommandPackageKey());
+        self::assertSame($expectedCommandPackageKey, $this->subject->getCommandPackageKey());
     }
 
     /**
@@ -45,7 +45,7 @@ class FlowTest extends TestCase
     public function getBuildEssentialsDirectoryName(string $version, string $expectedEssentialsDirectoryName): void
     {
         $this->subject->setVersion($version);
-        self::assertEquals($expectedEssentialsDirectoryName, $this->subject->getBuildEssentialsDirectoryName());
+        self::assertSame($expectedEssentialsDirectoryName, $this->subject->getBuildEssentialsDirectoryName());
     }
 
     /**
@@ -55,7 +55,7 @@ class FlowTest extends TestCase
     public function getFlowScriptName(string $version, string $expectedFlowScriptName): void
     {
         $this->subject->setVersion($version);
-        self::assertEquals($expectedFlowScriptName, $this->subject->getFlowScriptName());
+        self::assertSame($expectedFlowScriptName, $this->subject->getFlowScriptName());
     }
 
     /**

@@ -31,7 +31,7 @@ class ConsoleFormatterTest extends TestCase
      */
     public function format(array $record, string $expectedOutput): void
     {
-        self::assertEquals($expectedOutput, $this->subject->format($record));
+        self::assertSame($expectedOutput, $this->subject->format($record));
     }
 
     public function records(): array

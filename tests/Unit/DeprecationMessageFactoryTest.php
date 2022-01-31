@@ -25,7 +25,7 @@ class DeprecationMessageFactoryTest extends TestCase
             '4.0.0'
         );
 
-        self::assertEquals(
+        self::assertSame(
             $expectedMessage,
             DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__, '4.0.0')
         );

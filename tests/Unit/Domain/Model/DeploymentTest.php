@@ -114,7 +114,7 @@ class DeploymentTest extends TestCase
         $deployment = new Deployment('Some name', $deploymentLockIdentifier);
         $deployment->setContainer(static::getKernel()->getContainer());
 
-        self::assertEquals($deployment->getReleaseIdentifier(), $deployment->getDeploymentLockIdentifier());
+        self::assertSame($deployment->getReleaseIdentifier(), $deployment->getDeploymentLockIdentifier());
     }
 
     /**
@@ -125,7 +125,7 @@ class DeploymentTest extends TestCase
         $deploymentLockIdentifier = 'Deployment lock identifier';
         $deployment = new Deployment('Some name', $deploymentLockIdentifier);
 
-        self::assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
+        self::assertSame($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
     }
 
     /**
@@ -138,7 +138,7 @@ class DeploymentTest extends TestCase
 
         $deployment = new Deployment('Some name');
 
-        self::assertEquals($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
+        self::assertSame($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
     }
 
     /**
@@ -153,7 +153,7 @@ class DeploymentTest extends TestCase
 
         $releaseIdentifier = $deployment->getReleaseIdentifier();
 
-        self::assertEquals(
+        self::assertSame(
             '/deployment/path/releases/' . $releaseIdentifier,
             $deployment->getApplicationReleasePath($application)
         );
@@ -172,7 +172,7 @@ class DeploymentTest extends TestCase
 
         $releaseIdentifier = $deployment->getReleaseIdentifier();
 
-        self::assertEquals(
+        self::assertSame(
             '/deployment/path/releases/' . $releaseIdentifier . '/htdocs',
             $deployment->getApplicationReleasePath($application)
         );
