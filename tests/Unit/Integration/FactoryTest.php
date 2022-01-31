@@ -50,7 +50,7 @@ class FactoryTest extends TestCase
      */
     private $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
 
