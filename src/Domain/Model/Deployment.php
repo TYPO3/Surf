@@ -57,13 +57,13 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     /**
      * The release identifier will be created on each deployment
-     * @var string
+     * @var string|null
      */
     protected $releaseIdentifier;
 
     /**
      * TRUE if the deployment should be simulated
-     * @var string
+     * @var bool
      */
     protected $dryRun = false;
 
