@@ -60,7 +60,7 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function createScriptInWebDirectory()
+    public function createScriptInWebDirectory(): void
     {
         $this->application->setOption('webDirectory', 'public');
         $randomBytes = random_bytes(32);

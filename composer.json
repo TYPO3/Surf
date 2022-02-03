@@ -60,6 +60,6 @@
         "bin/surf"
     ],
     "scripts": {
-        "phpstan": "vendor/bin/phpstan analyse --ansi"
+        "phpstan": "phpstan analyse --ansi"
     }
 }

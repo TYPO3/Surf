@@ -60,7 +60,7 @@ class SimpleWorkflow extends Workflow
      *
      * A rollback will be done for all nodes as long as the stage switch was not completed.
      */
-    public function run(Deployment $deployment)
+    public function run(Deployment $deployment): void
     {
         parent::run($deployment);
 

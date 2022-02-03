@@ -39,7 +39,7 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
         $command = $this->replacePaths($application, $deployment, $options['command']);
@@ -49,12 +49,12 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -66,7 +66,7 @@ class ShellTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->execute($command, $node, $deployment, true);
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['command']);
         $resolver->setDefault('rollbackCommand', null);

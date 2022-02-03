@@ -38,7 +38,7 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
         $replacePaths = [];
@@ -55,12 +55,12 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $replacePaths = [];
         $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
@@ -77,7 +77,7 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->execute($command, $localhost, $deployment, true);
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['command']);
         $resolver->setDefault('rollbackCommand', null);

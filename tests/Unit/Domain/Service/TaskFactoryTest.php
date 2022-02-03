@@ -18,7 +18,6 @@ use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Domain\Service\TaskFactory;
-use TYPO3\Surf\Exception as SurfException;
 use TYPO3\Surf\Task\CreateArchiveTask;
 use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
@@ -69,7 +68,7 @@ class TaskFactoryTest extends TestCase
         $task = new class {
         };
 
-        $this->expectException(SurfException::class);
+        $this->expectException(\UnexpectedValueException::class);
 
         $this->subject->createTaskInstance(get_class($task));
     }
@@ -79,7 +78,7 @@ class CustomTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
     }
 

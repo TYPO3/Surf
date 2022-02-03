@@ -19,7 +19,7 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $allReleases = \TYPO3\Surf\findAllReleases($deployment, $node, $application, $this->shell);
 
@@ -68,7 +68,7 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

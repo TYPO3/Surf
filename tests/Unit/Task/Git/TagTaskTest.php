@@ -27,7 +27,7 @@ class TagTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithRequiredOptionsAndPushTagCreatesAndPushesTag()
+    public function executeWithRequiredOptionsAndPushTagCreatesAndPushesTag(): void
     {
         $options = [
             'tagName' => 'release-{releaseIdentifier}',
@@ -43,7 +43,7 @@ class TagTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function executeWithRequiredOptionsAndRecurseIntoSubmodulesCreatesTagOnRootAndSubmodules()
+    public function executeWithRequiredOptionsAndRecurseIntoSubmodulesCreatesTagOnRootAndSubmodules(): void
     {
         $options = [
             'tagName' => 'release-{releaseIdentifier}',

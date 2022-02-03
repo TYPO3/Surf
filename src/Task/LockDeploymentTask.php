@@ -27,7 +27,7 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
 
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         if (! $deployment->isDryRun()) {
             // Create .surf directory if not exists
@@ -49,7 +49,7 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
         }
     }
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $unLockDeployment = new UnlockDeploymentTask();
         $unLockDeployment->setShellCommandService(new ShellCommandService());
@@ -59,7 +59,7 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

@@ -37,6 +37,6 @@ final class SystemClock implements ClockInterface
         if ($datetime === false) {
             throw ClockException::formatCouldNotBeConvertedToTimestamp($format, $time);
         }
-        return $datetime->format('U');
+        return $datetime->getTimestamp();
     }
 }

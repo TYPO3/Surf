@@ -31,7 +31,7 @@ use Webmozart\Assert\Assert;
  */
 class CompareDatabaseTask extends AbstractCliTask
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         /** @var CMS $application */
         Assert::isInstanceOf($application, CMS::class);
@@ -49,7 +49,7 @@ class CompareDatabaseTask extends AbstractCliTask
         );
     }
 
-    protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = [])
+    protected function getSuitableCliArguments(Node $node, CMS $application, Deployment $deployment, array $options = []): array
     {
         if ($this->getAvailableCliPackage($node, $application, $deployment, $options) === 'typo3_console') {
             $databaseCompareMode = $options['databaseCompareMode'] ?? '*.add,*.change';

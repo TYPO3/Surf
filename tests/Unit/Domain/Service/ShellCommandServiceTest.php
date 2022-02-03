@@ -36,7 +36,7 @@ class ShellCommandServiceTest extends TestCase
         $password = null,
         $port = null,
         $privateKey = null
-    ) {
+    ): void {
         /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $service */
         $service = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
@@ -216,7 +216,7 @@ class ShellCommandServiceTest extends TestCase
     /**
      * @test
      */
-    public function executeProcessProperlyLogsStandardAndErrorOutput()
+    public function executeProcessProperlyLogsStandardAndErrorOutput(): void
     {
         $shellCommandService = new ShellCommandService();
         $deployment = new Deployment('TestDeployment');

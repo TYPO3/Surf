@@ -35,7 +35,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $configurationFileExtension = isset($options['configurationFileExtension']) ? $options['configurationFileExtension'] : 'yaml';
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
@@ -85,7 +85,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

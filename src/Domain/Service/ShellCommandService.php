@@ -149,18 +149,19 @@ class ShellCommandService
      * Open a process with symfony/process and process each line by logging and
      * collecting its output.
      *
+     * @param Deployment $deployment
      * @param string $command
      * @param bool $logOutput
      * @param string $logPrefix
      * @return array The exit code of the command and the returned output
      */
-    public function executeProcess($deployment, $command, $logOutput, $logPrefix)
+    public function executeProcess($deployment, $command, $logOutput, $logPrefix): array
     {
         $process = Process::fromShellCommandline($command);
         $process->setTimeout(null);
         $callback = null;
         if ($logOutput) {
-            $callback = function ($type, $data) use ($deployment, $logPrefix) {
+            $callback = function ($type, $data) use ($deployment, $logPrefix): void {
                 if ($type === Process::OUT) {
                     $deployment->getLogger()->debug($logPrefix . trim($data));
                 } elseif ($type === Process::ERR) {
@@ -175,7 +176,7 @@ class ShellCommandService
     /**
      * Prepare a command
      *
-     * @param array|string $command
+     * @param array|string|null $command
      * @return string
      */
     protected function prepareCommand($command)

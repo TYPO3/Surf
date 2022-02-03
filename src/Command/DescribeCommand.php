@@ -48,7 +48,7 @@ class DescribeCommand extends Command
         $this->factory = $factory;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Describes the flow for the given name')
             ->addArgument(
@@ -93,7 +93,7 @@ class DescribeCommand extends Command
         return 0;
     }
 
-    protected function printNodes(array $nodes)
+    protected function printNodes(array $nodes): void
     {
         $this->output->writeln('Nodes:' . PHP_EOL);
         foreach ($nodes as $node) {
@@ -101,7 +101,7 @@ class DescribeCommand extends Command
         }
     }
 
-    protected function printApplications(array $applications, Workflow $workflow)
+    protected function printApplications(array $applications, Workflow $workflow): void
     {
         $this->output->writeln(PHP_EOL . 'Applications:' . PHP_EOL);
         foreach ($applications as $application) {
@@ -129,7 +129,7 @@ class DescribeCommand extends Command
         }
     }
 
-    protected function printStages(Application $application, array $stages, array $tasks)
+    protected function printStages(Application $application, array $stages, array $tasks): void
     {
         foreach ($stages as $stage) {
             $this->output->writeln('      <comment>' . $stage . ':</comment>');
@@ -163,7 +163,7 @@ class DescribeCommand extends Command
      * @param string $step
      * @param string $output
      */
-    private function printBeforeAfterTasks(array $tasks, $applicationName, $task, $step, &$output)
+    private function printBeforeAfterTasks(array $tasks, $applicationName, $task, $step, &$output): void
     {
         foreach (['_', $applicationName] as $name) {
             $label = $name === '_' ? 'for all applications' : 'for application ' . $name;

@@ -27,17 +27,20 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     /**
      * The working directory. Either local or remote, and probably in a special application root directory
      *
-     * @var string
+     * @var string|null
      */
     protected $workingDirectory;
 
     /**
      * Localhost or deployment target node
      *
-     * @var Node
+     * @var Node|null
      */
     protected $targetNode;
 
+    /**
+     * @return bool|mixed
+     */
     protected function executeCliCommand(array $cliArguments, Node $node, CMS $application, Deployment $deployment, array $options = [])
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
@@ -54,7 +57,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         ], $this->targetNode, $deployment);
     }
 
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

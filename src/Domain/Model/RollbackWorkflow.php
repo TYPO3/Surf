@@ -26,7 +26,7 @@ final class RollbackWorkflow extends Workflow
         'rollback:cleanup',
     ];
 
-    public function run(Deployment $deployment)
+    public function run(Deployment $deployment): void
     {
         parent::run($deployment);
 
@@ -66,7 +66,7 @@ final class RollbackWorkflow extends Workflow
         }
     }
 
-    private function configureRollbackTasks(Deployment $deployment)
+    private function configureRollbackTasks(Deployment $deployment): void
     {
         foreach ($deployment->getNodes() as $node) {
             foreach ($deployment->getApplications() as $application) {

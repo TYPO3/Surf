@@ -24,7 +24,7 @@ use Webmozart\Assert\Assert;
  */
 class SetUpExtensionsTask extends AbstractCliTask
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, CMS::class);
 
@@ -54,7 +54,7 @@ class SetUpExtensionsTask extends AbstractCliTask
         );
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('extensionKeys', []);
         $resolver->setAllowedTypes('extensionKeys', 'array');

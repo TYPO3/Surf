@@ -53,7 +53,7 @@ class WebOpcacheResetExecuteTask extends Task
         $this->filesystem = $filesystem;
     }
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -70,7 +70,7 @@ class WebOpcacheResetExecuteTask extends Task
         }
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['baseUrl', 'scriptIdentifier']);
         $resolver->setDefault('throwErrorOnWebOpCacheResetExecuteTask', false);

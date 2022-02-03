@@ -33,7 +33,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected $replacePaths = [];
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -89,12 +89,12 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
         $this->shell->execute('rm -Rf ' . $releasePath, $node, $deployment, true);
@@ -115,7 +115,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         }, '');
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('webDirectory', null);
         $resolver->setDefault('rsyncExcludes', ['.git']);

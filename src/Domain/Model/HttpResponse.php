@@ -28,14 +28,14 @@ final class HttpResponse
     private $headers;
 
     /**
-     * @var string
+     * @var int
      */
     private $statusCode;
 
     /**
      * @param string $body
      * @param array $headers
-     * @param string $statusCode
+     * @param int $statusCode
      */
     public function __construct($body, array $headers, $statusCode)
     {
@@ -61,7 +61,7 @@ final class HttpResponse
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getStatusCode()
     {

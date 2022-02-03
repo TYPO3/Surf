@@ -53,7 +53,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         $this->clock = $clock;
     }
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         if (! isset($options['keepReleases']) && ! isset($options['onlyRemoveReleasesOlderThan'])) {
             $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"');
@@ -92,7 +92,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

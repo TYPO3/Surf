@@ -15,10 +15,7 @@ namespace TYPO3\Surf\Domain\Model;
  */
 class FailedDeployment extends Deployment
 {
-    /**
-     * @param string $name
-     */
-    public function __construct($name = null)
+    public function __construct(string $name)
     {
         parent::__construct($name);
         $this->releaseIdentifier = null;
@@ -28,7 +25,7 @@ class FailedDeployment extends Deployment
      * Initialize the deployment
      * noop
      */
-    public function initialize()
+    public function initialize(): void
     {
     }
 
@@ -36,7 +33,7 @@ class FailedDeployment extends Deployment
      * Run this deployment
      * noop
      */
-    public function deploy()
+    public function deploy(): void
     {
     }
 
@@ -44,7 +41,7 @@ class FailedDeployment extends Deployment
      * Simulate this deployment without executing tasks
      * noop
      */
-    public function simulate()
+    public function simulate(): void
     {
     }
 

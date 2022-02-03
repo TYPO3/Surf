@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception as SurfException;
+use UnexpectedValueException;
 
 /**
  * @final
@@ -23,7 +24,7 @@ class TaskFactory implements ContainerAwareInterface
     use ContainerAwareTrait;
 
     /**
-     * @return ShellCommandServiceAwareInterface|Task
+     * @return Task
      */
     public function createTaskInstance(string $taskName)
     {
@@ -37,7 +38,7 @@ class TaskFactory implements ContainerAwareInterface
     }
 
     /**
-     * @return ShellCommandServiceAwareInterface|Task
+     * @return Task
      */
     private function createTask(string $taskName)
     {
@@ -48,6 +49,10 @@ class TaskFactory implements ContainerAwareInterface
             }
         } else {
             $task = $this->container->get($taskName);
+        }
+
+        if (!$task instanceof Task) {
+            throw new UnexpectedValueException('Variable $task is not of type Task');
         }
 
         return $task;

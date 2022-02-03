@@ -39,7 +39,7 @@ class NodeTest extends TestCase
     /**
      * @test
      */
-    public function setUsername()
+    public function setUsername(): void
     {
         $node = new Node('Node');
         $node->setUsername('username');

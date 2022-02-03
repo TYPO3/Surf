@@ -28,7 +28,7 @@ use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
  */
 class GitCheckoutTask extends AbstractCheckoutTask
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -47,13 +47,13 @@ class GitCheckoutTask extends AbstractCheckoutTask
         $this->executeOrSimulatePostGitCheckoutCommands($releasePath, $sha1, $node, $deployment, $options);
     }
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
         $this->shell->execute('rm -f ' . $releasePath . 'REVISION', $node, $deployment, true);
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['repositoryUrl']);
         $resolver->setDefault('hardClean', true);

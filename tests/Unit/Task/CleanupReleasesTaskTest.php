@@ -31,7 +31,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     private $shellCommandService;
 
     /**
-     * @array
+     * @var array
      */
     private $folderStructure;
 
@@ -121,7 +121,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      *
      * @param int $currentTime
      * @param array $identifiers
-     * @param int $stringToTime
+     * @param string $stringToTime
      * @param array $expectedFoldersToBeRemoved
      */
     public function removeReleasesByAge(

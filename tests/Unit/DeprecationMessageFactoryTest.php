@@ -17,7 +17,7 @@ class DeprecationMessageFactoryTest extends TestCase
     /**
      * @test
      */
-    public function createGenericDeprecationWarningForTaskMessage()
+    public function createGenericDeprecationWarningForTaskMessage(): void
     {
         $expectedMessage = sprintf(
             'The usage of %s is deprecated and will be removed in TYPO3 Surf Version %s',

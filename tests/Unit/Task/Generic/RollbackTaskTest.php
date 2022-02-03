@@ -45,7 +45,7 @@ previous',
     /**
      * @test
      */
-    public function canNotRollbackTooFewReleasesExist()
+    public function canNotRollbackTooFewReleasesExist(): void
     {
         $releasesPath = $this->application->getReleasesPath();
 
