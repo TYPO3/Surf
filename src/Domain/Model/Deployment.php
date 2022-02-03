@@ -131,7 +131,14 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     public function __construct(string $name, string $deploymentLockIdentifier = null)
     {
         $this->name = $name;
-        $this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
+
+        $time = strftime('%Y%m%d%H%M%S', time());
+
+        if($time === false) {
+            throw new \UnexpectedValueException('Could not create valid releaseIdentifier');
+        }
+
+        $this->releaseIdentifier = $time;
 
         $this->setDeploymentLockIdentifier($deploymentLockIdentifier);
     }

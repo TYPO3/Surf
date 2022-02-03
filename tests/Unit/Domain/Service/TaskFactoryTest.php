@@ -69,7 +69,7 @@ class TaskFactoryTest extends TestCase
         $task = new class {
         };
 
-        $this->expectException(SurfException::class);
+        $this->expectException(\UnexpectedValueException::class);
 
         $this->subject->createTaskInstance(get_class($task));
     }

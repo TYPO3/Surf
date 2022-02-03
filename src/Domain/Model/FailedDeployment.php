@@ -15,10 +15,7 @@ namespace TYPO3\Surf\Domain\Model;
  */
 class FailedDeployment extends Deployment
 {
-    /**
-     * @param string $name
-     */
-    public function __construct($name = null)
+    public function __construct(string $name)
     {
         parent::__construct($name);
         $this->releaseIdentifier = null;

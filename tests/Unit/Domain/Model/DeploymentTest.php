@@ -107,7 +107,7 @@ class DeploymentTest extends TestCase
      * @test
      * @dataProvider wrongDeploymentLockIdentifiersProvided
      *
-     * @param mixed $deploymentLockIdentifier
+     * @param string $deploymentLockIdentifier
      */
     public function deploymentHasDefaultLockIdentifierIfNoIdentifierIsGiven($deploymentLockIdentifier): void
     {
@@ -184,12 +184,7 @@ class DeploymentTest extends TestCase
     public function wrongDeploymentLockIdentifiersProvided(): array
     {
         return [
-            [null],
-            [
-                ['some array'],
-            ],
             [''],
-            [new \stdClass()],
         ];
     }
 }

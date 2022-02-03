@@ -154,7 +154,7 @@ class Factory implements FactoryInterface, ContainerAwareInterface
 
         if (! $this->filesystem->fileExists($deploymentPathAndFilename)) {
             $this->logger->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
-            $deployment = new FailedDeployment();
+            $deployment = new FailedDeployment($deploymentName);
             $deployment->setLogger($this->logger);
 
             return $deployment;
