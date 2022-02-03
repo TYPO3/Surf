@@ -18,7 +18,6 @@ use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Domain\Service\TaskFactory;
-use TYPO3\Surf\Exception as SurfException;
 use TYPO3\Surf\Task\CreateArchiveTask;
 use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 

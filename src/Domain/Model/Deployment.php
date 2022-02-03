@@ -134,7 +134,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
         $time = strftime('%Y%m%d%H%M%S', time());
 
-        if($time === false) {
+        if ($time === false) {
             throw new \UnexpectedValueException('Could not create valid releaseIdentifier');
         }
 
