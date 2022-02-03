@@ -11,7 +11,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.3'
+          php-version: '7.4'
           coverage: none
       - name: Install overtrue/phplint
         run: composer global require "overtrue/phplint:^2.0" --no-ansi --no-interaction --no-progress --classmap-authoritative
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.2', '7.3', '7.4']
+        php: ['7.4', '8.0', '8.1']
         dependencies: ['locked', 'latest']
 
     name: PHP ${{ matrix.php }} unittests with ${{ matrix.dependencies }} deps
