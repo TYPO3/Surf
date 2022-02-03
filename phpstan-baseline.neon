@@ -31,19 +31,9 @@ parameters:
 			path: src/Domain/Model/Deployment.php
 
 		-
-			message: "#^Property TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Deployment\\:\\:\\$releaseIdentifier \\(string\\|null\\) does not accept string\\|false\\.$#"
-			count: 1
-			path: src/Domain/Model/Deployment.php
-
-		-
 			message: "#^Property TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Deployment\\:\\:\\$workflow \\(TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Workflow\\) does not accept object\\|null\\.$#"
 			count: 1
 			path: src/Domain/Model/Deployment.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of method TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Deployment\\:\\:__construct\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: src/Domain/Model/FailedDeployment.php
 
 		-
 			message: "#^Cannot call method createTimestampFromFormat\\(\\) on TYPO3\\\\Surf\\\\Domain\\\\Clock\\\\ClockInterface\\|null\\.$#"
