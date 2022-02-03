@@ -33,7 +33,7 @@ class TaskManager
         $this->taskFactory = $taskFactory;
     }
 
-    public function execute(string $taskName, Node $node, Application $application, Deployment $deployment, $stage, array $options = [], string $definedTaskName = ''): void
+    public function execute(string $taskName, Node $node, Application $application, Deployment $deployment, string $stage, array $options = [], string $definedTaskName = ''): void
     {
         $definedTaskName = $definedTaskName ?: $taskName;
         $deployment->getLogger()->info($node->getName() . ' (' . $application->getName() . ') ' . $definedTaskName);

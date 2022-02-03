@@ -21,14 +21,17 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 
 abstract class Task
 {
+    /**
+     * @return mixed|void
+     */
     abstract public function execute(Node $node, Application $application, Deployment $deployment, array $options = []);
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->configureOptions($options);
     }
 
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->configureOptions($options);
     }
@@ -61,7 +64,7 @@ abstract class Task
         }
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         // Configure your options here, required, normalization etc.
     }

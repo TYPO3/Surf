@@ -35,7 +35,7 @@ class DownloadTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -44,7 +44,7 @@ class DownloadTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($command, $node, $deployment);
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('composerDownloadCommand', 'curl -s https://getcomposer.org/installer | php');
     }

@@ -1,13 +1,12 @@
 includes:
     - phpstan-baseline.neon
 parameters:
-  level: 5
+  level: 6
+  editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
   paths:
-    - "src/"
-    - "tests/"
+    - src
+    - Tests
 
   inferPrivatePropertyTypeFromConstructor: true
   checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false
-
-  ignoreErrors:

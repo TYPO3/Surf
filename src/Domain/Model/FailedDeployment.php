@@ -28,7 +28,7 @@ class FailedDeployment extends Deployment
      * Initialize the deployment
      * noop
      */
-    public function initialize()
+    public function initialize(): void
     {
     }
 
@@ -36,7 +36,7 @@ class FailedDeployment extends Deployment
      * Run this deployment
      * noop
      */
-    public function deploy()
+    public function deploy(): void
     {
     }
 
@@ -44,7 +44,7 @@ class FailedDeployment extends Deployment
      * Simulate this deployment without executing tasks
      * noop
      */
-    public function simulate()
+    public function simulate(): void
     {
     }
 

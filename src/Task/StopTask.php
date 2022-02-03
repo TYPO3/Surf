@@ -23,7 +23,7 @@ use TYPO3\Surf\Exception\StopWorkflowException;
  */
 class StopTask extends Task
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         throw new StopWorkflowException('Workflow stopped explicitly');
     }
@@ -31,7 +31,7 @@ class StopTask extends Task
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

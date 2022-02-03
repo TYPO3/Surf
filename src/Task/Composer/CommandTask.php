@@ -41,7 +41,7 @@ use TYPO3\Surf\Domain\Model\Node;
  */
 class CommandTask extends AbstractComposerTask
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -52,7 +52,7 @@ class CommandTask extends AbstractComposerTask
         parent::execute($node, $application, $deployment, $options);
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         parent::resolveOptions($resolver);
         $resolver->setDefaults([

@@ -66,7 +66,7 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
         $this->idGenerator = $idGenerator;
     }
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -94,7 +94,7 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
         }
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['sourceDirectory', 'targetFile', 'baseDirectory']);
         $resolver->setDefault('exclude', []);

@@ -79,7 +79,7 @@ class CustomTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
     }
 

@@ -27,7 +27,7 @@ class FunctionalTestTask extends Task implements ShellCommandServiceAwareInterfa
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for FunctionalTestTask, got "%s"', get_class($application)));
 
@@ -41,7 +41,7 @@ class FunctionalTestTask extends Task implements ShellCommandServiceAwareInterfa
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

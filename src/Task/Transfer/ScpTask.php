@@ -26,7 +26,7 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $fileName = sprintf('%s.tar.gz', $deployment->getReleaseIdentifier());
 
@@ -94,12 +94,12 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $releasePath = $deployment->getApplicationReleasePath($application);
         $this->shell->execute(sprintf('rm -rf %s', $releasePath), $node, $deployment, true);
@@ -108,7 +108,7 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @return string
      */
-    private function getExcludes(array $options, $fileName)
+    private function getExcludes(array $options, string $fileName)
     {
         $excludes = ['.git', $fileName];
         if (isset($options['scpExcludes']) && is_array($options['scpExcludes'])) {

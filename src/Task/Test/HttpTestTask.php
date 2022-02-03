@@ -46,12 +46,12 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @param ClientInterface $client
      */
-    public function setClient(ClientInterface $client)
+    public function setClient(ClientInterface $client): void
     {
         $this->client = $client;
     }
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -79,7 +79,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('url');
         $resolver->setDefaults([
@@ -108,14 +108,14 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      *
      * @throws TaskExecutionException
      */
-    protected function assertExpectedStatus($expected, $actual)
+    protected function assertExpectedStatus($expected, $actual): void
     {
         if ((int)$actual !== (int)$expected) {
             throw new TaskExecutionException(sprintf('Expected status code %d but got %d', $expected, $actual), 1319536619);
         }
     }
 
-    protected function assertExpectedHeaders(array $expected, array $actual)
+    protected function assertExpectedHeaders(array $expected, array $actual): void
     {
         if (count($expected) > 0) {
             foreach ($expected as $headerName => $expectedValue) {
@@ -140,7 +140,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
-    protected function assertExpectedRegexp(array $expectedRegexp, $responseBody)
+    protected function assertExpectedRegexp(array $expectedRegexp, string $responseBody): void
     {
         if (count($expectedRegexp) > 0) {
             foreach ($expectedRegexp as $regexp) {
@@ -154,13 +154,8 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * Compare returned HTTP headers with expected values
-     *
-     * @param string $headerValue
-     * @param string $expectedValue
-     *
-     * @return bool
      */
-    protected function testSingleHeader($headerValue, $expectedValue)
+    protected function testSingleHeader(string $headerValue, string $expectedValue): bool
     {
         if (! $headerValue || trim($headerValue) === '') {
             return false;

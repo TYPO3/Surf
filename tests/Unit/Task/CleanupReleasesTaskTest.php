@@ -31,7 +31,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     private $shellCommandService;
 
     /**
-     * @array
+     * @var array
      */
     private $folderStructure;
 

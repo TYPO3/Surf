@@ -24,7 +24,7 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $command = sprintf(
             'cd %s && rm -rf ./previous && if [ -e ./current ]; then mv ./current ./previous; fi && ln -s ./%s ./current && rm -rf ./next',
@@ -39,12 +39,12 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $command = sprintf('cd %s && rm -f ./current && mv ./previous ./current', $application->getReleasesPath());
 

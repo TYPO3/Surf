@@ -51,16 +51,6 @@ class ShellTaskTest extends BaseTaskTest
     }
 
     /**
-     * @test
-     */
-    public function rollbackReturnVoidNoRollbackCommandGiven(): void
-    {
-        self::assertNull(
-            $this->task->rollback($this->node, $this->application, $this->deployment, ['command' => 'someCommand'])
-        );
-    }
-
-    /**
      * @param string $command
      * @param string $expectedCommand
      *

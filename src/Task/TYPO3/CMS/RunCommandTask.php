@@ -22,7 +22,7 @@ use Webmozart\Assert\Assert;
  */
 class RunCommandTask extends AbstractCliTask
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, CMS::class);
 
@@ -39,7 +39,7 @@ class RunCommandTask extends AbstractCliTask
         );
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('command');
         $resolver->setDefault('arguments', []);

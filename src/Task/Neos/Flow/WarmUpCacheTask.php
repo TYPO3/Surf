@@ -26,7 +26,7 @@ class WarmUpCacheTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf(
             $application,
@@ -48,12 +48,12 @@ class WarmUpCacheTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('phpBinaryPathAndFilename', 'php')
             ->setAllowedTypes('phpBinaryPathAndFilename', 'string');

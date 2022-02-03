@@ -48,7 +48,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
      */
     protected $suffix = ['2>&1'];
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -71,7 +71,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         }
     }
 
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
@@ -119,7 +119,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         return true;
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('composerCommandPath');
 

@@ -41,7 +41,7 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->validateOptions($options);
         $options = $this->processOptions($options, $deployment);
@@ -65,12 +65,12 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    protected function validateOptions(array $options)
+    protected function validateOptions(array $options): void
     {
         if (!isset($options['tagName'])) {
             throw new InvalidConfigurationException('Missing "tagName" option for TagTask', 1314186541);

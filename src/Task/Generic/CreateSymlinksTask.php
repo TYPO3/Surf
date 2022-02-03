@@ -36,7 +36,7 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -60,12 +60,12 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('symlinks', []);
         $resolver->setAllowedTypes('symlinks', 'array');

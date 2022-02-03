@@ -32,7 +32,7 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
 {
     use ShellCommandServiceAwareTrait;
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $result = $this->shell->execute(sprintf('test -d %s', $application->getDeploymentPath()), $node, $deployment, true);
         if ($result === false) {
@@ -50,12 +50,12 @@ class CreateDirectoriesTask extends Task implements ShellCommandServiceAwareInte
     /**
      * @codeCoverageIgnore
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $commands = [
             sprintf('rm %s/next', $application->getReleasesPath()),

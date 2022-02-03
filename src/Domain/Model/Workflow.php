@@ -32,7 +32,7 @@ abstract class Workflow
         $this->taskManager = $taskManager;
     }
 
-    public function run(Deployment $deployment)
+    public function run(Deployment $deployment): void
     {
         if (!$deployment->isInitialized()) {
             throw new SurfException('Deployment must be initialized before running it', 1335976529);
@@ -125,7 +125,7 @@ abstract class Workflow
      * @param string $stage The name of the stage when this task shall be executed
      * @param string $step A stage has three steps "before", "tasks" and "after"
      */
-    protected function addTaskToStage($tasks, $stage, Application $application = null, $step = 'tasks')
+    protected function addTaskToStage($tasks, $stage, Application $application = null, $step = 'tasks'): void
     {
         if (!is_array($tasks)) {
             $tasks = [$tasks];
@@ -297,7 +297,7 @@ abstract class Workflow
      *
      * @param string $stage
      */
-    protected function executeStage($stage, Node $node, Application $application, Deployment $deployment)
+    protected function executeStage($stage, Node $node, Application $application, Deployment $deployment): void
     {
         foreach (['before', 'tasks', 'after'] as $stageStep) {
             foreach (['_', $application->getName()] as $applicationName) {
@@ -317,11 +317,8 @@ abstract class Workflow
      * Execute a task and consider configured before / after "hooks"
      *
      * Will also execute tasks that are registered to run before or after this task.
-     *
-     * @param string $task
-     * @param string $stage
      */
-    protected function executeTask($task, Node $node, Application $application, Deployment $deployment, $stage, array &$callstack = [])
+    protected function executeTask(string $task, Node $node, Application $application, Deployment $deployment, string $stage, array &$callstack = []): void
     {
         foreach (['_', $application->getName()] as $applicationName) {
             if (isset($this->tasks['before'][$applicationName][$task])) {

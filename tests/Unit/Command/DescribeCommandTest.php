@@ -60,7 +60,7 @@ class DescribeCommandTest extends TestCase
         $this->application->setOption(RsyncTask::class . '[rsyncExcludes]', ['.git', 'web/fileadmin', 'web/uploads']);
         $this->application->addNode($this->node);
         $this->deployment->addApplication($this->application);
-        $this->deployment->onInitialize(function () {
+        $this->deployment->onInitialize(function (): void {
             $workflow = $this->deployment->getWorkflow();
             $workflow->defineTask('TYPO3\\Surf\\Task\\CustomTask', LocalShellTask::class, [
                 'command' => [

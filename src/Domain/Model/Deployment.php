@@ -128,7 +128,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      */
     private $deploymentLockIdentifier;
 
-    public function __construct($name, $deploymentLockIdentifier = null)
+    public function __construct(string $name, string $deploymentLockIdentifier = null)
     {
         $this->name = $name;
         $this->releaseIdentifier = strftime('%Y%m%d%H%M%S', time());
@@ -146,7 +146,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @throws SurfException
      */
-    public function initialize()
+    public function initialize(): void
     {
         if ($this->initialized) {
             throw new SurfException('Already initialized', 1335976472);
@@ -184,7 +184,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @throws SurfException
      */
-    public function deploy()
+    public function deploy(): void
     {
         $this->logger->notice('Deploying ' . $this->name . ' (' . $this->releaseIdentifier . ')');
         $this->workflow->run($this);
@@ -195,7 +195,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * It will set dryRun = TRUE which can be inspected by any task.
      */
-    public function simulate()
+    public function simulate(): void
     {
         $this->setDryRun(true);
         $this->logger->notice('Simulating ' . $this->name . ' (' . $this->releaseIdentifier . ')');
@@ -276,7 +276,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return Node|null The Node or NULL if no Node with the given name was found
      */
-    public function getNode($name)
+    public function getNode(string $name): ?Node
     {
         if ($name === 'localhost') {
             $node = new Node('localhost');
@@ -368,14 +368,14 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         return $this->releaseIdentifier;
     }
 
-    public function setRelativeProjectRootPath($relativeProjectRootPath)
+    public function setRelativeProjectRootPath(string $relativeProjectRootPath): self
     {
         $this->relativeProjectRootPath = $relativeProjectRootPath;
 
         return $this;
     }
 
-    public function getRelativeProjectRootPath()
+    public function getRelativeProjectRootPath(): string
     {
         return $this->relativeProjectRootPath;
     }
@@ -383,7 +383,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     /**
      * @return bool TRUE If the deployment is run in "dry run" mode
      */
-    public function isDryRun()
+    public function isDryRun(): bool
     {
         return $this->dryRun;
     }
@@ -503,7 +503,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @param string $deploymentConfigurationPath
      */
-    public function setDeploymentBasePath($deploymentConfigurationPath)
+    public function setDeploymentBasePath($deploymentConfigurationPath): void
     {
         $this->deploymentBasePath = $deploymentConfigurationPath;
     }
@@ -521,7 +521,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     /**
      * @param string $workspacesBasePath
      */
-    public function setWorkspacesBasePath($workspacesBasePath)
+    public function setWorkspacesBasePath($workspacesBasePath): void
     {
         $this->workspacesBasePath = rtrim($workspacesBasePath, '\\/');
     }
@@ -529,7 +529,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     /**
      * @param string $temporaryPath
      */
-    public function setTemporaryPath($temporaryPath)
+    public function setTemporaryPath($temporaryPath): void
     {
         $this->temporaryPath = rtrim($temporaryPath, '\\/');
     }
@@ -582,16 +582,18 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     /**
      * Get path to a temp folder on the filesystem
      */
-    public function getTemporaryPath()
+    public function getTemporaryPath(): string
     {
         return $this->temporaryPath;
     }
 
-    public function rollback(bool $dryRun = false)
+    public function rollback(bool $dryRun = false): void
     {
         $this->logger->notice('Rollback deployment ' . $this->name . ' (' . $this->releaseIdentifier . ')');
 
-        $this->setWorkflow($this->container->get(RollbackWorkflow::class));
+        /** @var RollbackWorkflow $workflow */
+        $workflow = $this->container->get(RollbackWorkflow::class);
+        $this->setWorkflow($workflow);
         $this->initialize();
         if ($dryRun) {
             $this->setDryRun(true);
@@ -602,7 +604,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     /**
      * @param bool $force
      */
-    public function setForceRun($force)
+    public function setForceRun($force): void
     {
         $this->forceRun = (bool)$force;
     }
@@ -626,7 +628,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     /**
      * @param string|null $deploymentLockIdentifier
      */
-    private function setDeploymentLockIdentifier($deploymentLockIdentifier = null)
+    private function setDeploymentLockIdentifier($deploymentLockIdentifier = null): void
     {
         if (! is_string($deploymentLockIdentifier) || $deploymentLockIdentifier === '') {
             $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false

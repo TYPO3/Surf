@@ -46,7 +46,7 @@ use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
  */
 class GitTask extends AbstractCheckoutTask
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -59,7 +59,7 @@ class GitTask extends AbstractCheckoutTask
         $this->executeOrSimulatePostGitCheckoutCommands($localCheckoutPath, $sha1, $localhost, $deployment, $options);
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('repositoryUrl');
     }

@@ -88,7 +88,7 @@ class SimpleWorkflowTest extends TestCase
             [
                 'Just one global task in stage initialize',
                 static function (Workflow $workflow, Application $application) {
-                    return static function () use ($workflow) {
+                    return static function () use ($workflow): void {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize');
                     };
@@ -107,7 +107,7 @@ class SimpleWorkflowTest extends TestCase
             [
                 'Add multiple tasks with afterTask',
                 function (Workflow $workflow, Application $application) {
-                    return static function () use ($workflow) {
+                    return static function () use ($workflow): void {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
                             ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
@@ -152,7 +152,7 @@ class SimpleWorkflowTest extends TestCase
             [
                 'Tasks in different stages',
                 static function (Workflow $workflow, Application $application) {
-                    return static function () use ($workflow) {
+                    return static function () use ($workflow): void {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
                             ->addTask('typo3.surf:test:checkout', 'update')
@@ -234,7 +234,7 @@ class SimpleWorkflowTest extends TestCase
                 function ($workflow, $applications) {
                     [$flowApplication, $typo3Application] = $applications;
 
-                    return function () use ($workflow, $flowApplication, $typo3Application) {
+                    return function () use ($workflow, $flowApplication, $typo3Application): void {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
                             ->addTask('typo3.surf:test:doctrine:migrate', 'migrate', $flowApplication)
@@ -354,7 +354,7 @@ class SimpleWorkflowTest extends TestCase
         $mockTaskManager
             ->expects(self::any())
             ->method('execute')
-            ->will(self::returnCallback(function ($task, Node $node, Application $application, Deployment $deployment, $stage, array $options = []) use (&$executedTasks) {
+            ->will(self::returnCallback(function ($task, Node $node, Application $application, Deployment $deployment, $stage, array $options = []) use (&$executedTasks): void {
                 $executedTasks[] = [
                     'task' => $task,
                     'node' => $node->getName(),
@@ -496,7 +496,7 @@ class SimpleWorkflowTest extends TestCase
     {
         return [
             'remove task in stage' => [
-                function ($workflow, $application) {
+                function ($workflow, $application): void {
                     $workflow->addTask('task1:initialize', 'initialize');
                     $workflow->addTask('task2:package', 'package');
 
@@ -514,7 +514,7 @@ class SimpleWorkflowTest extends TestCase
                 ]
             ],
             'remove task in before hook' => [
-                function ($workflow, $application) {
+                function ($workflow, $application): void {
                     $workflow->addTask('task1:initialize', 'initialize');
                     $workflow->beforeTask('task1:initialize', 'task2:before');
                     $workflow->beforeTask('task1:initialize', 'task3:before');
@@ -541,7 +541,7 @@ class SimpleWorkflowTest extends TestCase
                 ]
             ],
             'remove task in after hook' => [
-                function ($workflow, $application) {
+                function ($workflow, $application): void {
                     $workflow->addTask('task1:initialize', 'initialize');
                     $workflow->afterTask('task1:initialize', 'task2:after');
                     $workflow->afterTask('task1:initialize', 'task3:after');
@@ -581,7 +581,7 @@ class SimpleWorkflowTest extends TestCase
                     [
                         'application' => 'Neos Flow Application',
                         'node' => 'flow-1.example.com',
-                        'callable' => function (Workflow $workflow, Application $application) {
+                        'callable' => function (Workflow $workflow, Application $application): void {
                             $workflow->addTask('task1:initialize', 'initialize', $application);
                             $workflow->addTask('task2:package', 'package', $application);
                             $workflow->afterTask('task2:package', 'task2:whatever', $application);
@@ -591,7 +591,7 @@ class SimpleWorkflowTest extends TestCase
                     [
                         'application' => 'TYPO3 Application',
                         'node' => 'typo3.example.com',
-                        'callable' => function (Workflow $workflow, Application $application) {
+                        'callable' => function (Workflow $workflow, Application $application): void {
                             $workflow->addTask('task1:initialize', 'initialize', $application);
                             $workflow->addTask('task2:package', 'package', $application);
                             $workflow->afterTask('task2:package', 'task2:whatever', $application);
@@ -705,7 +705,7 @@ class SimpleWorkflowTest extends TestCase
     {
         return [
             'task in stage for specific application, task after stage for any application' => [
-                function (Workflow $workflow, Application $application) {
+                function (Workflow $workflow, Application $application): void {
                     $workflow->addTask('task1:switch', 'switch', $application);
                     $workflow->afterStage('switch', 'task2:afterSwitch');
                 },
@@ -735,7 +735,7 @@ class SimpleWorkflowTest extends TestCase
      * @test
      * @dataProvider stageStepExamples
      */
-    public function beforeAndAfterStageStepsAreIndependentOfApplications($callback, $expectedTasks): void
+    public function beforeAndAfterStageStepsAreIndependentOfApplications(callable $callback, array $expectedTasks): void
     {
         $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);

@@ -22,7 +22,7 @@ use Webmozart\Assert\Assert;
  */
 class FlushCachesTask extends AbstractCliTask
 {
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
 
         /** @var CMS $application */
@@ -54,7 +54,7 @@ class FlushCachesTask extends AbstractCliTask
         }
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('arguments', [])
             ->setAllowedTypes('arguments', ['array', 'string'])

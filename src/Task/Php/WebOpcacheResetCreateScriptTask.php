@@ -61,7 +61,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         $this->randomBytesGenerator = $randomBytesGenerator;
     }
 
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -102,7 +102,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         }
     }
 
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
 
@@ -121,7 +121,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         return $scriptIdentifier;
     }
 
-    protected function resolveOptions(OptionsResolver $resolver)
+    protected function resolveOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('scriptIdentifier', null);
         $resolver->setDefault('scriptBasePath', null);
