@@ -50,7 +50,7 @@ class SystemClockTest extends TestCase
 
     /**
      * @param string $format
-     * @param int $time
+     * @param string $time
      * @param int $expected
      * @test
      * @dataProvider validFormatCanBeConvertedToTimestamp

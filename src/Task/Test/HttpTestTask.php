@@ -69,7 +69,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
 
         if ($options['expectedStatus'] !== null) {
-            $this->assertExpectedStatus($options['expectedStatus'], $response->getStatusCode());
+            $this->assertExpectedStatus((int)$options['expectedStatus'], $response->getStatusCode());
         }
         if ($options['expectedHeaders'] !== null) {
             $this->assertExpectedHeaders($this->extractHeadersFromMultiLineString($options['expectedHeaders']), $response->getHeaders());
@@ -247,7 +247,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         $statusParts = explode(' ', $status);
         $headers = $this->extractHeadersFromMultiLineString(trim($headersString));
 
-        return new HttpResponse($body, $headers, $statusParts[1]);
+        return new HttpResponse($body, $headers, (int)$statusParts[1]);
     }
 
     /**

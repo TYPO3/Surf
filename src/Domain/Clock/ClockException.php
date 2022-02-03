@@ -23,14 +23,8 @@ final class ClockException extends Exception
         return new self(sprintf('The string %s could not be converted to timestamp', $string));
     }
 
-    /**
-     * @param string $format
-     * @param int $time
-     *
-     * @return ClockException
-     */
-    public static function formatCouldNotBeConvertedToTimestamp($format, $time)
+    public static function formatCouldNotBeConvertedToTimestamp(string $format, string $time): self
     {
-        return new self(sprintf('The format %s could not be converted to timestamp for time %d', $format, $time));
+        return new self(sprintf('The format %s could not be converted to timestamp for time %s', $format, $time));
     }
 }
