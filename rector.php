@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src',
-        __DIR__ . '/Tests',
+        __DIR__ . '/tests',
     ]);
 
     // get services (needed for register a single rule)
