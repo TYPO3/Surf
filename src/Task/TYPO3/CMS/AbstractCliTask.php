@@ -27,14 +27,14 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     /**
      * The working directory. Either local or remote, and probably in a special application root directory
      *
-     * @var string
+     * @var string|null
      */
     protected $workingDirectory;
 
     /**
      * Localhost or deployment target node
      *
-     * @var Node
+     * @var Node|null
      */
     protected $targetNode;
 

@@ -175,7 +175,7 @@ class ShellCommandService
     /**
      * Prepare a command
      *
-     * @param array|string $command
+     * @param array|string|null $command
      * @return string
      */
     protected function prepareCommand($command)

@@ -274,7 +274,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * In the special case "localhost" an ad-hoc Node with hostname "localhost" is returned.
      *
-     * @return Node The Node or NULL if no Node with the given name was found
+     * @return Node|null The Node or NULL if no Node with the given name was found
      */
     public function getNode($name)
     {

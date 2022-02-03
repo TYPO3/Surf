@@ -122,7 +122,7 @@ class Node
     }
 
     /**
-     * @param string $port
+     * @param int $port
      *
      * @return Node
      */
@@ -177,7 +177,7 @@ class Node
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
     public function getPort()
     {
