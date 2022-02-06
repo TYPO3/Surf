@@ -48,7 +48,7 @@ class FlushCachesTask extends AbstractCliTask
     {
         switch ($this->getAvailableCliPackage($node, $application, $deployment, $options)) {
             case 'typo3_console':
-                return array_merge([$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush'], $options['arguments']);
+                return array_merge([$this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options), 'cache:flush'], $options['arguments']);
             default:
                 return [];
         }

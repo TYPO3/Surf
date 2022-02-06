@@ -28,7 +28,7 @@ class RunCommandTask extends AbstractCliTask
 
         $options = $this->configureOptions($options);
 
-        $arguments = array_merge([$this->getConsoleScriptFileName($node, $application, $deployment, $options), $options['command']], $options['arguments']);
+        $arguments = array_merge([$this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options), $options['command']], $options['arguments']);
 
         $this->executeCliCommand(
             $arguments,

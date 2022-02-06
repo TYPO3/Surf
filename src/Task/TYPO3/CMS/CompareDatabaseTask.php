@@ -53,7 +53,7 @@ class CompareDatabaseTask extends AbstractCliTask
     {
         if ($this->getAvailableCliPackage($node, $application, $deployment, $options) === 'typo3_console') {
             $databaseCompareMode = $options['databaseCompareMode'] ?? '*.add,*.change';
-            return [$this->getConsoleScriptFileName($node, $application, $deployment, $options), 'database:updateschema', $databaseCompareMode];
+            return [$this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options), 'database:updateschema', $databaseCompareMode];
         }
 
         return [];

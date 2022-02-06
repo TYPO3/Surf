@@ -29,7 +29,7 @@ class SetUpExtensionsTask extends AbstractCliTask
         Assert::isInstanceOf($application, CMS::class);
 
         try {
-            $scriptFileName = $this->getConsoleScriptFileName($node, $application, $deployment, $options);
+            $scriptFileName = $this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options);
         } catch (InvalidConfigurationException $e) {
             $deployment->getLogger()->warning('TYPO3 Console script (' . $options['scriptFileName'] . ') was not found! Make sure it is available in your project, you set the "scriptFileName" option correctly or remove this task (' . __CLASS__ . ') in your deployment configuration!');
             return;
