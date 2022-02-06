@@ -82,6 +82,6 @@ parameters:
 
 		-
 			message: "#^Offset mixed on array\\{\\} in isset\\(\\) does not exist\\.$#"
-			count: 2
+			count: 3
 			path: tests/Unit/Task/BaseTaskTest.php
 

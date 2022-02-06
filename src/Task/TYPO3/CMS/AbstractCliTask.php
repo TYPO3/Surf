@@ -8,6 +8,8 @@ namespace TYPO3\Surf\Task\TYPO3\CMS;
  * file that was distributed with this source code.
  */
 
+use PharIo\Version\InvalidVersionException;
+use PharIo\Version\Version;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -100,6 +102,28 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         }
 
         return $options['scriptFileName'];
+    }
+
+    protected function getTypo3ConsoleVersion(Node $node, CMS $application, Deployment $deployment, array $options): Version
+    {
+        $scriptFileName = $this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options);
+
+        $commandArguments = [$scriptFileName, '--version'];
+
+        $output = $this->executeCliCommand(
+            $commandArguments,
+            $node,
+            $application,
+            $deployment,
+        );
+
+        $version = trim(substr($output, strlen('TYPO3 Console')));
+
+        try {
+            return new Version($version);
+        } catch (InvalidVersionException $e) {
+            return new Version('0.0.0');
+        }
     }
 
     protected function fileExists(string $pathAndFileName, Node $node, CMS $application, Deployment $deployment, array $options = []): bool
