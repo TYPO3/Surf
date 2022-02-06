@@ -85,3 +85,8 @@ parameters:
 			count: 3
 			path: tests/Unit/Task/BaseTaskTest.php
 
+		-
+			message: "#^Parameter \\#2 \\$headers of class GuzzleHttp\\\\Psr7\\\\Response constructor expects array\\<string, array\\<string\\>\\|string\\>, array\\<int, string\\> given\\.$#"
+			count: 1
+			path: tests/Unit/Task/Test/HttpTestTaskTest.php
+

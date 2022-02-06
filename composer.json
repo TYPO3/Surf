@@ -4,7 +4,7 @@
     "license": "GPL-3.0-or-later",
     "require": {
         "php": "^7.4 || ^8.0",
-        "guzzlehttp/guzzle": "^6.0",
+        "guzzlehttp/guzzle": "^6.0 || ^7.0",
         "monolog/monolog": "^1.17",
         "neos/utility-files": "^3.0",
         "padraic/phar-updater": "1.0.5",
