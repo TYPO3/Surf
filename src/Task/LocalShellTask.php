@@ -65,7 +65,7 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
         $replacePaths = [];
         $replacePaths['{workspacePath}'] = escapeshellarg($deployment->getWorkspacePath($application));
 
-        if (null === $options['rollbackCommand']) {
+        if (!isset($options['rollbackCommand'])) {
             return;
         }
 
