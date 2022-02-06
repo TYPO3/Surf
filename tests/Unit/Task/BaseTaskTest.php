@@ -99,6 +99,11 @@ abstract class BaseTaskTest extends TestCase
             ->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
                 if (is_array($command)) {
                     $commands['executed'] = array_merge($commands['executed'], $command);
+                    foreach ($command as $singleCommand) {
+                        if (isset($responses[$singleCommand])) {
+                            return $responses[$singleCommand];
+                        }
+                    }
                 } else {
                     $commands['executed'][] = $command;
                     if (isset($responses[$command])) {

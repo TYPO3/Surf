@@ -35,6 +35,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
         parent::setUp();
         $this->application = new CMS('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
+        $this->expectTypo3ConsoleVersion('TYPO3 Console 5.8.6');
     }
 
     /**
@@ -48,6 +49,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
             $this->deployment,
             ['scriptFileName' => 'vendor/bin/typo3cms']
         );
+
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setupactive'");
     }
 
@@ -94,5 +96,61 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
             "test -f '{$this->deployment->getApplicationReleasePath($this->application)}/vendor/bin/typo3cms'"
         );
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' 'foo,bar'");
+    }
+
+    /**
+     * @test
+     */
+    public function consoleIsFoundInCorrectPathWithoutAppDirectoryInVersionEqualOrHigherThanSeven(): void
+    {
+        $this->expectTypo3ConsoleVersion('TYPO3 Console 7.0.0');
+
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'extensionKeys' => ['foo', 'bar']
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' '-e' 'foo' '-e' 'bar'");
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithoutOptionExecutesSetUpInVersionEqualOrHigherThanSeven(): void
+    {
+        $this->expectTypo3ConsoleVersion('TYPO3 Console 7.0.0');
+
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['scriptFileName' => 'vendor/bin/typo3cms']
+        );
+
+        $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup'");
+    }
+
+    /**
+     * @test
+     */
+    public function executeWithoutOptionAndMissingVersionExecutesSetUpActive(): void
+    {
+        $this->expectTypo3ConsoleVersion('');
+        $this->task->execute(
+            $this->node,
+            $this->application,
+            $this->deployment,
+            ['scriptFileName' => 'vendor/bin/typo3cms']
+        );
+
+        $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setupactive'");
+    }
+
+    private function expectTypo3ConsoleVersion(string $typo3ConsoleVersion): void
+    {
+        $versionCommand = 'php \'vendor/bin/typo3cms\' \'--version\'';
+        $this->commands['versionCommand'] = $versionCommand;
+        $this->responses[$versionCommand] = $typo3ConsoleVersion;
     }
 }
