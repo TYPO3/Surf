@@ -15,10 +15,7 @@ use Psr\Log\LoggerInterface;
 
 final class LoggerFactory
 {
-    /**
-     * @var ConsoleHandler
-     */
-    private $consoleHandler;
+    private ConsoleHandler $consoleHandler;
 
     public function __construct(ConsoleHandler $consoleHandler)
     {

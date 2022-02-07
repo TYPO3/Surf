@@ -50,15 +50,9 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @var FilesystemInterface
-     */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
-    /**
-     * @var IdGeneratorInterface
-     */
-    private $idGenerator;
+    private IdGeneratorInterface $idGenerator;
 
     public function __construct(FilesystemInterface $filesystem, IdGeneratorInterface $idGenerator)
     {

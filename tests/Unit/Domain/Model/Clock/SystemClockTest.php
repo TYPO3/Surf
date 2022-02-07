@@ -15,10 +15,7 @@ use TYPO3\Surf\Domain\Clock\SystemClock;
 
 class SystemClockTest extends TestCase
 {
-    /**
-     * @var SystemClock
-     */
-    private $subject;
+    private SystemClock $subject;
 
     protected function setUp(): void
     {

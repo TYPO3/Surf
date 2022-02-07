@@ -23,9 +23,15 @@ final class CommandsToApplicationCompilerPass implements CompilerPassInterface
         $applicationDefinition = $container->getDefinition(ConsoleApplication::class);
 
         foreach ($container->getDefinitions() as $name => $definition) {
-            if (is_a($definition->getClass(), Command::class, true)) {
-                $applicationDefinition->addMethodCall('add', [new Reference($name)]);
+            if (!is_string($definition->getClass())) {
+                continue;
             }
+
+            if (!is_a($definition->getClass(), Command::class, true)) {
+                continue;
+            }
+
+            $applicationDefinition->addMethodCall('add', [new Reference($name)]);
         }
     }
 }

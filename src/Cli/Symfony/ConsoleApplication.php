@@ -18,15 +18,9 @@ use TYPO3\Surf\Integration\FactoryInterface;
  */
 class ConsoleApplication extends Application
 {
-    /**
-     * @var FactoryInterface
-     */
-    protected $factory;
+    protected FactoryInterface $factory;
 
-    /**
-     * @var OutputInterface
-     */
-    private $output;
+    private OutputInterface $output;
 
     public function __construct(FactoryInterface $factory, OutputInterface $output, string $name, string $version)
     {
