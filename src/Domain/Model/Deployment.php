@@ -300,7 +300,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     public function getWorkflow(): Workflow
     {
-        if(!$this->workflow instanceof Workflow) {
+        if (!$this->workflow instanceof Workflow) {
             throw new UnexpectedValueException('No workflow is defined for deployment');
         }
 

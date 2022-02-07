@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Task;
  * file that was distributed with this source code.
  */
 use TYPO3\Surf\Domain\Clock\ClockInterface;
-use TYPO3\Surf\Domain\Clock\SystemClock;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
