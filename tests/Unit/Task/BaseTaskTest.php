@@ -7,7 +7,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
@@ -77,7 +77,7 @@ abstract class BaseTaskTest extends TestCase
         $this->responses = [];
         $responses = &$this->responses;
 
-        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService */
+        /** @var MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createMock(ShellCommandService::class);
         $shellCommandService
             ->expects(self::any())

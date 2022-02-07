@@ -55,7 +55,7 @@ final class LockDeploymentTaskTest extends BaseTaskTest
     /**
      * @return LockDeploymentTask
      */
-    protected function createTask()
+    protected function createTask(): LockDeploymentTask
     {
         return new LockDeploymentTask();
     }

@@ -14,11 +14,9 @@ use TYPO3\Surf\Exception;
 final class ClockException extends Exception
 {
     /**
-     * @param string $string
-     *
      * @return ClockException
      */
-    public static function stringCouldNotBeConvertedToTimestamp($string)
+    public static function stringCouldNotBeConvertedToTimestamp(string $string): self
     {
         return new self(sprintf('The string %s could not be converted to timestamp', $string));
     }

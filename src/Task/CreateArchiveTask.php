@@ -94,7 +94,7 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
         $resolver->setDefault('exclude', []);
         $resolver->setAllowedTypes('exclude', 'array');
 
-        $resolver->setAllowedValues('sourceDirectory', function ($directory) {
+        $resolver->setAllowedValues('sourceDirectory', function ($directory): bool {
             return $this->filesystem->isDirectory($directory);
         });
         $resolver->setAllowedValues('targetFile', static function ($targetFile) {

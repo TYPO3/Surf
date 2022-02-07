@@ -19,7 +19,7 @@ final class FluidPromise implements PromiseInterface
     /**
      * @inheritDoc
      */
-    public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
+    public function execute(array $args, ObjectProphecy $object, MethodProphecy $method): object
     {
         return $object->reveal();
     }

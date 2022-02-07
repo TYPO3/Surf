@@ -17,10 +17,7 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  */
 abstract class Workflow
 {
-    /**
-     * @var TaskManager
-     */
-    protected $taskManager;
+    protected TaskManager $taskManager;
 
     /**
      * @var array
@@ -58,7 +55,7 @@ abstract class Workflow
     {
         $removeApplicationName = $application instanceof Application ? $application->getName() : null;
 
-        $applicationRemovalGuardClause = function ($applicationName) use ($removeApplicationName) {
+        $applicationRemovalGuardClause = function ($applicationName) use ($removeApplicationName): bool {
             return null !== $removeApplicationName && $applicationName !== $removeApplicationName;
         };
 
@@ -69,7 +66,7 @@ abstract class Workflow
                 }
                 foreach ($steps as $step => $tasksByStageStep) {
                     foreach ($tasksByStageStep as $stageName => $tasks) {
-                        $this->tasks['stage'][$applicationName][$step][$stageName] = array_filter($tasks, function ($task) use ($removeTask) {
+                        $this->tasks['stage'][$applicationName][$step][$stageName] = array_filter($tasks, function ($task) use ($removeTask): bool {
                             return $task !== $removeTask;
                         });
                     }
@@ -82,7 +79,7 @@ abstract class Workflow
                     continue;
                 }
                 foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
+                    $this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask): bool {
                         return $task !== $removeTask;
                     });
                 }
@@ -94,7 +91,7 @@ abstract class Workflow
                     continue;
                 }
                 foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask) {
+                    $this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask): bool {
                         return $task !== $removeTask;
                     });
                 }
@@ -110,7 +107,7 @@ abstract class Workflow
      *
      * @return Workflow
      */
-    public function forStage($stage, $tasks)
+    public function forStage($stage, $tasks): \TYPO3\Surf\Domain\Model\Workflow
     {
         return $this->addTask($tasks, $stage);
     }

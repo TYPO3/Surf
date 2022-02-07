@@ -26,7 +26,7 @@ final class ConsoleKernel extends Kernel
     /**
      * @inheritDoc
      */
-    public function registerBundles()
+    public function registerBundles(): array
     {
         return [];
     }
@@ -42,16 +42,16 @@ final class ConsoleKernel extends Kernel
     /**
      * @inheritDoc
      */
-    protected function build(ContainerBuilder $containerBuilder): void
+    protected function build(ContainerBuilder $container): void
     {
-        $containerBuilder->addCompilerPass(new CommandsToApplicationCompilerPass());
-        $containerBuilder->registerForAutoconfiguration(
+        $container->addCompilerPass(new CommandsToApplicationCompilerPass());
+        $container->registerForAutoconfiguration(
             ContainerAwareInterface::class
         )->addMethodCall(
             'setContainer',
             [new Reference(ContainerInterface::class)]
         );
-        $containerBuilder->registerForAutoconfiguration(
+        $container->registerForAutoconfiguration(
             ShellCommandServiceAwareInterface::class
         )->addMethodCall(
             'setShellCommandService',

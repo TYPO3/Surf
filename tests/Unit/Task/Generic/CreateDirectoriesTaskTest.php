@@ -32,7 +32,7 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
     /**
      * @return CreateDirectoriesTask
      */
-    protected function createTask()
+    protected function createTask(): CreateDirectoriesTask
     {
         return new CreateDirectoriesTask();
     }

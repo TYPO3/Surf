@@ -23,10 +23,7 @@ class TaskFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * @return Task
-     */
-    public function createTaskInstance(string $taskName)
+    public function createTaskInstance(string $taskName): Task
     {
         $task = $this->createTask($taskName);
 
@@ -37,10 +34,7 @@ class TaskFactory implements ContainerAwareInterface
         return $task;
     }
 
-    /**
-     * @return Task
-     */
-    private function createTask(string $taskName)
+    private function createTask(string $taskName): Task
     {
         if (! $this->container->has($taskName)) {
             $task = new $taskName();

@@ -73,7 +73,7 @@ class VarnishPurgeTaskTest extends BaseTaskTest
     /**
      * @return VarnishPurgeTask
      */
-    protected function createTask()
+    protected function createTask(): VarnishPurgeTask
     {
         return new VarnishPurgeTask();
     }

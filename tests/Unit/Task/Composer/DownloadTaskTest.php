@@ -35,7 +35,7 @@ class DownloadTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(sprintf('cd %s && %s', escapeshellarg($applicationReleasePath), 'curl -s https://custom.domain.org/installer | php'));
     }
 
-    protected function createTask()
+    protected function createTask(): DownloadTask
     {
         return new DownloadTask();
     }

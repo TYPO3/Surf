@@ -88,10 +88,7 @@ class DumpDatabaseTask extends Task implements ShellCommandServiceAwareInterface
             . ' | '
             . $sshCommand->getCommandLine();
 
-        $localhost = new Node('localhost');
-        $localhost->onLocalhost();
-
-        $this->shell->executeOrSimulate($command, $localhost, $deployment);
+        $this->shell->executeOrSimulate($command, $deployment->createLocalhostNode(), $deployment);
     }
 
     /**

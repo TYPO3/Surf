@@ -65,7 +65,7 @@ class Node
      * @param string $hostname The Node's hostname
      * @return Node
      */
-    public function setHostname($hostname)
+    public function setHostname($hostname): \TYPO3\Surf\Domain\Model\Node
     {
         return $this->setOption('hostname', $hostname);
     }

@@ -185,10 +185,7 @@ class CommandTaskTest extends BaseTaskTest
         );
     }
 
-    /**
-     * @return Task
-     */
-    protected function createTask()
+    protected function createTask(): CommandTask
     {
         return new CommandTask();
     }

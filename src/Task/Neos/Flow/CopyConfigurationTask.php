@@ -76,10 +76,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
             }
         }
 
-        $localhost = new Node('localhost');
-        $localhost->onLocalhost();
-
-        $this->shell->executeOrSimulate($commands, $localhost, $deployment);
+        $this->shell->executeOrSimulate($commands, $deployment->createLocalhostNode(), $deployment);
     }
 
     /**

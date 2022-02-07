@@ -33,7 +33,7 @@ class WarmUpCacheTaskTest extends BaseTaskTest
     /**
      * @return WarmUpCacheTask
      */
-    protected function createTask()
+    protected function createTask(): WarmUpCacheTask
     {
         return new WarmUpCacheTask();
     }

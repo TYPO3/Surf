@@ -39,7 +39,7 @@ class StopTaskTest extends BaseTaskTest
     /**
      * @return StopTask
      */
-    protected function createTask()
+    protected function createTask(): StopTask
     {
         return new StopTask();
     }

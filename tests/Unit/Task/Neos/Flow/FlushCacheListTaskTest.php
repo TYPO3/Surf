@@ -92,7 +92,7 @@ class FlushCacheListTaskTest extends BaseTaskTest
     /**
      * @return FlushCacheListTask
      */
-    protected function createTask()
+    protected function createTask(): FlushCacheListTask
     {
         return new FlushCacheListTask();
     }

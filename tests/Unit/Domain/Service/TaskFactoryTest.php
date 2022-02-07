@@ -8,7 +8,6 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
 use PHPUnit\Framework\TestCase;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -20,6 +19,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Domain\Service\TaskFactory;
 use TYPO3\Surf\Task\CreateArchiveTask;
 use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
+use UnexpectedValueException;
 
 class TaskFactoryTest extends TestCase
 {
@@ -68,7 +68,7 @@ class TaskFactoryTest extends TestCase
         $task = new class {
         };
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
         $this->subject->createTaskInstance(get_class($task));
     }

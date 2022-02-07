@@ -96,7 +96,7 @@ class RsyncFoldersTaskTest extends BaseTaskTest
     /**
      * @return RsyncFoldersTask
      */
-    protected function createTask()
+    protected function createTask(): RsyncFoldersTask
     {
         return new RsyncFoldersTask();
     }

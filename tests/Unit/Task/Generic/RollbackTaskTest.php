@@ -62,10 +62,7 @@ previous',
         self::assertCount(1, $this->commands['executed']);
     }
 
-    /**
-     * @return RollbackTask|Task
-     */
-    protected function createTask()
+    protected function createTask(): RollbackTask
     {
         return new RollbackTask();
     }

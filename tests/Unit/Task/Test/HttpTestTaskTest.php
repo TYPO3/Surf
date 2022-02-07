@@ -151,7 +151,7 @@ Content-Type: text/html; charset=UTF-8',
     /**
      * @return HttpTestTask
      */
-    protected function createTask()
+    protected function createTask(): HttpTestTask
     {
         return new HttpTestTask(new Client());
     }

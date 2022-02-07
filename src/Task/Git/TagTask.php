@@ -81,10 +81,7 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
-    /**
-     * @return array
-     */
-    protected function processOptions(array $options, Deployment $deployment)
+    protected function processOptions(array $options, Deployment $deployment): array
     {
         foreach (['tagName', 'description'] as $optionName) {
             $options[$optionName] = str_replace(

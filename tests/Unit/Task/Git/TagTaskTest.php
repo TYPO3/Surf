@@ -56,10 +56,7 @@ class TagTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("git submodule foreach 'git tag -f -a -m '\\''Release {$this->deployment->getReleaseIdentifier()} - by Surf.'\\'' '\\''release-{$this->deployment->getReleaseIdentifier()}'\\'''");
     }
 
-    /**
-     * @return Task
-     */
-    protected function createTask()
+    protected function createTask(): TagTask
     {
         return new TagTask();
     }

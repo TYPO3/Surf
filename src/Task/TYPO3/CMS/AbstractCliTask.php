@@ -69,7 +69,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         if (!isset($this->workingDirectory, $this->targetNode)) {
             if (isset($options['useApplicationWorkspace']) && $options['useApplicationWorkspace'] === true) {
                 $this->workingDirectory = $deployment->getWorkspacePath($application);
-                $node = $deployment->getNode('localhost');
+                $node = $deployment->createLocalhostNode();
             } else {
                 $this->workingDirectory = $deployment->getApplicationReleasePath($application);
             }

@@ -38,7 +38,7 @@ class PublishResourcesTaskTest extends BaseTaskTest
     /**
      * @return PublishResourcesTask
      */
-    protected function createTask()
+    protected function createTask(): PublishResourcesTask
     {
         return new PublishResourcesTask();
     }

@@ -7,7 +7,7 @@ namespace TYPO3\Surf\Domain\Service;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use Phar;
 use Symfony\Component\Process\Process;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -27,7 +27,7 @@ class ShellCommandService
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return mixed The output of the shell command or false if the command returned a non-zero exit code and $ignoreErrors was enabled.
      */
-    public function execute($command, Node $node, Deployment $deployment, $ignoreErrors = false, $logOutput = true)
+    public function execute($command, Node $node, Deployment $deployment, bool $ignoreErrors = false, bool $logOutput = true)
     {
         if ($node->isLocalhost()) {
             list($exitCode, $returnedOutput) = $this->executeLocalCommand($command, $deployment, $logOutput);
@@ -45,10 +45,8 @@ class ShellCommandService
      * Simulate a command by just outputting what would be executed
      *
      * @param array|string $command
-     *
-     * @return bool
      */
-    public function simulate($command, Node $node, Deployment $deployment)
+    public function simulate($command, Node $node, Deployment $deployment): bool
     {
         if ($node->isLocalhost()) {
             $command = $this->prepareCommand($command);
@@ -83,7 +81,7 @@ class ShellCommandService
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return array
      */
-    protected function executeLocalCommand($command, Deployment $deployment, $logOutput = true)
+    protected function executeLocalCommand($command, Deployment $deployment, $logOutput = true): array
     {
         $command = $this->prepareCommand($command);
         $deployment->getLogger()->debug('(localhost): "' . $command . '"');
@@ -131,7 +129,7 @@ class ShellCommandService
 
         if ($node->hasOption('password')) {
             $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([dirname(dirname(dirname(__DIR__))), 'Resources', 'Private/Scripts/PasswordSshLogin.expect']);
-            if (\Phar::running() !== '') {
+            if (Phar::running() !== '') {
                 $passwordSshLoginScriptContents = file_get_contents($passwordSshLoginScriptPathAndFilename);
                 $passwordSshLoginScriptPathAndFilename = Files::concatenatePaths([$deployment->getTemporaryPath(), 'PasswordSshLogin.expect']);
                 file_put_contents($passwordSshLoginScriptPathAndFilename, $passwordSshLoginScriptContents);
@@ -139,7 +137,7 @@ class ShellCommandService
             $sshCommand = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $sshCommand);
         }
         $success = $this->executeProcess($deployment, $sshCommand, $logOutput, '    > ');
-        if (isset($passwordSshLoginScriptPathAndFilename) && \Phar::running() !== '') {
+        if (isset($passwordSshLoginScriptPathAndFilename) && Phar::running() !== '') {
             unlink($passwordSshLoginScriptPathAndFilename);
         }
         return $success;
@@ -179,7 +177,7 @@ class ShellCommandService
      * @param array|string|null $command
      * @return string
      */
-    protected function prepareCommand($command)
+    protected function prepareCommand($command): string
     {
         if (is_string($command)) {
             return trim($command);

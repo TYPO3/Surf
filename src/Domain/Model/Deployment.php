@@ -33,90 +33,70 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     /**
      * The name of this deployment
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * The workflow used for this deployment
-     * @var Workflow
      */
-    protected $workflow;
+    protected ?Workflow $workflow = null;
 
     /**
      * The applications deployed with this deployment
      * @var Application[]
      */
-    protected $applications = [];
+    protected array $applications = [];
 
     /**
      * A logger instance used to log messages during deployment
-     * @var LoggerInterface
      */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     /**
      * The release identifier will be created on each deployment
-     * @var string|null
      */
-    protected $releaseIdentifier;
+    protected ?string $releaseIdentifier = null;
 
     /**
      * TRUE if the deployment should be simulated
-     * @var bool
      */
-    protected $dryRun = false;
+    protected bool $dryRun = false;
 
     /**
      * Callbacks that should be executed after initialization
      * @var array
      */
-    protected $initCallbacks = [];
+    protected array $initCallbacks = [];
 
     /**
      * Tells if the deployment ran successfully or failed
-     * @var int
      */
-    protected $status = self::STATUS_UNKNOWN;
+    protected int $status = self::STATUS_UNKNOWN;
 
-    /**
-     * @var bool
-     */
-    protected $initialized = false;
+    protected bool $initialized = false;
 
-    /**
-     * The options
-     * @var array
-     */
-    protected $options = [];
+    protected array $options = [];
 
     /**
      * The deployment declaration base path for this deployment
-     * @var string
      */
-    protected $deploymentBasePath;
+    protected string $deploymentBasePath;
 
     /**
      * The base path to the local workspaces when packaging for deployment
      * (may be temporary directory)
-     *
-     * @var string
      */
-    protected $workspacesBasePath;
+    protected string $workspacesBasePath;
 
     /**
      * The relative base path to the project root (for example 'htdocs')
-     *
-     * @var string
      */
-    protected $relativeProjectRootPath = '';
+    protected string $relativeProjectRootPath = '';
 
     /**
      * The base path to a temporary directory
-     *
-     * @var string
      */
-    protected $temporaryPath;
+    protected string $temporaryPath;
 
     private bool $forceRun = false;
 
@@ -153,7 +133,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
             throw new SurfException('Already initialized', 1335976472);
         }
         if ($this->workflow === null) {
-            $this->workflow = $this->container->get(SimpleWorkflow::class);
+            $this->workflow = $this->createSimpleWorkflow();
         }
 
         foreach ($this->applications as $application) {
@@ -188,7 +168,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     public function deploy(): void
     {
         $this->logger->notice('Deploying ' . $this->name . ' (' . $this->releaseIdentifier . ')');
-        $this->workflow->run($this);
+        $this->getWorkflow()->run($this);
     }
 
     /**
@@ -200,7 +180,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     {
         $this->setDryRun(true);
         $this->logger->notice('Simulating ' . $this->name . ' (' . $this->releaseIdentifier . ')');
-        $this->workflow->run($this);
+        $this->getWorkflow()->run($this);
     }
 
     /**
@@ -208,7 +188,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return string
      */
-    public function getApplicationReleaseBasePath(Application $application)
+    public function getApplicationReleaseBasePath(Application $application): string
     {
         return Files::concatenatePaths([
             $application->getReleasesPath(),
@@ -221,7 +201,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return string
      */
-    public function getApplicationReleasePath(Application $application)
+    public function getApplicationReleasePath(Application $application): string
     {
         return Files::concatenatePaths([
             $this->getApplicationReleaseBasePath($application),
@@ -234,7 +214,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return string The Deployment's name
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -280,13 +260,18 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     public function getNode(string $name): ?Node
     {
         if ($name === 'localhost') {
-            $node = new Node('localhost');
-            $node->onLocalhost();
-            return $node;
+            return $this->createLocalhostNode();
         }
         $nodes = $this->getNodes();
 
         return $nodes[$name] ?? null;
+    }
+
+    public function createLocalhostNode(): Node
+    {
+        $node = new Node('localhost');
+        $node->onLocalhost();
+        return $node;
     }
 
     /**
@@ -294,7 +279,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return Application[]
      */
-    public function getApplications()
+    public function getApplications(): array
     {
         return $this->applications;
     }
@@ -306,53 +291,37 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return Deployment The current deployment instance for chaining
      */
-    public function addApplication(Application $application)
+    public function addApplication(Application $application): self
     {
         $this->applications[$application->getName()] = $application;
 
         return $this;
     }
 
-    /**
-     * Get the deployment workflow
-     *
-     * @return Workflow The deployment workflow
-     */
-    public function getWorkflow()
+    public function getWorkflow(): Workflow
     {
+        if(!$this->workflow instanceof Workflow) {
+            throw new UnexpectedValueException('No workflow is defined for deployment');
+        }
+
         return $this->workflow;
     }
 
-    /**
-     * Sets the deployment workflow
-     *
-     * @param Workflow $workflow The workflow to set
-     *
-     * @return Deployment The current deployment instance for chaining
-     */
-    public function setWorkflow($workflow)
+    public function setWorkflow(Workflow $workflow): self
     {
         $this->workflow = $workflow;
 
         return $this;
     }
 
-    /**
-     * @param LoggerInterface $logger
-     *
-     * @return Deployment
-     */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    /**
-     * @return LoggerInterface
-     */
-    public function getLogger()
+    public function getLogger(): LoggerInterface
     {
         return $this->logger;
     }
@@ -361,10 +330,8 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      * Get the deployment release identifier
      *
      * This gets the current release identifier when running a deployment.
-     *
-     * @return string The release identifier
      */
-    public function getReleaseIdentifier()
+    public function getReleaseIdentifier(): ?string
     {
         return $this->releaseIdentifier;
     }
@@ -381,34 +348,19 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         return $this->relativeProjectRootPath;
     }
 
-    /**
-     * @return bool TRUE If the deployment is run in "dry run" mode
-     */
     public function isDryRun(): bool
     {
         return $this->dryRun;
     }
 
-    /**
-     * Set the dry run mode for this deployment
-     *
-     * @param bool $dryRun
-     *
-     * @return Deployment The current deployment instance for chaining
-     */
-    public function setDryRun($dryRun)
+    public function setDryRun(bool $dryRun): self
     {
         $this->dryRun = $dryRun;
 
         return $this;
     }
 
-    /**
-     * @param int $status
-     *
-     * @return Deployment
-     */
-    public function setStatus($status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -420,15 +372,12 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return int One of the Deployment::STATUS_* constants
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
 
-    /**
-     * @return bool TRUE If the deployment is initialized
-     */
-    public function isInitialized()
+    public function isInitialized(): bool
     {
         return $this->initialized;
     }
@@ -441,31 +390,20 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return array An array of options indexed by option key
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
 
     /**
-     * Get an option defined on the deployment
-     *
-     * @param string $key
-     *
      * @return mixed
      */
-    public function getOption($key)
+    public function getOption(string $key)
     {
         return $this->options[$key];
     }
 
-    /**
-     * Test if an option was set for this deployment
-     *
-     * @param string $key The option key
-     *
-     * @return bool TRUE If the option was set
-     */
-    public function hasOption($key)
+    public function hasOption(string $key): bool
     {
         return array_key_exists($key, $this->options);
     }
@@ -477,7 +415,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return Deployment The current instance for chaining
      */
-    public function setOptions($options)
+    public function setOptions(array $options): self
     {
         $this->options = $options;
 
@@ -487,60 +425,42 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     /**
      * Set an option for the deployment
      *
-     * @param string $key The option key
      * @param mixed $value The option value
-     *
-     * @return Deployment The current instance for chaining
      */
-    public function setOption($key, $value)
+    public function setOption(string $key, $value): self
     {
         $this->options[$key] = $value;
 
         return $this;
     }
 
-    /**
-     * Set the deployment base path
-     *
-     * @param string $deploymentConfigurationPath
-     */
-    public function setDeploymentBasePath($deploymentConfigurationPath): void
+    public function setDeploymentBasePath(string $deploymentConfigurationPath): void
     {
         $this->deploymentBasePath = $deploymentConfigurationPath;
     }
 
     /**
      * Get the deployment base path (defaults to ./.surf)
-     *
-     * @return string
      */
-    public function getDeploymentBasePath()
+    public function getDeploymentBasePath(): string
     {
         return $this->deploymentBasePath;
     }
 
-    /**
-     * @param string $workspacesBasePath
-     */
-    public function setWorkspacesBasePath($workspacesBasePath): void
+    public function setWorkspacesBasePath(string $workspacesBasePath): void
     {
         $this->workspacesBasePath = rtrim($workspacesBasePath, '\\/');
     }
 
-    /**
-     * @param string $temporaryPath
-     */
-    public function setTemporaryPath($temporaryPath): void
+    public function setTemporaryPath(string $temporaryPath): void
     {
         $this->temporaryPath = rtrim($temporaryPath, '\\/');
     }
 
     /**
      * Get the deployment configuration path (defaults to ./.surf/DeploymentName/Configuration)
-     *
-     * @return string The path without a trailing slash
      */
-    public function getDeploymentConfigurationPath()
+    public function getDeploymentConfigurationPath(): string
     {
         return Files::concatenatePaths([
             $this->getDeploymentBasePath(),
@@ -551,12 +471,8 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     /**
      * Get a local workspace directory for the application
-     *
-     * @param Application $application
-     *
-     * @return string
      */
-    public function getWorkspacePath(Application $application)
+    public function getWorkspacePath(Application $application): string
     {
         return Files::concatenatePaths([
             $this->workspacesBasePath,
@@ -567,12 +483,8 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     /**
      * Get a local workspace directory for the application
-     *
-     * @param Application $application
-     *
-     * @return string
      */
-    public function getWorkspaceWithProjectRootPath(Application $application)
+    public function getWorkspaceWithProjectRootPath(Application $application): string
     {
         return Files::concatenatePaths([
             $this->getWorkspacePath($application),
@@ -599,43 +511,42 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         if ($dryRun) {
             $this->setDryRun(true);
         }
-        $this->workflow->run($this);
+        $workflow->run($this);
     }
 
-    /**
-     * @param bool $force
-     */
-    public function setForceRun($force): void
+    public function setForceRun(bool $force): void
     {
-        $this->forceRun = (bool)$force;
+        $this->forceRun = $force;
     }
 
-    /**
-     * @return bool
-     */
-    public function getForceRun()
+    public function getForceRun(): bool
     {
         return $this->forceRun;
     }
 
-    /**
-     * @return string
-     */
-    public function getDeploymentLockIdentifier()
+    public function getDeploymentLockIdentifier(): string
     {
         return $this->deploymentLockIdentifier;
     }
 
-    /**
-     * @param string|null $deploymentLockIdentifier
-     */
-    private function setDeploymentLockIdentifier($deploymentLockIdentifier = null): void
+    private function setDeploymentLockIdentifier(?string $deploymentLockIdentifier = null): void
     {
         if (! is_string($deploymentLockIdentifier) || $deploymentLockIdentifier === '') {
             $deploymentLockIdentifier = getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER') !== false
                 ? (string)getenv('SURF_DEPLOYMENT_LOCK_IDENTIFIER')
                 : $this->releaseIdentifier;
         }
-        $this->deploymentLockIdentifier = $deploymentLockIdentifier;
+        $this->deploymentLockIdentifier = (string)$deploymentLockIdentifier;
+    }
+
+    private function createSimpleWorkflow(): SimpleWorkflow
+    {
+        $workflow = $this->container->get(SimpleWorkflow::class);
+
+        if (!$workflow instanceof SimpleWorkflow) {
+            throw new UnexpectedValueException(sprintf('Workflow must be of type "%s"', SimpleWorkflow::class));
+        }
+
+        return $workflow;
     }
 }

@@ -50,7 +50,7 @@ class FailedDeployment extends Deployment
      *
      * @return int One of the Deployment::STATUS_* constants
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return self::STATUS_UNKNOWN;
     }

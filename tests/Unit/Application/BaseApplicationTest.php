@@ -70,7 +70,7 @@ class BaseApplicationTest extends TestCase
         $workflow = $this->createWorkflow();
 
         $workflow->addTask(GitCheckoutTask::class, 'transfer', $this->subject)->shouldBeCalledOnce();
-        $deployment = $this->prophesize(Deployment::class);
+        $deployment = $this->createDeployment();
 
         $this->subject->setOption('transferMethod', 'git');
         $this->subject->registerTasks($workflow->reveal(), $deployment->reveal());
@@ -84,7 +84,7 @@ class BaseApplicationTest extends TestCase
         $workflow = $this->createWorkflow();
 
         $workflow->addTask(ScpTask::class, 'transfer', $this->subject)->shouldBeCalledOnce();
-        $deployment = $this->prophesize(Deployment::class);
+        $deployment = $this->createDeployment();
 
         $this->subject->setOption('transferMethod', 'scp');
         $this->subject->registerTasks($workflow->reveal(), $deployment->reveal());
@@ -132,5 +132,16 @@ class BaseApplicationTest extends TestCase
         $workflow->defineTask(Argument::any(), Argument::any(), Argument::type('array'))->will(new FluidPromise());
 
         return $workflow;
+    }
+
+    /**
+     * @return Deployment|ObjectProphecy
+     */
+    private function createDeployment()
+    {
+        $deployment = $this->prophesize(Deployment::class);
+        $deployment->getForceRun()->willReturn(false);
+
+        return $deployment;
     }
 }

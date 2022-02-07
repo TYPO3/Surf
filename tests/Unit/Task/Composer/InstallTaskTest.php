@@ -83,10 +83,7 @@ class InstallTaskTest extends BaseTaskTest
         );
     }
 
-    /**
-     * @return Task
-     */
-    protected function createTask()
+    protected function createTask(): InstallTask
     {
         return new InstallTask();
     }

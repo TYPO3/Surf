@@ -57,7 +57,7 @@ class DumpDatabaseTaskTest extends BaseTaskTest
     /**
      * @return DumpDatabaseTask
      */
-    protected function createTask()
+    protected function createTask(): DumpDatabaseTask
     {
         return new DumpDatabaseTask();
     }

@@ -45,7 +45,7 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
     /**
      * @return UnlockDeploymentTask
      */
-    protected function createTask()
+    protected function createTask(): UnlockDeploymentTask
     {
         return new UnlockDeploymentTask();
     }

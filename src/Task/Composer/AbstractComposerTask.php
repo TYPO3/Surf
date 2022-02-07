@@ -29,24 +29,18 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
 
     /**
      * Command to run
-     *
-     * @var string
      */
-    protected $command = '';
+    protected string $command = '';
 
     /**
      * Arguments for the command
-     *
-     * @var array
      */
-    protected $arguments = [];
+    protected array $arguments = [];
 
     /**
      * Suffix for the command
-     *
-     * @var array
      */
-    protected $suffix = ['2>&1'];
+    protected array $suffix = ['2>&1'];
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
@@ -78,10 +72,8 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
 
     /**
      * Build the composer command in the given $path.
-     *
-     * @return array
      */
-    private function buildComposerCommands(string $manifestPath, array $options)
+    private function buildComposerCommands(string $manifestPath, array $options): array
     {
         $arguments = array_merge(
             [escapeshellcmd($options['composerCommandPath']), $this->command],
@@ -99,10 +91,8 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
 
     /**
      * Checks if a composer manifest exists in the directory at the given path.
-     *
-     * @return bool
      */
-    private function composerManifestExists(string $path, Node $node, Deployment $deployment)
+    private function composerManifestExists(string $path, Node $node, Deployment $deployment): bool
     {
         // In dry run mode, no checkout is there, this we must not assume a composer.json is there!
         if ($deployment->isDryRun()) {
@@ -124,7 +114,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         $resolver->setRequired('composerCommandPath');
 
         $resolver->setDefault('additionalArguments', [])
-            ->setNormalizer('additionalArguments', static function (Options $options, $value) {
+            ->setNormalizer('additionalArguments', static function (Options $options, $value): array {
                 return (array)$value;
             });
 

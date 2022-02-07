@@ -61,10 +61,7 @@ class LocalShellTaskTest extends BaseTaskTest
         ];
     }
 
-    /**
-     * @return LocalShellTask|Task
-     */
-    protected function createTask()
+    protected function createTask(): LocalShellTask
     {
         return new LocalShellTask();
     }

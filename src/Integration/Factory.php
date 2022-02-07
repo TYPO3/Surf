@@ -25,20 +25,11 @@ class Factory implements FactoryInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var OutputInterface
-     */
-    protected $output;
+    protected OutputInterface $output;
 
-    /**
-     * @var Logger
-     */
-    protected $logger;
+    protected Logger $logger;
 
-    /**
-     * @var FilesystemInterface
-     */
-    protected $filesystem;
+    protected FilesystemInterface $filesystem;
 
     public function __construct(FilesystemInterface $filesystem, Logger $logger)
     {
@@ -74,7 +65,7 @@ class Factory implements FactoryInterface, ContainerAwareInterface
         $path = $this->getDeploymentsBasePath($path);
         $files = $this->filesystem->glob(Files::concatenatePaths([$path, '*.php']));
 
-        return array_map(static function ($file) use ($path) {
+        return array_map(static function ($file) use ($path): string {
             return substr($file, strlen($path) + 1, -4);
         }, $files);
     }

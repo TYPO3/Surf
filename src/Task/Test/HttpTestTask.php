@@ -94,7 +94,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             'proxy' => null,
             'proxyPort' => null,
         ]);
-        $resolver->setNormalizer('remote', static function (Options $options, $value) {
+        $resolver->setNormalizer('remote', static function (Options $options, $value): bool {
             return (bool)$value;
         });
     }
@@ -183,7 +183,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      * @throws TaskExecutionException
      * @throws GuzzleException
      */
-    protected function executeLocalCurlRequest($url, array $options = [])
+    protected function executeLocalCurlRequest($url, array $options = []): HttpResponse
     {
         $guzzleOptions = [];
 
@@ -228,7 +228,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      * @return HttpResponse
      * @throws TaskExecutionException
      */
-    protected function executeRemoteCurlRequest($url, Node $node, Deployment $deployment, $additionalCurlParameters = '')
+    protected function executeRemoteCurlRequest($url, Node $node, Deployment $deployment, $additionalCurlParameters = ''): HttpResponse
     {
         $command = 'curl -s -I ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
         $head = $this->shell->execute($command, $node, $deployment, false, false);

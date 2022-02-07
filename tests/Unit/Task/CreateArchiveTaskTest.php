@@ -195,7 +195,7 @@ class CreateArchiveTaskTest extends BaseTaskTest
     /**
      * @return CreateArchiveTask
      */
-    protected function createTask()
+    protected function createTask(): CreateArchiveTask
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->idGenerator = $this->prophesize(IdGeneratorInterface::class);

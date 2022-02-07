@@ -32,7 +32,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
     /**
      * @return CreateSymlinksTask
      */
-    protected function createTask()
+    protected function createTask(): CreateSymlinksTask
     {
         return new CreateSymlinksTask();
     }

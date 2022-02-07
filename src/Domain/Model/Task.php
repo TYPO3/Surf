@@ -36,10 +36,7 @@ abstract class Task
         $this->configureOptions($options);
     }
 
-    /**
-     * @return array
-     */
-    protected function configureOptions(array $options = [])
+    protected function configureOptions(array $options = []): array
     {
         try {
             $resolver = new OptionsResolver();

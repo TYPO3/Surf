@@ -77,7 +77,7 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
             ->setNormalizer('flushCacheList', static function (Options $options, $value) {
                 return is_array($value) ? $value : explode(',', $value);
             })
-            ->setAllowedValues('flushCacheList', static function ($value) {
+            ->setAllowedValues('flushCacheList', static function ($value): bool {
                 if (is_array($value)) {
                     return !empty($value);
                 }

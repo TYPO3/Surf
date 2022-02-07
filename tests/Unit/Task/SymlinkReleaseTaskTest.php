@@ -45,7 +45,7 @@ class SymlinkReleaseTaskTest extends BaseTaskTest
     /**
      * @return SymlinkReleaseTask
      */
-    protected function createTask()
+    protected function createTask(): SymlinkReleaseTask
     {
         return new SymlinkReleaseTask();
     }

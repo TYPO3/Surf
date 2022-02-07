@@ -7,7 +7,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use Closure;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
@@ -87,7 +87,7 @@ class SimpleWorkflowTest extends TestCase
         return [
             [
                 'Just one global task in stage initialize',
-                static function (Workflow $workflow, Application $application) {
+                static function (Workflow $workflow, Application $application): callable {
                     return static function () use ($workflow): void {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize');
@@ -106,7 +106,7 @@ class SimpleWorkflowTest extends TestCase
             ],
             [
                 'Add multiple tasks with afterTask',
-                function (Workflow $workflow, Application $application) {
+                function (Workflow $workflow, Application $application): callable {
                     return static function () use ($workflow): void {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
@@ -151,7 +151,7 @@ class SimpleWorkflowTest extends TestCase
             ],
             [
                 'Tasks in different stages',
-                static function (Workflow $workflow, Application $application) {
+                static function (Workflow $workflow, Application $application): callable {
                     return static function () use ($workflow): void {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
@@ -194,7 +194,7 @@ class SimpleWorkflowTest extends TestCase
      * @dataProvider globalTaskDefinitions
      *
      * @param string $message
-     * @param \Closure $initializeCallback
+     * @param Closure $initializeCallback
      * @param array $expectedExecutions
      */
     public function globalTaskDefinitionsAreExecutedCorrectly(
@@ -231,7 +231,7 @@ class SimpleWorkflowTest extends TestCase
         return [
             [
                 'Specific tasks for applications',
-                function ($workflow, $applications) {
+                function ($workflow, $applications): callable {
                     [$flowApplication, $typo3Application] = $applications;
 
                     return function () use ($workflow, $flowApplication, $typo3Application): void {
@@ -300,7 +300,7 @@ class SimpleWorkflowTest extends TestCase
      * @dataProvider applicationTaskDefinitions
      *
      * @param string $message
-     * @param \Closure $initializeCallback
+     * @param Closure $initializeCallback
      * @param array $expectedExecutions
      */
     public function applicationTaskDefinitionsAreExecutedCorrectly(
@@ -338,7 +338,7 @@ class SimpleWorkflowTest extends TestCase
      *
      * @param array $executedTasks Register for executed tasks
      *
-     * @return \TYPO3\Surf\Domain\Model\Deployment A configured Deployment for testing
+     * @return Deployment A configured Deployment for testing
      */
     protected function buildDeployment(array &$executedTasks = [])
     {

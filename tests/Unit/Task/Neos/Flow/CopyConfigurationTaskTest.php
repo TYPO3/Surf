@@ -133,10 +133,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("' foo@remote:\"");
     }
 
-    /**
-     * @return Task
-     */
-    protected function createTask()
+    protected function createTask(): CopyConfigurationTask
     {
         return new CopyConfigurationTask();
     }

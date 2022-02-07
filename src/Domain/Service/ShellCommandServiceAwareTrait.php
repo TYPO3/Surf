@@ -12,10 +12,7 @@ namespace TYPO3\Surf\Domain\Service;
  */
 trait ShellCommandServiceAwareTrait
 {
-    /**
-     * @var ShellCommandService
-     */
-    protected $shell;
+    protected ShellCommandService $shell;
 
     public function setShellCommandService(ShellCommandService $shellCommandService): void
     {

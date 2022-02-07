@@ -64,6 +64,12 @@ class Filesystem implements FilesystemInterface
 
     public function glob(string $pattern): array
     {
-        return glob($pattern);
+        $matches = glob($pattern);
+
+        if ($matches === false) {
+            throw new \UnexpectedValueException(sprintf('Glob pattern "%s" could be applied', $pattern));
+        }
+
+        return $matches;
     }
 }

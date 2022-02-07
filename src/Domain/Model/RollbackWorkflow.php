@@ -77,10 +77,7 @@ final class RollbackWorkflow extends Workflow
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'Rollback workflow';
     }
