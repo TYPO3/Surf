@@ -13,7 +13,6 @@ use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
-use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\DeploymentLockedException;
@@ -23,9 +22,16 @@ use TYPO3\Surf\Exception\DeploymentLockedException;
  */
 final class LockDeploymentTask extends Task implements ShellCommandServiceAwareInterface
 {
-    const LOCK_FILE_NAME = 'deploy.lock';
+    public const LOCK_FILE_NAME = 'deploy.lock';
+
+    private UnlockDeploymentTask $unlockDeploymentTask;
 
     use ShellCommandServiceAwareTrait;
+
+    public function __construct(UnlockDeploymentTask $unlockDeploymentTask)
+    {
+        $this->unlockDeploymentTask = $unlockDeploymentTask;
+    }
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
@@ -51,9 +57,7 @@ final class LockDeploymentTask extends Task implements ShellCommandServiceAwareI
 
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
-        $unLockDeployment = new UnlockDeploymentTask();
-        $unLockDeployment->setShellCommandService(new ShellCommandService());
-        $unLockDeployment->execute($node, $application, $deployment, $options);
+        $this->unlockDeploymentTask->execute($node, $application, $deployment, $options);
     }
 
     /**
