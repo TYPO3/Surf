@@ -52,11 +52,14 @@ final class LockDeploymentTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment);
     }
 
-    /**
-     * @return LockDeploymentTask
-     */
     protected function createTask(): LockDeploymentTask
     {
-        return new LockDeploymentTask();
+        $task =  static::getKernel()->getContainer()->get(LockDeploymentTask::class);
+
+        if (!$task instanceof LockDeploymentTask) {
+            throw new \UnexpectedValueException(sprintf('Task is not of type "%s"', LockDeploymentTask::class));
+        }
+
+        return $task;
     }
 }
