@@ -62,6 +62,6 @@ class SimulateCommand extends Command
         $deployment = $this->factory->getDeployment($deploymentName, $configurationPath, true, true, $force);
         $deployment->simulate();
 
-        return $deployment->getStatus();
+        return $deployment->getStatus()->toInt();
     }
 }

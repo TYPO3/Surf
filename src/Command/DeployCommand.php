@@ -60,6 +60,6 @@ class DeployCommand extends Command
         $deployment = $this->factory->getDeployment((string)$deploymentName, $configurationPath, false, true, $input->getOption('force'));
         $deployment->deploy();
 
-        return $deployment->getStatus();
+        return $deployment->getStatus()->toInt();
     }
 }

@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Flow\Utility\Files;
+use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 use TYPO3\Surf\Exception as SurfException;
 use UnexpectedValueException;
 
@@ -25,11 +26,6 @@ use UnexpectedValueException;
 class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
-
-    public const STATUS_SUCCESS = 0;
-    public const STATUS_FAILED = 1;
-    public const STATUS_CANCELLED = 2;
-    public const STATUS_UNKNOWN = 3;
 
     /**
      * The name of this deployment
@@ -68,10 +64,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      */
     protected array $initCallbacks = [];
 
-    /**
-     * Tells if the deployment ran successfully or failed
-     */
-    protected int $status = self::STATUS_UNKNOWN;
+    protected DeploymentStatus $status;
 
     protected bool $initialized = false;
 
@@ -105,6 +98,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     public function __construct(string $name, string $deploymentLockIdentifier = null)
     {
         $this->name = $name;
+        $this->status = DeploymentStatus::UNKNOWN();
 
         $time = strftime('%Y%m%d%H%M%S', time());
 
@@ -153,7 +147,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return Deployment
      */
-    public function onInitialize($callback)
+    public function onInitialize(callable $callback): self
     {
         $this->initCallbacks[] = $callback;
 
@@ -360,19 +354,14 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         return $this;
     }
 
-    public function setStatus(int $status): self
+    public function setStatus(DeploymentStatus $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    /**
-     * Get the current deployment status
-     *
-     * @return int One of the Deployment::STATUS_* constants
-     */
-    public function getStatus(): int
+    public function getStatus(): DeploymentStatus
     {
         return $this->status;
     }

@@ -6,6 +6,7 @@
         "php": "^7.4 || ^8.0",
         "guzzlehttp/guzzle": "^6.0 || ^7.0",
         "monolog/monolog": "^1.17",
+        "myclabs/php-enum": "^1.8",
         "neos/utility-files": "^3.0",
         "padraic/phar-updater": "1.0.5",
         "phar-io/version": "^3.1",
@@ -27,7 +28,8 @@
         "phpstan/phpstan-phpunit": "^1.0",
         "phpstan/phpstan-webmozart-assert": "^1.0",
         "phpunit/phpunit": "^8.0",
-        "rector/rector": "^0.12"
+        "rector/rector": "^0.12",
+        "timeweb/phpstan-enum": "^3.0"
     },
     "config": {
         "optimize-autoloader": true,

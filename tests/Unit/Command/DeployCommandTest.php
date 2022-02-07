@@ -14,6 +14,7 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\Surf\Command\DeployCommand;
+use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Integration\FactoryInterface;
 
@@ -43,7 +44,7 @@ final class DeployCommandTest extends TestCase
         // @var Deployment|\Prophecy\Prophecy\ObjectProphecy $deployment
         $deployment = $this->prophesize(Deployment::class);
         $deployment->deploy()->shouldBeCalledOnce();
-        $deployment->getStatus()->willReturn(Deployment::STATUS_SUCCESS);
+        $deployment->getStatus()->willReturn(DeploymentStatus::SUCCESS());
 
         $this->factory->getDeployment(
             'Foo',
