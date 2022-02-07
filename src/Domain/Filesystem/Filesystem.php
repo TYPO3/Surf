@@ -9,6 +9,8 @@ namespace TYPO3\Surf\Domain\Filesystem;
  * file that was distributed with this source code.
  */
 
+use UnexpectedValueException;
+
 /**
  * @codeCoverageIgnore
  */
@@ -18,7 +20,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritDoc
      */
-    public function put($filename, $content)
+    public function put(string $filename, string $content)
     {
         return file_put_contents($filename, $content);
     }
@@ -26,7 +28,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritDoc
      */
-    public function get($filename, $includePath = false, $streamContext = null)
+    public function get(string $filename, bool $includePath = false, $streamContext = null)
     {
         return file_get_contents($filename, $includePath, $streamContext);
     }
@@ -67,7 +69,7 @@ class Filesystem implements FilesystemInterface
         $matches = glob($pattern);
 
         if ($matches === false) {
-            throw new \UnexpectedValueException(sprintf('Glob pattern "%s" could be applied', $pattern));
+            throw new UnexpectedValueException(sprintf('Glob pattern "%s" could be applied', $pattern));
         }
 
         return $matches;

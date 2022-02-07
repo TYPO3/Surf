@@ -131,7 +131,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         }
 
         foreach ($this->applications as $application) {
-            $application->registerTasks($this->workflow, $this);
+            $application->registerTasks($this->getWorkflow(), $this);
         }
         foreach ($this->initCallbacks as $callback) {
             $callback();

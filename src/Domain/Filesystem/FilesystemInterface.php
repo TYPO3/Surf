@@ -12,21 +12,16 @@ interface FilesystemInterface
 {
 
     /**
-     * @param string $filename
-     * @param string $content
-     *
      * @return bool|int
      */
-    public function put($filename, $content);
+    public function put(string $filename, string $content);
 
     /**
-     * @param string $filename
-     * @param bool $includePath
      * @param resource|null $streamContext
      *
      * @return false|string
      */
-    public function get($filename, $includePath = false, $streamContext = null);
+    public function get(string $filename, bool $includePath = false, $streamContext = null);
 
     public function isDirectory(string $directory): bool;
 

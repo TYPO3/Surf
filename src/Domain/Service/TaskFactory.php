@@ -13,7 +13,6 @@ namespace TYPO3\Surf\Domain\Service;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Domain\Model\Task;
-use TYPO3\Surf\Exception as SurfException;
 use UnexpectedValueException;
 
 /**
@@ -25,13 +24,7 @@ class TaskFactory implements ContainerAwareInterface
 
     public function createTaskInstance(string $taskName): Task
     {
-        $task = $this->createTask($taskName);
-
-        if (! $task instanceof Task) {
-            throw new SurfException(sprintf('The task %s is not a subclass of %s but of class %s', $taskName, Task::class, get_class($task)), 1451210811);
-        }
-
-        return $task;
+        return $this->createTask($taskName);
     }
 
     private function createTask(string $taskName): Task

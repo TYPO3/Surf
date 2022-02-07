@@ -13,140 +13,82 @@ namespace TYPO3\Surf\Domain\Model;
  */
 class Node
 {
-    /**
-     * The name
-     * @var string
-     */
-    protected $name;
+    protected string $name;
 
     /**
      * Options for this node
      *
      * username: SSH username for connecting to this node (optional)
      * port: SSH port for connecting to the node (optional)
-     *
-     * @var array
      */
-    protected $options = [];
+    protected array $options = [];
 
-    /**
-     * Constructor
-     *
-     * @param string $name
-     */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * Get the Node's name
-     *
-     * @return string The Node's name
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Get the Node's hostname
-     *
-     * @return string The Node's hostname
-     */
-    public function getHostname()
+    public function getHostname(): string
     {
         return $this->getOption('hostname');
     }
 
-    /**
-     * Sets this Node's hostname
-     *
-     * @param string $hostname The Node's hostname
-     * @return Node
-     */
-    public function setHostname($hostname): \TYPO3\Surf\Domain\Model\Node
+    public function setHostname(string $hostname): Node
     {
         return $this->setOption('hostname', $hostname);
     }
 
-    /**
-     * Get the Node's options
-     *
-     * @return array The Node's options
-     */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
 
-    /**
-     * Sets this Node's options
-     *
-     * @param array $options The Node's options
-     * @return Node
-     */
-    public function setOptions(array $options)
+    public function setOptions(array $options): self
     {
         $this->options = $options;
         return $this;
     }
 
     /**
-     * @param string $key
      * @return mixed
      */
-    public function getOption($key)
+    public function getOption(string $key)
     {
         return $this->options[$key];
     }
 
     /**
-     * @param string $key
      * @param mixed $value
-     * @return Node
      */
-    public function setOption($key, $value)
+    public function setOption(string $key, $value): self
     {
         $this->options[$key] = $value;
         return $this;
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function hasOption($key)
+    public function hasOption(string $key): bool
     {
         return isset($this->options[$key]);
     }
 
-    /**
-     * @param int $port
-     *
-     * @return Node
-     */
-    public function setPort($port)
+    public function setPort(int $port): self
     {
         $this->setOption('port', $port);
         return $this;
     }
 
-    /**
-     * @param callable $remoteCommandExecutionHandler
-     *
-     * @return Node
-     */
-    public function setRemoteCommandExecutionHandler(callable $remoteCommandExecutionHandler)
+    public function setRemoteCommandExecutionHandler(callable $remoteCommandExecutionHandler): self
     {
         $this->setOption('remoteCommandExecutionHandler', $remoteCommandExecutionHandler);
         return $this;
     }
 
-    /**
-     * @return callable|null
-     */
-    public function getRemoteCommandExecutionHandler()
+    public function getRemoteCommandExecutionHandler(): ?callable
     {
         if ($this->hasOption('remoteCommandExecutionHandler')) {
             return $this->getOption('remoteCommandExecutionHandler');
@@ -154,21 +96,13 @@ class Node
         return null;
     }
 
-    /**
-     * @param string $username
-     *
-     * @return Node
-     */
-    public function setUsername($username)
+    public function setUsername(string $username): self
     {
         $this->setOption('username', $username);
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         if ($this->hasOption('username')) {
             return $this->getOption('username');
@@ -179,7 +113,7 @@ class Node
     /**
      * @return int|null
      */
-    public function getPort()
+    public function getPort(): ?int
     {
         if ($this->hasOption('port')) {
             return $this->getOption('port');
@@ -188,27 +122,18 @@ class Node
         return null;
     }
 
-    /**
-     * @return bool TRUE if this node is the localhost
-     */
-    public function isLocalhost()
+    public function isLocalhost(): bool
     {
         return $this->getOption('hostname') === 'localhost';
     }
 
-    /**
-     * @return Node
-     */
-    public function onLocalhost()
+    public function onLocalhost(): self
     {
         $this->setOption('hostname', 'localhost');
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }

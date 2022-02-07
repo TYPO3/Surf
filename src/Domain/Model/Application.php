@@ -17,24 +17,22 @@ use Webmozart\Assert\Assert;
 class Application
 {
     /**
-     * default directory name for shared directory
-     *
-     * @const
+     * @var string
      */
     public const DEFAULT_SHARED_DIR = 'shared';
 
+    /**
+     * @var string
+     */
     public const DEFAULT_WEB_DIRECTORY = 'public';
 
-    /**
-     * The name
-     */
     protected string $name;
 
     /**
      * The nodes for this application
-     * @var array
+     * @var Node[]
      */
-    protected $nodes = [];
+    protected array $nodes = [];
 
     /**
      * The deployment path for this application on a node
@@ -91,7 +89,7 @@ class Application
     /**
      * Set the nodes where this application should be deployed
      *
-     * @param array|Node[] $nodes The application nodes
+     * @param Node[] $nodes The application nodes
      */
     public function setNodes(array $nodes): self
     {
