@@ -8,10 +8,10 @@ namespace TYPO3\Surf\Task\Test;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use function GuzzleHttp\headers_from_lines;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
@@ -33,10 +33,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @var ClientInterface
-     */
-    private $client;
+    private ClientInterface $client;
 
     public function __construct(ClientInterface $client)
     {
@@ -254,6 +251,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function extractHeadersFromMultiLineString($headerText)
     {
-        return $headerText !== '' ? \GuzzleHttp\headers_from_lines(explode(chr(10), $headerText)) : [];
+        return $headerText !== '' ? headers_from_lines(explode(chr(10), $headerText)) : [];
     }
 }

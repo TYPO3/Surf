@@ -21,11 +21,7 @@ use TYPO3\Surf\Tests\Unit\FluidPromise;
 
 class BaseApplicationTest extends TestCase
 {
-
-    /**
-     * @var BaseApplication
-     */
-    private $subject;
+    private BaseApplication $subject;
 
     protected function setUp(): void
     {

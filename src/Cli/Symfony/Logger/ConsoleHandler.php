@@ -28,15 +28,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ConsoleHandler extends AbstractProcessingHandler
 {
-    /**
-     * @var OutputInterface
-     */
-    private $output;
+    private OutputInterface $output;
 
-    /**
-     * @var array
-     */
-    private $verbosityLevelMap = [
+    private array $verbosityLevelMap = [
         OutputInterface::VERBOSITY_NORMAL => Logger::INFO,
         OutputInterface::VERBOSITY_VERBOSE => Logger::DEBUG,
         OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::DEBUG,
@@ -92,7 +86,7 @@ class ConsoleHandler extends AbstractProcessingHandler
      */
     private function updateLevel(): bool
     {
-        if (null === $this->output || OutputInterface::VERBOSITY_QUIET === $verbosity = $this->output->getVerbosity()) {
+        if (OutputInterface::VERBOSITY_QUIET === $verbosity = $this->output->getVerbosity()) {
             return false;
         }
 

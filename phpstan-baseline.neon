@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$object_or_string of function is_a expects object\\|string, string\\|null given\\.$#"
-			count: 1
-			path: src/Cli/Symfony/CompilerPasses/CommandsToApplicationCompilerPass.php
-
-		-
 			message: "#^Cannot call method getVersion\\(\\) on Symfony\\\\Component\\\\Console\\\\Application\\|null\\.$#"
 			count: 1
 			path: src/Command/SelfUpdateCommand.php

@@ -15,35 +15,17 @@ namespace TYPO3\Surf\Domain\Model;
  */
 final class TaskInHistory
 {
-    /**
-     * @var Task
-     */
-    private $task;
+    private Task $task;
 
-    /**
-     * @var Node
-     */
-    private $node;
+    private Node $node;
 
-    /**
-     * @var Application
-     */
-    private $application;
+    private Application $application;
 
-    /**
-     * @var Deployment
-     */
-    private $deployment;
+    private Deployment $deployment;
 
-    /**
-     * @var string
-     */
-    private $stage;
+    private string $stage;
 
-    /**
-     * @var array
-     */
-    private $options;
+    private array $options;
 
     private function __construct(Task $task, Node $node, Application $application, Deployment $deployment, string $stage, array $options)
     {

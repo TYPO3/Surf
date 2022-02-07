@@ -23,10 +23,7 @@ class TaskManager
      */
     protected $taskHistory = [];
 
-    /**
-     * @var TaskFactory
-     */
-    private $taskFactory;
+    private TaskFactory $taskFactory;
 
     public function __construct(TaskFactory $taskFactory)
     {

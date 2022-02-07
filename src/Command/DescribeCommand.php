@@ -32,10 +32,7 @@ class DescribeCommand extends Command
      */
     protected $output;
 
-    /**
-     * @var FactoryInterface
-     */
-    private $factory;
+    private FactoryInterface $factory;
 
     /**
      * @var string

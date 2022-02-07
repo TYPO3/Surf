@@ -18,10 +18,7 @@ use TYPO3\Surf\Integration\FactoryInterface;
 
 class SimulateCommand extends Command
 {
-    /**
-     * @var FactoryInterface
-     */
-    private $factory;
+    private FactoryInterface $factory;
 
     /**
      * @var string

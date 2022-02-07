@@ -45,15 +45,9 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @var RandomBytesGeneratorInterface
-     */
-    private $randomBytesGenerator;
+    private RandomBytesGeneratorInterface $randomBytesGenerator;
 
-    /**
-     * @var FilesystemInterface
-     */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
     public function __construct(RandomBytesGeneratorInterface $randomBytesGenerator, FilesystemInterface $filesystem)
     {

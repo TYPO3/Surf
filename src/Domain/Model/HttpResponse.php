@@ -17,20 +17,11 @@ namespace TYPO3\Surf\Domain\Model;
 
 final class HttpResponse
 {
-    /**
-     * @var string
-     */
-    private $body;
+    private string $body;
 
-    /**
-     * @var array
-     */
-    private $headers;
+    private array $headers;
 
-    /**
-     * @var int
-     */
-    private $statusCode;
+    private int $statusCode;
 
     /**
      * @param string $body

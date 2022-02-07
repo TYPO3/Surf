@@ -8,13 +8,13 @@ namespace TYPO3\Surf\Domain\Model;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Exception as SurfException;
+use UnexpectedValueException;
 
 /**
  * A Deployment
@@ -118,15 +118,9 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      */
     protected $temporaryPath;
 
-    /**
-     * @var bool
-     */
-    private $forceRun = false;
+    private bool $forceRun = false;
 
-    /**
-     * @var string
-     */
-    private $deploymentLockIdentifier;
+    private string $deploymentLockIdentifier;
 
     public function __construct(string $name, string $deploymentLockIdentifier = null)
     {
@@ -135,7 +129,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         $time = strftime('%Y%m%d%H%M%S', time());
 
         if ($time === false) {
-            throw new \UnexpectedValueException('Could not create valid releaseIdentifier');
+            throw new UnexpectedValueException('Could not create valid releaseIdentifier');
         }
 
         $this->releaseIdentifier = $time;

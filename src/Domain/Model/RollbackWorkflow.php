@@ -17,10 +17,8 @@ final class RollbackWorkflow extends Workflow
 {
     /**
      * Order of stages that will be executed
-     *
-     * @var array
      */
-    private $stages = [
+    private array $stages = [
         'rollback:initialize',
         'rollback:execute',
         'rollback:cleanup',

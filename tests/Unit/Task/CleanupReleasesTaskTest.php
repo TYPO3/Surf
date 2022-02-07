@@ -8,7 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
@@ -26,14 +26,11 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     use KernelAwareTrait;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService
+     * @var MockObject|ShellCommandService $shellCommandService
      */
     private $shellCommandService;
 
-    /**
-     * @var array
-     */
-    private $folderStructure;
+    private array $folderStructure;
 
     /**
      * @var ClockInterface|ObjectProphecy
@@ -56,7 +53,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
 
-        /** @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface $mockLogger */
+        /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $this->deployment->setLogger($mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
@@ -84,7 +81,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     public function doNothingJustLogDebugIfOptionKeepReleasesIsNotDefined(): void
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface $logger */
+        /** @var LoggerInterface|MockObject $logger */
         $logger = $this->deployment->getLogger();
         $logger->expects(self::once())->method('debug');
 

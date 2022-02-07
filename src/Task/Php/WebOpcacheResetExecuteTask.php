@@ -42,11 +42,7 @@ use TYPO3\Surf\Exception\TaskExecutionException;
  */
 class WebOpcacheResetExecuteTask extends Task
 {
-
-    /**
-     * @var FilesystemInterface
-     */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
     public function __construct(FilesystemInterface $filesystem)
     {
