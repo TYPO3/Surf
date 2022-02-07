@@ -11,19 +11,20 @@ namespace TYPO3\Surf\Domain\Model;
 
 use Exception;
 use TYPO3\Surf\Domain\Enum\DeploymentStatus;
+use TYPO3\Surf\Domain\Enum\RollbackWorkflowStage;
+use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Generic\RollbackTask;
 
 final class RollbackWorkflow extends Workflow
 {
-    /**
-     * Order of stages that will be executed
-     */
-    private array $stages = [
-        'rollback:initialize',
-        'rollback:execute',
-        'rollback:cleanup',
-    ];
+    private array $stages;
+
+    public function __construct(TaskManager $taskManager)
+    {
+        parent::__construct($taskManager);
+        $this->stages = RollbackWorkflowStage::toArray();
+    }
 
     public function run(Deployment $deployment): void
     {
@@ -73,7 +74,7 @@ final class RollbackWorkflow extends Workflow
                     continue;
                 }
 
-                $this->addTaskToStage(RollbackTask::class, 'rollback:execute', $application);
+                $this->addTaskToStage(RollbackTask::class, RollbackWorkflowStage::STEP_02_EXECUTE, $application);
             }
         }
     }

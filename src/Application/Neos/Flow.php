@@ -9,6 +9,7 @@ namespace TYPO3\Surf\Application\Neos;
  */
 
 use TYPO3\Surf\Application\BaseApplication;
+use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Task\Composer\InstallTask;
@@ -51,17 +52,17 @@ class Flow extends BaseApplication
         parent::registerTasks($workflow, $deployment);
 
         $workflow
-            ->addTask(CreateDirectoriesTask::class, 'initialize', $this)
-            ->afterStage('update', [
+            ->addTask(CreateDirectoriesTask::class, SimpleWorkflowStage::STEP_01_INITIALIZE, $this)
+            ->afterStage(SimpleWorkflowStage::STEP_05_UPDATE, [
                 SymlinkDataTask::class,
                 SymlinkConfigurationTask::class,
                 CopyConfigurationTask::class
             ], $this)
-            ->addTask(MigrateTask::class, 'migrate', $this)
-            ->addTask(PublishResourcesTask::class, 'finalize', $this);
+            ->addTask(MigrateTask::class, SimpleWorkflowStage::STEP_06_MIGRATE, $this)
+            ->addTask(PublishResourcesTask::class, SimpleWorkflowStage::STEP_07_FINALIZE, $this);
 
         if ($this->getOption('enableCacheWarmupBeforeSwitchingToNewRelease') === true) {
-            $workflow->addTask(WarmUpCacheTask::class, 'finalize', $this);
+            $workflow->addTask(WarmUpCacheTask::class, SimpleWorkflowStage::STEP_07_FINALIZE, $this);
         }
         if ($this->getOption('enableCacheWarmupAfterSwitchingToNewRelease') === true) {
             $workflow->afterTask(SymlinkReleaseTask::class, WarmUpCacheTask::class, $this);
@@ -72,7 +73,7 @@ class Flow extends BaseApplication
     {
         switch ($updateMethod) {
             case 'composer':
-                $workflow->addTask(InstallTask::class, 'update', $this);
+                $workflow->addTask(InstallTask::class, SimpleWorkflowStage::STEP_05_UPDATE, $this);
                 break;
             default:
                 parent::registerTasksForUpdateMethod($workflow, $updateMethod);
