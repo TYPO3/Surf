@@ -23,37 +23,23 @@ final class HttpResponse
 
     private int $statusCode;
 
-    /**
-     * @param string $body
-     * @param array $headers
-     * @param int $statusCode
-     */
-    public function __construct($body, array $headers, $statusCode)
+    public function __construct(string $body, array $headers, int $statusCode)
     {
         $this->body = $body;
         $this->headers = $headers;
         $this->statusCode = $statusCode;
     }
 
-    /**
-     * @return string
-     */
     public function getBody(): string
     {
         return $this->body;
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return $this->headers;
     }
 
-    /**
-     * @return int
-     */
     public function getStatusCode(): int
     {
         return $this->statusCode;

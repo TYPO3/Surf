@@ -9,7 +9,7 @@ namespace TYPO3\Surf\Domain\Clock;
  * file that was distributed with this source code.
  */
 
-use DateTime;
+use DateTimeImmutable;
 
 final class SystemClock implements ClockInterface
 {
@@ -32,7 +32,7 @@ final class SystemClock implements ClockInterface
 
     public function createTimestampFromFormat(string $format, string $time): int
     {
-        $datetime = DateTime::createFromFormat($format, $time);
+        $datetime = DateTimeImmutable::createFromFormat($format, $time);
 
         if ($datetime === false) {
             throw ClockException::formatCouldNotBeConvertedToTimestamp($format, $time);

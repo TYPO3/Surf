@@ -19,10 +19,7 @@ abstract class Workflow
 {
     protected TaskManager $taskManager;
 
-    /**
-     * @var array
-     */
-    protected $tasks = [];
+    protected array $tasks = [];
 
     public function __construct(TaskManager $taskManager)
     {
@@ -37,21 +34,12 @@ abstract class Workflow
         $deployment->getLogger()->debug('Using workflow "' . $this->getName() . '"');
     }
 
-    /**
-     * Get a name for this type of workflow
-     *
-     * @return string
-     */
-    abstract public function getName();
+    abstract public function getName(): string;
 
     /**
      * Remove the given task from all stages and applications
-     *
-     * @param string $removeTask
-     *
-     * @return Workflow
      */
-    public function removeTask($removeTask, Application $application = null)
+    public function removeTask(string $removeTask, Application $application = null): self
     {
         $removeApplicationName = $application instanceof Application ? $application->getName() : null;
 
@@ -102,12 +90,9 @@ abstract class Workflow
     }
 
     /**
-     * @param string $stage
      * @param array|string $tasks
-     *
-     * @return Workflow
      */
-    public function forStage($stage, $tasks): \TYPO3\Surf\Domain\Model\Workflow
+    public function forStage(string $stage, $tasks): self
     {
         return $this->addTask($tasks, $stage);
     }
@@ -122,7 +107,7 @@ abstract class Workflow
      * @param string $stage The name of the stage when this task shall be executed
      * @param string $step A stage has three steps "before", "tasks" and "after"
      */
-    protected function addTaskToStage($tasks, $stage, Application $application = null, $step = 'tasks'): void
+    protected function addTaskToStage($tasks, string $stage, Application $application = null, string $step = 'tasks'): void
     {
         if (!is_array($tasks)) {
             $tasks = [$tasks];
@@ -148,7 +133,7 @@ abstract class Workflow
      *
      * @return Workflow
      */
-    public function addTask($tasks, $stage, Application $application = null)
+    public function addTask($tasks, string $stage, Application $application = null)
     {
         $this->addTaskToStage($tasks, $stage, $application);
 
@@ -160,12 +145,9 @@ abstract class Workflow
      *
      * The execution will not depend on a stage but on an optional application.
      *
-     * @param string $task
      * @param array|string $tasks
-     *
-     * @return Workflow
      */
-    public function afterTask($task, $tasks, Application $application = null)
+    public function afterTask(string $task, $tasks, Application $application = null): self
     {
         if (!is_array($tasks)) {
             $tasks = [$tasks];
@@ -186,12 +168,9 @@ abstract class Workflow
      *
      * The execution will not depend on a stage but on an optional application.
      *
-     * @param string $task
      * @param array|string $tasks
-     *
-     * @return Workflow
      */
-    public function beforeTask($task, $tasks, Application $application = null)
+    public function beforeTask(string $task, $tasks, Application $application = null): self
     {
         if (!is_array($tasks)) {
             $tasks = [$tasks];
@@ -209,14 +188,8 @@ abstract class Workflow
 
     /**
      * Define a new task based on an existing task by setting options
-     *
-     * @param string $taskName
-     * @param string $baseTask
-     * @param array $options
-     *
-     * @return Workflow
      */
-    public function defineTask($taskName, $baseTask, $options)
+    public function defineTask(string $taskName, string $baseTask, array $options): self
     {
         $this->tasks['defined'][$taskName] = [
             'task' => $baseTask,
@@ -228,13 +201,9 @@ abstract class Workflow
     /**
      * Add tasks that shall be executed before the given stage
      *
-     * @param string $stage
      * @param array|string $tasks
-     * @param Application $application
-     *
-     * @return Workflow
      */
-    public function beforeStage($stage, $tasks, Application $application = null)
+    public function beforeStage(string $stage, $tasks, Application $application = null): self
     {
         $this->addTaskToStage($tasks, $stage, $application, 'before');
 
@@ -244,12 +213,9 @@ abstract class Workflow
     /**
      * Add tasks that shall be executed after the given stage
      *
-     * @param string $stage
      * @param array|string $tasks
-     *
-     * @return Workflow
      */
-    public function afterStage($stage, $tasks, Application $application = null)
+    public function afterStage(string $stage, $tasks, Application $application = null): self
     {
         $this->addTaskToStage($tasks, $stage, $application, 'after');
 
@@ -258,13 +224,8 @@ abstract class Workflow
 
     /**
      * Override options for given task
-     *
-     * @param string $taskName
-     * @param array $options
-     *
-     * @return Workflow
      */
-    public function setTaskOptions($taskName, $options)
+    public function setTaskOptions(string $taskName, array $options): self
     {
         $baseTask = $taskName;
         if (isset($this->tasks['defined'][$taskName]) && is_array($this->tasks['defined'][$taskName])) {
@@ -281,20 +242,16 @@ abstract class Workflow
 
     /**
      * Returns list of all registered tasks
-     *
-     * @return array
      */
-    public function getTasks()
+    public function getTasks(): array
     {
         return $this->tasks;
     }
 
     /**
      * Execute a stage for a node and application
-     *
-     * @param string $stage
      */
-    protected function executeStage($stage, Node $node, Application $application, Deployment $deployment): void
+    protected function executeStage(string $stage, Node $node, Application $application, Deployment $deployment): void
     {
         foreach (['before', 'tasks', 'after'] as $stageStep) {
             foreach (['_', $application->getName()] as $applicationName) {

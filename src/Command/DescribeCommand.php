@@ -64,7 +64,7 @@ class DescribeCommand extends Command
         $deployment = $this->factory->getDeployment((string)$deploymentName, $configurationPath);
         $workflow = $deployment->getWorkflow();
 
-        if (! $deployment instanceof FailedDeployment && $workflow instanceof Workflow) {
+        if (! $deployment instanceof FailedDeployment) {
             $output->writeln('<success>Deployment ' . $deployment->getName() . '</success>');
             $output->writeln('');
             $output->writeln('Workflow: <success>' . $workflow->getName() . '</success>');

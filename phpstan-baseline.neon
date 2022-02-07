@@ -1,16 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$length of function random_bytes expects int\\<1, max\\>, int given\\.$#"
-			count: 1
-			path: src/Domain/Generator/RandomBytesGenerator.php
-
-		-
-			message: "#^Parameter \\#1 \\$workflow of method TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Application\\:\\:registerTasks\\(\\) expects TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Workflow, TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Workflow\\|null given\\.$#"
-			count: 1
-			path: src/Domain/Model/Deployment.php
-
-		-
 			message: "#^Parameter \\#1 \\$input of function array_filter expects array, array\\<array\\|string\\>\\|false given\\.$#"
 			count: 1
 			path: src/Task/CleanupReleasesTask.php

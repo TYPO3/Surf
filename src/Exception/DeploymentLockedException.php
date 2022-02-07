@@ -14,12 +14,7 @@ use TYPO3\Surf\Exception as SurfException;
 
 final class DeploymentLockedException extends SurfException
 {
-    /**
-     * @param string $currentDeploymentLockIdentifier
-     *
-     * @return DeploymentLockedException
-     */
-    public static function deploymentLockedBy(Deployment $deployment, $currentDeploymentLockIdentifier): self
+    public static function deploymentLockedBy(Deployment $deployment, string $currentDeploymentLockIdentifier): self
     {
         return new static(sprintf('Deployment %s is currently locked by %s. Use parameter --force to unlock and deploy', $deployment->getName(), $currentDeploymentLockIdentifier));
     }
