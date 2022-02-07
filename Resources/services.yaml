@@ -19,7 +19,7 @@ services:
         factory: ['@TYPO3\Surf\Cli\Symfony\ConsoleOutputFactory', 'createOutput']
     TYPO3\Surf\:
         resource: '../src/*'
-        exclude: '../src/{Cli,Application,Exception,Domain/Model,DeprecationMessageFactory.php,Exception.php,functions.php}'
+        exclude: '../src/{Cli,Application,Exception,Domain/Model,Domain/Enum,DeprecationMessageFactory.php,Exception.php,functions.php}'
     TYPO3\Surf\Cli\Symfony\ConsoleApplication: ~
     TYPO3\Surf\Cli\Symfony\ConsoleOutputFactory: ~
     TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler: ~

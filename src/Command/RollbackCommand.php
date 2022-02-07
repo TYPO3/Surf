@@ -61,6 +61,6 @@ class RollbackCommand extends Command
         $deployment = $this->factory->getDeployment($deploymentName, $configurationPath, $simulate, false);
         $deployment->rollback($simulate);
 
-        return $deployment->getStatus();
+        return $deployment->getStatus()->toInt();
     }
 }

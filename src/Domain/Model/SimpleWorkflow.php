@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Domain\Model;
  */
 
 use Exception;
+use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 use TYPO3\Surf\Exception\DeploymentLockedException;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
@@ -85,7 +86,7 @@ class SimpleWorkflow extends Workflow
                     try {
                         $this->executeStage($stage, $node, $application, $deployment);
                     } catch (DeploymentLockedException $exception) {
-                        $deployment->setStatus(Deployment::STATUS_CANCELLED);
+                        $deployment->setStatus(DeploymentStatus::CANCELLED());
                         $deployment->getLogger()->info($exception->getMessage());
                         if ($this->enableRollback) {
                             $this->taskManager->rollback();
@@ -93,7 +94,7 @@ class SimpleWorkflow extends Workflow
 
                         return;
                     } catch (Exception $exception) {
-                        $deployment->setStatus(Deployment::STATUS_FAILED);
+                        $deployment->setStatus(DeploymentStatus::FAILED());
                         if ($this->enableRollback) {
                             if (array_search($stage, $this->stages, false) <= array_search('switch', $this->stages, false)) {
                                 $deployment->getLogger()->error('Got exception "' . $exception->getMessage() . '" rolling back.');
@@ -111,8 +112,8 @@ class SimpleWorkflow extends Workflow
                 }
             }
         }
-        if ($deployment->getStatus() === Deployment::STATUS_UNKNOWN) {
-            $deployment->setStatus(Deployment::STATUS_SUCCESS);
+        if ($deployment->getStatus()->isUnknown()) {
+            $deployment->setStatus(DeploymentStatus::SUCCESS());
         }
     }
 

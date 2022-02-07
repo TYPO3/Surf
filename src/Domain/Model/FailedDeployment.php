@@ -8,6 +8,8 @@ namespace TYPO3\Surf\Domain\Model;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Domain\Enum\DeploymentStatus;
+
 /**
  * Representing a failed deployment
  *
@@ -45,13 +47,8 @@ class FailedDeployment extends Deployment
     {
     }
 
-    /**
-     * Get the current deployment status
-     *
-     * @return int One of the Deployment::STATUS_* constants
-     */
-    public function getStatus(): int
+    public function getStatus(): DeploymentStatus
     {
-        return self::STATUS_UNKNOWN;
+        return DeploymentStatus::UNKNOWN();
     }
 }

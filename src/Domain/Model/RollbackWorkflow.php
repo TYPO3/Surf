@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Domain\Model;
  */
 
 use Exception;
+use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Generic\RollbackTask;
 
@@ -59,8 +60,8 @@ final class RollbackWorkflow extends Workflow
                 }
             }
         }
-        if ($deployment->getStatus() === Deployment::STATUS_UNKNOWN) {
-            $deployment->setStatus(Deployment::STATUS_SUCCESS);
+        if ($deployment->getStatus()->isUnknown()) {
+            $deployment->setStatus(DeploymentStatus::SUCCESS());
         }
     }
 
