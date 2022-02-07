@@ -46,10 +46,7 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
 
         $command = str_replace(array_keys($replacePaths), $replacePaths, $options['command']);
 
-        $localhost = new Node('localhost');
-        $localhost->onLocalhost();
-
-        $this->shell->executeOrSimulate($command, $localhost, $deployment, $options['ignoreErrors'], $options['logOutput']);
+        $this->shell->executeOrSimulate($command, $deployment->createLocalhostNode(), $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
 
     /**
@@ -71,10 +68,7 @@ class LocalShellTask extends Task implements ShellCommandServiceAwareInterface
 
         $command = str_replace(array_keys($replacePaths), $replacePaths, $options['rollbackCommand']);
 
-        $localhost = new Node('localhost');
-        $localhost->onLocalhost();
-
-        $this->shell->execute($command, $localhost, $deployment, true);
+        $this->shell->execute($command, $deployment->createLocalhostNode(), $deployment, true);
     }
 
     protected function resolveOptions(OptionsResolver $resolver): void

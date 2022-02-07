@@ -43,7 +43,7 @@ class UnitTestTaskTest extends BaseTaskTest
     /**
      * @return UnitTestTask
      */
-    protected function createTask()
+    protected function createTask(): UnitTestTask
     {
         return new UnitTestTask();
     }

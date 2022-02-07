@@ -25,7 +25,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     /**
      * @return SetUpExtensionsTask
      */
-    protected function createTask()
+    protected function createTask(): SetUpExtensionsTask
     {
         return new SetUpExtensionsTask();
     }

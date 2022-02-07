@@ -7,7 +7,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -37,7 +37,7 @@ class ShellCommandServiceTest extends TestCase
         $port = null,
         $privateKey = null
     ): void {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $service */
+        /** @var MockObject|ShellCommandService $service */
         $service = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
@@ -60,7 +60,7 @@ class ShellCommandServiceTest extends TestCase
 
         $deployment = new Deployment('TestDeployment');
 
-        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
+        /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
@@ -128,14 +128,14 @@ class ShellCommandServiceTest extends TestCase
         $node->setHostname('asdf');
         $arguments = [];
 
-        $node->setRemoteCommandExecutionHandler(function (ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput) use (&$arguments) {
+        $node->setRemoteCommandExecutionHandler(function (ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput) use (&$arguments): array {
             $arguments = func_get_args();
             return [0, 'Hello World'];
         });
 
         $deployment = new Deployment('TestDeployment');
 
-        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
+        /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
@@ -156,7 +156,7 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeOnRemoteNodeJoinsCommandsWithAndOperator(): void
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService */
+        /** @var MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
@@ -164,7 +164,7 @@ class ShellCommandServiceTest extends TestCase
 
         $deployment = new Deployment('TestDeployment');
 
-        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
+        /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
@@ -187,7 +187,7 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeOnLocalNodeJoinsCommandsWithAndOperator(): void
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|ShellCommandService $shellCommandService */
+        /** @var MockObject|ShellCommandService $shellCommandService */
         $shellCommandService = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
 
         $node = new Node('TestNode');
@@ -195,7 +195,7 @@ class ShellCommandServiceTest extends TestCase
 
         $deployment = new Deployment('TestDeployment');
 
-        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
+        /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
@@ -220,7 +220,7 @@ class ShellCommandServiceTest extends TestCase
     {
         $shellCommandService = new ShellCommandService();
         $deployment = new Deployment('TestDeployment');
-        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $mockLogger */
+        /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 

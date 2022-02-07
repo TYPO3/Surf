@@ -73,7 +73,7 @@ class VarnishBanTaskTest extends BaseTaskTest
     /**
      * @return VarnishBanTask
      */
-    protected function createTask()
+    protected function createTask(): VarnishBanTask
     {
         return new VarnishBanTask();
     }

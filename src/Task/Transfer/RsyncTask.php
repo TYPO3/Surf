@@ -72,9 +72,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
             $command = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $command);
         }
 
-        $localhost = new Node('localhost');
-        $localhost->onLocalhost();
-        $this->shell->executeOrSimulate($command, $localhost, $deployment);
+        $this->shell->executeOrSimulate($command, $deployment->createLocalhostNode(), $deployment);
 
         if (isset($passwordSshLoginScriptPathAndFilename) && Phar::running() !== '') {
             unlink($passwordSshLoginScriptPathAndFilename);
@@ -107,7 +105,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function getExcludeFlags(array $rsyncExcludes): string
     {
-        return array_reduce($rsyncExcludes, function ($excludeOptions, $pattern) {
+        return array_reduce($rsyncExcludes, function ($excludeOptions, $pattern): string {
             if (!empty($this->replacePaths)) {
                 $pattern = str_replace(array_keys($this->replacePaths), $this->replacePaths, $pattern);
             }
@@ -120,7 +118,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $resolver->setDefault('webDirectory', null);
         $resolver->setDefault('rsyncExcludes', ['.git']);
         $resolver->setDefault('verbose', false);
-        $resolver->setDefault('quietFlag', static function (Options $options) {
+        $resolver->setDefault('quietFlag', static function (Options $options): string {
             if ($options['verbose']) {
                 return '';
             }

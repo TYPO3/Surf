@@ -8,7 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use InvalidArgumentException;
 use Prophecy\Argument;
 use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Application\TYPO3\CMS;
@@ -57,7 +57,7 @@ class FlushCachesTaskTest extends BaseTaskTest
     public function wrongApplicationTypeGivenThrowsException(): void
     {
         $invalidApplication = new BaseApplication('Hello world app');
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->task->execute($this->node, $invalidApplication, $this->deployment, []);
     }
 

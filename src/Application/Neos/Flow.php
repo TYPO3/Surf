@@ -25,15 +25,13 @@ class Flow extends BaseApplication
 {
     /**
      * The production context
-     * @var string
      */
-    protected $context = 'Production';
+    protected string $context = 'Production';
 
     /**
      * The Neos Flow major and minor version of this application
-     * @var string
      */
-    protected $version = '4.0';
+    protected string $version = '4.0';
 
     public const DEFAULT_WEB_DIRECTORY = 'Web';
 

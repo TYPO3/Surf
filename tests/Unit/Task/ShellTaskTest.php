@@ -83,7 +83,7 @@ class ShellTaskTest extends BaseTaskTest
     /**
      * @return ShellTask
      */
-    protected function createTask()
+    protected function createTask(): ShellTask
     {
         return new ShellTask();
     }

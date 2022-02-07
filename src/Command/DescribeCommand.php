@@ -22,15 +22,9 @@ use TYPO3\Surf\Integration\FactoryInterface;
 
 class DescribeCommand extends Command
 {
-    /**
-     * @var InputInterface
-     */
-    protected $input;
+    protected InputInterface $input;
 
-    /**
-     * @var OutputInterface
-     */
-    protected $output;
+    protected OutputInterface $output;
 
     private FactoryInterface $factory;
 
@@ -70,7 +64,7 @@ class DescribeCommand extends Command
         $deployment = $this->factory->getDeployment((string)$deploymentName, $configurationPath);
         $workflow = $deployment->getWorkflow();
 
-        if (! $deployment instanceof FailedDeployment) {
+        if (! $deployment instanceof FailedDeployment && $workflow instanceof Workflow) {
             $output->writeln('<success>Deployment ' . $deployment->getName() . '</success>');
             $output->writeln('');
             $output->writeln('Workflow: <success>' . $workflow->getName() . '</success>');
@@ -84,10 +78,10 @@ class DescribeCommand extends Command
 
             $this->printNodes($deployment->getNodes());
 
-            $this->printApplications($deployment->getApplications(), $deployment->getWorkflow());
+            $this->printApplications($deployment->getApplications(), $workflow);
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     protected function printNodes(array $nodes): void
@@ -154,13 +148,9 @@ class DescribeCommand extends Command
     /**
      * Print all tasks before or after a task
      *
-     * @param array $tasks
-     * @param string $applicationName
-     * @param string $task
-     * @param string $step
      * @param string $output
      */
-    private function printBeforeAfterTasks(array $tasks, $applicationName, $task, $step, &$output): void
+    private function printBeforeAfterTasks(array $tasks, string $applicationName, string $task, string $step, &$output): void
     {
         foreach (['_', $applicationName] as $name) {
             $label = $name === '_' ? 'for all applications' : 'for application ' . $name;

@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task\Generic;
  * file that was distributed with this source code.
  */
 
-use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Task\Generic\RollbackTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -62,10 +61,7 @@ previous',
         self::assertCount(1, $this->commands['executed']);
     }
 
-    /**
-     * @return RollbackTask|Task
-     */
-    protected function createTask()
+    protected function createTask(): RollbackTask
     {
         return new RollbackTask();
     }

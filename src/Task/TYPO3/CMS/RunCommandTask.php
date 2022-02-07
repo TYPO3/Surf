@@ -43,7 +43,7 @@ class RunCommandTask extends AbstractCliTask
     {
         $resolver->setRequired('command');
         $resolver->setDefault('arguments', []);
-        $resolver->setNormalizer('arguments', function (Options $options, $value) {
+        $resolver->setNormalizer('arguments', function (Options $options, $value): array {
             return (array)$value;
         });
     }

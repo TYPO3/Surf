@@ -12,17 +12,17 @@ use TYPO3\Surf\Exception as SurfException;
 
 final class InvalidConfigurationException extends SurfException
 {
-    public static function createNoApplicationConfigured(): InvalidConfigurationException
+    public static function createNoApplicationConfigured(): self
     {
         return new self('No application configured for deployment', 1334652420);
     }
 
-    public static function createNoNodesConfigured(): InvalidConfigurationException
+    public static function createNoNodesConfigured(): self
     {
         return new self('No nodes configured for application', 1334652427);
     }
 
-    public static function createTypo3ConsoleScriptNotFound(string $class): InvalidConfigurationException
+    public static function createTypo3ConsoleScriptNotFound(string $class): self
     {
         return new self('TYPO3 Console script was not found. Make sure it is available in your project and you set the "scriptFileName" option correctly. Alternatively you can remove this task (' . $class . ') in your deployment configuration.', 1481489230);
     }

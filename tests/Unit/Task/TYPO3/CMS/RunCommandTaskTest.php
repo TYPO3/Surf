@@ -118,7 +118,7 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @return RunCommandTask
      */
-    protected function createTask()
+    protected function createTask(): RunCommandTask
     {
         return new RunCommandTask();
     }

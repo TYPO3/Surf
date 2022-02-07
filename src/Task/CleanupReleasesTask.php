@@ -8,15 +8,15 @@ namespace TYPO3\Surf\Task;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
 use TYPO3\Surf\Domain\Clock\ClockInterface;
-use TYPO3\Surf\Domain\Clock\SystemClock;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use function TYPO3\Surf\findAllReleases;
+use function TYPO3\Surf\findPreviousReleaseIdentifier;
 
 /**
  * A cleanup task to delete old (unused) releases.
@@ -43,10 +43,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @var ClockInterface|SystemClock|null
-     */
-    private $clock;
+    private ClockInterface $clock;
 
     public function __construct(ClockInterface $clock)
     {
@@ -64,10 +61,10 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         $releasesPath = $application->getReleasesPath();
         $currentReleaseIdentifier = $deployment->getReleaseIdentifier();
 
-        $previousReleaseIdentifier = \TYPO3\Surf\findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
-        $allReleases = \TYPO3\Surf\findAllReleases($deployment, $node, $application, $this->shell);
+        $previousReleaseIdentifier = findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
+        $allReleases = findAllReleases($deployment, $node, $application, $this->shell);
 
-        $removableReleases = array_map('trim', array_filter($allReleases, static function ($release) use ($currentReleaseIdentifier, $previousReleaseIdentifier) {
+        $removableReleases = array_map('trim', array_filter($allReleases, static function ($release) use ($currentReleaseIdentifier, $previousReleaseIdentifier): bool {
             return $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous';
         }));
 
@@ -104,7 +101,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     {
         $onlyRemoveReleasesOlderThan = $this->clock->stringToTime($options['onlyRemoveReleasesOlderThan']);
         $currentTime = $this->clock->currentTime();
-        return array_filter($removableReleases, function ($removeRelease) use ($onlyRemoveReleasesOlderThan, $currentTime) {
+        return array_filter($removableReleases, function ($removeRelease) use ($onlyRemoveReleasesOlderThan, $currentTime): bool {
             return ($currentTime - $this->clock->createTimestampFromFormat('YmdHis', $removeRelease)) > ($currentTime - $onlyRemoveReleasesOlderThan);
         });
     }
@@ -112,7 +109,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     /**
      * @return array
      */
-    private function removeReleasesByNumber(array $options, array $removableReleases)
+    private function removeReleasesByNumber(array $options, array $removableReleases): array
     {
         sort($removableReleases);
         $keepReleases = $options['keepReleases'];

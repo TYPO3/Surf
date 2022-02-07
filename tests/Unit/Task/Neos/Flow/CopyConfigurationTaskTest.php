@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task\Neos\Flow;
  */
 
 use TYPO3\Surf\Application\Neos\Flow;
-use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Task\Neos\Flow\CopyConfigurationTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -133,10 +132,7 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("' foo@remote:\"");
     }
 
-    /**
-     * @return Task
-     */
-    protected function createTask()
+    protected function createTask(): CopyConfigurationTask
     {
         return new CopyConfigurationTask();
     }

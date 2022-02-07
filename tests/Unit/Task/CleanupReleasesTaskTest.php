@@ -98,7 +98,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $command = array_reduce(
             ['20171108132211', '20171109193135'],
-            function ($carry, $folder) {
+            function ($carry, $folder): string {
                 return $carry . sprintf(
                     'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
                     $this->application->getReleasesPath(),
@@ -150,7 +150,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
                 },
                 $expectedFoldersToBeRemoved
             ),
-            function ($command, $folder) {
+            function ($command, $folder): string {
                 return $command . sprintf(
                     'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
                     $this->application->getReleasesPath(),
@@ -206,7 +206,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     /**
      * @return CleanupReleasesTask
      */
-    protected function createTask()
+    protected function createTask(): CleanupReleasesTask
     {
         $this->clockMock = $this->prophesize(ClockInterface::class);
 

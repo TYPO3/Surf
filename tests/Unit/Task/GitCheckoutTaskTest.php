@@ -184,7 +184,7 @@ class GitCheckoutTaskTest extends BaseTaskTest
     /**
      * @return GitCheckoutTask
      */
-    protected function createTask()
+    protected function createTask(): GitCheckoutTask
     {
         return new GitCheckoutTask();
     }

@@ -21,7 +21,7 @@ class TaskManager
     /**
      * @var TaskInHistory[]
      */
-    protected $taskHistory = [];
+    protected array $taskHistory = [];
 
     private TaskFactory $taskFactory;
 

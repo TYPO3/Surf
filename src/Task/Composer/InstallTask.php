@@ -30,17 +30,13 @@ class InstallTask extends AbstractComposerTask
 {
     /**
      * Command to run
-     *
-     * @var string
      */
-    protected $command = 'install';
+    protected string $command = 'install';
 
     /**
      * Arguments for the command
-     *
-     * @var array
      */
-    protected $arguments = [
+    protected array $arguments = [
         '--no-ansi',
         '--no-interaction',
         '--no-dev',

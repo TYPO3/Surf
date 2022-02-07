@@ -8,7 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Php;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Exception\TaskExecutionException;
@@ -18,7 +18,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
 {
     /**
-     * @var FilesystemInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FilesystemInterface|MockObject
      */
     private $filesystem;
 
@@ -110,7 +110,7 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
     /**
      * @return WebOpcacheResetExecuteTask
      */
-    protected function createTask()
+    protected function createTask(): WebOpcacheResetExecuteTask
     {
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
 

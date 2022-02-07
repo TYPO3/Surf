@@ -25,7 +25,7 @@ class ScpTaskTest extends BaseTaskTest
     /**
      * @return ScpTask
      */
-    protected function createTask()
+    protected function createTask(): ScpTask
     {
         return new ScpTask();
     }

@@ -66,9 +66,13 @@ class SelfUpdateCommand extends Command
 
         $stability = $input->getOption('stability');
 
-        /** @var GithubStrategy $strategy */
-        $strategy = $updater->getStrategy();
-        $strategy->setCurrentLocalVersion($this->getApplication()->getVersion());
+        $application = $this->getApplication();
+
+        if (! $application instanceof \Symfony\Component\Console\Application) {
+            throw new \UnexpectedValueException('No application defined');
+        }
+
+        $strategy->setCurrentLocalVersion($application->getVersion());
         $strategy->setStability($stability);
 
         if ($input->getOption('check')) {
@@ -104,7 +108,7 @@ class SelfUpdateCommand extends Command
             }
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function getLocalPharName(): string

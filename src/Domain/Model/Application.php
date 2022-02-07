@@ -27,9 +27,8 @@ class Application
 
     /**
      * The name
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * The nodes for this application
@@ -39,21 +38,15 @@ class Application
 
     /**
      * The deployment path for this application on a node
-     * @var string
      */
-    protected $deploymentPath = '';
+    protected string $deploymentPath = '';
 
     /**
      * The relative releases directory for this application on a node
-     * @var string
      */
-    protected $releasesDirectory = 'releases';
+    protected string $releasesDirectory = 'releases';
 
-    /**
-     * The options
-     * @var array
-     */
-    protected $options = [];
+    protected array $options = [];
 
     public function __construct(string $name)
     {

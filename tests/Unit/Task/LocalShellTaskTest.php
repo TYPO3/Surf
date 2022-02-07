@@ -9,7 +9,6 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * file that was distributed with this source code.
  */
 
-use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\LocalShellTask;
 
@@ -61,10 +60,7 @@ class LocalShellTaskTest extends BaseTaskTest
         ];
     }
 
-    /**
-     * @return LocalShellTask|Task
-     */
-    protected function createTask()
+    protected function createTask(): LocalShellTask
     {
         return new LocalShellTask();
     }

@@ -43,7 +43,7 @@ class MigrateTaskTest extends BaseTaskTest
     /**
      * @return MigrateTask
      */
-    protected function createTask()
+    protected function createTask(): MigrateTask
     {
         return new MigrateTask();
     }

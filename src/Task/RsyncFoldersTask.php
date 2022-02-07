@@ -62,7 +62,7 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
         ];
 
         // Build commands to transfer folders
-        $commands = array_map(static function (array $folderPair) use ($replacePaths, $options, $node) {
+        $commands = array_map(static function (array $folderPair) use ($replacePaths, $options, $node): string {
             $sourceFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[0]), '/') . '/';
             $targetFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[1]), '/') . '/';
 
@@ -71,10 +71,7 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
             return sprintf('rsync -avz --delete -e ssh%s %s %s%s:%s', $port, $sourceFolder, $options['username'], $node->getHostname(), $targetFolder);
         }, $options['folders']);
 
-        $localhost = new Node('localhost');
-        $localhost->onLocalhost();
-
-        $this->shell->executeOrSimulate($commands, $localhost, $deployment, $options['ignoreErrors'], $options['logOutput']);
+        $this->shell->executeOrSimulate($commands, $deployment->createLocalhostNode(), $deployment, $options['ignoreErrors'], $options['logOutput']);
     }
 
     /**
@@ -91,7 +88,7 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
         $resolver->setDefault('logOutput', true);
 
         $resolver->setDefault('username', '');
-        $resolver->setNormalizer('username', static function (Options $options, $value) {
+        $resolver->setNormalizer('username', static function (Options $options, $value): string {
             if ($value === '') {
                 return $value;
             }
@@ -101,7 +98,7 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
 
         $resolver->setDefault('folders', []);
         $resolver->setAllowedTypes('folders', 'array');
-        $resolver->setNormalizer('folders', static function (Options $options, $value) {
+        $resolver->setNormalizer('folders', static function (Options $options, $value): array {
             $folders = [];
             foreach ($value as $folderKey => $folderValue) {
                 if (is_array($folderValue) && count($folderValue) === 2) {

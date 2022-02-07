@@ -76,7 +76,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter(): ConsoleFormatter
     {
         return new ConsoleFormatter();
     }

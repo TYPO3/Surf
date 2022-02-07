@@ -10,6 +10,7 @@ namespace TYPO3\Surf\Tests\Unit\Application\Neos;
  */
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
@@ -63,7 +64,7 @@ class FlowTest extends TestCase
      */
     public function registerComposerInstallTask(): void
     {
-        $deployment = $this->prophesize(Deployment::class);
+        $deployment = $this->createDeployment();
         $workflow = new SimpleWorkflow($this->prophesize(TaskManager::class)->reveal());
         $this->subject->setOption('updateMethod', 'composer');
         $this->subject->registerTasks($workflow, $deployment->reveal());
@@ -96,5 +97,16 @@ class FlowTest extends TestCase
             ['1.1', 'Common'],
             ['1.2', 'BuildEssentials']
         ];
+    }
+
+    /**
+     * @return Deployment|ObjectProphecy
+     */
+    private function createDeployment()
+    {
+        $deployment = $this->prophesize(Deployment::class);
+        $deployment->getForceRun()->willReturn(false);
+
+        return $deployment;
     }
 }

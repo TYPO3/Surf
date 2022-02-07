@@ -8,7 +8,7 @@ namespace TYPO3\Surf\Tests\Unit\Task\Php;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Generator\RandomBytesGeneratorInterface;
@@ -20,12 +20,12 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
 {
     /**
-     * @var FilesystemInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FilesystemInterface|MockObject
      */
     private $filesystem;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|RandomBytesGeneratorInterface
+     * @var MockObject|RandomBytesGeneratorInterface
      */
     private $randomBytesGenerator;
 
@@ -134,7 +134,7 @@ class WebOpcacheResetCreateScriptTaskTest extends BaseTaskTest
     /**
      * @return WebOpcacheResetCreateScriptTask
      */
-    protected function createTask()
+    protected function createTask(): WebOpcacheResetCreateScriptTask
     {
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
         $this->randomBytesGenerator = $this->getMockBuilder(RandomBytesGeneratorInterface::class)->getMock();

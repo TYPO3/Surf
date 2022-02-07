@@ -19,7 +19,7 @@ final class DeploymentLockedException extends SurfException
      *
      * @return DeploymentLockedException
      */
-    public static function deploymentLockedBy(Deployment $deployment, $currentDeploymentLockIdentifier)
+    public static function deploymentLockedBy(Deployment $deployment, $currentDeploymentLockIdentifier): self
     {
         return new static(sprintf('Deployment %s is currently locked by %s. Use parameter --force to unlock and deploy', $deployment->getName(), $currentDeploymentLockIdentifier));
     }

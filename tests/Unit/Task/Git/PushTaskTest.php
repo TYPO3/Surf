@@ -81,7 +81,7 @@ class PushTaskTest extends BaseTaskTest
     /**
      * @return PushTask
      */
-    protected function createTask()
+    protected function createTask(): PushTask
     {
         return new PushTask();
     }

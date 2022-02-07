@@ -32,7 +32,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
     /**
      * @return SymlinkDataTask
      */
-    protected function createTask()
+    protected function createTask(): SymlinkDataTask
     {
         return new SymlinkDataTask();
     }
@@ -157,7 +157,7 @@ class SymlinkDataTaskTest extends BaseTaskTest
      *
      * @return array
      */
-    private function mergeOptions(array $options)
+    private function mergeOptions(array $options): array
     {
         return array_merge($this->application->getOptions(), $options);
     }

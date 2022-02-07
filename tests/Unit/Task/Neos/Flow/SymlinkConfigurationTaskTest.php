@@ -60,7 +60,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
     /**
      * @return SymlinkConfigurationTask
      */
-    protected function createTask()
+    protected function createTask(): SymlinkConfigurationTask
     {
         return new SymlinkConfigurationTask();
     }

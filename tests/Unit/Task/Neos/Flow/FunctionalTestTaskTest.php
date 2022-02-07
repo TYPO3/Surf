@@ -43,7 +43,7 @@ class FunctionalTestTaskTest extends BaseTaskTest
     /**
      * @return FunctionalTestTask
      */
-    protected function createTask()
+    protected function createTask(): FunctionalTestTask
     {
         return new FunctionalTestTask();
     }

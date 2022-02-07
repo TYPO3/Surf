@@ -69,15 +69,12 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
             $scriptIdentifier = $options['scriptIdentifier'];
         }
 
-        $localhost = new Node('localhost');
-        $localhost->onLocalhost();
-
         $commands = [
             'cd ' . escapeshellarg($scriptBasePath),
             'rm -f surf-opcache-reset-*',
         ];
 
-        $this->shell->executeOrSimulate($commands, $localhost, $deployment);
+        $this->shell->executeOrSimulate($commands, $deployment->createLocalhostNode(), $deployment);
 
         if (! $deployment->isDryRun()) {
             $scriptFilename = sprintf('%s/surf-opcache-reset-%s.php', $scriptBasePath, $scriptIdentifier);

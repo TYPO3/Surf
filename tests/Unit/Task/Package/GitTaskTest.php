@@ -27,7 +27,7 @@ class GitTaskTest extends BaseTaskTest
     /**
      * @return GitTask
      */
-    protected function createTask()
+    protected function createTask(): GitTask
     {
         return new GitTask();
     }

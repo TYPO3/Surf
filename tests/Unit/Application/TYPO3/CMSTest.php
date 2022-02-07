@@ -44,6 +44,8 @@ class CMSTest extends TestCase
     {
         // @var Deployment|\Prophecy\Prophecy\ObjectProphecy $workflow
         $deployment = $this->prophesize(Deployment::class);
+        $deployment->getForceRun()->willReturn(false);
+        $deployment->hasOption('initialDeployment')->willReturn(false);
 
         // @var Workflow|\Prophecy\Prophecy\ObjectProphecy $workflow
         $workflow = $this->prophesize(Workflow::class);

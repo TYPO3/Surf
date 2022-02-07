@@ -36,16 +36,13 @@ class BaseApplication extends Application
      * Symlinks, which should be created for each release.
      *
      * @see \TYPO3\Surf\Task\Generic\CreateSymlinksTask
-     * @var array
      */
-    protected $symlinks = [];
+    protected array $symlinks = [];
 
     /**
      * Directories which should be created on deployment. E.g. shared folders.
-     *
-     * @var array
      */
-    protected $directories = [];
+    protected array $directories = [];
 
     /**
      * Basic application specific options
@@ -62,10 +59,8 @@ class BaseApplication extends Application
      *   updateMethod: How to prepare and update the application assets on the node after transfer
      *
      *   lockDeployment: Locked deployments can only run once at a time
-     *
-     * @var array
      */
-    protected $options = [
+    protected array $options = [
         'packageMethod' => 'git',
         'transferMethod' => 'rsync',
         'updateMethod' => null,

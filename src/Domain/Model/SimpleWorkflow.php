@@ -20,16 +20,13 @@ class SimpleWorkflow extends Workflow
 {
     /**
      * If FALSE no rollback will be done on errors
-     * @var bool
      */
-    protected $enableRollback = true;
+    protected bool $enableRollback = true;
 
     /**
      * Order of stages that will be executed
-     *
-     * @var array
      */
-    protected $stages = [
+    protected array $stages = [
         // Initialize directories etc. (first time deploy)
         'initialize',
         // Lock deployment
@@ -124,30 +121,19 @@ class SimpleWorkflow extends Workflow
         return 'Simple workflow';
     }
 
-    /**
-     * @param bool $enableRollback
-     *
-     * @return SimpleWorkflow
-     */
-    public function setEnableRollback($enableRollback)
+    public function setEnableRollback(bool $enableRollback): self
     {
         $this->enableRollback = $enableRollback;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isEnableRollback()
+    public function isEnableRollback(): bool
     {
         return $this->enableRollback;
     }
 
-    /**
-     * @return array
-     */
-    public function getStages()
+    public function getStages(): array
     {
         return $this->stages;
     }

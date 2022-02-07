@@ -108,7 +108,7 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
     /**
      * @return string
      */
-    private function getExcludes(array $options, string $fileName)
+    private function getExcludes(array $options, string $fileName): string
     {
         $excludes = ['.git', $fileName];
         if (isset($options['scpExcludes']) && is_array($options['scpExcludes'])) {

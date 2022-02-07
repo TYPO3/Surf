@@ -229,7 +229,7 @@ class RsyncTaskTest extends BaseTaskTest
     /**
      * @return RsyncTask
      */
-    protected function createTask()
+    protected function createTask(): RsyncTask
     {
         return new RsyncTask();
     }

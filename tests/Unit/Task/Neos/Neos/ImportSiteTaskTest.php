@@ -33,7 +33,7 @@ class ImportSiteTaskTest extends BaseTaskTest
     /**
      * @return ImportSiteTask
      */
-    protected function createTask()
+    protected function createTask(): ImportSiteTask
     {
         return new ImportSiteTask();
     }

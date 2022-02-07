@@ -32,7 +32,7 @@ function findAllReleases(Deployment $deployment, Node $node, Application $applic
  *
  * @return string
  */
-function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell)
+function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
 {
     $previousReleasePath = $application->getReleasesPath() . '/previous';
     return trim($shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment));
@@ -43,7 +43,7 @@ function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Appli
  *
  * @return string
  */
-function findCurrentReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell)
+function findCurrentReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
 {
     $currentReleasePath = $application->getReleasesPath() . '/current';
     return trim($shell->execute("if [ -h $currentReleasePath ]; then basename `readlink $currentReleasePath` ; fi", $node, $deployment));

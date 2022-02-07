@@ -7,13 +7,15 @@ namespace TYPO3\Surf\Task\Generic;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use function TYPO3\Surf\findAllReleases;
+use function TYPO3\Surf\findCurrentReleaseIdentifier;
+use function TYPO3\Surf\findPreviousReleaseIdentifier;
 
 final class RollbackTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -21,11 +23,11 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
-        $allReleases = \TYPO3\Surf\findAllReleases($deployment, $node, $application, $this->shell);
+        $allReleases = findAllReleases($deployment, $node, $application, $this->shell);
 
         $releasesPath = $application->getReleasesPath();
 
-        $releases = array_map('trim', array_filter($allReleases, function ($release) {
+        $releases = array_map('trim', array_filter($allReleases, function ($release): bool {
             return $release !== '.' && $release !== 'current' && $release !== 'previous';
         }));
 
@@ -33,8 +35,8 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
 
         $numberOfReleases = count($releases);
         if ($numberOfReleases > 1) {
-            $previousReleaseIdentifier = \TYPO3\Surf\findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
-            $currentReleaseIdentifier = \TYPO3\Surf\findCurrentReleaseIdentifier($deployment, $node, $application, $this->shell);
+            $previousReleaseIdentifier = findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
+            $currentReleaseIdentifier = findCurrentReleaseIdentifier($deployment, $node, $application, $this->shell);
 
             // Symlink to old release.
             $deployment->getLogger()->info(($deployment->isDryRun() ? 'Would symlink current to' : 'Symlink current to') . ' release ' . $previousReleaseIdentifier);

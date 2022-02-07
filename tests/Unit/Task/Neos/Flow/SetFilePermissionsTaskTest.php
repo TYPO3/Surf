@@ -72,7 +72,7 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
     /**
      * @return SetFilePermissionsTask
      */
-    protected function createTask()
+    protected function createTask(): SetFilePermissionsTask
     {
         return new SetFilePermissionsTask();
     }

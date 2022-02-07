@@ -66,7 +66,7 @@ class DeploymentTest extends TestCase
             ->addApplication($application2);
 
         $nodes = $deployment->getNodes();
-        $nodeNames = array_map(static function (Node $node) {
+        $nodeNames = array_map(static function (Node $node): string {
             return $node->getName();
         }, $nodes);
         sort($nodeNames);

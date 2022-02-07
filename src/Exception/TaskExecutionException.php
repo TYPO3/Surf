@@ -17,12 +17,12 @@ use TYPO3\Surf\Exception as SurfException;
  */
 final class TaskExecutionException extends SurfException
 {
-    public static function webOpcacheResetExecuteTaskDidNotReturnExpectedResult(string $scriptUrl): TaskExecutionException
+    public static function webOpcacheResetExecuteTaskDidNotReturnExpectedResult(string $scriptUrl): self
     {
         return new self(sprintf('WebOpcacheResetExecuteTask at "%s" did not return expected result', $scriptUrl), 1471511860);
     }
 
-    public static function webOpcacheResetCreateScriptTaskCouldNotWritFile(string $scriptFilename): TaskExecutionException
+    public static function webOpcacheResetCreateScriptTaskCouldNotWritFile(string $scriptFilename): self
     {
         return new self(sprintf('Could not write file "%s"', $scriptFilename), 1421932414);
     }

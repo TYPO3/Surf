@@ -76,7 +76,7 @@ class WebOpcacheResetExecuteTask extends Task
             return is_array($value) ? stream_context_create($value) : null;
         });
 
-        $resolver->setNormalizer('baseUrl', function (Options $options, $value) {
+        $resolver->setNormalizer('baseUrl', function (Options $options, $value): string {
             return rtrim($value, '/');
         });
     }
