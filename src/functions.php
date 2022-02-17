@@ -17,14 +17,20 @@ use TYPO3\Surf\Domain\Service\ShellCommandService;
 /**
  * Find all releases for current application
  *
- * @return array[]|false|string[]
+ * @return string[]
  */
-function findAllReleases(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell)
+function findAllReleases(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): array
 {
     $releasesPath = $application->getReleasesPath();
     $allReleasesList = $shell->execute("if [ -d $releasesPath/. ]; then find $releasesPath/. -maxdepth 1 -type d -exec basename {} \; ; fi", $node, $deployment);
 
-    return preg_split('/\s+/', $allReleasesList, -1, PREG_SPLIT_NO_EMPTY);
+    $allReleases = preg_split('/\s+/', $allReleasesList, -1, PREG_SPLIT_NO_EMPTY);
+
+    if ($allReleases === false) {
+        return[];
+    }
+
+    return $allReleases;
 }
 
 /**
