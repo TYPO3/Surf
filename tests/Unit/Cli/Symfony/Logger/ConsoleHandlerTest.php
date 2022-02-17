@@ -22,7 +22,6 @@ class ConsoleHandlerTest extends TestCase
      */
     public function constructor(): void
     {
-        // @var OutputInterface|\Prophecy\Prophecy\ObjectProphecy $output
         $output = $this->prophesize(OutputInterface::class);
 
         $handler = new ConsoleHandler($output->reveal(), false);
@@ -34,7 +33,6 @@ class ConsoleHandlerTest extends TestCase
      */
     public function isHandlingReturnsTrue(): void
     {
-        // @var OutputInterface|\Prophecy\Prophecy\ObjectProphecy $output
         $output = $this->prophesize(OutputInterface::class);
         $output->getVerbosity()->willReturn(OutputInterface::VERBOSITY_DEBUG)->shouldBeCalled();
 
@@ -47,7 +45,6 @@ class ConsoleHandlerTest extends TestCase
      */
     public function isHandlingReturnsFalseIfOutputIsQuiet(): void
     {
-        // @var OutputInterface|\Prophecy\Prophecy\ObjectProphecy $output
         $output = $this->prophesize(OutputInterface::class);
         $output->getVerbosity()->willReturn(OutputInterface::VERBOSITY_QUIET)->shouldBeCalled();
 
@@ -60,7 +57,6 @@ class ConsoleHandlerTest extends TestCase
      */
     public function getFormatter(): void
     {
-        // @var OutputInterface|\Prophecy\Prophecy\ObjectProphecy $output
         $output = $this->prophesize(OutputInterface::class);
 
         $handler = new ConsoleHandler($output->reveal());

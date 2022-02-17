@@ -42,12 +42,10 @@ class CMSTest extends TestCase
      */
     public function registerTasks(): void
     {
-        // @var Deployment|\Prophecy\Prophecy\ObjectProphecy $workflow
         $deployment = $this->prophesize(Deployment::class);
         $deployment->getForceRun()->willReturn(false);
         $deployment->hasOption('initialDeployment')->willReturn(false);
 
-        // @var Workflow|\Prophecy\Prophecy\ObjectProphecy $workflow
         $workflow = $this->prophesize(Workflow::class);
         $workflow->addTask(Argument::any(), Argument::any(), $this->subject)->will(new FluidPromise());
         $workflow->afterTask(Argument::any(), Argument::any(), $this->subject)->will(new FluidPromise());
