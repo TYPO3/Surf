@@ -1,6 +1,6 @@
 parameters:
     name: 'TYPO3 Surf'
-    version: '3.0.0-alpha'
+    version: '3.0.1'
 
 services:
     _defaults:
