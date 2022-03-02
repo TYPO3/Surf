@@ -36,7 +36,7 @@ final class ConsoleKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__ . '/../../../Resources/services.yaml');
+        $loader->load(__DIR__ . '/../../../Resources/services.php');
     }
 
     /**

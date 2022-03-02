@@ -3,7 +3,7 @@
   "files": [
     "LICENSE.txt",
     "Resources/Private/Scripts/PasswordSshLogin.expect",
-    "Resources/services.yaml"
+    "Resources/services.php"
   ],
   "finder": [
     {
