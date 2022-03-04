@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TYPO3\Surf;
 
 /*
@@ -41,7 +43,7 @@ function findAllReleases(Deployment $deployment, Node $node, Application $applic
 function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
 {
     $previousReleasePath = $application->getReleasesPath() . '/previous';
-    return trim($shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment));
+    return trim($shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment) ?? '');
 }
 
 /**
