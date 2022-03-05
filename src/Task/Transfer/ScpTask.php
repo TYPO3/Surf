@@ -12,6 +12,7 @@ namespace TYPO3\Surf\Task\Transfer;
  */
 
 use TYPO3\Flow\Utility\Files;
+use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -36,7 +37,7 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
         $releasePath = Files::concatenatePaths([$application->getReleasesPath(), $deployment->getReleaseIdentifier()]);
 
         // Create remote transfer path if not exist
-        $remoteTransferPath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache', 'transfer']);
+        $remoteTransferPath = Files::concatenatePaths([$application->getDeploymentPath(), 'cache', SimpleWorkflowStage::STEP_04_TRANSFER]);
         $this->shell->executeOrSimulate(sprintf('mkdir -p %s', $remoteTransferPath), $node, $deployment);
 
         // Create the scp destination command

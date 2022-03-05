@@ -13,6 +13,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 use Closure;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -93,7 +94,7 @@ class SimpleWorkflowTest extends TestCase
                 static function (Workflow $workflow, Application $application): callable {
                     return static function () use ($workflow): void {
                         $workflow
-                            ->addTask('typo3.surf:test:setup', 'initialize');
+                            ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE);
                     };
                 },
                 [
@@ -112,7 +113,7 @@ class SimpleWorkflowTest extends TestCase
                 function (Workflow $workflow, Application $application): callable {
                     return static function () use ($workflow): void {
                         $workflow
-                            ->addTask('typo3.surf:test:setup', 'initialize')
+                            ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE)
                             ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
                             ->afterTask('typo3.surf:test:secondsetup', 'typo3.surf:test:finalize');
                     };
@@ -157,9 +158,9 @@ class SimpleWorkflowTest extends TestCase
                 static function (Workflow $workflow, Application $application): callable {
                     return static function () use ($workflow): void {
                         $workflow
-                            ->addTask('typo3.surf:test:setup', 'initialize')
-                            ->addTask('typo3.surf:test:checkout', 'update')
-                            ->addTask('typo3.surf:test:symlink', 'switch');
+                            ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE)
+                            ->addTask('typo3.surf:test:checkout', SimpleWorkflowStage::STEP_05_UPDATE)
+                            ->addTask('typo3.surf:test:symlink', SimpleWorkflowStage::STEP_09_SWITCH);
                     };
                 },
                 [
@@ -500,8 +501,8 @@ class SimpleWorkflowTest extends TestCase
         return [
             'remove task in stage' => [
                 function ($workflow, $application): void {
-                    $workflow->addTask('task1:initialize', 'initialize');
-                    $workflow->addTask('task2:package', 'package');
+                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
+                    $workflow->addTask('task2:package', SimpleWorkflowStage::STEP_03_PACKAGE);
 
                     $workflow->removeTask('task1:initialize');
                 },
@@ -518,7 +519,7 @@ class SimpleWorkflowTest extends TestCase
             ],
             'remove task in before hook' => [
                 function ($workflow, $application): void {
-                    $workflow->addTask('task1:initialize', 'initialize');
+                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
                     $workflow->beforeTask('task1:initialize', 'task2:before');
                     $workflow->beforeTask('task1:initialize', 'task3:before');
 
@@ -545,7 +546,7 @@ class SimpleWorkflowTest extends TestCase
             ],
             'remove task in after hook' => [
                 function ($workflow, $application): void {
-                    $workflow->addTask('task1:initialize', 'initialize');
+                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
                     $workflow->afterTask('task1:initialize', 'task2:after');
                     $workflow->afterTask('task1:initialize', 'task3:after');
 

@@ -12,6 +12,7 @@ namespace TYPO3\Surf\Application\TYPO3;
  */
 
 use TYPO3\Surf\Application\BaseApplication;
+use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Task\DumpDatabaseTask;
@@ -58,12 +59,12 @@ class CMS extends BaseApplication
         parent::registerTasks($workflow, $deployment);
 
         if ($deployment->hasOption('initialDeployment') && $deployment->getOption('initialDeployment') === true) {
-            $workflow->addTask(DumpDatabaseTask::class, 'initialize', $this);
-            $workflow->addTask(RsyncFoldersTask::class, 'initialize', $this);
+            $workflow->addTask(DumpDatabaseTask::class, SimpleWorkflowStage::STEP_01_INITIALIZE, $this);
+            $workflow->addTask(RsyncFoldersTask::class, SimpleWorkflowStage::STEP_01_INITIALIZE, $this);
         }
         $workflow
-            ->afterStage('update', SymlinkDataTask::class, $this)
-            ->afterStage('switch', FlushCachesTask::class, $this)
-            ->addTask(SetUpExtensionsTask::class, 'migrate', $this);
+            ->afterStage(SimpleWorkflowStage::STEP_05_UPDATE, SymlinkDataTask::class, $this)
+            ->afterStage(SimpleWorkflowStage::STEP_09_SWITCH, FlushCachesTask::class, $this)
+            ->addTask(SetUpExtensionsTask::class, SimpleWorkflowStage::STEP_06_MIGRATE, $this);
     }
 }

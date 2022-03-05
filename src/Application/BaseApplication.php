@@ -11,6 +11,7 @@ namespace TYPO3\Surf\Application;
  * file that was distributed with this source code.
  */
 
+use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
@@ -100,7 +101,7 @@ class BaseApplication extends Application
             $this->registerTasksForTransferMethod($workflow, $this->getOption('transferMethod'));
         }
 
-        $workflow->afterStage('transfer', CreateSymlinksTask::class, $this);
+        $workflow->afterStage(SimpleWorkflowStage::STEP_04_TRANSFER, CreateSymlinksTask::class, $this);
 
         if ($this->hasOption('updateMethod')) {
             $this->registerTasksForUpdateMethod($workflow, (string)$this->getOption('updateMethod'));
@@ -109,14 +110,14 @@ class BaseApplication extends Application
         // TODO Define tasks for local shell task and local git checkout
 
         $workflow
-            ->addTask(CreateDirectoriesTask::class, 'initialize', $this)
+            ->addTask(CreateDirectoriesTask::class, SimpleWorkflowStage::STEP_01_INITIALIZE, $this)
             ->afterTask(CreateDirectoriesTask::class, GenericCreateDirectoriesTask::class, $this)
-            ->addTask(SymlinkReleaseTask::class, 'switch', $this)
-            ->addTask(CleanupReleasesTask::class, 'cleanup', $this);
+            ->addTask(SymlinkReleaseTask::class, SimpleWorkflowStage::STEP_09_SWITCH, $this)
+            ->addTask(CleanupReleasesTask::class, SimpleWorkflowStage::STEP_10_CLEANUP, $this);
 
         if ($this->hasOption('lockDeployment') && $this->getOption('lockDeployment') === true) {
-            $workflow->addTask(LockDeploymentTask::class, 'lock', $this);
-            $workflow->addTask(UnlockDeploymentTask::class, 'unlock', $this);
+            $workflow->addTask(LockDeploymentTask::class, SimpleWorkflowStage::STEP_02_LOCK, $this);
+            $workflow->addTask(UnlockDeploymentTask::class, SimpleWorkflowStage::STEP_11_UNLOCK, $this);
         }
 
         if ($deployment->getForceRun()) {
@@ -184,7 +185,7 @@ class BaseApplication extends Application
     {
         switch ($packageMethod) {
             case 'git':
-                $workflow->addTask(GitTask::class, 'package', $this);
+                $workflow->addTask(GitTask::class, SimpleWorkflowStage::STEP_03_PACKAGE, $this);
                 $workflow->defineTask(
                     $localInstallTask = 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
                     InstallTask::class,
@@ -203,13 +204,13 @@ class BaseApplication extends Application
     {
         switch ($transferMethod) {
             case 'git':
-                $workflow->addTask(GitCheckoutTask::class, 'transfer', $this);
+                $workflow->addTask(GitCheckoutTask::class, SimpleWorkflowStage::STEP_04_TRANSFER, $this);
                 break;
             case 'rsync':
-                $workflow->addTask(RsyncTask::class, 'transfer', $this);
+                $workflow->addTask(RsyncTask::class, SimpleWorkflowStage::STEP_04_TRANSFER, $this);
                 break;
             case 'scp':
-                $workflow->addTask(ScpTask::class, 'transfer', $this);
+                $workflow->addTask(ScpTask::class, SimpleWorkflowStage::STEP_04_TRANSFER, $this);
                 break;
         }
     }

@@ -62,7 +62,7 @@ class Application
      *
      * Example:
      *
-     *   $workflow->addTask(CreateDirectoriesTask::class, 'initialize', $this);
+     *   $workflow->addTask(CreateDirectoriesTask::class, SimpleWorkflowStage::STEP_01_INITIALIZE, $this);
      */
     public function registerTasks(Workflow $workflow, Deployment $deployment): void
     {

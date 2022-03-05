@@ -13,6 +13,8 @@ namespace TYPO3\Surf\Domain\Model;
 
 use Exception;
 use TYPO3\Surf\Domain\Enum\DeploymentStatus;
+use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
+use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception\DeploymentLockedException;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
@@ -26,33 +28,13 @@ class SimpleWorkflow extends Workflow
      */
     protected bool $enableRollback = true;
 
-    /**
-     * Order of stages that will be executed
-     */
-    protected array $stages = [
-        // Initialize directories etc. (first time deploy)
-        'initialize',
-        // Lock deployment
-        'lock',
-        // Local preparation of and packaging of application assets (code and files)
-        'package',
-        // Transfer of application assets to the node
-        'transfer',
-        // Update the application assets on the node
-        'update',
-        // Migrate (Doctrine, custom)
-        'migrate',
-        // Prepare final release (e.g. warmup)
-        'finalize',
-        // Smoke test
-        'test',
-        // Do symlink to current release
-        'switch',
-        // Delete temporary files or previous releases
-        'cleanup',
-        // Unlock deployment
-        'unlock',
-    ];
+    protected array $stages = [];
+
+    public function __construct(TaskManager $taskManager)
+    {
+        parent::__construct($taskManager);
+        $this->stages = SimpleWorkflowStage::toArray();
+    }
 
     /**
      * Sequentially execute the stages for each node, so first all nodes will go through the initialize stage and
@@ -98,7 +80,7 @@ class SimpleWorkflow extends Workflow
                     } catch (Exception $exception) {
                         $deployment->setStatus(DeploymentStatus::FAILED());
                         if ($this->enableRollback) {
-                            if (array_search($stage, $this->stages, false) <= array_search('switch', $this->stages, false)) {
+                            if (array_search($stage, $this->stages, false) <= array_search(SimpleWorkflowStage::STEP_09_SWITCH, $this->stages, false)) {
                                 $deployment->getLogger()->error('Got exception "' . $exception->getMessage() . '" rolling back.');
                                 $this->taskManager->rollback();
                             } else {
