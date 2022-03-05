@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 /*
@@ -117,7 +120,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
             $deployment,
         );
 
-        $version = trim(substr($output, strlen('TYPO3 Console')));
+        $version = trim(substr($output, strlen('TYPO3 Console')) ?: '');
 
         try {
             return new Version($version);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -66,7 +68,7 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
             $sourceFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[0]), '/') . '/';
             $targetFolder = rtrim(str_replace(array_keys($replacePaths), $replacePaths, $folderPair[1]), '/') . '/';
 
-            $port = $node->hasOption('port') ? ' -P ' . escapeshellarg($node->getOption('port')) : '';
+            $port = $node->hasOption('port') ? ' -P ' . escapeshellarg((string)$node->getOption('port')) : '';
 
             return sprintf('rsync -avz --delete -e ssh%s %s %s%s:%s', $port, $sourceFolder, $options['username'], $node->getHostname(), $targetFolder);
         }, $options['folders']);
