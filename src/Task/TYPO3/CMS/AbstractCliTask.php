@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
 /*
@@ -28,17 +31,13 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
 
     /**
      * The working directory. Either local or remote, and probably in a special application root directory
-     *
-     * @var string|null
      */
-    protected $workingDirectory;
+    protected ?string $workingDirectory = null;
 
     /**
      * Localhost or deployment target node
-     *
-     * @var Node|null
      */
-    protected $targetNode;
+    protected ?Node $targetNode = null;
 
     /**
      * @return bool|mixed
@@ -53,8 +52,12 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         }
         $commandPrefix .= $phpBinaryPathAndFilename . ' ';
 
+        if (!$this->targetNode instanceof Node) {
+            return false;
+        }
+
         return $this->shell->executeOrSimulate([
-            'cd ' . escapeshellarg($this->workingDirectory),
+            'cd ' . escapeshellarg((string)$this->workingDirectory),
             $commandPrefix . implode(' ', array_map('escapeshellarg', $cliArguments))
         ], $this->targetNode, $deployment);
     }
@@ -117,7 +120,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
             $deployment,
         );
 
-        $version = trim(substr($output, strlen('TYPO3 Console')));
+        $version = trim(substr($output, strlen('TYPO3 Console')) ?: '');
 
         try {
             return new Version($version);

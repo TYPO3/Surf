@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Tests\Unit\Cli\Symfony\Logger;
 
 /*
@@ -21,7 +23,6 @@ class LoggerFactoryTest extends TestCase
      */
     public function createLogger(): void
     {
-        // @var ConsoleHandler|\Prophecy\Prophecy\ObjectProphecy $output
         $consoleHandler = $this->prophesize(ConsoleHandler::class);
 
         $loggerFactory = new LoggerFactory($consoleHandler->reveal());

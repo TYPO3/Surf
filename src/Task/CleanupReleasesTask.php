@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Task;
 
 /*
@@ -64,9 +66,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         $previousReleaseIdentifier = findPreviousReleaseIdentifier($deployment, $node, $application, $this->shell);
         $allReleases = findAllReleases($deployment, $node, $application, $this->shell);
 
-        $removableReleases = array_map('trim', array_filter($allReleases, static function ($release) use ($currentReleaseIdentifier, $previousReleaseIdentifier): bool {
-            return $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous';
-        }));
+        $removableReleases = $this->extractRemovableReleases($allReleases, $currentReleaseIdentifier, $previousReleaseIdentifier);
 
         if (isset($options['onlyRemoveReleasesOlderThan'])) {
             $removeReleases = $this->removeReleasesByAge($options, $removableReleases);
@@ -106,13 +106,17 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         });
     }
 
-    /**
-     * @return array
-     */
     private function removeReleasesByNumber(array $options, array $removableReleases): array
     {
         sort($removableReleases);
         $keepReleases = $options['keepReleases'];
         return array_slice($removableReleases, 0, count($removableReleases) - $keepReleases);
+    }
+
+    private function extractRemovableReleases(array $allReleases, ?string $currentReleaseIdentifier, string $previousReleaseIdentifier): array
+    {
+        return array_map('trim', array_filter($allReleases, static function ($release) use ($currentReleaseIdentifier, $previousReleaseIdentifier): bool {
+            return $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous';
+        }));
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Tests\Unit\Command;
 
 /*
@@ -41,7 +43,6 @@ final class DeployCommandTest extends TestCase
      */
     public function executeForceRun(): void
     {
-        // @var Deployment|\Prophecy\Prophecy\ObjectProphecy $deployment
         $deployment = $this->prophesize(Deployment::class);
         $deployment->deploy()->shouldBeCalledOnce();
         $deployment->getStatus()->willReturn(DeploymentStatus::SUCCESS());

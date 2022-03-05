@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
 /*
@@ -137,6 +140,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     public function executeWithoutOptionAndMissingVersionExecutesSetUpActive(): void
     {
         $this->expectTypo3ConsoleVersion('');
+
         $this->task->execute(
             $this->node,
             $this->application,

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Domain\Service;
 
 /*
@@ -116,7 +119,7 @@ class ShellCommandService
         // TODO Get SSH options from node or deployment
         $sshOptions = ['-A'];
         if ($node->hasOption('port')) {
-            $sshOptions[] = '-p ' . escapeshellarg($node->getOption('port'));
+            $sshOptions[] = '-p ' . escapeshellarg((string)$node->getOption('port'));
         }
         if ($node->hasOption('password')) {
             $sshOptions[] = '-o PubkeyAuthentication=no';

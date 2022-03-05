@@ -1,23 +1,8 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$input of function array_filter expects array, array\\<array\\|string\\>\\|false given\\.$#"
-			count: 1
-			path: src/Task/CleanupReleasesTask.php
-
-		-
-			message: "#^Parameter \\#1 \\$input of function array_filter expects array, array\\<array\\|string\\>\\|false given\\.$#"
-			count: 1
-			path: src/Task/Generic/RollbackTask.php
-
-		-
-			message: "#^Parameter \\#1 \\$arg of function escapeshellarg expects string, string\\|null given\\.$#"
-			count: 1
-			path: src/Task/TYPO3/CMS/AbstractCliTask.php
-
-		-
 			message: "#^Parameter \\#2 \\$node of method TYPO3\\\\Surf\\\\Domain\\\\Service\\\\ShellCommandService\\:\\:executeOrSimulate\\(\\) expects TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Node, TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Node\\|null given\\.$#"
-			count: 2
+			count: 1
 			path: src/Task/TYPO3/CMS/AbstractCliTask.php
 
 		-

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TYPO3\Surf\Tests\Unit\Task;
 
 /*
@@ -179,7 +181,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             // Remove folders older than 121 seconds
             [
                 1535191400,
-                $identifiers = [
+                [
                     '0 seconds ago',
                     '60 seconds ago',
                     '120 seconds ago',
@@ -191,14 +193,14 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             // Remove folders older than 2 days
             [
                 1535191400,
-                $identifiers = [
+                [
                     '1 second ago',
                     '10 minutes ago',
-                    '2 apples and 1 second ago',
+                    '2 days 1 second ago',
                     '3 days ago',
                 ],
                 '2 days ago',
-                ['2 days and 1 second ago', '3 days ago'],
+                ['2 days 1 second ago', '3 days ago'],
             ],
         ];
     }
