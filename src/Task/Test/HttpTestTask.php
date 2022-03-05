@@ -13,6 +13,7 @@ namespace TYPO3\Surf\Task\Test;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use function GuzzleHttp\headers_from_lines;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
@@ -23,7 +24,6 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\TaskExecutionException;
-use function GuzzleHttp\headers_from_lines;
 
 /**
  * A task for testing HTTP request
