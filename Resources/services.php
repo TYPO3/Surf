@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use TYPO3\Surf\Cli\Symfony\ConsoleApplication;
 use TYPO3\Surf\Cli\Symfony\ConsoleOutputFactory;
 use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
@@ -18,6 +17,7 @@ use TYPO3\Surf\Domain\Model\RollbackWorkflow;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Integration\Factory;
 use TYPO3\Surf\Integration\FactoryInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();

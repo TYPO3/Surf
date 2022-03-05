@@ -6,9 +6,16 @@
     <!-- include all sniffs in the PSR2 standard -->
     <rule ref="PSR2"/>
 
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="300"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+
     <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/Namespaces/AlphabeticallySortedUsesSniff.php">
         <properties>
-            <property name="caseSensitive" value="true"/>
+            <property name="caseSensitive" value="false"/>
         </properties>
     </rule>
 
