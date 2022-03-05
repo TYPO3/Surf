@@ -13,7 +13,6 @@ namespace TYPO3\Surf\Task\Test;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use function GuzzleHttp\headers_from_lines;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Domain\Model\Application;
@@ -24,6 +23,7 @@ use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 use TYPO3\Surf\Exception\TaskExecutionException;
+use function GuzzleHttp\headers_from_lines;
 
 /**
  * A task for testing HTTP request
@@ -160,17 +160,16 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             return false;
         }
 
-        // = Value equals
         if (strpos($expectedValue, '=') === 0) {
+            // = Value equals
             $result = $headerValue === trim(substr($expectedValue, 1));
-        } // < Intval smaller than
-        elseif (strpos($expectedValue, '<') === 0) {
+        } elseif (strpos($expectedValue, '<') === 0) {
+            // < Intval smaller than
             $result = (int)$headerValue < (int)substr($expectedValue, 1);
-        } // > Intval bigger than
-        elseif (strpos($expectedValue, '>') === 0) {
+        } elseif (strpos($expectedValue, '>') === 0) {
+            // > Intval bigger than
             $result = (int)$headerValue > (int)substr($expectedValue, 1);
-        } // Default
-        else {
+        } else {
             $result = $headerValue === $expectedValue;
         }
 

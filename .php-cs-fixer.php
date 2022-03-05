@@ -44,7 +44,14 @@ return (new Config())
         'no_unused_imports' => true,
         'concat_space' => ['spacing' => 'one'],
         'no_whitespace_in_blank_line' => true,
-        'ordered_imports' => true,
+        'ordered_imports' => [
+            'imports_order' => [
+                'class',
+                'function',
+                'const',
+            ],
+            'sort_algorithm' => 'none',
+        ],
         'single_quote' => true,
         'no_empty_statement' => true,
         'no_extra_blank_lines' => true,
