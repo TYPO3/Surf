@@ -139,7 +139,7 @@ class Application
      */
     public function getSharedPath(): string
     {
-        return $this->getDeploymentPath().'/'.$this->getSharedDirectory();
+        return $this->getDeploymentPath() . '/' . $this->getSharedDirectory();
     }
 
     /**
@@ -192,7 +192,7 @@ class Application
      */
     public function getReleasesPath(): string
     {
-        return rtrim($this->getDeploymentPath().'/'.$this->getReleasesDirectory(), '/');
+        return rtrim($this->getDeploymentPath() . '/' . $this->getReleasesDirectory(), '/');
     }
 
     /**
