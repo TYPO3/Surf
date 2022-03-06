@@ -154,10 +154,12 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      */
     protected function testSingleHeader(string $headerValue, string $expectedValue): bool
     {
-        if (! $headerValue || trim($headerValue) === '') {
+        if (! $headerValue) {
             return false;
         }
-
+        if (trim($headerValue) === '') {
+            return false;
+        }
         if (strpos($expectedValue, '=') === 0) {
             // = Value equals
             $result = $headerValue === trim(substr($expectedValue, 1));

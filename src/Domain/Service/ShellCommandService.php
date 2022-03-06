@@ -140,9 +140,13 @@ class ShellCommandService
             $sshCommand = sprintf('expect %s %s %s', escapeshellarg($passwordSshLoginScriptPathAndFilename), escapeshellarg($node->getOption('password')), $sshCommand);
         }
         $success = $this->executeProcess($deployment, $sshCommand, $logOutput, '    > ');
-        if (isset($passwordSshLoginScriptPathAndFilename) && Phar::running() !== '') {
-            unlink($passwordSshLoginScriptPathAndFilename);
+        if (!isset($passwordSshLoginScriptPathAndFilename)) {
+            return $success;
         }
+        if (Phar::running() === '') {
+            return $success;
+        }
+        unlink($passwordSshLoginScriptPathAndFilename);
         return $success;
     }
 

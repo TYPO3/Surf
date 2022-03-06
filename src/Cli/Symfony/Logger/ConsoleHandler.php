@@ -55,7 +55,10 @@ class ConsoleHandler extends AbstractProcessingHandler
      */
     public function isHandling(array $record)
     {
-        return $this->updateLevel() && parent::isHandling($record);
+        if (!$this->updateLevel()) {
+            return false;
+        }
+        return parent::isHandling($record);
     }
 
     /**
@@ -65,7 +68,10 @@ class ConsoleHandler extends AbstractProcessingHandler
     {
         // we have to update the logging level each time because the verbosity of the
         // console output might have changed in the meantime (it is not immutable)
-        return $this->updateLevel() && parent::handle($record);
+        if (!$this->updateLevel()) {
+            return false;
+        }
+        return parent::handle($record);
     }
 
     /**

@@ -199,8 +199,15 @@ class Factory implements FactoryInterface, ContainerAwareInterface
 
     protected function ensureDirectoryExists(string $directory): void
     {
-        if (! $this->filesystem->fileExists($directory) && ! $this->filesystem->createDirectory($directory) && ! $this->filesystem->isDirectory($directory)) {
-            throw new InvalidConfigurationException(sprintf('Directory "%s" cannot be created!', $directory), 1451862775);
+        if ($this->filesystem->fileExists($directory)) {
+            return;
         }
+        if ($this->filesystem->createDirectory($directory)) {
+            return;
+        }
+        if ($this->filesystem->isDirectory($directory)) {
+            return;
+        }
+        throw new InvalidConfigurationException(sprintf('Directory "%s" cannot be created!', $directory), 1451862775);
     }
 }
