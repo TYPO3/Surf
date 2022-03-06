@@ -58,7 +58,7 @@ class CMS extends BaseApplication
     {
         parent::registerTasks($workflow, $deployment);
 
-        if ($deployment->hasOption('initialDeployment') && $deployment->getOption('initialDeployment') === true) {
+        if ($deployment->provideBoolOption('initialDeployment')) {
             $workflow->addTask(DumpDatabaseTask::class, SimpleWorkflowStage::STEP_01_INITIALIZE, $this);
             $workflow->addTask(RsyncFoldersTask::class, SimpleWorkflowStage::STEP_01_INITIALIZE, $this);
         }

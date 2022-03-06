@@ -11,6 +11,7 @@ namespace TYPO3\Surf\Domain\Model;
  * file that was distributed with this source code.
  */
 
+use InvalidArgumentException;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use Webmozart\Assert\Assert;
 
@@ -76,6 +77,7 @@ class Application
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -99,12 +101,14 @@ class Application
         Assert::allIsInstanceOf($nodes, Node::class);
 
         $this->nodes = $nodes;
+
         return $this;
     }
 
     public function addNode(Node $node): self
     {
         $this->nodes[$node->getName()] = $node;
+
         return $this;
     }
 
@@ -146,26 +150,25 @@ class Application
      */
     public function getSharedDirectory(): string
     {
-        $result = self::DEFAULT_SHARED_DIR;
-        if ($this->hasOption('sharedDirectory') && !empty($this->getOption('sharedDirectory'))) {
-            $sharedPath = $this->getOption('sharedDirectory');
-            if (preg_match('/(^|\/)\.\.(\/|$)/', $sharedPath)) {
-                throw new InvalidConfigurationException(
-                    sprintf(
-                        'Relative constructs as "../" are not allowed in option "sharedDirectory". Given option: "%s"',
-                        $sharedPath
-                    ),
-                    1490107183141
-                );
-            }
-            $result = rtrim($sharedPath, '/');
+        $sharedDirectory = $this->provideStringOption('sharedDirectory');
+        if ($sharedDirectory === '') {
+            return self::DEFAULT_SHARED_DIR;
         }
-        return $result;
+
+        $message = sprintf(
+            'Relative constructs as "../" are not allowed in option "sharedDirectory". Given option: "%s"',
+            $sharedDirectory
+        );
+
+        $this->ensureThatNoRelativePathIsGiven($sharedDirectory, $message);
+
+        return rtrim($sharedDirectory, '/');
     }
 
     public function setDeploymentPath(string $deploymentPath): self
     {
         $this->deploymentPath = rtrim($deploymentPath, '/');
+
         return $this;
     }
 
@@ -176,13 +179,11 @@ class Application
 
     public function setReleasesDirectory(string $releasesDirectory): self
     {
-        if (preg_match('/(^|\/)\.\.(\/|$)/', $releasesDirectory)) {
-            throw new InvalidConfigurationException(
-                sprintf('"../" is not allowed in the releases directory "%s"', $releasesDirectory),
-                1380870750
-            );
-        }
+        $message = sprintf('"../" is not allowed in the releases directory "%s"', $releasesDirectory);
+
+        $this->ensureThatNoRelativePathIsGiven($releasesDirectory, $message);
         $this->releasesDirectory = trim($releasesDirectory, '/');
+
         return $this;
     }
 
@@ -205,7 +206,7 @@ class Application
         return array_merge($this->options, [
             'deploymentPath' => $this->getDeploymentPath(),
             'releasesPath' => $this->getReleasesPath(),
-            'sharedPath' => $this->getSharedPath()
+            'sharedPath' => $this->getSharedPath(),
         ]);
     }
 
@@ -230,12 +231,27 @@ class Application
 
     public function hasOption(string $key): bool
     {
-        return array_key_exists($key, $this->options);
+        return isset($this->options[$key]);
+    }
+
+    public function provideBoolOption(string $key): bool
+    {
+        return $this->options[$key] ?? false;
+    }
+
+    public function provideStringOption(string $key): string
+    {
+        if (! $this->hasOption($key)) {
+            return '';
+        }
+
+        return (string)$this->getOption($key);
     }
 
     public function setOptions(array $options): self
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -246,6 +262,19 @@ class Application
     public function setOption(string $key, $value): self
     {
         $this->options[$key] = $value;
+
         return $this;
+    }
+
+    private function ensureThatNoRelativePathIsGiven(string $directory, string $message): void
+    {
+        try {
+            Assert::notRegex($directory, '/(^|\/)\.\.(\/|$)/', $message);
+        } catch (InvalidArgumentException $e) {
+            throw new InvalidConfigurationException(
+                $e->getMessage(),
+                1490107183141
+            );
+        }
     }
 }
