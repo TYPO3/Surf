@@ -100,13 +100,11 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $command = array_reduce(
             ['20171108132211', '20171109193135'],
-            function ($carry, $folder): string {
-                return $carry . sprintf(
-                    'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
-                    $this->application->getReleasesPath(),
-                    $folder
-                );
-            },
+            fn ($carry, $folder): string => $carry . sprintf(
+                'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
+                $this->application->getReleasesPath(),
+                $folder
+            ),
             ''
         );
 
@@ -129,6 +127,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $stringToTime,
         array $expectedFoldersToBeRemoved
     ): void {
+        $folderStructure = [];
         $this->clockMock->currentTime()->willReturn($currentTime);
 
         $folderStructure['.'] = '.';
@@ -147,18 +146,14 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $command = array_reduce(
             array_map(
-                function ($expectedFolderToBeRemoved) use ($currentTime) {
-                    return strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime));
-                },
+                fn ($expectedFolderToBeRemoved) => strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime)),
                 $expectedFoldersToBeRemoved
             ),
-            function ($command, $folder): string {
-                return $command . sprintf(
-                    'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
-                    $this->application->getReleasesPath(),
-                    $folder
-                );
-            },
+            fn ($command, $folder): string => $command . sprintf(
+                'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
+                $this->application->getReleasesPath(),
+                $folder
+            ),
             ''
         );
 

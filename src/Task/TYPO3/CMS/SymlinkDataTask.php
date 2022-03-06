@@ -31,6 +31,7 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
+        $commands = [];
         $options = $this->configureOptions($options);
         $targetReleasePath = $deployment->getApplicationReleasePath($application);
         $webDirectory = $options['webDirectory'];
@@ -86,8 +87,6 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
             return [];
         });
 
-        $resolver->setNormalizer('webDirectory', function (Options $options, $value): string {
-            return trim($value, '\\/');
-        });
+        $resolver->setNormalizer('webDirectory', fn (Options $options, $value): string => trim($value, '\\/'));
     }
 }

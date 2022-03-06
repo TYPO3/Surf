@@ -46,9 +46,7 @@ abstract class Workflow
     {
         $removeApplicationName = $application instanceof Application ? $application->getName() : null;
 
-        $applicationRemovalGuardClause = function ($applicationName) use ($removeApplicationName): bool {
-            return null !== $removeApplicationName && $applicationName !== $removeApplicationName;
-        };
+        $applicationRemovalGuardClause = fn ($applicationName): bool => null !== $removeApplicationName && $applicationName !== $removeApplicationName;
 
         if (isset($this->tasks['stage'])) {
             foreach ($this->tasks['stage'] as $applicationName => $steps) {
@@ -57,9 +55,7 @@ abstract class Workflow
                 }
                 foreach ($steps as $step => $tasksByStageStep) {
                     foreach ($tasksByStageStep as $stageName => $tasks) {
-                        $this->tasks['stage'][$applicationName][$step][$stageName] = array_filter($tasks, function ($task) use ($removeTask): bool {
-                            return $task !== $removeTask;
-                        });
+                        $this->tasks['stage'][$applicationName][$step][$stageName] = array_filter($tasks, fn ($task): bool => $task !== $removeTask);
                     }
                 }
             }
@@ -70,9 +66,7 @@ abstract class Workflow
                     continue;
                 }
                 foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask): bool {
-                        return $task !== $removeTask;
-                    });
+                    $this->tasks['before'][$applicationName][$taskName] = array_filter($tasks, fn ($task): bool => $task !== $removeTask);
                 }
             }
         }
@@ -82,9 +76,7 @@ abstract class Workflow
                     continue;
                 }
                 foreach ($tasksByTask as $taskName => $tasks) {
-                    $this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, function ($task) use ($removeTask): bool {
-                        return $task !== $removeTask;
-                    });
+                    $this->tasks['after'][$applicationName][$taskName] = array_filter($tasks, fn ($task): bool => $task !== $removeTask);
                 }
             }
         }

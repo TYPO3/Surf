@@ -10,7 +10,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use UnexpectedValueException;
 use TYPO3\Surf\Exception\DeploymentLockedException;
 use TYPO3\Surf\Task\LockDeploymentTask;
 
@@ -59,7 +59,7 @@ final class LockDeploymentTaskTest extends BaseTaskTest
         $task =  static::getKernel()->getContainer()->get(LockDeploymentTask::class);
 
         if (!$task instanceof LockDeploymentTask) {
-            throw new \UnexpectedValueException(sprintf('Task is not of type "%s"', LockDeploymentTask::class));
+            throw new UnexpectedValueException(sprintf('Task is not of type "%s"', LockDeploymentTask::class));
         }
 
         return $task;

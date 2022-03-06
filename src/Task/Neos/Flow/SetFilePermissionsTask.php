@@ -80,9 +80,7 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
     {
         $resolver->setDefault('username', 'root');
 
-        $resolver->setDefault('shellUsername', static function (Options $options) {
-            return $options['username'];
-        });
+        $resolver->setDefault('shellUsername', static fn (Options $options) => $options['username']);
 
         $resolver->setDefault('webserverUsername', 'www-data');
         $resolver->setDefault('webserverGroupname', 'www-data');

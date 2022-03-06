@@ -164,9 +164,7 @@ Content-Type: text/html; charset=UTF-8',
 
         try {
             $this->task->execute($this->node, $this->application, $this->deployment, $options);
-        } catch (Exception $e) {
-            $exception = $e;
-        } catch (GuzzleException $e) {
+        } catch (Exception|GuzzleException $e) {
             $exception = $e;
         }
 

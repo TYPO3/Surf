@@ -35,7 +35,7 @@ class FlushCachesTask extends AbstractCliTask
 
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
-            $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure it is available in your project, or remove this task (' . __CLASS__ . ') in your deployment configuration!');
+            $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure it is available in your project, or remove this task (' . self::class . ') in your deployment configuration!');
             return;
         }
         $this->executeCliCommand(
@@ -61,8 +61,6 @@ class FlushCachesTask extends AbstractCliTask
     {
         $resolver->setDefault('arguments', [])
             ->setAllowedTypes('arguments', ['array', 'string'])
-            ->setNormalizer('arguments', function (Options $options, $value): array {
-                return (array)$value;
-            });
+            ->setNormalizer('arguments', fn (Options $options, $value): array => (array)$value);
     }
 }

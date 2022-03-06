@@ -73,8 +73,6 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
         $resolver->setAllowedTypes('symlinks', 'array');
         $resolver->setDefault('genericSymlinksBaseDir', null);
         $resolver->setAllowedTypes('genericSymlinksBaseDir', ['string', 'null']);
-        $resolver->setNormalizer('genericSymlinksBaseDir', function (Options $options, $value) {
-            return ! empty($value) ? $value : null;
-        });
+        $resolver->setNormalizer('genericSymlinksBaseDir', fn (Options $options, $value) => ! empty($value) ? $value : null);
     }
 }

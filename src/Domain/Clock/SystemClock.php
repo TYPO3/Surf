@@ -22,7 +22,7 @@ final class SystemClock implements ClockInterface
 
     public function stringToTime(string $string, int $time = null): int
     {
-        $time = $time ?? $this->currentTime();
+        $time ??= $this->currentTime();
         $timestamp = strtotime($string, $time);
 
         if ($timestamp === false) {

@@ -96,9 +96,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             'proxy' => null,
             'proxyPort' => null,
         ]);
-        $resolver->setNormalizer('remote', static function (Options $options, $value): bool {
-            return (bool)$value;
-        });
+        $resolver->setNormalizer('remote', static fn (Options $options, $value): bool => (bool)$value);
     }
 
     /**
@@ -236,7 +234,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
 
         $command = 'curl -s ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
         $body = $this->shell->execute($command, $node, $deployment, false, false);
-        list($status, $headersString) = explode(chr(10), $head, 2);
+        [$status, $headersString] = explode(chr(10), $head, 2);
         $statusParts = explode(' ', $status);
         $headers = $this->extractHeadersFromMultiLineString(trim($headersString));
 
