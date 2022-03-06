@@ -96,7 +96,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
             'proxy' => null,
             'proxyPort' => null,
         ]);
-        $resolver->setNormalizer('remote', static fn(Options $options, $value): bool => (bool)$value);
+        $resolver->setNormalizer('remote', static fn (Options $options, $value): bool => (bool)$value);
     }
 
     /**

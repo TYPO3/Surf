@@ -100,7 +100,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $command = array_reduce(
             ['20171108132211', '20171109193135'],
-            fn($carry, $folder): string => $carry . sprintf(
+            fn ($carry, $folder): string => $carry . sprintf(
                 'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
                 $this->application->getReleasesPath(),
                 $folder
@@ -146,10 +146,10 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $command = array_reduce(
             array_map(
-                fn($expectedFolderToBeRemoved) => strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime)),
+                fn ($expectedFolderToBeRemoved) => strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime)),
                 $expectedFoldersToBeRemoved
             ),
-            fn($command, $folder): string => $command . sprintf(
+            fn ($command, $folder): string => $command . sprintf(
                 'rm -rf %1$s/%2$s;rm -f %1$s/%2$sREVISION;',
                 $this->application->getReleasesPath(),
                 $folder

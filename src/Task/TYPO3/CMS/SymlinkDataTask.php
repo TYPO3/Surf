@@ -87,6 +87,6 @@ class SymlinkDataTask extends Task implements ShellCommandServiceAwareInterface
             return [];
         });
 
-        $resolver->setNormalizer('webDirectory', fn(Options $options, $value): string => trim($value, '\\/'));
+        $resolver->setNormalizer('webDirectory', fn (Options $options, $value): string => trim($value, '\\/'));
     }
 }

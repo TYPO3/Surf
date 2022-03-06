@@ -91,7 +91,7 @@ class SimpleWorkflowTest extends TestCase
         return [
             [
                 'Just one global task in stage initialize',
-                static fn(Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                static fn (Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
                     $workflow
                         ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE);
                 },
@@ -108,7 +108,7 @@ class SimpleWorkflowTest extends TestCase
             ],
             [
                 'Add multiple tasks with afterTask',
-                fn(Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                fn (Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
                     $workflow
                         ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE)
                         ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
@@ -151,7 +151,7 @@ class SimpleWorkflowTest extends TestCase
             ],
             [
                 'Tasks in different stages',
-                static fn(Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                static fn (Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
                     $workflow
                         ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE)
                         ->addTask('typo3.surf:test:checkout', SimpleWorkflowStage::STEP_05_UPDATE)

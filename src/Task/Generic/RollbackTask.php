@@ -30,7 +30,7 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
 
         $releasesPath = $application->getReleasesPath();
 
-        $releases = array_map('trim', array_filter($allReleases, fn($release): bool => $release !== '.' && $release !== 'current' && $release !== 'previous'));
+        $releases = array_map('trim', array_filter($allReleases, fn ($release): bool => $release !== '.' && $release !== 'current' && $release !== 'previous'));
 
         sort($releases, SORT_NUMERIC | SORT_DESC);
 

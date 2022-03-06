@@ -101,7 +101,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     {
         $onlyRemoveReleasesOlderThan = $this->clock->stringToTime($options['onlyRemoveReleasesOlderThan']);
         $currentTime = $this->clock->currentTime();
-        return array_filter($removableReleases, fn($removeRelease): bool => ($currentTime - $this->clock->createTimestampFromFormat('YmdHis', $removeRelease)) > ($currentTime - $onlyRemoveReleasesOlderThan));
+        return array_filter($removableReleases, fn ($removeRelease): bool => ($currentTime - $this->clock->createTimestampFromFormat('YmdHis', $removeRelease)) > ($currentTime - $onlyRemoveReleasesOlderThan));
     }
 
     private function removeReleasesByNumber(array $options, array $removableReleases): array
@@ -113,6 +113,6 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
 
     private function extractRemovableReleases(array $allReleases, ?string $currentReleaseIdentifier, string $previousReleaseIdentifier): array
     {
-        return array_map('trim', array_filter($allReleases, static fn($release): bool => $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous'));
+        return array_map('trim', array_filter($allReleases, static fn ($release): bool => $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous'));
     }
 }
