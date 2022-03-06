@@ -115,7 +115,7 @@ class BaseApplication extends Application
             ->addTask(SymlinkReleaseTask::class, SimpleWorkflowStage::STEP_09_SWITCH, $this)
             ->addTask(CleanupReleasesTask::class, SimpleWorkflowStage::STEP_10_CLEANUP, $this);
 
-        if ($this->hasOption('lockDeployment') && $this->getOption('lockDeployment') === true) {
+        if ($this->provideBoolOption('lockDeployment')) {
             $workflow->addTask(LockDeploymentTask::class, SimpleWorkflowStage::STEP_02_LOCK, $this);
             $workflow->addTask(UnlockDeploymentTask::class, SimpleWorkflowStage::STEP_11_UNLOCK, $this);
         }
@@ -183,20 +183,18 @@ class BaseApplication extends Application
 
     protected function registerTasksForPackageMethod(Workflow $workflow, ?string $packageMethod): void
     {
-        switch ($packageMethod) {
-            case 'git':
-                $workflow->addTask(GitTask::class, SimpleWorkflowStage::STEP_03_PACKAGE, $this);
-                $workflow->defineTask(
-                    $localInstallTask = 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
-                    InstallTask::class,
-                    [
-                        'nodeName' => 'localhost',
-                        'useApplicationWorkspace' => true,
-                        'additionalArguments' => ['--ignore-platform-reqs'],
-                    ]
-                );
-                $workflow->afterTask(GitTask::class, $localInstallTask, $this);
-                break;
+        if ($packageMethod == 'git') {
+            $workflow->addTask(GitTask::class, SimpleWorkflowStage::STEP_03_PACKAGE, $this);
+            $workflow->defineTask(
+                $localInstallTask = 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
+                InstallTask::class,
+                [
+                    'nodeName' => 'localhost',
+                    'useApplicationWorkspace' => true,
+                    'additionalArguments' => ['--ignore-platform-reqs'],
+                ]
+            );
+            $workflow->afterTask(GitTask::class, $localInstallTask, $this);
         }
     }
 

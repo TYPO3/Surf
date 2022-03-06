@@ -64,10 +64,10 @@ class Flow extends BaseApplication
             ->addTask(MigrateTask::class, SimpleWorkflowStage::STEP_06_MIGRATE, $this)
             ->addTask(PublishResourcesTask::class, SimpleWorkflowStage::STEP_07_FINALIZE, $this);
 
-        if ($this->getOption('enableCacheWarmupBeforeSwitchingToNewRelease') === true) {
+        if ($this->provideBoolOption('enableCacheWarmupBeforeSwitchingToNewRelease')) {
             $workflow->addTask(WarmUpCacheTask::class, SimpleWorkflowStage::STEP_07_FINALIZE, $this);
         }
-        if ($this->getOption('enableCacheWarmupAfterSwitchingToNewRelease') === true) {
+        if ($this->provideBoolOption('enableCacheWarmupAfterSwitchingToNewRelease')) {
             $workflow->afterTask(SymlinkReleaseTask::class, WarmUpCacheTask::class, $this);
         }
     }

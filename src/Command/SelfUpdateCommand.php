@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Command;
 
+use Humbug\SelfUpdate\Strategy\GithubStrategy;
+use Humbug\SelfUpdate\Updater;
+use Phar;
 /*
  * This file is part of TYPO3 Surf.
  *
@@ -11,15 +14,12 @@ namespace TYPO3\Surf\Command;
  * file that was distributed with this source code.
  */
 use Symfony\Component\Console\Application;
-use UnexpectedValueException;
-use Humbug\SelfUpdate\Strategy\GithubStrategy;
-use Humbug\SelfUpdate\Updater;
-use Phar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use UnexpectedValueException;
 
 /**
  * @codeCoverageIgnore

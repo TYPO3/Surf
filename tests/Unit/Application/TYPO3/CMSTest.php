@@ -46,7 +46,7 @@ class CMSTest extends TestCase
     {
         $deployment = $this->prophesize(Deployment::class);
         $deployment->getForceRun()->willReturn(false);
-        $deployment->hasOption('initialDeployment')->willReturn(false);
+        $deployment->provideBoolOption('initialDeployment')->willReturn(false);
 
         $workflow = $this->prophesize(Workflow::class);
         $workflow->addTask(Argument::any(), Argument::any(), $this->subject)->will(new FluidPromise());

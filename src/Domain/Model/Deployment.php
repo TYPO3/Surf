@@ -540,4 +540,9 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
         return $workflow;
     }
+
+    public function provideBoolOption(string $key): bool
+    {
+        return $this->options[$key] ?? false;
+    }
 }
