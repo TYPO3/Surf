@@ -67,15 +67,11 @@ class CommandTask extends AbstractComposerTask
         $resolver
             ->setRequired('command')
             ->setAllowedTypes('command', 'string')
-            ->setNormalizer('command', static function (Options $options, $value): string {
-                return escapeshellarg($value);
-            });
+            ->setNormalizer('command', static fn(Options $options, $value): string => escapeshellarg($value));
 
         $resolver
             ->setAllowedTypes('arguments', 'array')
-            ->setNormalizer('arguments', static function (Options $options, $value): array {
-                return array_map('escapeshellarg', $value);
-            });
+            ->setNormalizer('arguments', static fn(Options $options, $value): array => array_map('escapeshellarg', $value));
 
         $resolver
             ->setAllowedTypes('suffix', ['array', 'string', 'null'])

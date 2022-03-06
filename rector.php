@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Rector\Set\ValueObject\SetList;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
+use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
+use Rector\Set\ValueObject\LevelSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -15,7 +14,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
+    $parameters->set(Option::SKIP, [
+        AddLiteralSeparatorToNumberRector::class
+    ]);
+    // $containerConfigurator->import(SetList::CODE_QUALITY);
+    $containerConfigurator->import(LevelSetList::UP_TO_PHP_74);
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
     // get services (needed for register a single rule)

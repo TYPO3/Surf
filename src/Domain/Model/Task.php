@@ -46,19 +46,7 @@ abstract class Task
             $resolver->setDefined(array_keys($options));
             $this->resolveOptions($resolver);
             return $resolver->resolve($options);
-        } catch (MissingOptionsException $e) {
-            throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
-        } catch (InvalidOptionsException $e) {
-            throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
-        } catch (NoConfigurationException $e) {
-            throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
-        } catch (NoSuchOptionException $e) {
-            throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
-        } catch (OptionDefinitionException $e) {
-            throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
-        } catch (UndefinedOptionsException $e) {
-            throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
-        } catch (ExceptionInterface $e) {
+        } catch (MissingOptionsException|InvalidOptionsException|NoConfigurationException|NoSuchOptionException|OptionDefinitionException|UndefinedOptionsException|ExceptionInterface $e) {
             throw new InvalidConfigurationException($e->getMessage(), $e->getCode());
         }
     }

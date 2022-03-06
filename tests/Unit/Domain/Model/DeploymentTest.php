@@ -68,9 +68,7 @@ class DeploymentTest extends TestCase
             ->addApplication($application2);
 
         $nodes = $deployment->getNodes();
-        $nodeNames = array_map(static function (Node $node): string {
-            return $node->getName();
-        }, $nodes);
+        $nodeNames = array_map(static fn(Node $node): string => $node->getName(), $nodes);
         sort($nodeNames);
 
         self::assertEquals(['test1.example.com', 'test2.example.com'], $nodeNames);

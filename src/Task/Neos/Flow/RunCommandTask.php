@@ -77,9 +77,7 @@ class RunCommandTask extends Task implements ShellCommandServiceAwareInterface
 
         $resolver->setDefault('arguments', []);
         $resolver->setAllowedTypes('arguments', ['array', 'string']);
-        $resolver->setNormalizer('arguments', function (Options $options, $value): array {
-            return (array)$value;
-        });
+        $resolver->setNormalizer('arguments', fn(Options $options, $value): array => (array)$value);
         $resolver->setRequired('command')->setAllowedTypes('command', 'string');
     }
 }

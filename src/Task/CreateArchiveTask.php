@@ -96,11 +96,7 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
         $resolver->setDefault('exclude', []);
         $resolver->setAllowedTypes('exclude', 'array');
 
-        $resolver->setAllowedValues('sourceDirectory', function ($directory): bool {
-            return $this->filesystem->isDirectory($directory);
-        });
-        $resolver->setAllowedValues('targetFile', static function ($targetFile) {
-            return preg_match('/\.(tar\.gz|tar\.bz2|zip)$/', $targetFile);
-        });
+        $resolver->setAllowedValues('sourceDirectory', fn($directory): bool => $this->filesystem->isDirectory($directory));
+        $resolver->setAllowedValues('targetFile', static fn($targetFile) => preg_match('/\.(tar\.gz|tar\.bz2|zip)$/', $targetFile));
     }
 }

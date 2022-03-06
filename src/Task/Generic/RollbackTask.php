@@ -30,9 +30,7 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
 
         $releasesPath = $application->getReleasesPath();
 
-        $releases = array_map('trim', array_filter($allReleases, function ($release): bool {
-            return $release !== '.' && $release !== 'current' && $release !== 'previous';
-        }));
+        $releases = array_map('trim', array_filter($allReleases, fn($release): bool => $release !== '.' && $release !== 'current' && $release !== 'previous'));
 
         sort($releases, SORT_NUMERIC | SORT_DESC);
 
@@ -53,7 +51,7 @@ final class RollbackTask extends Task implements ShellCommandServiceAwareInterfa
             $this->shell->executeOrSimulate($removeCommand, $node, $deployment);
 
             if ($numberOfReleases > 2) {
-                list($penultimateRelease) = array_slice($releases, -3, 1);
+                [$penultimateRelease] = array_slice($releases, -3, 1);
                 // Symlink previous to penultimate release
                 $deployment->getLogger()->info(($deployment->isDryRun() ? 'Would symlink previous to' : 'Symlink previous to') . ' release ' . $penultimateRelease);
                 $symlinkCommand = sprintf('cd %1$s && ln -sfn ./%2$s previous', $releasesPath, $penultimateRelease);

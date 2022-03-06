@@ -116,9 +116,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         $resolver->setRequired('composerCommandPath');
 
         $resolver->setDefault('additionalArguments', [])
-            ->setNormalizer('additionalArguments', static function (Options $options, $value): array {
-                return (array)$value;
-            });
+            ->setNormalizer('additionalArguments', static fn(Options $options, $value): array => (array)$value);
 
         $resolver->setDefault('useApplicationWorkspace', false);
         $resolver->setDefault('nodeName', null);

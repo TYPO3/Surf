@@ -23,13 +23,13 @@ class DeprecationMessageFactoryTest extends TestCase
     {
         $expectedMessage = sprintf(
             'The usage of %s is deprecated and will be removed in TYPO3 Surf Version %s',
-            __CLASS__,
+            self::class,
             '4.0.0'
         );
 
         self::assertSame(
             $expectedMessage,
-            DeprecationMessageFactory::createGenericDeprecationWarningForTask(__CLASS__, '4.0.0')
+            DeprecationMessageFactory::createGenericDeprecationWarningForTask(self::class, '4.0.0')
         );
     }
 }

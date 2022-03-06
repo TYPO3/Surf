@@ -10,7 +10,8 @@ namespace TYPO3\Surf\Command;
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
+use Symfony\Component\Console\Application;
+use UnexpectedValueException;
 use Humbug\SelfUpdate\Strategy\GithubStrategy;
 use Humbug\SelfUpdate\Updater;
 use Phar;
@@ -70,8 +71,8 @@ class SelfUpdateCommand extends Command
 
         $application = $this->getApplication();
 
-        if (! $application instanceof \Symfony\Component\Console\Application) {
-            throw new \UnexpectedValueException('No application defined');
+        if (! $application instanceof Application) {
+            throw new UnexpectedValueException('No application defined');
         }
 
         $strategy->setCurrentLocalVersion($application->getVersion());

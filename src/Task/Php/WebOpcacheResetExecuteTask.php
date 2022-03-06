@@ -74,12 +74,8 @@ class WebOpcacheResetExecuteTask extends Task
         $resolver->setDefault('throwErrorOnWebOpCacheResetExecuteTask', false);
         $resolver->setDefault('stream_context', null);
 
-        $resolver->setNormalizer('stream_context', function (Options $options, $value) {
-            return is_array($value) ? stream_context_create($value) : null;
-        });
+        $resolver->setNormalizer('stream_context', fn(Options $options, $value) => is_array($value) ? stream_context_create($value) : null);
 
-        $resolver->setNormalizer('baseUrl', function (Options $options, $value): string {
-            return rtrim($value, '/');
-        });
+        $resolver->setNormalizer('baseUrl', fn(Options $options, $value): string => rtrim($value, '/'));
     }
 }

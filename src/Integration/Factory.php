@@ -67,9 +67,7 @@ class Factory implements FactoryInterface, ContainerAwareInterface
         $path = $this->getDeploymentsBasePath($path);
         $files = $this->filesystem->glob(Files::concatenatePaths([$path, '*.php']));
 
-        return array_map(static function ($file) use ($path): string {
-            return substr($file, strlen($path) + 1, -4);
-        }, $files);
+        return array_map(static fn($file): string => substr($file, strlen($path) + 1, -4), $files);
     }
 
     /**

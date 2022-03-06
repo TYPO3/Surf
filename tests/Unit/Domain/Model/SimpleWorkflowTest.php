@@ -91,11 +91,9 @@ class SimpleWorkflowTest extends TestCase
         return [
             [
                 'Just one global task in stage initialize',
-                static function (Workflow $workflow, Application $application): callable {
-                    return static function () use ($workflow): void {
-                        $workflow
-                            ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE);
-                    };
+                static fn(Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                    $workflow
+                        ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE);
                 },
                 [
                     [
@@ -110,13 +108,11 @@ class SimpleWorkflowTest extends TestCase
             ],
             [
                 'Add multiple tasks with afterTask',
-                function (Workflow $workflow, Application $application): callable {
-                    return static function () use ($workflow): void {
-                        $workflow
-                            ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE)
-                            ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
-                            ->afterTask('typo3.surf:test:secondsetup', 'typo3.surf:test:finalize');
-                    };
+                fn(Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                    $workflow
+                        ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE)
+                        ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
+                        ->afterTask('typo3.surf:test:secondsetup', 'typo3.surf:test:finalize');
                 },
                 [
                     [
@@ -155,13 +151,11 @@ class SimpleWorkflowTest extends TestCase
             ],
             [
                 'Tasks in different stages',
-                static function (Workflow $workflow, Application $application): callable {
-                    return static function () use ($workflow): void {
-                        $workflow
-                            ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE)
-                            ->addTask('typo3.surf:test:checkout', SimpleWorkflowStage::STEP_05_UPDATE)
-                            ->addTask('typo3.surf:test:symlink', SimpleWorkflowStage::STEP_09_SWITCH);
-                    };
+                static fn(Workflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                    $workflow
+                        ->addTask('typo3.surf:test:setup', SimpleWorkflowStage::STEP_01_INITIALIZE)
+                        ->addTask('typo3.surf:test:checkout', SimpleWorkflowStage::STEP_05_UPDATE)
+                        ->addTask('typo3.surf:test:symlink', SimpleWorkflowStage::STEP_09_SWITCH);
                 },
                 [
                     [
