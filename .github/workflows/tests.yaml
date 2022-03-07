@@ -11,7 +11,7 @@ jobs:
     name: Lint PHP
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.0.0
+      - uses: actions/checkout@v2
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -31,7 +31,7 @@ jobs:
 
     name: PHP ${{ matrix.php }} unittests with ${{ matrix.dependencies }} deps
     steps:
-      - uses: actions/checkout@v2.0.0
+      - uses: actions/checkout@v2
 
       - id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
