@@ -11,4 +11,4 @@
 .. default-role:: code
 .. highlight:: php
 
-.. |copyright| replace:: 2020
+.. |copyright| replace:: 2022
