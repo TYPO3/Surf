@@ -31,7 +31,7 @@ function requireAutoloader()
     foreach ($autoloadPaths as $path) {
         if (file_exists($path)) {
             /** @noinspection PhpIncludeInspection */
-            return file_exists($path) && include $path;
+            return include $path;
         }
     }
 
