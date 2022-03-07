@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "291ff564eb373d7d3022f98541df391c",
+    "content-hash": "57eb371d731439a12604b89720fc3b47",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -669,16 +669,16 @@
         },
         {
             "name": "padraic/phar-updater",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/humbug/phar-updater.git",
-                "reference": "fb9d3b1551a99466f0a74cd264f4c95a8621ac7a"
+                "reference": "d01d3b8f26e541ac9b9eeba1e18d005d852f7ff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/humbug/phar-updater/zipball/fb9d3b1551a99466f0a74cd264f4c95a8621ac7a",
-                "reference": "fb9d3b1551a99466f0a74cd264f4c95a8621ac7a",
+                "url": "https://api.github.com/repos/humbug/phar-updater/zipball/d01d3b8f26e541ac9b9eeba1e18d005d852f7ff1",
+                "reference": "d01d3b8f26e541ac9b9eeba1e18d005d852f7ff1",
                 "shasum": ""
             },
             "require": {
@@ -722,7 +722,7 @@
                 "source": "https://github.com/humbug/phar-updater/tree/1.0"
             },
             "abandoned": true,
-            "time": "2018-02-20T01:18:59+00:00"
+            "time": "2018-03-30T12:52:15+00:00"
         },
         {
             "name": "phar-io/version",
