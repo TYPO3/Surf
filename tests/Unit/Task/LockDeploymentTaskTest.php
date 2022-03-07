@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace TYPO3\Surf\Tests\Unit\Task;
-
-use TYPO3\Surf\Exception\DeploymentLockedException;
-use TYPO3\Surf\Task\LockDeploymentTask;
 /*
  * This file is part of TYPO3 Surf.
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
+namespace TYPO3\Surf\Tests\Unit\Task;
+
+use TYPO3\Surf\Exception\DeploymentLockedException;
+use TYPO3\Surf\Task\LockDeploymentTask;
 use UnexpectedValueException;
 
 final class LockDeploymentTaskTest extends BaseTaskTest

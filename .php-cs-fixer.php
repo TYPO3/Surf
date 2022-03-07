@@ -79,5 +79,16 @@ return (new Config())
         'declare_equal_normalize' => ['space' => 'none'],
         'dir_constant' => true,
         'declare_strict_types' => true,
+        'header_comment' => [
+            'header' => <<<EOF
+This file is part of TYPO3 Surf.
+
+For the full copyright and license information, please view the LICENSE.txt
+file that was distributed with this source code.
+EOF,
+            'comment_type' => 'comment',
+            'location' => 'after_declare_strict',
+            'separate' => 'both'
+        ]
     ])
     ->setFinder($finder);

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace TYPO3\Surf\Task\Neos\Flow;
-
 /*
  * This file is part of TYPO3 Surf.
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
+namespace TYPO3\Surf\Task\Neos\Flow;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\Neos\Flow;

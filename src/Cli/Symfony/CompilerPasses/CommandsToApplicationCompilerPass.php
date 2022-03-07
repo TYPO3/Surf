@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace TYPO3\Surf\Cli\Symfony\CompilerPasses;
-
 /*
  * This file is part of TYPO3 Surf.
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
+namespace TYPO3\Surf\Cli\Symfony\CompilerPasses;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

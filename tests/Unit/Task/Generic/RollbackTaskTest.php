@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace TYPO3\Surf\Tests\Unit\Task\Generic;
-
 /*
  * This file is part of TYPO3 Surf.
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
+namespace TYPO3\Surf\Tests\Unit\Task\Generic;
 
 use TYPO3\Surf\Task\Generic\RollbackTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
