@@ -72,7 +72,6 @@ class Laravel extends BaseApplication
                 RouteCacheTask::class,
                 ViewCacheTask::class,
             ], SimpleWorkflowStage::STEP_07_FINALIZE, $this)
-            ->afterStage(SimpleWorkflowStage::STEP_10_CLEANUP, ClearAuthResetsTask::class, $this)
         ;
     }
 }
