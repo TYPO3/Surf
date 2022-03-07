@@ -14,7 +14,6 @@ namespace TYPO3\Surf\Application;
 use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
-use TYPO3\Surf\Task\Laravel\ClearAuthResetsTask;
 use TYPO3\Surf\Task\Laravel\ConfigCacheTask;
 use TYPO3\Surf\Task\Laravel\CreateDirectoriesTask;
 use TYPO3\Surf\Task\Laravel\EnvAwareTask;
