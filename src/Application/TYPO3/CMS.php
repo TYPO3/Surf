@@ -29,6 +29,7 @@ class CMS extends BaseApplication
 
         $this->options = array_merge($this->options, [
             'context' => 'Production',
+            'typo3CliFileName' => 'vendor/bin/typo3',
             'scriptFileName' => 'vendor/bin/typo3cms',
             'symlinkDataFolders' => [
                 'fileadmin',

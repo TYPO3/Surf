@@ -90,6 +90,23 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         }
     }
 
+    protected function getTypo3CoreCliFileName(Node $node, CMS $application, Deployment $deployment, array $options = []): string
+    {
+        if (!isset($options['typo3CliFileName'])) {
+            throw InvalidConfigurationException::createTypo3CoreCliNotFound(get_class($this));
+        }
+
+        if (false === strpos($options['typo3CliFileName'], 'typo3')) {
+            throw InvalidConfigurationException::createTypo3CoreCliNotFound(get_class($this));
+        }
+
+        if (false === $this->fileExists($options['typo3CliFileName'], $node, $application, $deployment, $options)) {
+            throw InvalidConfigurationException::createTypo3CoreCliNotFound(get_class($this));
+        }
+
+        return $options['typo3CliFileName'];
+    }
+
     protected function getTypo3ConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = []): string
     {
         if (!isset($options['scriptFileName'])) {
@@ -107,6 +124,29 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         return $options['scriptFileName'];
     }
 
+    protected function getTypo3CoreVersion(Node $node, CMS $application, Deployment $deployment, array $options): Version
+    {
+        $scriptFileName = $this->getTypo3CoreCliFileName($node, $application, $deployment, $options);
+
+        $commandArguments = [$scriptFileName, '--version'];
+
+        $output = $this->executeCliCommand(
+            $commandArguments,
+            $node,
+            $application,
+            $deployment,
+            $options
+        );
+
+        preg_match('/TYPO3 CMS (.*) \(/', $output, $matches);
+
+        try {
+            return new Version($matches[1]);
+        } catch (InvalidVersionException $e) {
+            return new Version('0.0.0');
+        }
+    }
+
     protected function getTypo3ConsoleVersion(Node $node, CMS $application, Deployment $deployment, array $options): Version
     {
         $scriptFileName = $this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options);
@@ -118,6 +158,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
             $node,
             $application,
             $deployment,
+            $options
         );
 
         // return version in simulation

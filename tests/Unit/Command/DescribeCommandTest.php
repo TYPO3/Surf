@@ -31,20 +31,14 @@ class DescribeCommandTest extends TestCase
 {
     use KernelAwareTrait;
 
-    /**
-     * @var Deployment
-     */
-    protected $deployment;
+    protected Deployment $deployment;
 
     /**
      * @var Application|BaseApplication
      */
     protected $application;
 
-    /**
-     * @var Node
-     */
-    protected $node;
+    protected Node $node;
 
     protected function setUp(): void
     {
@@ -174,12 +168,9 @@ Applications:
     }
 
     /**
-     * @param Application $application
-     * @param array $options
-     * @return string
      * @throws Exception
      */
-    protected function getDescriptionOfPredefinedApplication($application, $options = []): string
+    protected function getDescriptionOfPredefinedApplication(Application $application, array $options = []): string
     {
         $this->application = $application;
         $this->application->addNode($this->node);
@@ -227,6 +218,7 @@ Applications:
       lockDeployment => <success>1</success>
       webDirectory => <success>public</success>
       context => <success>Production</success>
+      typo3CliFileName => <success>vendor/bin/typo3</success>
       scriptFileName => <success>vendor/bin/typo3cms</success>
       symlinkDataFolders =>
         <success>fileadmin</success>

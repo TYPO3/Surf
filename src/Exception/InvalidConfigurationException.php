@@ -25,6 +25,11 @@ final class InvalidConfigurationException extends SurfException
         return new self('No nodes configured for application', 1334652427);
     }
 
+    public static function createTypo3CoreCliNotFound(string $class): self
+    {
+        return new self('TYPO3 Core CLI script was not found. Make sure it is available in your project and you set the "typo3CliFileName" option correctly. Alternatively you can remove this task (' . $class . ') in your deployment configuration.', 1481489229);
+    }
+
     public static function createTypo3ConsoleScriptNotFound(string $class): self
     {
         return new self('TYPO3 Console script was not found. Make sure it is available in your project and you set the "scriptFileName" option correctly. Alternatively you can remove this task (' . $class . ') in your deployment configuration.', 1481489230);
@@ -32,6 +37,6 @@ final class InvalidConfigurationException extends SurfException
 
     public static function createNoDeploymentNameGiven(): self
     {
-        return new static('No deployment name given!', 1451865016);
+        return new self('No deployment name given!', 1451865016);
     }
 }
