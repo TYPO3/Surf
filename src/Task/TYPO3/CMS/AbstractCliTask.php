@@ -120,6 +120,11 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
             $deployment,
         );
 
+        // return version in simulation
+        if ($output === true) {
+            return new Version('0.0.0');
+        }
+
         [$versionLine] = explode("\n", $output);
 
         $version = trim(substr($versionLine, strlen('TYPO3 Console')) ?: '');
