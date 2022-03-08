@@ -120,6 +120,22 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     /**
      * @test
      */
+    public function consoleIsFoundInCorrectPathWithoutAppDirectoryInVersionEqualOrHigherThanSevenButInMultilineFormat(): void
+    {
+        $this->expectTypo3ConsoleVersion("TYPO3 Console 7.0.5\nTYPO3 CMS 11.5.7 (Application Context: Production)");
+
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'extensionKeys' => ['foo', 'bar']
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->application)}'");
+        $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' '-e' 'foo' '-e' 'bar'");
+    }
+
+    /**
+     * @test
+     */
     public function executeWithoutOptionExecutesSetUpInVersionEqualOrHigherThanSeven(): void
     {
         $this->expectTypo3ConsoleVersion('TYPO3 Console 7.0.0');
