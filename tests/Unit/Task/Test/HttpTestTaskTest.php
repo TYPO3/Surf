@@ -123,7 +123,7 @@ Content-Type: text/html; charset=UTF-8',
             'url' => self::URL,
             'expectedHeaders' => 'Server:SomeWeirdServer',
         ];
-        $this->mockClient(new Response(200, ['Server:Apache'], 'Hello World'));
+        $this->mockClient(new Response(200, ['Server' => 'Apache'], 'Hello World'));
         $this->expectException(TaskExecutionException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
     }
