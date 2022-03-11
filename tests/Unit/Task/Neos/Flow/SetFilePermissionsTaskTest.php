@@ -18,6 +18,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SetFilePermissionsTaskTest extends BaseTaskTest
 {
+    protected function createTask(): SetFilePermissionsTask
+    {
+        return new SetFilePermissionsTask();
+    }
+
     /**
      * @test
      */
@@ -41,9 +46,6 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(sprintf($expectedCommand, $this->deployment->getReleaseIdentifier()));
     }
 
-    /**
-     * @return array
-     */
     public function executeWithDifferentOptions(): array
     {
         return [
@@ -69,13 +71,5 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
                 ['webserverUsername' => 'webserverUsername', 'webserverGroupname' => 'webserverGroupname']
             ],
         ];
-    }
-
-    /**
-     * @return SetFilePermissionsTask
-     */
-    protected function createTask(): SetFilePermissionsTask
-    {
-        return new SetFilePermissionsTask();
     }
 }

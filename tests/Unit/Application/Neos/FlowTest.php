@@ -21,10 +21,7 @@ use TYPO3\Surf\Task\Composer\InstallTask;
 
 class FlowTest extends TestCase
 {
-    /**
-     * @var Flow
-     */
-    protected $subject;
+    protected Flow $subject;
 
     protected function setUp(): void
     {
@@ -77,6 +74,7 @@ class FlowTest extends TestCase
     public function commandPackageKeyProvider(): array
     {
         return [
+            ['1.0', 'typo3.flow3'],
             ['2.0', 'typo3.flow'],
             ['3.8', 'typo3.flow'],
             ['4.0', 'neos.flow'],

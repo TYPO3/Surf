@@ -17,6 +17,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class WarmUpCacheTaskTest extends BaseTaskTest
 {
+    protected function createTask(): WarmUpCacheTask
+    {
+        return new WarmUpCacheTask();
+    }
+
     /**
      * @test
      */
@@ -30,13 +35,5 @@ class WarmUpCacheTaskTest extends BaseTaskTest
                 $this->deployment->getReleaseIdentifier()
             )
         );
-    }
-
-    /**
-     * @return WarmUpCacheTask
-     */
-    protected function createTask(): WarmUpCacheTask
-    {
-        return new WarmUpCacheTask();
     }
 }

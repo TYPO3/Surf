@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -38,6 +40,9 @@ class CompareDatabaseTask extends AbstractCliTask
     {
         /** @var CMS $application */
         Assert::isInstanceOf($application, CMS::class);
+
+        $options = $this->configureOptions($options);
+
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
             $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure one is available in your project, or remove this task (' . self::class . ') in your deployment configuration!');
@@ -56,9 +61,26 @@ class CompareDatabaseTask extends AbstractCliTask
     {
         if ($this->getAvailableCliPackage($node, $application, $deployment, $options) === 'typo3_console') {
             $databaseCompareMode = $options['databaseCompareMode'] ?? '*.add,*.change';
-            return [$this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options), 'database:updateschema', $databaseCompareMode];
+            return array_merge(
+                [
+                    $this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options),
+                    'database:updateschema',
+                    $databaseCompareMode
+                ],
+                $options['arguments']
+            );
         }
 
         return [];
+    }
+
+    protected function resolveOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefault('databaseCompareMode', 'safe')
+            ->setAllowedTypes('databaseCompareMode', ['string']);
+
+        $resolver->setDefault('arguments', [])
+            ->setAllowedTypes('arguments', ['array', 'string'])
+            ->setNormalizer('arguments', fn (Options $options, $value): array => (array)$value);
     }
 }

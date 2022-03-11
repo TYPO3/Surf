@@ -17,9 +17,6 @@ use TYPO3\Surf\Task\Transfer\RsyncTask;
 use TYPO3\Surf\Tests\Unit\AssertCommandExecuted;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-/**
- * Unit test for the RsyncTask
- */
 class RsyncTaskTest extends BaseTaskTest
 {
     protected function setUp(): void
@@ -28,6 +25,11 @@ class RsyncTaskTest extends BaseTaskTest
 
         $this->application = new Flow('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    protected function createTask(): RsyncTask
+    {
+        return new RsyncTask();
     }
 
     /**
@@ -227,13 +229,5 @@ class RsyncTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(
             '/--recursive --times --perms --links --delete --delete-excluded --exclude \'.ddev\' --exclude \'.git\' --exclude \'web\/fileadmin\' --exclude \'web\/uploads\'/'
         );
-    }
-
-    /**
-     * @return RsyncTask
-     */
-    protected function createTask(): RsyncTask
-    {
-        return new RsyncTask();
     }
 }

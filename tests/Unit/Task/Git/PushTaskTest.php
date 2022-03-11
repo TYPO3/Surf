@@ -17,6 +17,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class PushTaskTest extends BaseTaskTest
 {
+    protected function createTask(): PushTask
+    {
+        return new PushTask();
+    }
+
     /**
      * @test
      */
@@ -78,13 +83,5 @@ class PushTaskTest extends BaseTaskTest
                 $options['refspec']
             )
         );
-    }
-
-    /**
-     * @return PushTask
-     */
-    protected function createTask(): PushTask
-    {
-        return new PushTask();
     }
 }

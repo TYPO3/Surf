@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Task;
 
 use TYPO3\Surf\Exception\InvalidConfigurationException;
-use TYPO3\Surf\Exception\TaskExecutionException;
 use TYPO3\Surf\Task\ShellTask;
 
 class ShellTaskTest extends BaseTaskTest
@@ -21,6 +20,11 @@ class ShellTaskTest extends BaseTaskTest
      * @var ShellTask
      */
     protected $task;
+
+    protected function createTask(): ShellTask
+    {
+        return new ShellTask();
+    }
 
     /**
      * @test
@@ -33,15 +37,10 @@ class ShellTaskTest extends BaseTaskTest
     }
 
     /**
-     * @param string $command
-     * @param string $expectedCommand
-     *
      * @test
      * @dataProvider commands
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
      */
-    public function executeSomeCommandSuccessfully($command, $expectedCommand): void
+    public function executeSomeCommandSuccessfully(string $command, string $expectedCommand): void
     {
         $this->task->execute(
             $this->node,
@@ -53,15 +52,10 @@ class ShellTaskTest extends BaseTaskTest
     }
 
     /**
-     * @param string $command
-     * @param string $expectedCommand
-     *
-     * @throws InvalidConfigurationException
-     * @throws TaskExecutionException
      * @test
      * @dataProvider commands
      */
-    public function rollbackSomeCommandSuccessfully($command, $expectedCommand): void
+    public function rollbackSomeCommandSuccessfully(string $command, string $expectedCommand): void
     {
         $this->task->rollback(
             $this->node,
@@ -72,21 +66,10 @@ class ShellTaskTest extends BaseTaskTest
         $this->assertCommandExecuted($expectedCommand);
     }
 
-    /**
-     * @return array
-     */
     public function commands(): array
     {
         return [
             ['ln -s {sharedPath}', sprintf('ln -s %s', escapeshellarg('/shared'))],
         ];
-    }
-
-    /**
-     * @return ShellTask
-     */
-    protected function createTask(): ShellTask
-    {
-        return new ShellTask();
     }
 }

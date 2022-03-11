@@ -14,20 +14,11 @@ namespace TYPO3\Surf\Tests\Unit;
 use InvalidArgumentException;
 use PHPUnit\Framework\Constraint\Constraint;
 
-/**
- * Class AssertCommandExecuted
- */
 class AssertCommandExecuted extends Constraint
 {
-    /**
-     * @var string
-     */
-    protected $expectedCommand;
+    protected string $expectedCommand;
 
-    /**
-     * @param string $expectedCommand The expected, executed command substring
-     */
-    public function __construct($expectedCommand)
+    public function __construct(string $expectedCommand)
     {
         if (!is_string($expectedCommand)) {
             throw new InvalidArgumentException('Expected command should be a string, ' . gettype($expectedCommand) . ' given');

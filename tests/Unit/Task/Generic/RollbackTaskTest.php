@@ -16,6 +16,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 final class RollbackTaskTest extends BaseTaskTest
 {
+    protected function createTask(): RollbackTask
+    {
+        return new RollbackTask();
+    }
+
     /**
      * @test
      */
@@ -61,10 +66,5 @@ previous',
         $this->task->execute($this->node, $this->application, $this->deployment);
 
         self::assertCount(1, $this->commands['executed']);
-    }
-
-    protected function createTask(): RollbackTask
-    {
-        return new RollbackTask();
     }
 }

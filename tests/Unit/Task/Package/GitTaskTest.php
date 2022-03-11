@@ -17,6 +17,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class GitTaskTest extends BaseTaskTest
 {
+    protected function createTask(): GitTask
+    {
+        return new GitTask();
+    }
+
     /**
      * @test
      */
@@ -24,13 +29,5 @@ class GitTaskTest extends BaseTaskTest
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, []);
-    }
-
-    /**
-     * @return GitTask
-     */
-    protected function createTask(): GitTask
-    {
-        return new GitTask();
     }
 }

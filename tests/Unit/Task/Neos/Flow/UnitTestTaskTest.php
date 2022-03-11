@@ -18,6 +18,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class UnitTestTaskTest extends BaseTaskTest
 {
+    protected function createTask(): UnitTestTask
+    {
+        return new UnitTestTask();
+    }
+
     /**
      * @test
      */
@@ -40,13 +45,5 @@ class UnitTestTaskTest extends BaseTaskTest
                 $this->deployment->getReleaseIdentifier()
             )
         );
-    }
-
-    /**
-     * @return UnitTestTask
-     */
-    protected function createTask(): UnitTestTask
-    {
-        return new UnitTestTask();
     }
 }

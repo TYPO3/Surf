@@ -25,6 +25,13 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
      */
     private $filesystem;
 
+    protected function createTask(): WebOpcacheResetExecuteTask
+    {
+        $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
+
+        return new WebOpcacheResetExecuteTask($this->filesystem);
+    }
+
     /**
      * @test
      */
@@ -108,15 +115,5 @@ class WebOpcacheResetExecuteTaskTest extends BaseTaskTest
         ];
 
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-    }
-
-    /**
-     * @return WebOpcacheResetExecuteTask
-     */
-    protected function createTask(): WebOpcacheResetExecuteTask
-    {
-        $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
-
-        return new WebOpcacheResetExecuteTask($this->filesystem);
     }
 }

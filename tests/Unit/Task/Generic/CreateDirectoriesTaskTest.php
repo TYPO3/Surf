@@ -15,9 +15,6 @@ use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Task\Generic\CreateDirectoriesTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-/**
- * Class CreateDirectoriesTaskTest
- */
 class CreateDirectoriesTaskTest extends BaseTaskTest
 {
     /**
@@ -32,9 +29,6 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
-    /**
-     * @return CreateDirectoriesTask
-     */
     protected function createTask(): CreateDirectoriesTask
     {
         return new CreateDirectoriesTask();

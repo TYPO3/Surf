@@ -28,6 +28,11 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
+    protected function createTask(): CopyConfigurationTask
+    {
+        return new CopyConfigurationTask();
+    }
+
     /**
      * @test
      */
@@ -133,10 +138,5 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("ssh -p '22' foo@remote \"");
         $this->assertCommandExecuted("scp -P '22'");
         $this->assertCommandExecuted("' foo@remote:\"");
-    }
-
-    protected function createTask(): CopyConfigurationTask
-    {
-        return new CopyConfigurationTask();
     }
 }

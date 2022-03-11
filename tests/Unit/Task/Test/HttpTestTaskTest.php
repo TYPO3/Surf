@@ -31,6 +31,11 @@ class HttpTestTaskTest extends BaseTaskTest
 
     private const URL = 'https://whatever.iwant.com';
 
+    protected function createTask(): HttpTestTask
+    {
+        return new HttpTestTask(new Client());
+    }
+
     /**
      * @test
      */
@@ -148,14 +153,6 @@ Content-Type: text/html; charset=UTF-8',
         $this->mockClient(new Response(200, [], 'Hello World'));
         $this->expectException(TaskExecutionException::class);
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
-    }
-
-    /**
-     * @return HttpTestTask
-     */
-    protected function createTask(): HttpTestTask
-    {
-        return new HttpTestTask(new Client());
     }
 
     protected function assertNoExceptionThrown(array $options): void

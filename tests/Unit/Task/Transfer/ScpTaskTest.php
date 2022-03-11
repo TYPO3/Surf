@@ -24,9 +24,6 @@ class ScpTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
-    /**
-     * @return ScpTask
-     */
     protected function createTask(): ScpTask
     {
         return new ScpTask();

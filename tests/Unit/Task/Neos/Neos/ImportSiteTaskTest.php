@@ -18,11 +18,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 class ImportSiteTaskTest extends BaseTaskTest
 {
     /**
-     * @var ImportSiteTask
-     */
-    protected $task;
-
-    /**
      * @var Neos
      */
     protected $application;
@@ -33,9 +28,6 @@ class ImportSiteTaskTest extends BaseTaskTest
         $this->application = new Neos('TestApplication');
     }
 
-    /**
-     * @return ImportSiteTask
-     */
     protected function createTask(): ImportSiteTask
     {
         return new ImportSiteTask();
@@ -57,11 +49,7 @@ class ImportSiteTaskTest extends BaseTaskTest
         $this->useCorrectCommandPackageKey('3.0', 'typo3.neos');
     }
 
-    /**
-     * @param string $version
-     * @param string $commandPackageKey
-     */
-    public function useCorrectCommandPackageKey($version = '4.0', $commandPackageKey = 'neos.neos'): void
+    protected function useCorrectCommandPackageKey(string $version = '4.0', string $commandPackageKey = 'neos.neos'): void
     {
         $this->application->setVersion($version);
         $options = [

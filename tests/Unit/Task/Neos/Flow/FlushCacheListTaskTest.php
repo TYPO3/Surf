@@ -19,6 +19,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class FlushCacheListTaskTest extends BaseTaskTest
 {
+    protected function createTask(): FlushCacheListTask
+    {
+        return new FlushCacheListTask();
+    }
+
     /**
      * @test
      */
@@ -89,13 +94,5 @@ class FlushCacheListTaskTest extends BaseTaskTest
                 $this->deployment->getReleaseIdentifier()
             )
         );
-    }
-
-    /**
-     * @return FlushCacheListTask
-     */
-    protected function createTask(): FlushCacheListTask
-    {
-        return new FlushCacheListTask();
     }
 }

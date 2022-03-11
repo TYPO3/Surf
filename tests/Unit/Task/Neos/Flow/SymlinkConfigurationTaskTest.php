@@ -15,9 +15,6 @@ use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-/**
- * Unit test for the SymlinkConfigurationTask
- */
 class SymlinkConfigurationTaskTest extends BaseTaskTest
 {
     /**
@@ -31,6 +28,11 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
 
         $this->application = new Flow('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    protected function createTask(): SymlinkConfigurationTask
+    {
+        return new SymlinkConfigurationTask();
     }
 
     /**
@@ -58,13 +60,5 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('mkdir -p ../../../shared/Configuration/Production/Foo');
         $this->assertCommandExecuted('mkdir -p Production');
         $this->assertCommandExecuted('ln -snf ../../../../shared/Configuration/Production/Foo Production/Foo');
-    }
-
-    /**
-     * @return SymlinkConfigurationTask
-     */
-    protected function createTask(): SymlinkConfigurationTask
-    {
-        return new SymlinkConfigurationTask();
     }
 }

@@ -32,9 +32,6 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
-    /**
-     * @return CreateDirectoriesTask
-     */
     protected function createTask(): CreateDirectoriesTask
     {
         return new CreateDirectoriesTask();
