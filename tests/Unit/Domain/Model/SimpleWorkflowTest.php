@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 
-use Closure;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
@@ -23,9 +22,6 @@ use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception as SurfException;
 
-/**
- * Unit test for SimpleWorkflow
- */
 class SimpleWorkflowTest extends TestCase
 {
     /**
@@ -102,7 +98,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ]
                 ]
@@ -121,7 +117,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ],
                     [
@@ -129,7 +125,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ],
                     [
@@ -137,7 +133,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ],
                     [
@@ -145,7 +141,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ]
                 ]
@@ -164,7 +160,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ],
                     [
@@ -172,7 +168,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'update',
+                        'stage' => SimpleWorkflowStage::STEP_05_UPDATE,
                         'options' => []
                     ],
                     [
@@ -180,7 +176,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'test1.example.com',
                         'application' => 'Test application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'switch',
+                        'stage' => SimpleWorkflowStage::STEP_09_SWITCH,
                         'options' => []
                     ]
                 ]
@@ -191,14 +187,10 @@ class SimpleWorkflowTest extends TestCase
     /**
      * @test
      * @dataProvider globalTaskDefinitions
-     *
-     * @param string $message
-     * @param Closure $initializeCallback
-     * @param array $expectedExecutions
      */
     public function globalTaskDefinitionsAreExecutedCorrectly(
-        $message,
-        $initializeCallback,
+        string $message,
+        callable $initializeCallback,
         array $expectedExecutions
     ): void {
         $executedTasks = [];
@@ -233,7 +225,7 @@ class SimpleWorkflowTest extends TestCase
                 function ($workflow, $applications): callable {
                     [$flowApplication, $typo3Application] = $applications;
 
-                    return function () use ($workflow, $flowApplication, $typo3Application): void {
+                    return static function () use ($workflow, $flowApplication, $typo3Application): void {
                         $workflow
                             ->addTask('typo3.surf:test:setup', 'initialize')
                             ->addTask('typo3.surf:test:doctrine:migrate', 'migrate', $flowApplication)
@@ -246,7 +238,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ],
                     [
@@ -254,7 +246,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'flow-2.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ],
                     [
@@ -262,7 +254,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'neos.example.com',
                         'application' => 'TYPO3 Neos Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => []
                     ],
                     [
@@ -270,7 +262,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'migrate',
+                        'stage' => SimpleWorkflowStage::STEP_06_MIGRATE,
                         'options' => []
                     ],
                     [
@@ -278,7 +270,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'flow-2.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'migrate',
+                        'stage' => SimpleWorkflowStage::STEP_06_MIGRATE,
                         'options' => []
                     ],
                     [
@@ -286,7 +278,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'neos.example.com',
                         'application' => 'TYPO3 Neos Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'migrate',
+                        'stage' => SimpleWorkflowStage::STEP_06_MIGRATE,
                         'options' => []
                     ]
                 ]
@@ -297,14 +289,10 @@ class SimpleWorkflowTest extends TestCase
     /**
      * @test
      * @dataProvider applicationTaskDefinitions
-     *
-     * @param string $message
-     * @param Closure $initializeCallback
-     * @param array $expectedExecutions
      */
     public function applicationTaskDefinitionsAreExecutedCorrectly(
-        $message,
-        $initializeCallback,
+        string $message,
+        callable $initializeCallback,
         array $expectedExecutions
     ): void {
         $executedTasks = [];
@@ -330,44 +318,6 @@ class SimpleWorkflowTest extends TestCase
         $workflow->run($deployment);
 
         self::assertEquals($expectedExecutions, $executedTasks, $message);
-    }
-
-    /**
-     * Build a Deployment object with Workflow for testing
-     *
-     * @param array $executedTasks Register for executed tasks
-     *
-     * @return Deployment A configured Deployment for testing
-     */
-    protected function buildDeployment(array &$executedTasks = [])
-    {
-        $deployment = new Deployment('Test deployment');
-        $mockLogger = $this->createMock(LoggerInterface::class);
-        // Enable log to console to debug tests
-        // $mockLogger->expects(self::any())->method('log')->will($this->returnCallback(function($message) {
-        //   echo $message . chr(10);
-        // }));
-        $deployment->setLogger($mockLogger);
-
-        $mockTaskManager = $this->createMock(TaskManager::class);
-        $mockTaskManager
-            ->expects(self::any())
-            ->method('execute')
-            ->will(self::returnCallback(function ($task, Node $node, Application $application, Deployment $deployment, $stage, array $options = []) use (&$executedTasks): void {
-                $executedTasks[] = [
-                    'task' => $task,
-                    'node' => $node->getName(),
-                    'application' => $application->getName(),
-                    'deployment' => $deployment->getName(),
-                    'stage' => $stage,
-                    'options' => $options
-                ];
-            }));
-
-        $workflow = new SimpleWorkflow($mockTaskManager);
-        $deployment->setWorkflow($workflow);
-
-        return $deployment;
     }
 
     /**
@@ -408,7 +358,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -416,7 +366,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -424,7 +374,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -432,7 +382,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -440,7 +390,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -448,7 +398,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -456,7 +406,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -464,7 +414,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -472,7 +422,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'initialize',
+                'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                 'options' => []
             ],
             [
@@ -480,7 +430,7 @@ class SimpleWorkflowTest extends TestCase
                 'node' => 'flow-1.example.com',
                 'application' => 'Neos Flow Application',
                 'deployment' => 'Test deployment',
-                'stage' => 'package',
+                'stage' => SimpleWorkflowStage::STEP_03_PACKAGE,
                 'options' => []
             ]
         ];
@@ -488,90 +438,6 @@ class SimpleWorkflowTest extends TestCase
         self::assertEquals($expected, $executedTasks);
     }
 
-    /**
-     * @return array
-     */
-    public function taskRegistrationExamples(): array
-    {
-        return [
-            'remove task in stage' => [
-                function ($workflow, $application): void {
-                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
-                    $workflow->addTask('task2:package', SimpleWorkflowStage::STEP_03_PACKAGE);
-
-                    $workflow->removeTask('task1:initialize');
-                },
-                [
-                    [
-                        'task' => 'task2:package',
-                        'node' => 'flow-1.example.com',
-                        'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'package',
-                        'options' => []
-                    ]
-                ]
-            ],
-            'remove task in before hook' => [
-                function ($workflow, $application): void {
-                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
-                    $workflow->beforeTask('task1:initialize', 'task2:before');
-                    $workflow->beforeTask('task1:initialize', 'task3:before');
-
-                    $workflow->removeTask('task2:before');
-                },
-                [
-                    [
-                        'task' => 'task3:before',
-                        'node' => 'flow-1.example.com',
-                        'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
-                    ],
-                    [
-                        'task' => 'task1:initialize',
-                        'node' => 'flow-1.example.com',
-                        'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
-                    ]
-                ]
-            ],
-            'remove task in after hook' => [
-                function ($workflow, $application): void {
-                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
-                    $workflow->afterTask('task1:initialize', 'task2:after');
-                    $workflow->afterTask('task1:initialize', 'task3:after');
-
-                    $workflow->removeTask('task2:after');
-                },
-                [
-                    [
-                        'task' => 'task1:initialize',
-                        'node' => 'flow-1.example.com',
-                        'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
-                    ],
-                    [
-                        'task' => 'task3:after',
-                        'node' => 'flow-1.example.com',
-                        'application' => 'Neos Flow Application',
-                        'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
-                        'options' => []
-                    ]
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * @return array
-     */
     public function taskRegistrationExamplesForDifferentApplications(): array
     {
         return [
@@ -604,7 +470,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'initialize',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
                         'options' => [],
                     ],
                     [
@@ -612,7 +478,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'package',
+                        'stage' => SimpleWorkflowStage::STEP_03_PACKAGE,
                         'options' => [],
                     ],
                     [
@@ -620,7 +486,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'typo3.example.com',
                         'application' => 'TYPO3 Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'package',
+                        'stage' => SimpleWorkflowStage::STEP_03_PACKAGE,
                         'options' => [],
                     ],
                     [
@@ -628,7 +494,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'typo3.example.com',
                         'application' => 'TYPO3 Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'package',
+                        'stage' => SimpleWorkflowStage::STEP_03_PACKAGE,
                         'options' => [],
                     ],
                 ],
@@ -668,17 +534,92 @@ class SimpleWorkflowTest extends TestCase
         self::assertEquals($expectedTasks, $executedTasks);
     }
 
+    public function taskRegistrationExamples(): array
+    {
+        return [
+            'remove task in stage' => [
+                function (Workflow $workflow, Application $application): void {
+                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
+                    $workflow->addTask('task2:package', SimpleWorkflowStage::STEP_03_PACKAGE);
+
+                    $workflow->removeTask('task1:initialize');
+                },
+                [
+                    [
+                        'task' => 'task2:package',
+                        'node' => 'flow-1.example.com',
+                        'application' => 'Neos Flow Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => SimpleWorkflowStage::STEP_03_PACKAGE,
+                        'options' => []
+                    ]
+                ]
+            ],
+            'remove task in before hook' => [
+                function (Workflow $workflow, Application $application): void {
+                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
+                    $workflow->beforeTask('task1:initialize', 'task2:before');
+                    $workflow->beforeTask('task1:initialize', 'task3:before');
+
+                    $workflow->removeTask('task2:before');
+                },
+                [
+                    [
+                        'task' => 'task3:before',
+                        'node' => 'flow-1.example.com',
+                        'application' => 'Neos Flow Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
+                        'options' => []
+                    ],
+                    [
+                        'task' => 'task1:initialize',
+                        'node' => 'flow-1.example.com',
+                        'application' => 'Neos Flow Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
+                        'options' => []
+                    ]
+                ]
+            ],
+            'remove task in after hook' => [
+                function (Workflow $workflow, Application $application): void {
+                    $workflow->addTask('task1:initialize', SimpleWorkflowStage::STEP_01_INITIALIZE);
+                    $workflow->afterTask('task1:initialize', 'task2:after');
+                    $workflow->afterTask('task1:initialize', 'task3:after');
+
+                    $workflow->removeTask('task2:after');
+                },
+                [
+                    [
+                        'task' => 'task1:initialize',
+                        'node' => 'flow-1.example.com',
+                        'application' => 'Neos Flow Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
+                        'options' => []
+                    ],
+                    [
+                        'task' => 'task3:after',
+                        'node' => 'flow-1.example.com',
+                        'application' => 'Neos Flow Application',
+                        'deployment' => 'Test deployment',
+                        'stage' => SimpleWorkflowStage::STEP_01_INITIALIZE,
+                        'options' => []
+                    ]
+                ]
+            ]
+        ];
+    }
+
     /**
      * @test
      * @dataProvider taskRegistrationExamples
      *
-     * @param callable $callback
-     * @param array $expectedTasks
-     *
      * @throws SurfException
      * @throws SurfException\InvalidConfigurationException
      */
-    public function removeTaskRemovesTaskFromStages($callback, $expectedTasks): void
+    public function removeTaskRemovesTaskFromStages(callable $callback, array $expectedTasks): void
     {
         $executedTasks = [];
         $deployment = $this->buildDeployment($executedTasks);
@@ -697,9 +638,6 @@ class SimpleWorkflowTest extends TestCase
         self::assertEquals($expectedTasks, $executedTasks);
     }
 
-    /**
-     * @return array
-     */
     public function stageStepExamples(): array
     {
         return [
@@ -714,7 +652,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'switch',
+                        'stage' => SimpleWorkflowStage::STEP_09_SWITCH,
                         'options' => []
                     ],
                     [
@@ -722,7 +660,7 @@ class SimpleWorkflowTest extends TestCase
                         'node' => 'flow-1.example.com',
                         'application' => 'Neos Flow Application',
                         'deployment' => 'Test deployment',
-                        'stage' => 'switch',
+                        'stage' => SimpleWorkflowStage::STEP_09_SWITCH,
                         'options' => []
                     ]
                 ]
@@ -751,5 +689,52 @@ class SimpleWorkflowTest extends TestCase
         $workflow->run($deployment);
 
         self::assertEquals($expectedTasks, $executedTasks);
+    }
+
+    /**
+     * Build a Deployment object with Workflow for testing
+     *
+     * @param array $executedTasks Register for executed tasks
+     *
+     * @return Deployment A configured Deployment for testing
+     */
+    protected function buildDeployment(array &$executedTasks = []): Deployment
+    {
+        $deployment = new Deployment('Test deployment');
+        $mockLogger = $this->createMock(LoggerInterface::class);
+        // Enable log to console to debug tests
+        // $mockLogger->expects(self::any())->method('log')->will($this->returnCallback(function($message) {
+        //   echo $message . chr(10);
+        // }));
+        $deployment->setLogger($mockLogger);
+
+        $mockTaskManager = $this->createMock(TaskManager::class);
+        $mockTaskManager
+            ->expects(self::any())
+            ->method('execute')
+            ->willReturnCallback(
+                function (
+                    $task,
+                    Node $node,
+                    Application $application,
+                    Deployment $deployment,
+                    $stage,
+                    array $options = []
+                ) use (&$executedTasks): void {
+                    $executedTasks[] = [
+                        'task' => $task,
+                        'node' => $node->getName(),
+                        'application' => $application->getName(),
+                        'deployment' => $deployment->getName(),
+                        'stage' => $stage,
+                        'options' => $options
+                    ];
+                }
+            );
+
+        $workflow = new SimpleWorkflow($mockTaskManager);
+        $deployment->setWorkflow($workflow);
+
+        return $deployment;
     }
 }

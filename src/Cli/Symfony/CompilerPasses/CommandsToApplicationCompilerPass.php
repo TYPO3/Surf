@@ -19,6 +19,9 @@ use TYPO3\Surf\Cli\Symfony\ConsoleApplication;
 
 final class CommandsToApplicationCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @codeCoverageIgnore
+     */
     public function process(ContainerBuilder $container): void
     {
         $applicationDefinition = $container->getDefinition(ConsoleApplication::class);
