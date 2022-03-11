@@ -11,4 +11,5 @@ Deployment Recipes
    TYPO3/Index
    Neos/Index
    Flow/Index
+   Laravel/Index
    Other/Index
