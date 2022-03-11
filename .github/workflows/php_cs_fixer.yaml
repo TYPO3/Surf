@@ -12,7 +12,7 @@ jobs:
     # dont run jobs on forks, because we are not allowed to commit
     # workaround for missing secret in fork PRs - see https://github.com/actions/checkout/issues/298
     # see https://github.com/rectorphp/rector/commit/d395e1c28b8e6a56711dcc2e10490a82965850e4
-    if: github.event.pull_request.draft == false && github.repository == 'TYPO3/Surf' && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event.pull_request.draft == false && github.repository == 'TYPO3/Surf' && github.actor != 'dependabot[bot]'
 
     steps:
       - uses: actions/checkout@v2
