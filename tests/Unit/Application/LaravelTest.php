@@ -20,10 +20,7 @@ use TYPO3\Surf\Tests\Unit\FluidPromise;
 
 class LaravelTest extends TestCase
 {
-    /**
-     * @var Laravel
-     */
-    protected $subject;
+    protected Laravel $subject;
 
     protected function setUp(): void
     {

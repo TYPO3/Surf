@@ -18,6 +18,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class FunctionalTestTaskTest extends BaseTaskTest
 {
+    protected function createTask(): FunctionalTestTask
+    {
+        return new FunctionalTestTask();
+    }
+
     /**
      * @test
      */
@@ -40,13 +45,5 @@ class FunctionalTestTaskTest extends BaseTaskTest
                 $this->deployment->getReleaseIdentifier()
             )
         );
-    }
-
-    /**
-     * @return FunctionalTestTask
-     */
-    protected function createTask(): FunctionalTestTask
-    {
-        return new FunctionalTestTask();
     }
 }

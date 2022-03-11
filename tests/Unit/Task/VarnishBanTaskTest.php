@@ -33,6 +33,11 @@ class VarnishBanTaskTest extends BaseTaskTest
      */
     protected $task;
 
+    protected function createTask(): VarnishBanTask
+    {
+        return new VarnishBanTask();
+    }
+
     /**
      * @test
      */
@@ -77,13 +82,5 @@ class VarnishBanTaskTest extends BaseTaskTest
         ];
         $this->task->simulate($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted('/varnishadm -S secretFile -T 127.0.0.1:6082 status/');
-    }
-
-    /**
-     * @return VarnishBanTask
-     */
-    protected function createTask(): VarnishBanTask
-    {
-        return new VarnishBanTask();
     }
 }

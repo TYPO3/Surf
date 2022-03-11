@@ -14,9 +14,6 @@ namespace TYPO3\Surf\Tests\Unit\Task;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\DumpDatabaseTask;
 
-/**
- * Unit test for the DumpDatabaseTaskTest
- */
 class DumpDatabaseTaskTest extends BaseTaskTest
 {
     protected function setUp(): void

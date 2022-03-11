@@ -18,6 +18,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class PublishResourcesTaskTest extends BaseTaskTest
 {
+    protected function createTask(): PublishResourcesTask
+    {
+        return new PublishResourcesTask();
+    }
+
     /**
      * @test
      */
@@ -30,7 +35,7 @@ class PublishResourcesTaskTest extends BaseTaskTest
     /**
      * @test
      */
-    public function tooLowFlowVersionReturnsNull(): void
+    public function tooLowFlowVersionDoesNotRunTheTask(): void
     {
         $this->application = new Flow();
         $this->application->setVersion('2.9');
@@ -38,10 +43,14 @@ class PublishResourcesTaskTest extends BaseTaskTest
     }
 
     /**
-     * @return PublishResourcesTask
+     * @test
      */
-    protected function createTask(): PublishResourcesTask
+    public function version3RunsTheTask(): void
     {
-        return new PublishResourcesTask();
+        $this->application = new Flow();
+        $this->application->setVersion('3.0');
+        $this->task->execute($this->node, $this->application, $this->deployment);
+
+        $this->assertCommandExecuted("cd /releases/{$this->deployment->getReleaseIdentifier()} && FLOW_CONTEXT=Production php ./flow typo3.flow:resource:publish");
     }
 }

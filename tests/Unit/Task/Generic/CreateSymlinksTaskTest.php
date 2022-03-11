@@ -15,9 +15,6 @@ use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Task\Generic\CreateSymlinksTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-/**
- * Class CreateSymlinksTaskTest
- */
 class CreateSymlinksTaskTest extends BaseTaskTest
 {
     /**
@@ -32,9 +29,6 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
-    /**
-     * @return CreateSymlinksTask
-     */
     protected function createTask(): CreateSymlinksTask
     {
         return new CreateSymlinksTask();

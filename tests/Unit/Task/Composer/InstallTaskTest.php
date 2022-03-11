@@ -15,9 +15,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Composer\InstallTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-/**
- * Unit test for the TagTask
- */
 class InstallTaskTest extends BaseTaskTest
 {
     protected function setUp(): void
@@ -25,6 +22,11 @@ class InstallTaskTest extends BaseTaskTest
         parent::setUp();
 
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    protected function createTask(): InstallTask
+    {
+        return new InstallTask();
     }
 
     /**
@@ -83,10 +85,5 @@ class InstallTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(
             '/^composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative \'--ignore-platform-reqs\' 2>&1$/'
         );
-    }
-
-    protected function createTask(): InstallTask
-    {
-        return new InstallTask();
     }
 }

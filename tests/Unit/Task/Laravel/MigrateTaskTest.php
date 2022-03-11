@@ -54,4 +54,20 @@ class MigrateTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment);
         $this->assertCommandExecuted("/php 'artisan' 'migrate' '--force'$/");
     }
+
+    /**
+     * @test
+     */
+    public function rollbackSuccessfully(): void
+    {
+        $this->task->rollback($this->node, $this->application, $this->deployment);
+        $this->assertCommandExecuted(
+            sprintf(
+                "cd '%s/%s'",
+                $this->application->getReleasesPath(),
+                $this->deployment->getReleaseIdentifier()
+            )
+        );
+        $this->assertCommandExecuted("/php 'artisan' 'migrate:rollback' '--force'$/");
+    }
 }

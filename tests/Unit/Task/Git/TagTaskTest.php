@@ -14,9 +14,6 @@ namespace TYPO3\Surf\Tests\Unit\Task\Git;
 use TYPO3\Surf\Task\Git\TagTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-/**
- * Unit test for the TagTask
- */
 class TagTaskTest extends BaseTaskTest
 {
     protected function setUp(): void
@@ -24,6 +21,11 @@ class TagTaskTest extends BaseTaskTest
         parent::setUp();
 
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    protected function createTask(): TagTask
+    {
+        return new TagTask();
     }
 
     /**
@@ -56,10 +58,5 @@ class TagTaskTest extends BaseTaskTest
 
         $this->assertCommandExecuted('git tag -f -a -m \'Release ' . $this->deployment->getReleaseIdentifier() . ' - by Surf.\' \'release-' . $this->deployment->getReleaseIdentifier() . '\'');
         $this->assertCommandExecuted("git submodule foreach 'git tag -f -a -m '\\''Release {$this->deployment->getReleaseIdentifier()} - by Surf.'\\'' '\\''release-{$this->deployment->getReleaseIdentifier()}'\\'''");
-    }
-
-    protected function createTask(): TagTask
-    {
-        return new TagTask();
     }
 }

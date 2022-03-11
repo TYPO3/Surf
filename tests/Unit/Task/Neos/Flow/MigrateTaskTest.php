@@ -18,6 +18,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class MigrateTaskTest extends BaseTaskTest
 {
+    protected function createTask(): MigrateTask
+    {
+        return new MigrateTask();
+    }
+
     /**
      * @test
      */
@@ -40,13 +45,5 @@ class MigrateTaskTest extends BaseTaskTest
                 $this->deployment->getReleaseIdentifier()
             )
         );
-    }
-
-    /**
-     * @return MigrateTask
-     */
-    protected function createTask(): MigrateTask
-    {
-        return new MigrateTask();
     }
 }

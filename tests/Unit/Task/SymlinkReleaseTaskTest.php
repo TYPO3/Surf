@@ -15,6 +15,11 @@ use TYPO3\Surf\Task\SymlinkReleaseTask;
 
 class SymlinkReleaseTaskTest extends BaseTaskTest
 {
+    protected function createTask(): SymlinkReleaseTask
+    {
+        return new SymlinkReleaseTask();
+    }
+
     /**
      * @test
      */
@@ -44,17 +49,6 @@ class SymlinkReleaseTaskTest extends BaseTaskTest
         );
     }
 
-    /**
-     * @return SymlinkReleaseTask
-     */
-    protected function createTask(): SymlinkReleaseTask
-    {
-        return new SymlinkReleaseTask();
-    }
-
-    /**
-     * @return string
-     */
     private function expectedCommand(): string
     {
         return 'cd ' . $this->application->getReleasesPath()

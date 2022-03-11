@@ -15,9 +15,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Task\Composer\CommandTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-/**
- * Unit test for the TagTask
- */
 class CommandTaskTest extends BaseTaskTest
 {
     protected function setUp(): void
@@ -25,6 +22,11 @@ class CommandTaskTest extends BaseTaskTest
         parent::setUp();
 
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    protected function createTask(): CommandTask
+    {
+        return new CommandTask();
     }
 
     /**
@@ -185,10 +187,5 @@ class CommandTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(
             '/^composer \'update\' \'--no-ansi\' \'--no-interaction\' \'--no-dev\' \'--no-progress\' \'--classmap-authoritative\' 2>&1$/'
         );
-    }
-
-    protected function createTask(): CommandTask
-    {
-        return new CommandTask();
     }
 }

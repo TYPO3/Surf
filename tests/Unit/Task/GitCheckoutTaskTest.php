@@ -15,9 +15,6 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Exception\TaskExecutionException;
 use TYPO3\Surf\Task\GitCheckoutTask;
 
-/**
- * Unit test for the GitCheckoutTask
- */
 class GitCheckoutTaskTest extends BaseTaskTest
 {
     protected function setUp(): void

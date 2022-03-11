@@ -36,6 +36,9 @@ class MigrateFreshAndSeedTask extends AbstractCliTask
         );
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);

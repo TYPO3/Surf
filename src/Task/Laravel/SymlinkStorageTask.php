@@ -44,6 +44,9 @@ class SymlinkStorageTask extends Task implements ShellCommandServiceAwareInterfa
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);

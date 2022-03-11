@@ -19,6 +19,11 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class RunCommandTaskTest extends BaseTaskTest
 {
+    protected function createTask(): RunCommandTask
+    {
+        return new RunCommandTask();
+    }
+
     /**
      * @test
      */
@@ -41,11 +46,8 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @test
      * @dataProvider executeWithDifferentOptions
-     *
-     * @param string $expectedCommand
-     * @param array $options
      */
-    public function executeSuccessfully($expectedCommand, array $options = []): void
+    public function executeSuccessfully(string $expectedCommand, array $options = []): void
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
@@ -86,13 +88,5 @@ class RunCommandTaskTest extends BaseTaskTest
                 ['command' => 'cache:warmup', 'phpBinaryPathAndFilename' => '/usr/local/bin/php']
             ],
         ];
-    }
-
-    /**
-     * @return RunCommandTask
-     */
-    protected function createTask(): RunCommandTask
-    {
-        return new RunCommandTask();
     }
 }

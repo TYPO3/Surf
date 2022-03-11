@@ -33,6 +33,11 @@ class VarnishPurgeTaskTest extends BaseTaskTest
      */
     protected $task;
 
+    protected function createTask(): VarnishPurgeTask
+    {
+        return new VarnishPurgeTask();
+    }
+
     /**
      * @test
      */
@@ -77,13 +82,5 @@ class VarnishPurgeTaskTest extends BaseTaskTest
         ];
         $this->task->simulate($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted('/varnishadm -S secretFile -T 127.0.0.1:6082 status/');
-    }
-
-    /**
-     * @return VarnishPurgeTask
-     */
-    protected function createTask(): VarnishPurgeTask
-    {
-        return new VarnishPurgeTask();
     }
 }

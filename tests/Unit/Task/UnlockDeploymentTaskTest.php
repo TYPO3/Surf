@@ -21,6 +21,11 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
+    protected function createTask(): UnlockDeploymentTask
+    {
+        return new UnlockDeploymentTask();
+    }
+
     /**
      * @test
      */
@@ -42,13 +47,5 @@ final class UnlockDeploymentTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(
             sprintf('rm -f %s', escapeshellarg($this->application->getDeploymentPath() . '/.surf/deploy.lock'))
         );
-    }
-
-    /**
-     * @return UnlockDeploymentTask
-     */
-    protected function createTask(): UnlockDeploymentTask
-    {
-        return new UnlockDeploymentTask();
     }
 }

@@ -15,9 +15,6 @@ use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Task\TYPO3\CMS\SymlinkDataTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
-/**
- * Class SymlinkDataTaskTest
- */
 class SymlinkDataTaskTest extends BaseTaskTest
 {
     /**
