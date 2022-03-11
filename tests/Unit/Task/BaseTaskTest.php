@@ -86,36 +86,40 @@ abstract class BaseTaskTest extends TestCase
         $shellCommandService
             ->expects(self::any())
             ->method('execute')
-            ->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
-                if (is_array($command)) {
-                    $commands['executed'] = array_merge($commands['executed'], $command);
-                } else {
-                    $commands['executed'][] = $command;
-                    if (isset($responses[$command])) {
-                        return $responses[$command];
+            ->willReturnCallback(
+                function ($command) use (&$commands, &$responses) {
+                    if (is_array($command)) {
+                        $commands['executed'] = array_merge($commands['executed'], $command);
+                    } else {
+                        $commands['executed'][] = $command;
+                        if (isset($responses[$command])) {
+                            return $responses[$command];
+                        }
                     }
+                    return '';
                 }
-                return '';
-            }));
+            );
         $shellCommandService
             ->expects(self::any())
             ->method('executeOrSimulate')
-            ->will($this->returnCallback(function ($command) use (&$commands, &$responses) {
-                if (is_array($command)) {
-                    $commands['executed'] = array_merge($commands['executed'], $command);
-                    foreach ($command as $singleCommand) {
-                        if (isset($responses[$singleCommand])) {
-                            return $responses[$singleCommand];
+            ->willReturnCallback(
+                function ($command) use (&$commands, &$responses) {
+                    if (is_array($command)) {
+                        $commands['executed'] = array_merge($commands['executed'], $command);
+                        foreach ($command as $singleCommand) {
+                            if (isset($responses[$singleCommand])) {
+                                return $responses[$singleCommand];
+                            }
+                        }
+                    } else {
+                        $commands['executed'][] = $command;
+                        if (isset($responses[$command])) {
+                            return $responses[$command];
                         }
                     }
-                } else {
-                    $commands['executed'][] = $command;
-                    if (isset($responses[$command])) {
-                        return $responses[$command];
-                    }
+                    return '';
                 }
-                return '';
-            }));
+            );
         $this->task = $this->createTask();
         if ($this->task instanceof ShellCommandServiceAwareInterface) {
             $this->task->setShellCommandService($shellCommandService);
