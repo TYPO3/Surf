@@ -43,9 +43,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         $this->client = $client;
     }
 
-    /**
-     * @param ClientInterface $client
-     */
     public function setClient(ClientInterface $client): void
     {
         $this->client = $client;
@@ -106,9 +103,9 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
      *
      * @throws TaskExecutionException
      */
-    protected function assertExpectedStatus($expected, $actual): void
+    protected function assertExpectedStatus(int $expected, int $actual): void
     {
-        if ((int)$actual !== (int)$expected) {
+        if ($actual !== $expected) {
             throw new TaskExecutionException(sprintf('Expected status code %d but got %d', $expected, $actual), 1319536619);
         }
     }
@@ -178,14 +175,10 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * @param string $url Request URL
-     * @param array $options
-     *
-     * @return HttpResponse
      * @throws TaskExecutionException
      * @throws GuzzleException
      */
-    protected function executeLocalCurlRequest($url, array $options = []): HttpResponse
+    protected function executeLocalCurlRequest(string $url, array $options = []): HttpResponse
     {
         $guzzleOptions = [];
 
@@ -222,16 +215,14 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * @param string $url Request URL
-     * @param Node $node
-     * @param Deployment $deployment
-     * @param string $additionalCurlParameters
-     *
-     * @return HttpResponse
      * @throws TaskExecutionException
      */
-    protected function executeRemoteCurlRequest($url, Node $node, Deployment $deployment, $additionalCurlParameters = ''): HttpResponse
-    {
+    protected function executeRemoteCurlRequest(
+        string $url,
+        Node $node,
+        Deployment $deployment,
+        string $additionalCurlParameters = ''
+    ): HttpResponse {
         $command = 'curl -s -I ' . $additionalCurlParameters . ' ' . escapeshellarg($url);
         $head = $this->shell->execute($command, $node, $deployment, false, false);
 
@@ -246,12 +237,8 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * Split response into headers and body part
-     *
-     * @param string $headerText
-     *
-     * @return array Extracted response headers as associative array
      */
-    protected function extractHeadersFromMultiLineString($headerText)
+    protected function extractHeadersFromMultiLineString(string $headerText): array
     {
         return $headerText !== '' ? headers_from_lines(explode(chr(10), $headerText)) : [];
     }

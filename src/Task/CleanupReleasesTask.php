@@ -95,10 +95,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         $this->execute($node, $application, $deployment, $options);
     }
 
-    /**
-     * @return array
-     */
-    private function removeReleasesByAge(array $options, array $removableReleases)
+    private function removeReleasesByAge(array $options, array $removableReleases): array
     {
         $onlyRemoveReleasesOlderThan = $this->clock->stringToTime($options['onlyRemoveReleasesOlderThan']);
         $currentTime = $this->clock->currentTime();

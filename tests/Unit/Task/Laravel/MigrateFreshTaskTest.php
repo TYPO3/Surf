@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class MigrateFreshTaskTest extends BaseTaskTest
 {
-    /**
-     * @var MigrateFreshTask
-     */
-    protected $task;
-
     protected function createTask(): MigrateFreshTask
     {
         return new MigrateFreshTask();

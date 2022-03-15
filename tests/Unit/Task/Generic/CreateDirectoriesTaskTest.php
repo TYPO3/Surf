@@ -17,11 +17,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class CreateDirectoriesTaskTest extends BaseTaskTest
 {
-    /**
-     * @var CreateDirectoriesTask
-     */
-    protected $task;
-
     protected function setUp(): void
     {
         parent::setUp();

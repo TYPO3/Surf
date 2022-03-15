@@ -17,11 +17,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class CreateSymlinksTaskTest extends BaseTaskTest
 {
-    /**
-     * @var CreateSymlinksTask
-     */
-    protected $task;
-
     protected function setUp(): void
     {
         parent::setUp();

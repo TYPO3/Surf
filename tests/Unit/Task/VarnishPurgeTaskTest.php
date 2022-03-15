@@ -28,11 +28,6 @@ use TYPO3\Surf\Task\VarnishPurgeTask;
 
 class VarnishPurgeTaskTest extends BaseTaskTest
 {
-    /**
-     * @var VarnishPurgeTask
-     */
-    protected $task;
-
     protected function createTask(): VarnishPurgeTask
     {
         return new VarnishPurgeTask();

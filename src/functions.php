@@ -37,8 +37,6 @@ function findAllReleases(Deployment $deployment, Node $node, Application $applic
 
 /**
  * Get previous release identifier
- *
- * @return string
  */
 function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
 {
@@ -48,8 +46,6 @@ function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Appli
 
 /**
  * Get current release identifier
- *
- * @return string
  */
 function findCurrentReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
 {

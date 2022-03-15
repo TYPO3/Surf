@@ -178,9 +178,6 @@ class DeploymentTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function wrongDeploymentLockIdentifiersProvided(): array
     {
         return [

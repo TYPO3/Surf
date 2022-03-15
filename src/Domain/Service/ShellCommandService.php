@@ -83,9 +83,8 @@ class ShellCommandService
      *
      * @param array|string $command
      * @param bool $logOutput TRUE if the output of the command should be logged
-     * @return array
      */
-    protected function executeLocalCommand($command, Deployment $deployment, $logOutput = true): array
+    protected function executeLocalCommand($command, Deployment $deployment, bool $logOutput = true): array
     {
         $command = $this->prepareCommand($command);
         $deployment->getLogger()->debug('(localhost): "' . $command . '"');
@@ -100,7 +99,7 @@ class ShellCommandService
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return array
      */
-    protected function executeRemoteCommand($command, Node $node, Deployment $deployment, $logOutput = true)
+    protected function executeRemoteCommand($command, Node $node, Deployment $deployment, bool $logOutput = true)
     {
         $command = $this->prepareCommand($command);
         $deployment->getLogger()->debug('$' . $node->getName() . ': "' . $command . '"');
@@ -163,7 +162,7 @@ class ShellCommandService
         $process->setTimeout(null);
         $callback = null;
         if ($logOutput) {
-            $callback = function ($type, $data) use ($deployment, $logPrefix): void {
+            $callback = static function ($type, $data) use ($deployment, $logPrefix): void {
                 if ($type === Process::OUT) {
                     $deployment->getLogger()->debug($logPrefix . trim($data));
                 } elseif ($type === Process::ERR) {

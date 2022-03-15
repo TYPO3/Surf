@@ -17,6 +17,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use TYPO3\Surf\Exception\TaskExecutionException;
 use TYPO3\Surf\Task\Test\HttpTestTask;
@@ -27,7 +28,7 @@ class HttpTestTaskTest extends BaseTaskTest
     /**
      * @var HttpTestTask
      */
-    protected $task;
+    protected Task $task;
 
     private const URL = 'https://whatever.iwant.com';
 

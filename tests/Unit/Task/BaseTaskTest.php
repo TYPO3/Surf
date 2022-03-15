@@ -33,35 +33,21 @@ abstract class BaseTaskTest extends TestCase
 
     /**
      * Executed commands
-     * @var array
      */
-    protected $commands;
+    protected array $commands = [];
 
     /**
-     * Predefined command respones
-     * @var array
+     * Predefined command responses
      */
-    protected $responses;
+    protected array $responses = [];
 
-    /**
-     * @var Task
-     */
-    protected $task;
+    protected Task $task;
 
-    /**
-     * @var Node
-     */
-    protected $node;
+    protected Node $node;
 
-    /**
-     * @var Application
-     */
-    protected $application;
+    protected Application $application;
 
-    /**
-     * @var Deployment
-     */
-    protected $deployment;
+    protected Deployment $deployment;
 
     /**
      * @var LoggerInterface|ObjectProphecy

@@ -21,24 +21,16 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class CompareDatabaseTaskTest extends BaseTaskTest
 {
-    /**
-     * @var CompareDatabaseTask
-     */
-    protected $task;
-
-    /**
-     * @return CompareDatabaseTask
-     */
-    protected function createTask(): CompareDatabaseTask
-    {
-        return new CompareDatabaseTask();
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    protected function createTask(): CompareDatabaseTask
+    {
+        return new CompareDatabaseTask();
     }
 
     /**

@@ -20,15 +20,15 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class RunCommandTaskTest extends BaseTaskTest
 {
-    /**
-     * @var RunCommandTask
-     */
-    protected $task;
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
+    }
+
+    protected function createTask(): RunCommandTask
+    {
+        return new RunCommandTask();
     }
 
     /**
@@ -115,13 +115,5 @@ class RunCommandTaskTest extends BaseTaskTest
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted("TYPO3_CONTEXT='Production' php 'vendor/bin/typo3cms' 'command:any'");
-    }
-
-    /**
-     * @return RunCommandTask
-     */
-    protected function createTask(): RunCommandTask
-    {
-        return new RunCommandTask();
     }
 }

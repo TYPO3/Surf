@@ -17,11 +17,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SymlinkStorageTaskTest extends BaseTaskTest
 {
-    /**
-     * @var SymlinkStorageTask
-     */
-    protected $task;
-
     protected function createTask(): SymlinkStorageTask
     {
         return new SymlinkStorageTask();

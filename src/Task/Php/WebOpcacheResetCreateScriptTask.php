@@ -105,10 +105,7 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         }
     }
 
-    /**
-     * @return string
-     */
-    private function setScriptIdentifier(Application $application)
+    private function setScriptIdentifier(Application $application): string
     {
         $scriptIdentifier = bin2hex($this->randomBytesGenerator->generate(32));
         $application->setOption(WebOpcacheResetExecuteTask::class . '[scriptIdentifier]', $scriptIdentifier);

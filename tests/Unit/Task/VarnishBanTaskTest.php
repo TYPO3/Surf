@@ -28,11 +28,6 @@ use TYPO3\Surf\Task\VarnishBanTask;
 
 class VarnishBanTaskTest extends BaseTaskTest
 {
-    /**
-     * @var VarnishBanTask
-     */
-    protected $task;
-
     protected function createTask(): VarnishBanTask
     {
         return new VarnishBanTask();

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Task\Neos\Flow;
 
 use TYPO3\Surf\Application\Neos\Flow;
+use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Task\Neos\Flow\SymlinkConfigurationTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -20,7 +21,7 @@ class SymlinkConfigurationTaskTest extends BaseTaskTest
     /**
      * @var Flow
      */
-    protected $application;
+    protected Application $application;
 
     protected function setUp(): void
     {

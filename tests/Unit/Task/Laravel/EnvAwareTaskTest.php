@@ -17,11 +17,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class EnvAwareTaskTest extends BaseTaskTest
 {
-    /**
-     * @var EnvAwareTask
-     */
-    protected $task;
-
     protected function createTask(): EnvAwareTask
     {
         return new EnvAwareTask();

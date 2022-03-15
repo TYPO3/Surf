@@ -31,10 +31,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @var array
-     */
-    protected $replacePaths = [];
+    protected array $replacePaths = [];
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {

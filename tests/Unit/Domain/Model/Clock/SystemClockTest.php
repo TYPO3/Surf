@@ -25,43 +25,33 @@ class SystemClockTest extends TestCase
     }
 
     /**
-     * @param string $string
-     *
      * @test
      * @dataProvider invalidStringsCannotBeConvertedToTimestamp
      */
-    public function stringCouldNotBeConvertedCorrectlyExceptionIsThrown($string): void
+    public function stringCouldNotBeConvertedCorrectlyExceptionIsThrown(string $string): void
     {
         $this->expectException(ClockException::class);
         $this->subject->stringToTime($string);
     }
 
     /**
-     * @param string $string
-     * @param int $base
      * @test
      * @dataProvider validStringCanBeConvertedToTimestamp
      */
-    public function stringCanBeConvertedToValidTimestamp($string, $base): void
+    public function stringCanBeConvertedToValidTimestamp(string $string, int $base): void
     {
         self::assertEquals(strtotime($string, $base), $this->subject->stringToTime($string, $base));
     }
 
     /**
-     * @param string $format
-     * @param string $time
-     * @param int $expected
      * @test
      * @dataProvider validFormatCanBeConvertedToTimestamp
      */
-    public function successFullyCreateTimestampFromFormat($format, $time, $expected): void
+    public function successFullyCreateTimestampFromFormat(string $format, string $time, int $expected): void
     {
         self::assertSame($expected, $this->subject->createTimestampFromFormat($format, $time));
     }
 
-    /**
-     * @return array
-     */
     public function validFormatCanBeConvertedToTimestamp(): array
     {
         return [
@@ -69,9 +59,6 @@ class SystemClockTest extends TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
     public function validStringCanBeConvertedToTimestamp(): array
     {
         return [
@@ -81,9 +68,6 @@ class SystemClockTest extends TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
     public function invalidStringsCannotBeConvertedToTimestamp(): array
     {
         return [

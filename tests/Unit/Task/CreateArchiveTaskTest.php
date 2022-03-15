@@ -31,6 +31,13 @@ class CreateArchiveTaskTest extends BaseTaskTest
      */
     private $idGenerator;
 
+    protected function createTask(): CreateArchiveTask
+    {
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->idGenerator = $this->prophesize(IdGeneratorInterface::class);
+        return new CreateArchiveTask($this->filesystem->reveal(), $this->idGenerator->reveal());
+    }
+
     /**
      * @test
      */
@@ -192,15 +199,5 @@ class CreateArchiveTaskTest extends BaseTaskTest
         foreach ($expectedCommands as $command) {
             $this->assertCommandExecuted($command);
         }
-    }
-
-    /**
-     * @return CreateArchiveTask
-     */
-    protected function createTask(): CreateArchiveTask
-    {
-        $this->filesystem = $this->prophesize(FilesystemInterface::class);
-        $this->idGenerator = $this->prophesize(IdGeneratorInterface::class);
-        return new CreateArchiveTask($this->filesystem->reveal(), $this->idGenerator->reveal());
     }
 }

@@ -108,9 +108,6 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->execute(sprintf('rm -rf %s', $releasePath), $node, $deployment, true);
     }
 
-    /**
-     * @return string
-     */
     private function getExcludes(array $options, string $fileName): string
     {
         $excludes = ['.git', $fileName];

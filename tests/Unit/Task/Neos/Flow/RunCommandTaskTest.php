@@ -54,9 +54,6 @@ class RunCommandTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(sprintf($expectedCommand, $this->deployment->getReleaseIdentifier()));
     }
 
-    /**
-     * @return array
-     */
     public function executeWithDifferentOptions(): array
     {
         return [

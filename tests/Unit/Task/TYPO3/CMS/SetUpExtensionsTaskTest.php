@@ -17,25 +17,17 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SetUpExtensionsTaskTest extends BaseTaskTest
 {
-    /**
-     * @var SetUpExtensionsTask
-     */
-    protected $task;
-
-    /**
-     * @return SetUpExtensionsTask
-     */
-    protected function createTask(): SetUpExtensionsTask
-    {
-        return new SetUpExtensionsTask();
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
         $this->expectTypo3ConsoleVersion('TYPO3 Console 5.8.6');
+    }
+
+    protected function createTask(): SetUpExtensionsTask
+    {
+        return new SetUpExtensionsTask();
     }
 
     /**

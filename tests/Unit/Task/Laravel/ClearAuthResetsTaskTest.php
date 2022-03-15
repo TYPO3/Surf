@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class ClearAuthResetsTaskTest extends BaseTaskTest
 {
-    /**
-     * @var ClearAuthResetsTask
-     */
-    protected $task;
-
     protected function createTask(): ClearAuthResetsTask
     {
         return new ClearAuthResetsTask();
