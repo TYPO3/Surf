@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class ViewCacheTaskTest extends BaseTaskTest
 {
-    /**
-     * @var ViewCacheTask
-     */
-    protected $task;
-
     protected function createTask(): ViewCacheTask
     {
         return new ViewCacheTask();

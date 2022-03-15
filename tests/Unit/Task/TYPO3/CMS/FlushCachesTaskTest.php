@@ -21,24 +21,16 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class FlushCachesTaskTest extends BaseTaskTest
 {
-    /**
-     * @var FlushCachesTask
-     */
-    protected $task;
-
-    /**
-     * @return FlushCachesTask
-     */
-    protected function createTask(): FlushCachesTask
-    {
-        return new FlushCachesTask();
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
         $this->application->setDeploymentPath('/home/jdoe/app');
+    }
+
+    protected function createTask(): FlushCachesTask
+    {
+        return new FlushCachesTask();
     }
 
     /**

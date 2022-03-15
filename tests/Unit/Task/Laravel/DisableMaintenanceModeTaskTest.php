@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class DisableMaintenanceModeTaskTest extends BaseTaskTest
 {
-    /**
-     * @var DisableMaintenanceModeTask
-     */
-    protected $task;
-
     protected function createTask(): DisableMaintenanceModeTask
     {
         return new DisableMaintenanceModeTask();

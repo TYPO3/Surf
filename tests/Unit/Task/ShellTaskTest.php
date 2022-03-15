@@ -16,11 +16,6 @@ use TYPO3\Surf\Task\ShellTask;
 
 class ShellTaskTest extends BaseTaskTest
 {
-    /**
-     * @var ShellTask
-     */
-    protected $task;
-
     protected function createTask(): ShellTask
     {
         return new ShellTask();

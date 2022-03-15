@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class StorageLinkTaskTest extends BaseTaskTest
 {
-    /**
-     * @var StorageLinkTask
-     */
-    protected $task;
-
     protected function createTask(): StorageLinkTask
     {
         return new StorageLinkTask();

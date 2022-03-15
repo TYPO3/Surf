@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Task\Neos\Neos;
 
 use TYPO3\Surf\Application\Neos\Neos;
+use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Task\Neos\Neos\ImportSiteTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
@@ -20,7 +21,7 @@ class ImportSiteTaskTest extends BaseTaskTest
     /**
      * @var Neos
      */
-    protected $application;
+    protected Application $application;
 
     protected function setUp(): void
     {

@@ -80,8 +80,6 @@ class SimpleWorkflowTest extends TestCase
      * Data provider with task definitions and expected executions
      *
      * Tests a simple setup with one node and one application.
-     *
-     * @return array
      */
     public function globalTaskDefinitions(): array
     {
@@ -214,8 +212,6 @@ class SimpleWorkflowTest extends TestCase
      * Data provider with task definitions and expected executions
      *
      * A more complex setup with two applications running on three nodes.
-     *
-     * @return array
      */
     public function applicationTaskDefinitions(): array
     {

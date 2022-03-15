@@ -20,11 +20,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class WarmupCacheTaskTest extends BaseTaskTest
 {
-    /**
-     * @var WarmupCacheTask
-     */
-    protected $task;
-
     protected function setUp(): void
     {
         parent::setUp();

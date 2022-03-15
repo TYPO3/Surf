@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class QueueRestartTaskTest extends BaseTaskTest
 {
-    /**
-     * @var QueueRestartTask
-     */
-    protected $task;
-
     protected function createTask(): QueueRestartTask
     {
         return new QueueRestartTask();

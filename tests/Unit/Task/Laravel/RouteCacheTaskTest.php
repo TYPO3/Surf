@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class RouteCacheTaskTest extends BaseTaskTest
 {
-    /**
-     * @var RouteCacheTask
-     */
-    protected $task;
-
     protected function createTask(): RouteCacheTask
     {
         return new RouteCacheTask();

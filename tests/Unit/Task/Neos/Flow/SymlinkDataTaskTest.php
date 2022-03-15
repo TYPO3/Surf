@@ -17,11 +17,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SymlinkDataTaskTest extends BaseTaskTest
 {
-    /**
-     * @var Flow
-     */
-    protected $application;
-
     protected function setUp(): void
     {
         parent::setUp();

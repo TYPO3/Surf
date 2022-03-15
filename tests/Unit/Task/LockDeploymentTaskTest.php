@@ -23,6 +23,17 @@ final class LockDeploymentTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
+    protected function createTask(): LockDeploymentTask
+    {
+        $task = static::getKernel()->getContainer()->get(LockDeploymentTask::class);
+
+        if (!$task instanceof LockDeploymentTask) {
+            throw new UnexpectedValueException(sprintf('Task is not of type "%s"', LockDeploymentTask::class));
+        }
+
+        return $task;
+    }
+
     /**
      * @test
      */
@@ -53,16 +64,5 @@ final class LockDeploymentTaskTest extends BaseTaskTest
         ];
         $this->expectException(DeploymentLockedException::class);
         $this->task->execute($this->node, $this->application, $this->deployment);
-    }
-
-    protected function createTask(): LockDeploymentTask
-    {
-        $task =  static::getKernel()->getContainer()->get(LockDeploymentTask::class);
-
-        if (!$task instanceof LockDeploymentTask) {
-            throw new UnexpectedValueException(sprintf('Task is not of type "%s"', LockDeploymentTask::class));
-        }
-
-        return $task;
     }
 }

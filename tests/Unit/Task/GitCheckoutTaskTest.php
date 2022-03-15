@@ -24,6 +24,11 @@ class GitCheckoutTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
+    protected function createTask(): GitCheckoutTask
+    {
+        return new GitCheckoutTask();
+    }
+
     /**
      * @test
      */
@@ -179,13 +184,5 @@ class GitCheckoutTaskTest extends BaseTaskTest
             self::assertSame(1335974926, $exception->getCode());
             throw $exception;
         }
-    }
-
-    /**
-     * @return GitCheckoutTask
-     */
-    protected function createTask(): GitCheckoutTask
-    {
-        return new GitCheckoutTask();
     }
 }

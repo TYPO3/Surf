@@ -28,18 +28,13 @@ class ShellCommandServiceTest extends TestCase
      *
      * @test
      * @dataProvider commandOptionDataProvider
-     * @param string $expectedCommandArguments
-     * @param string $username
-     * @param string $password
-     * @param int $port
-     * @param string $privateKey
      */
     public function executeRemoteCommandRespectsOptionsInSshCommand(
-        $expectedCommandArguments,
-        $username = null,
-        $password = null,
-        $port = null,
-        $privateKey = null
+        string $expectedCommandArguments,
+        string $username = null,
+        string $password = null,
+        int $port = null,
+        string $privateKey = null
     ): void {
         /** @var MockObject|ShellCommandService $service */
         $service = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);
@@ -73,15 +68,13 @@ class ShellCommandServiceTest extends TestCase
             ->expects(self::once())
             ->method('executeProcess')
             ->with(self::anything(), $expectedCommand)
-            ->will(self::returnValue([0, 'Hello World']));
+            ->willReturn([0, 'Hello World']);
 
         $service->executeOrSimulate('echo "Hello World"', $node, $deployment);
     }
 
     /**
      * Data provider for executeRemoteCommandRespectsOptionsInSshCommand
-     *
-     * @return array
      */
     public function commandOptionDataProvider(): array
     {
@@ -173,13 +166,12 @@ class ShellCommandServiceTest extends TestCase
         $deployment->setLogger($mockLogger);
 
         $shellCommandService
-            ->expects(self::any())
             ->method('executeProcess')
             ->with(
                 $deployment,
                 $this->stringContains('bin/false && ls -al')
             )
-            ->will(self::returnValue([0, 'Foo']));
+            ->willReturn([0, 'Foo']);
 
         $response = $shellCommandService->execute(['bin/false', 'ls -al'], $node, $deployment);
 
@@ -204,13 +196,12 @@ class ShellCommandServiceTest extends TestCase
         $deployment->setLogger($mockLogger);
 
         $shellCommandService
-            ->expects(self::any())
             ->method('executeProcess')
             ->with(
                 $deployment,
                 $this->stringContains('bin/false && ls -al')
             )
-            ->will(self::returnValue([0, 'Foo']));
+            ->willReturn([0, 'Foo']);
 
         $response = $shellCommandService->execute(['bin/false', 'ls -al'], $node, $deployment);
 

@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class ConfigCacheTaskTest extends BaseTaskTest
 {
-    /**
-     * @var ConfigCacheTask
-     */
-    protected $task;
-
     protected function createTask(): ConfigCacheTask
     {
         return new ConfigCacheTask();

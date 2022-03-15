@@ -19,11 +19,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class MigrateFreshAndSeedTaskTest extends BaseTaskTest
 {
-    /**
-     * @var MigrateFreshAndSeedTask
-     */
-    protected $task;
-
     protected function createTask(): MigrateFreshAndSeedTask
     {
         return new MigrateFreshAndSeedTask();

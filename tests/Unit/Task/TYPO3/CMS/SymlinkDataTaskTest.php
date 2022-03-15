@@ -17,11 +17,6 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SymlinkDataTaskTest extends BaseTaskTest
 {
-    /**
-     * @var SymlinkDataTask
-     */
-    protected $task;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,9 +24,6 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
-    /**
-     * @return SymlinkDataTask
-     */
     protected function createTask(): SymlinkDataTask
     {
         return new SymlinkDataTask();
@@ -152,11 +144,6 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("ln -sf '../{$dataPath}/test/assets' 'test/assets'");
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
     private function mergeOptions(array $options): array
     {
         return array_merge($this->application->getOptions(), $options);

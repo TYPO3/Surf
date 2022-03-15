@@ -15,6 +15,11 @@ use TYPO3\Surf\Task\RsyncFoldersTask;
 
 class RsyncFoldersTaskTest extends BaseTaskTest
 {
+    protected function createTask(): RsyncFoldersTask
+    {
+        return new RsyncFoldersTask();
+    }
+
     /**
      * @test
      */
@@ -44,9 +49,6 @@ class RsyncFoldersTaskTest extends BaseTaskTest
         }
     }
 
-    /**
-     * @return array
-     */
     public function executeWithDifferentOptions(): array
     {
         return [
@@ -93,13 +95,5 @@ class RsyncFoldersTaskTest extends BaseTaskTest
                 ]
             ],
         ];
-    }
-
-    /**
-     * @return RsyncFoldersTask
-     */
-    protected function createTask(): RsyncFoldersTask
-    {
-        return new RsyncFoldersTask();
     }
 }

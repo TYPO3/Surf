@@ -79,6 +79,13 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         ];
     }
 
+    protected function createTask(): CleanupReleasesTask
+    {
+        $this->clockMock = $this->prophesize(ClockInterface::class);
+
+        return new CleanupReleasesTask($this->clockMock->reveal());
+    }
+
     /**
      * @test
      */
@@ -147,7 +154,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $command = array_reduce(
             array_map(
-                fn ($expectedFolderToBeRemoved) => strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime)),
+                static fn ($expectedFolderToBeRemoved) => strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime)),
                 $expectedFoldersToBeRemoved
             ),
             fn ($command, $folder): string => $command . sprintf(
@@ -168,9 +175,6 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         );
     }
 
-    /**
-     * @return array
-     */
     public function keepReleasesByAgeDataProvider(): array
     {
         return [
@@ -199,15 +203,5 @@ class CleanupReleasesTaskTest extends BaseTaskTest
                 ['2 days 1 second ago', '3 days ago'],
             ],
         ];
-    }
-
-    /**
-     * @return CleanupReleasesTask
-     */
-    protected function createTask(): CleanupReleasesTask
-    {
-        $this->clockMock = $this->prophesize(ClockInterface::class);
-
-        return new CleanupReleasesTask($this->clockMock->reveal());
     }
 }

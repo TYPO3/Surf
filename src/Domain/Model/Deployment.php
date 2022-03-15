@@ -63,7 +63,6 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     /**
      * Callbacks that should be executed after initialization
-     * @var array
      */
     protected array $initCallbacks = [];
 
@@ -180,11 +179,6 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         $this->getWorkflow()->run($this);
     }
 
-    /**
-     * @param Application $application
-     *
-     * @return string
-     */
     public function getApplicationReleaseBasePath(Application $application): string
     {
         return Files::concatenatePaths([
@@ -193,11 +187,6 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         ]);
     }
 
-    /**
-     * @param Application $application
-     *
-     * @return string
-     */
     public function getApplicationReleasePath(Application $application): string
     {
         return Files::concatenatePaths([
@@ -208,8 +197,6 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     /**
      * Get the Deployment's name
-     *
-     * @return string The Deployment's name
      */
     public function getName(): string
     {
@@ -218,12 +205,8 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     /**
      * Sets the deployment name
-     *
-     * @param string $name The deployment name
-     *
-     * @return Deployment The current deployment instance for chaining
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -235,7 +218,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
      *
      * @return Node[] The deployment nodes with all application nodes
      */
-    public function getNodes()
+    public function getNodes(): array
     {
         $nodes = [];
         foreach ($this->applications as $application) {

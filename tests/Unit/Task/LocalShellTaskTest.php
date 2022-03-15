@@ -16,6 +16,11 @@ use TYPO3\Surf\Task\LocalShellTask;
 
 class LocalShellTaskTest extends BaseTaskTest
 {
+    protected function createTask(): LocalShellTask
+    {
+        return new LocalShellTask();
+    }
+
     /**
      * @test
      */
@@ -60,10 +65,5 @@ class LocalShellTaskTest extends BaseTaskTest
         return [
             ['ln -s {workspacePath}', sprintf('ln -s %s', escapeshellarg('./Data/Surf/TestDeployment/TestApplication'))],
         ];
-    }
-
-    protected function createTask(): LocalShellTask
-    {
-        return new LocalShellTask();
     }
 }

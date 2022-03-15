@@ -15,6 +15,11 @@ use TYPO3\Surf\Task\CreateDirectoriesTask;
 
 class CreateDirectoriesTaskTest extends BaseTaskTest
 {
+    protected function createTask(): CreateDirectoriesTask
+    {
+        return new CreateDirectoriesTask();
+    }
+
     /**
      * @test
      */
@@ -35,13 +40,5 @@ class CreateDirectoriesTaskTest extends BaseTaskTest
         $this->task->rollback($this->node, $this->application, $this->deployment);
         $this->assertCommandExecuted(sprintf('rm %s/next', $this->application->getReleasesPath()));
         $this->assertCommandExecuted(sprintf('rm -rf %s', $this->deployment->getApplicationReleasePath($this->application)));
-    }
-
-    /**
-     * @return CreateDirectoriesTask
-     */
-    protected function createTask(): CreateDirectoriesTask
-    {
-        return new CreateDirectoriesTask();
     }
 }

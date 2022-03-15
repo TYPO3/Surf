@@ -23,6 +23,11 @@ class DumpDatabaseTaskTest extends BaseTaskTest
         $this->application->setDeploymentPath('/home/jdoe/app');
     }
 
+    protected function createTask(): DumpDatabaseTask
+    {
+        return new DumpDatabaseTask();
+    }
+
     /**
      * @test
      */
@@ -52,13 +57,5 @@ class DumpDatabaseTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(
             "'mysqldump' '-h' 'localhost' '-u' 'user' '-p(pass)' 'db' | 'ssh' 'hostname' ''\\''mysql'\\'' '\\''-h'\\'' '\\''localhost'\\'' '\\''-u'\\'' '\\''user'\\'' '\\''-p(pass)'\\'' '\\''db'\\'''"
         );
-    }
-
-    /**
-     * @return DumpDatabaseTask
-     */
-    protected function createTask(): DumpDatabaseTask
-    {
-        return new DumpDatabaseTask();
     }
 }

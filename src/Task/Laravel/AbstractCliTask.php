@@ -24,8 +24,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
 
     /**
      * The working directory. Either local or remote, and probably in a special application root directory
-     *
-     * @var string
      */
     protected ?string $workingDirectory = null;
 
@@ -61,7 +59,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         }
 
         return $this->shell->executeOrSimulate([
-            'cd ' . escapeshellarg((string)$this->workingDirectory),
+            'cd ' . escapeshellarg($this->workingDirectory ?? ''),
             $commandPrefix . implode(' ', array_map('escapeshellarg', $cliArguments))
         ], $this->targetNode, $deployment);
     }
