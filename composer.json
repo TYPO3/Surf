@@ -1,7 +1,6 @@
 {
     "name": "typo3/surf",
     "description": "TYPO3 Surf is a deployment tool, suited for a wide variety of applications",
-    "type": "library",
     "license": "GPL-3.0-or-later",
     "require": {
         "php": "^7.4 || ^8.0",
