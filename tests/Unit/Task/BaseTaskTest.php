@@ -64,7 +64,6 @@ abstract class BaseTaskTest extends TestCase
     {
         $this->commands = ['executed' => []];
         $commands = &$this->commands;
-        $this->responses = [];
         $responses = &$this->responses;
 
         /** @var MockObject|ShellCommandService $shellCommandService */
