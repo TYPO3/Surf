@@ -37,10 +37,10 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer Dependencies
-        run: composer install --no-progress
+        run: composer install --no-progress --working-dir=tools/php-cs-fixer
 
       - name: Run php-cs-fixer
-        run: vendor/bin/php-cs-fixer fix --diff
+        run: tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff
 
       - name: Commit changed files
         uses: stefanzweifel/git-auto-commit-action@v4

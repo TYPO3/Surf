@@ -9,3 +9,5 @@ _Output/
 Documentation/.doctrees
 var/
 /release/
+/tools/**/composer.lock
+/tools/**/vendor/
