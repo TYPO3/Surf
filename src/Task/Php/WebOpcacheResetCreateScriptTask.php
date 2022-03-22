@@ -83,12 +83,17 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
             $scriptFilename = sprintf('%s/surf-opcache-reset-%s.php', $scriptBasePath, $scriptIdentifier);
 
             $result = $this->filesystem->put($scriptFilename, '<?php
-                if (function_exists("opcache_reset")) {
-                    opcache_reset();
-                }
-                @unlink(__FILE__);
-                echo "success";
-            ');
+if (function_exists("clearstatcache")) {
+    // Clear realpath cache
+    clearstatcache(true);
+}
+if (function_exists("opcache_reset")) {
+    // Clear opcache
+    opcache_reset();
+}
+@unlink(__FILE__);
+echo "success";
+');
 
             if ($result === false) {
                 throw TaskExecutionException::webOpcacheResetCreateScriptTaskCouldNotWritFile($scriptFilename);
