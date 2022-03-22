@@ -7,6 +7,7 @@ TYPO3 Surf |version| documentation
 ==================================
 
 **What is Surf**
+
 Surf package is a complete automated deployment tool.
 It is best used but by far not limited to deploy TYPO3 CMS, Flow and Neos applications.
 It's inspired by some features of Capistrano (thanks) concerning the Git workflow.
