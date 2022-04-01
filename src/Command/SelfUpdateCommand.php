@@ -63,7 +63,7 @@ class SelfUpdateCommand extends Command
         $updater = new Updater(null, false, Updater::STRATEGY_GITHUB);
         /** @var GithubStrategy $strategy */
         $strategy = $updater->getStrategy();
-        $strategy->setPackageName('TYPO3/Surf');
+        $strategy->setPackageName('typo3/surf');
         $strategy->setPharName('surf.phar');
 
         $io = new SymfonyStyle($input, $output);
@@ -87,7 +87,7 @@ class SelfUpdateCommand extends Command
                     $strategy->getStability() === GithubStrategy::ANY ? 'latest' : 'current ' . $strategy->getStability(),
                     $updater->getNewVersion()
                 ));
-            } elseif (false === $updater->getNewVersion()) {
+            } elseif ('' === $updater->getNewVersion()) {
                 $output->writeln('There are no new builds available.');
             } else {
                 $output->writeln(sprintf('You have the current %s build installed.', $strategy->getStability()));

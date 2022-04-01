@@ -6,8 +6,8 @@ on:
       - "*.*.*"
 
 jobs:
-  build:
-    name: Build Phar
+  tagged-release:
+    name: Tagged Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
