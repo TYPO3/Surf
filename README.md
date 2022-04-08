@@ -10,7 +10,8 @@ This package is a powerful and flexible automated deployment tool for PHP projec
 means limited to, deploying [TYPO3](https://typo3.org), [Flow](https://flow.neos.io/) and [Neos](https://www.neos.io)
 applications. It is inspired by some features of Capistrano (thank you) in terms of the Git workflow.
 
-|                  | URL                                                     |
-|------------------|---------------------------------------------------------|
-| **Repository:**  | https://github.com/TYPO3/Surf                           |
-| **Read online:** | https://docs.typo3.org/other/typo3/surf/main/en-us/     |
+|                  | URL                                                 |
+|------------------|-----------------------------------------------------|
+| **Repository:**  | https://github.com/TYPO3/Surf                       |
+| **Read online:** | https://docs.typo3.org/other/typo3/surf/main/en-us/ |
+| **Packagist:**   | https://packagist.org/packages/typo3/surf           |
