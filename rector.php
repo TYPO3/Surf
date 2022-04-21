@@ -9,15 +9,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->parallel();
+    $rectorConfig->importNames();
+
     // get parameters
-    $parameters = $containerConfigurator->parameters();
+    $parameters = $rectorConfig->parameters();
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src',
         __DIR__ . '/tests',
@@ -25,15 +28,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, [
         AddLiteralSeparatorToNumberRector::class
     ]);
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_SPECIFIC_METHOD);
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_EXCEPTION);
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_YIELD_DATA_PROVIDER);
-    $containerConfigurator->import(LevelSetList::UP_TO_PHP_74);
+    $rectorConfig->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
+    $rectorConfig->import(PHPUnitSetList::PHPUNIT_SPECIFIC_METHOD);
+    $rectorConfig->import(PHPUnitSetList::PHPUNIT_EXCEPTION);
+    $rectorConfig->import(PHPUnitSetList::PHPUNIT_YIELD_DATA_PROVIDER);
+    $rectorConfig->import(LevelSetList::UP_TO_PHP_74);
 
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
     // get services (needed for register a single rule)
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
 
     // register a single rule
     //$services->set(TypedPropertyRector::class);
