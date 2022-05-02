@@ -4789,16 +4789,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.12.22",
+            "version": "0.12.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "0e76f19491498c136b698dc22b9b30d44a4e832c"
+                "reference": "690b31768b322db886b35845f8452025eba2cacb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/0e76f19491498c136b698dc22b9b30d44a4e832c",
-                "reference": "0e76f19491498c136b698dc22b9b30d44a4e832c",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/690b31768b322db886b35845f8452025eba2cacb",
+                "reference": "690b31768b322db886b35845f8452025eba2cacb",
                 "shasum": ""
             },
             "require": {
@@ -4837,7 +4837,7 @@
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.12.22"
+                "source": "https://github.com/rectorphp/rector/tree/0.12.23"
             },
             "funding": [
                 {
@@ -4845,7 +4845,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-27T22:44:46+00:00"
+            "time": "2022-05-01T15:50:16+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
