@@ -1,76 +1,70 @@
-.. -*- coding: utf-8 -*- with BOM.
-.. include:: Includes.txt
+.. include:: /Includes.rst.txt
 
-.. _start:
+====
+Surf
+====
 
-TYPO3 Surf |version| documentation
-==================================
+:Package name:
+   typo3/surf
 
-**What is Surf**
+:Version:
+   |release|
 
-Surf package is a complete automated deployment tool.
-It is best used but by far not limited to deploy TYPO3 CMS, Flow and Neos applications.
-It's inspired by some features of Capistrano (thanks) concerning the Git workflow.
+:Language:
+   en
 
-.. only:: html
+:Author:
+   Neos Team & TYPO3 Team & Contributors
 
-   :Classification:
-      deployment
+:License:
+   This document is published under the
+   `Creative Commons BY 4.0 <https://creativecommons.org/licenses/by/4.0/>`__
+   license.
 
-   :Version:
-      |release|
+:Rendered:
+   |today|
 
-   :Language:
-      en
+----
 
-   :Keywords:
-      Surf, Deployment, TYPO3, Flow, Neos
+This package is a powerful and flexible automated deployment tool for PHP
+projects. It is best suited for, but by no means limited to, deploying `TYPO3`_,
+`Flow`_ and `Neos`_ applications. It is inspired by some features of Capistrano
+(thank you) in terms of the Git workflow.
 
-   :Copyright:
-      |copyright|
+.. _TYPO3: https://typo3.org
+.. _Flow: https://flow.neos.io
+.. _Neos: https://www.neos.io
 
-   :Author:
-      The contributors of the TYPO3 Surf project
+----
 
-   :License:
-      The deployment package is licensed under `GNU General Public License <http://www.gnu.org/licenses/gpl.html>`_, version 3 or later.
-      Initial development was sponsored by `networkteam - Flow Framework Agentur <https://networkteam.com/fokus/flow-framework.html>`_.
-
-   :Rendered:
-      |today|
-
-**TYPO3**
-
-The content of this document is related to TYPO3 CMS,
-a GNU/GPL CMS/Framework available from `typo3.org <https://typo3.org/>`_ .
-
-**About this manual:**
-
-This is the official documentation to discover the main features and concepts of Surf.
-
-If you find an error or something is missing, please:
-`Report a Problem <https://github.com/TYPO3/Surf/issues/new>`__
+**Table of Contents:**
 
 .. toctree::
-     :hidden:
-     :maxdepth: 2
-     :titlesonly:
+   :maxdepth: 2
+   :titlesonly:
 
-     Introduction/Index
-     Installation/Index
-     Usage/Index
-     Architecture/Index
-     DeploymentFlow/Index
-     Applications/Index
-     Nodes/Index
-     Tasks/Index
-     CliUsage/Index
-     SmokeTesting/Index
-     Examples/Index
+   Introduction/Index
+   Installation/Index
+   Usage/Index
+   Architecture/Index
+   DeploymentFlow/Index
+   Applications/Index
+   Nodes/Index
+   Tasks/Index
+   CliUsage/Index
+   SmokeTesting/Index
+   Examples/Index
 
 .. toctree::
-     :caption: Migration
-     :hidden:
-     :maxdepth: 2
+   :maxdepth: 2
+   :titlesonly:
 
-     Migration/Index
+   Migration/Index
+
+.. Meta Menu
+
+.. toctree::
+   :hidden:
+
+   Sitemap
+   genindex

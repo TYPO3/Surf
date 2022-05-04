@@ -1,5 +1,4 @@
-.. -*- coding: utf-8 -*- with BOM.
-.. include:: ../Includes.txt
+.. include:: /Includes.rst.txt
 
 ============
 Applications
@@ -91,7 +90,7 @@ tag
 
    A tag name or tag glob pattern that is understood by `git ls-remote <https://git-scm.com/docs/git-ls-remote.html>`__.
 
-   Surf uses git (:shell:`ls-remote --sort=version`) to sort the results *versiony* and return the highest matching tag.
+   Surf uses git (:bash:`ls-remote --sort=version`) to sort the results *versiony* and return the highest matching tag.
 
    **Example:** ::
 

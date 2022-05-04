@@ -2,6 +2,11 @@
     "name": "typo3/surf",
     "description": "TYPO3 Surf is a deployment tool, suited for a wide variety of applications",
     "license": "GPL-3.0-or-later",
+    "support": {
+        "issues": "https://github.com/TYPO3/Surf/issues",
+        "source": "https://github.com/TYPO3/Surf",
+        "docs": "https://docs.typo3.org/other/typo3/surf/main/en-us/"
+    },
     "require": {
         "php": "^7.4 || ^8.0",
         "guzzlehttp/guzzle": "^6.0 || ^7.0",

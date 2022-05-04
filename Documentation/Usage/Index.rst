@@ -1,5 +1,4 @@
-.. -*- coding: utf-8 -*- with BOM.
-.. include:: ../Includes.txt
+.. include:: /Includes.rst.txt
 
 =====
 Usage
