@@ -6,9 +6,30 @@
 
 # Surf
 
-This package is a powerful and flexible automated deployment tool for PHP projects. It is best suited for, but by no
-means limited to, deploying [TYPO3](https://typo3.org), [Flow](https://flow.neos.io/) and [Neos](https://www.neos.io)
-applications. It is inspired by some features of Capistrano (thank you) in terms of the Git workflow.
+Surf package is an automated deployment tool. It is best used but by far not limited to deploy TYPO3 CMS and Flow applications.
+It's inspired by some features of Capistrano concerning the Git workflow.
+
+Some features of the Surf package:
+
+* Remote checkout of Git repositories with submodules
+* Flexible, declarative configuration of deployments
+* Multi-node (Cloud), multi-application (i.e. separated frontend and backend) deployments
+* Create custom tasks with a few lines
+* Simulate deployments with a dry run
+* Pre-defined workflows for TYPO3, Flow, Neos and Laravel deployments
+
+## Documentation
+
+For further information please read the documentation https://docs.typo3.org/other/typo3/surf/master/en-us/.
+
+### Contributing to the documentation
+
+You can simply edit or add a .rst file in the `Documentation` folder on GitHub and create a pull request.
+
+The online documentation will automatically update after changes to the master branch.
+To preview the documentation locally please follow this [guide](https://github.com/t3docs/docker-render-documentation).
+
+The documentation was set up according to the [TYPO3 documentation guide](https://docs.typo3.org/typo3cms/RenderTYPO3DocumentationGuide/Index.html).
 
 |                  | URL                                                 |
 |------------------|-----------------------------------------------------|
