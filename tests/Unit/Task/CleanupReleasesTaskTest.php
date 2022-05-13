@@ -141,7 +141,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $folderStructure['.'] = '.';
         foreach ($identifiers as $time) {
             $timestampForCurrentFolder = strtotime($time, $currentTime);
-            $folderName = strftime('%Y%m%d%H%M%S', $timestampForCurrentFolder);
+            $folderName = date('YmdHis', $timestampForCurrentFolder);
             $this->clockMock->createTimestampFromFormat('YmdHis', $folderName)->willReturn($timestampForCurrentFolder);
             $folderStructure[$folderName] = ['index.php'];
         }
@@ -154,7 +154,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $command = array_reduce(
             array_map(
-                static fn ($expectedFolderToBeRemoved) => strftime('%Y%m%d%H%M%S', strtotime($expectedFolderToBeRemoved, $currentTime)),
+                static fn ($expectedFolderToBeRemoved) => date('YmdHis', strtotime($expectedFolderToBeRemoved, $currentTime)),
                 $expectedFoldersToBeRemoved
             ),
             fn ($command, $folder): string => $command . sprintf(
