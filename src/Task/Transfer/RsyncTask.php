@@ -52,7 +52,7 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
         $username = $node->hasOption('username') ? $node->getOption('username') . '@' : '';
         $hostname = $node->getHostname();
         $noPubkeyAuthentication = $node->hasOption('password') ? ' -o PubkeyAuthentication=no' : '';
-        $port = $node->hasOption('port') ? ' -p ' . escapeshellarg($node->getOption('port')) : '';
+        $port = $node->hasOption('port') ? ' -p ' . escapeshellarg((string)$node->getOption('port')) : '';
         $key = $node->hasOption('privateKeyFile') ? ' -i ' . escapeshellarg($node->getOption('privateKeyFile')) : '';
         $rshFlag = ($node->isLocalhost() ? '' : '--rsh="ssh' . $noPubkeyAuthentication . $port . $key . '" ');
 
