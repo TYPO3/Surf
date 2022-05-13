@@ -100,7 +100,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         $this->name = $name;
         $this->status = DeploymentStatus::UNKNOWN();
 
-        $time = strftime('%Y%m%d%H%M%S', time());
+        $time = date('YmdHis', time());
 
         if ($time === false) {
             throw new UnexpectedValueException('Could not create valid releaseIdentifier');

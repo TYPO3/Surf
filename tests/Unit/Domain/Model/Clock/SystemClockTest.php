@@ -55,7 +55,7 @@ class SystemClockTest extends TestCase
     public function validFormatCanBeConvertedToTimestamp(): array
     {
         return [
-            ['YmdHis', strftime('%Y%m%d%H%M%S', 1535216980), 1535216980],
+            ['YmdHis', date('YmdHis', 1535216980), 1535216980],
         ];
     }
 
