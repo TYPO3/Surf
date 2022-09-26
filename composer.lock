@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "312f9cbf9849e1cf8ef381cbbf424c8b",
+    "content-hash": "88fe5411a677b5f18953148fcad50055",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -4801,31 +4801,29 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.13.5",
+            "version": "0.14.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "4170aad2943b150149ba9594c34539e06ced6c6b"
+                "reference": "c4ec650b298158fd7ccdf4613777792f0d1d13d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/4170aad2943b150149ba9594c34539e06ced6c6b",
-                "reference": "4170aad2943b150149ba9594c34539e06ced6c6b",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/c4ec650b298158fd7ccdf4613777792f0d1d13d7",
+                "reference": "c4ec650b298158fd7ccdf4613777792f0d1d13d7",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.7.10"
+                "phpstan/phpstan": "^1.8.3"
             },
             "conflict": {
-                "phpstan/phpdoc-parser": "<1.2",
                 "rector/rector-cakephp": "*",
                 "rector/rector-doctrine": "*",
                 "rector/rector-laravel": "*",
-                "rector/rector-nette": "*",
+                "rector/rector-php-parser": "*",
                 "rector/rector-phpoffice": "*",
                 "rector/rector-phpunit": "*",
-                "rector/rector-prefixed": "*",
                 "rector/rector-symfony": "*"
             },
             "bin": [
@@ -4834,7 +4832,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "0.13-dev"
+                    "dev-main": "0.14-dev"
                 }
             },
             "autoload": {
@@ -4849,7 +4847,7 @@
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.13.5"
+                "source": "https://github.com/rectorphp/rector/tree/0.14.3"
             },
             "funding": [
                 {
@@ -4857,7 +4855,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-06-09T12:54:02+00:00"
+            "time": "2022-09-23T09:46:53+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
