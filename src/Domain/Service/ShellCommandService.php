@@ -110,11 +110,11 @@ class ShellCommandService
             return $remoteCommandExecutionHandler($this, $command, $node, $deployment, $logOutput);
         }
 
-        $username = $node->hasOption('username') ? $node->getOption('username') : null;
+        $username = $node->getUsername();
         if (!empty($username)) {
             $username .= '@';
         }
-        $hostname = $node->getHostname();
+        $hostname = $node->hasOption('hostname') ? $node->getHostname() : '';
 
         // TODO Get SSH options from node or deployment
         $sshOptions = ['-A'];
@@ -178,6 +178,8 @@ class ShellCommandService
      * Prepare a command
      *
      * @param array|string|null $command
+     * @return string
+     * @throws TaskExecutionException
      */
     protected function prepareCommand($command): string
     {
