@@ -5817,16 +5817,16 @@
         },
         {
             "name": "timeweb/phpstan-enum",
-            "version": "v3.0.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timeweb/phpstan-enum.git",
-                "reference": "f2b10a56702a57454438a49b709c1676d53358cf"
+                "reference": "bbbc6c19fba9d79c9fba9d3088166240d6f56c81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timeweb/phpstan-enum/zipball/f2b10a56702a57454438a49b709c1676d53358cf",
-                "reference": "f2b10a56702a57454438a49b709c1676d53358cf",
+                "url": "https://api.github.com/repos/timeweb/phpstan-enum/zipball/bbbc6c19fba9d79c9fba9d3088166240d6f56c81",
+                "reference": "bbbc6c19fba9d79c9fba9d3088166240d6f56c81",
                 "shasum": ""
             },
             "require": {
@@ -5841,7 +5841,8 @@
             "extra": {
                 "phpstan": {
                     "includes": [
-                        "extension.neon"
+                        "extension.neon",
+                        "rules.neon"
                     ]
                 }
             },
@@ -5861,9 +5862,9 @@
             ],
             "support": {
                 "issues": "https://github.com/timeweb/phpstan-enum/issues",
-                "source": "https://github.com/timeweb/phpstan-enum/tree/v3.0.0"
+                "source": "https://github.com/timeweb/phpstan-enum/tree/3.1.0"
             },
-            "time": "2021-11-18T20:54:20+00:00"
+            "time": "2022-10-16T13:25:43+00:00"
         }
     ],
     "aliases": [],
