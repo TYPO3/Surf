@@ -4197,16 +4197,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.9",
+            "version": "1.8.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "3a72d9d9f2528fbd50c2d8fcf155fd9f74ade3f2"
+                "reference": "0c4459dc42c568b818b3f25186589f3acddc1823"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3a72d9d9f2528fbd50c2d8fcf155fd9f74ade3f2",
-                "reference": "3a72d9d9f2528fbd50c2d8fcf155fd9f74ade3f2",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0c4459dc42c568b818b3f25186589f3acddc1823",
+                "reference": "0c4459dc42c568b818b3f25186589f3acddc1823",
                 "shasum": ""
             },
             "require": {
@@ -4236,7 +4236,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.9"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.10"
             },
             "funding": [
                 {
@@ -4252,7 +4252,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-13T13:40:18+00:00"
+            "time": "2022-10-17T14:23:35+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -5817,21 +5817,21 @@
         },
         {
             "name": "timeweb/phpstan-enum",
-            "version": "3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timeweb/phpstan-enum.git",
-                "reference": "bbbc6c19fba9d79c9fba9d3088166240d6f56c81"
+                "reference": "72f54c981431039ee194ffdf46e8340fea49195a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timeweb/phpstan-enum/zipball/bbbc6c19fba9d79c9fba9d3088166240d6f56c81",
-                "reference": "bbbc6c19fba9d79c9fba9d3088166240d6f56c81",
+                "url": "https://api.github.com/repos/timeweb/phpstan-enum/zipball/72f54c981431039ee194ffdf46e8340fea49195a",
+                "reference": "72f54c981431039ee194ffdf46e8340fea49195a",
                 "shasum": ""
             },
             "require": {
                 "myclabs/php-enum": "^1.2",
-                "php": "~7.1|^8.0",
+                "php": "^7.1|^8.0",
                 "phpstan/phpstan": "^1.0"
             },
             "require-dev": {
@@ -5862,9 +5862,9 @@
             ],
             "support": {
                 "issues": "https://github.com/timeweb/phpstan-enum/issues",
-                "source": "https://github.com/timeweb/phpstan-enum/tree/3.1.0"
+                "source": "https://github.com/timeweb/phpstan-enum/tree/v3.1.1"
             },
-            "time": "2022-10-16T13:25:43+00:00"
+            "time": "2022-10-17T05:55:05+00:00"
         }
     ],
     "aliases": [],
