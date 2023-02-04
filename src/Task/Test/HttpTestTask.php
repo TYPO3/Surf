@@ -98,9 +98,6 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
-     * @param int $expected
-     * @param int $actual
-     *
      * @throws TaskExecutionException
      */
     protected function assertExpectedStatus(int $expected, int $actual): void
