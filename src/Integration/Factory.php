@@ -156,6 +156,7 @@ class Factory implements FactoryInterface, ContainerAwareInterface
         $deployment->setContainer($this->container);
         $deployment->setDeploymentBasePath($deploymentConfigurationPath);
         $deployment->setWorkspacesBasePath($workspacesBasePath);
+
         $tempPath = Files::concatenatePaths([$workspacesBasePath, $deploymentName]);
         $this->ensureDirectoryExists($tempPath);
         $deployment->setTemporaryPath($tempPath);
