@@ -59,8 +59,8 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
                 $username = isset($options['username']) ? $options['username'] . '@' : '';
                 $hostname = $node->getHostname();
 
-                $sshPort = isset($options['port']) ? '-p ' . escapeshellarg($options['port']) . ' ' : '';
-                $scpPort = isset($options['port']) ? '-P ' . escapeshellarg($options['port']) . ' ' : '';
+                $sshPort = isset($options['port']) ? '-p ' . escapeshellarg((string)$options['port']) . ' ' : '';
+                $scpPort = isset($options['port']) ? '-P ' . escapeshellarg((string)$options['port']) . ' ' : '';
                 $sshOptions = '';
                 $expect = '';
                 if ($node->hasOption('password')) {
