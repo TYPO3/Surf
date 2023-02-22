@@ -22,6 +22,8 @@ use TYPO3\Surf\Cli\Symfony\Logger\LoggerFactory;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Model\RollbackWorkflow;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
+use TYPO3\Surf\Domain\Version\ComposerVersionChecker;
+use TYPO3\Surf\Domain\Version\VersionCheckerInterface;
 use TYPO3\Surf\Integration\Factory;
 use TYPO3\Surf\Integration\FactoryInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -75,4 +77,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([service(FilesystemInterface::class), service(LoggerInterface::class)]);
 
     $services->alias(FactoryInterface::class, Factory::class);
+
+    $services->alias(VersionCheckerInterface::class, ComposerVersionChecker::class);
 };
