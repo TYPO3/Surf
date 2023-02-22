@@ -11,7 +11,10 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Service;
 
+use Monolog\Logger;
 use Phar;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Process\Process;
 use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -21,8 +24,15 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 /**
  * A shell command service
  */
-class ShellCommandService
+class ShellCommandService implements LoggerAwareInterface
 {
+    /**
+     * @var Logger
+     */
+    protected $logger;
+
+    use LoggerAwareTrait;
+
     /**
      * Execute a shell command (locally or remote depending on the node hostname)
      *
@@ -39,7 +49,7 @@ class ShellCommandService
             [$exitCode, $returnedOutput] = $this->executeRemoteCommand($command, $node, $deployment, $logOutput);
         }
         if (!$ignoreErrors && $exitCode !== 0) {
-            $deployment->getLogger()->warning(rtrim($returnedOutput));
+            $this->logger->warning(rtrim($returnedOutput));
             throw new TaskExecutionException('Command returned non-zero return code: ' . $exitCode, 1311007746);
         }
         return $exitCode === 0 ? $returnedOutput : false;
@@ -54,10 +64,10 @@ class ShellCommandService
     {
         if ($node->isLocalhost()) {
             $command = $this->prepareCommand($command);
-            $deployment->getLogger()->debug('... (localhost): "' . $command . '"');
+            $this->logger->debug('... (localhost): "' . $command . '"');
         } else {
             $command = $this->prepareCommand($command);
-            $deployment->getLogger()->debug('... $' . $node->getName() . ': "' . $command . '"');
+            $this->logger->debug('... $' . $node->getName() . ': "' . $command . '"');
         }
         return true;
     }
@@ -87,7 +97,7 @@ class ShellCommandService
     protected function executeLocalCommand($command, Deployment $deployment, bool $logOutput = true): array
     {
         $command = $this->prepareCommand($command);
-        $deployment->getLogger()->debug('(localhost): "' . $command . '"');
+        $this->logger->debug('(localhost): "' . $command . '"');
 
         return $this->executeProcess($deployment, $command, $logOutput, '> ');
     }
@@ -102,7 +112,7 @@ class ShellCommandService
     protected function executeRemoteCommand($command, Node $node, Deployment $deployment, bool $logOutput = true)
     {
         $command = $this->prepareCommand($command);
-        $deployment->getLogger()->debug('$' . $node->getName() . ': "' . $command . '"');
+        $this->logger->debug('$' . $node->getName() . ': "' . $command . '"');
 
         if ($node->hasOption('remoteCommandExecutionHandler')) {
             $remoteCommandExecutionHandler = $node->getOption('remoteCommandExecutionHandler');
@@ -162,11 +172,11 @@ class ShellCommandService
         $process->setTimeout(null);
         $callback = null;
         if ($logOutput) {
-            $callback = static function ($type, $data) use ($deployment, $logPrefix): void {
+            $callback = function ($type, $data) use ($logPrefix): void {
                 if ($type === Process::OUT) {
-                    $deployment->getLogger()->debug($logPrefix . trim($data));
+                    $this->logger->debug($logPrefix . trim($data));
                 } elseif ($type === Process::ERR) {
-                    $deployment->getLogger()->error($logPrefix . trim($data));
+                    $this->logger->error($logPrefix . trim($data));
                 }
             };
         }

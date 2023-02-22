@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Model;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
@@ -21,8 +24,15 @@ use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
-abstract class Task
+abstract class Task implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
     /**
      * @return mixed|void
      */

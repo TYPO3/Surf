@@ -63,6 +63,7 @@ class TaskManagerTest extends TestCase
         $taskFactory->createTaskInstance(Argument::any())->willReturn($this->task);
 
         $this->subject = new TaskManager($taskFactory->reveal());
+        $this->subject->setLogger($logger->reveal());
     }
 
     /**

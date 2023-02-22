@@ -400,6 +400,7 @@ class RollbackWorkflowTest extends TestCase
             );
 
         $workflow = new RollbackWorkflow($mockTaskManager);
+        $workflow->setLogger($mockLogger);
         $deployment->setWorkflow($workflow);
 
         return $deployment;

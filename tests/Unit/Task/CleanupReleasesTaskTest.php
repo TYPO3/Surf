@@ -14,7 +14,6 @@ namespace TYPO3\Surf\Tests\Unit\Task;
 use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Clock\ClockInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -56,9 +55,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $this->deployment = new Deployment('TestDeployment');
         $this->deployment->setContainer(static::getKernel()->getContainer());
 
-        /** @var LoggerInterface|MockObject $mockLogger */
-        $mockLogger = $this->createMock(LoggerInterface::class);
-        $this->deployment->setLogger($mockLogger);
+        $this->deployment->setLogger($this->mockLogger->reveal());
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
         $this->application = new Application('TestApplication');
 
@@ -77,6 +74,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
                 'index.php',
             ],
         ];
+        $this->task->setLogger($this->mockLogger->reveal());
     }
 
     protected function createTask(): CleanupReleasesTask
@@ -91,11 +89,8 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     public function doNothingJustLogDebugIfOptionKeepReleasesIsNotDefined(): void
     {
-        /** @var LoggerInterface|MockObject $logger */
-        $logger = $this->deployment->getLogger();
-        $logger->expects(self::once())->method('debug');
-
-        self::assertNull($this->task->execute($this->node, $this->application, $this->deployment, []));
+        $this->task->execute($this->node, $this->application, $this->deployment, []);
+        $this->mockLogger->debug(Argument::any())->shouldHaveBeenCalledOnce();
     }
 
     /**

@@ -55,7 +55,7 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
         $targetPath = $deployment->getApplicationReleasePath($node);
 
         foreach ($options['flushCacheList'] as $cache) {
-            $deployment->getLogger()->debug(sprintf('Flush cache with identifier "%s"', $cache));
+            $this->logger->debug(sprintf('Flush cache with identifier "%s"', $cache));
             $this->shell->executeOrSimulate(
                 $application->buildCommand($targetPath, 'cache:flushone', ['--identifier', $cache], $options['phpBinaryPathAndFilename']),
                 $node,

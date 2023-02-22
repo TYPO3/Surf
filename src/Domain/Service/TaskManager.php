@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Service;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -19,8 +22,15 @@ use TYPO3\Surf\Domain\Model\TaskInHistory;
 /**
  * @final
  */
-class TaskManager
+class TaskManager implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
     /**
      * @var TaskInHistory[]
      */
@@ -36,7 +46,7 @@ class TaskManager
     public function execute(string $taskName, Node $node, Application $application, Deployment $deployment, string $stage, array $options = [], string $definedTaskName = ''): void
     {
         $definedTaskName = $definedTaskName ?: $taskName;
-        $deployment->getLogger()->info($node->getName() . ' (' . $application->getName() . ') ' . $definedTaskName);
+        $this->logger->info($node->getName() . ' (' . $application->getName() . ') ' . $definedTaskName);
 
         $task = $this->taskFactory->createTaskInstance($taskName);
 
@@ -57,7 +67,7 @@ class TaskManager
     public function rollback(): void
     {
         foreach (array_reverse($this->taskHistory) as $historicTask) {
-            $historicTask->deployment()->getLogger()->info('Rolling back ' . get_class($historicTask->task()));
+            $this->logger->info('Rolling back ' . get_class($historicTask->task()));
             if (!$historicTask->deployment()->isDryRun()) {
                 $historicTask->task()->rollback($historicTask->node(), $historicTask->application(), $historicTask->deployment(), $historicTask->options());
             }

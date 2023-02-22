@@ -45,7 +45,7 @@ class CompareDatabaseTask extends AbstractCliTask
 
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
-            $deployment->getLogger()->warning('Extension "typo3_console" was not found! Make sure one is available in your project, or remove this task (' . self::class . ') in your deployment configuration!');
+            $this->logger->warning('Extension "typo3_console" was not found! Make sure one is available in your project, or remove this task (' . self::class . ') in your deployment configuration!');
             return;
         }
         $this->executeCliCommand(

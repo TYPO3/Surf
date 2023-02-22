@@ -292,11 +292,6 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
         return $this;
     }
 
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
-    }
-
     /**
      * Get the deployment release identifier
      *

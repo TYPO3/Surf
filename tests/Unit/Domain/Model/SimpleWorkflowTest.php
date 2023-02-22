@@ -729,6 +729,7 @@ class SimpleWorkflowTest extends TestCase
             );
 
         $workflow = new SimpleWorkflow($mockTaskManager);
+        $workflow->setLogger($mockLogger);
         $deployment->setWorkflow($workflow);
 
         return $deployment;

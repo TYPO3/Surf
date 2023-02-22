@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Cli\Symfony;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -56,6 +58,12 @@ final class ConsoleKernel extends Kernel
         )->addMethodCall(
             'setShellCommandService',
             [new Reference(ShellCommandService::class)]
+        );
+        $container->registerForAutoconfiguration(
+            LoggerAwareInterface::class
+        )->addMethodCall(
+            'setLogger',
+            [new Reference(LoggerInterface::class)]
         );
     }
 

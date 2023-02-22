@@ -28,10 +28,10 @@ final class UnlockDeploymentTask extends Task implements ShellCommandServiceAwar
 
         if (!$deployment->isDryRun()) {
             $rmOptions = $deployment->getForceRun() ? ' -f' : '';
-            $deployment->getLogger()->info(sprintf('remove lock file %s', $deploymentLockFile));
+            $this->logger->info(sprintf('remove lock file %s', $deploymentLockFile));
             $this->shell->execute(sprintf('rm%1$s %2$s', $rmOptions, $deploymentLockFile), $node, $deployment);
         } else {
-            $deployment->getLogger()->info(sprintf('Would remove lock file %s', $deploymentLockFile));
+            $this->logger->info(sprintf('Would remove lock file %s', $deploymentLockFile));
         }
     }
 

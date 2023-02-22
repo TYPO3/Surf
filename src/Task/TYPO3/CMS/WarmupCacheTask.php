@@ -30,7 +30,7 @@ class WarmupCacheTask extends AbstractCliTask
 
         $cliArguments = $this->getSuitableCliArguments($node, $application, $deployment, $options);
         if (empty($cliArguments)) {
-            $deployment->getLogger()->warning('TYPO3 Core CLI was not found! Make sure it is available in your project, or remove this task (' . self::class . ') in your deployment configuration!');
+            $this->logger->warning('TYPO3 Core CLI was not found! Make sure it is available in your project, or remove this task (' . self::class . ') in your deployment configuration!');
             return;
         }
 
