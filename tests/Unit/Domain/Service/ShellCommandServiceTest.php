@@ -62,6 +62,7 @@ class ShellCommandServiceTest extends TestCase
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
+        $service->setLogger($mockLogger);
 
         $expectedCommand = $expectedCommandArguments . ' \'echo "Hello World"\'';
         $service
@@ -135,6 +136,7 @@ class ShellCommandServiceTest extends TestCase
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
+        $shellCommandService->setLogger($mockLogger);
 
         $response = $shellCommandService->execute('foo command', $node, $deployment);
 
@@ -164,6 +166,7 @@ class ShellCommandServiceTest extends TestCase
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
+        $shellCommandService->setLogger($mockLogger);
 
         $shellCommandService
             ->method('executeProcess')
@@ -194,6 +197,7 @@ class ShellCommandServiceTest extends TestCase
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
+        $shellCommandService->setLogger($mockLogger);
 
         $shellCommandService
             ->method('executeProcess')
@@ -222,6 +226,7 @@ class ShellCommandServiceTest extends TestCase
         $mockLogger->expects(self::at(0))->method('debug')->with('$ out');
         $mockLogger->expects(self::at(1))->method('error')->with('$ err');
 
+        $shellCommandService->setLogger($mockLogger);
         $shellCommandService->executeProcess($deployment, 'echo "out" ; echo "err" >&2 ', true, '$ ');
     }
 }

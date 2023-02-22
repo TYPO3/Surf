@@ -350,7 +350,6 @@ class FactoryTest extends TestCase
 
         $deployment = $this->subject->getDeployment('foo');
 
-        self::assertSame($this->logger->reveal(), $deployment->getLogger());
         self::assertInstanceOf(FailedDeployment::class, $deployment);
     }
 }

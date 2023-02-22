@@ -103,7 +103,7 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         $composerJsonPath = Files::concatenatePaths([$path, 'composer.json']);
         $composerJsonExists = $this->shell->executeOrSimulate('test -f ' . escapeshellarg($composerJsonPath), $node, $deployment, true);
         if ($composerJsonExists === false) {
-            $deployment->getLogger()->debug('No composer.json found in path "' . $composerJsonPath . '"');
+            $this->logger->debug('No composer.json found in path "' . $composerJsonPath . '"');
 
             return false;
         }

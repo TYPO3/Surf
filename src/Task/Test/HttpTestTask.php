@@ -52,7 +52,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     {
         $options = $this->configureOptions($options);
 
-        $deployment->getLogger()->debug(sprintf('Requesting Url %s', $options['url']));
+        $this->logger->debug(sprintf('Requesting Url %s', $options['url']));
 
         if ($options['remote']) {
             $response = $this->executeRemoteCurlRequest(

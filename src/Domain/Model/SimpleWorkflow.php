@@ -57,21 +57,21 @@ class SimpleWorkflow extends Workflow
         }
 
         foreach ($this->stages as $stage) {
-            $deployment->getLogger()->notice('Stage ' . $stage);
+            $this->logger->notice('Stage ' . $stage);
             foreach ($nodes as $node) {
-                $deployment->getLogger()->debug('Node ' . $node->getName());
+                $this->logger->debug('Node ' . $node->getName());
                 foreach ($applications as $application) {
                     if (! $application->hasNode($node)) {
                         continue;
                     }
 
-                    $deployment->getLogger()->debug('Application ' . $application->getName());
+                    $this->logger->debug('Application ' . $application->getName());
 
                     try {
                         $this->executeStage($stage, $node, $application, $deployment);
                     } catch (DeploymentLockedException $exception) {
                         $deployment->setStatus(DeploymentStatus::CANCELLED());
-                        $deployment->getLogger()->info($exception->getMessage());
+                        $this->logger->info($exception->getMessage());
                         if ($this->enableRollback) {
                             $this->taskManager->rollback();
                         }
@@ -81,14 +81,14 @@ class SimpleWorkflow extends Workflow
                         $deployment->setStatus(DeploymentStatus::FAILED());
                         if ($this->enableRollback) {
                             if (array_search($stage, $this->stages, false) <= array_search(SimpleWorkflowStage::STEP_09_SWITCH, $this->stages, false)) {
-                                $deployment->getLogger()->error('Got exception "' . $exception->getMessage() . '" rolling back.');
+                                $this->logger->error('Got exception "' . $exception->getMessage() . '" rolling back.');
                                 $this->taskManager->rollback();
                             } else {
-                                $deployment->getLogger()->error('Got exception "' . $exception->getMessage() . '" but after switch stage, no rollback necessary.');
+                                $this->logger->error('Got exception "' . $exception->getMessage() . '" but after switch stage, no rollback necessary.');
                                 $this->taskManager->reset();
                             }
                         } else {
-                            $deployment->getLogger()->error('Got exception "' . $exception->getMessage() . '" but rollback disabled. Stopping.');
+                            $this->logger->error('Got exception "' . $exception->getMessage() . '" but rollback disabled. Stopping.');
                         }
 
                         return;

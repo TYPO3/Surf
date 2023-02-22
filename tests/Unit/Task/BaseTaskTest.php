@@ -117,6 +117,7 @@ abstract class BaseTaskTest extends TestCase
         $this->deployment->setContainer(static::getKernel()->getContainer());
 
         $this->mockLogger = $this->prophesize(LoggerInterface::class);
+        $this->task->setLogger($this->mockLogger->reveal());
 
         $this->deployment->setLogger($this->mockLogger->reveal());
         $this->deployment->setWorkspacesBasePath('./Data/Surf');

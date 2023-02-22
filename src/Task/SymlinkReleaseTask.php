@@ -36,7 +36,7 @@ class SymlinkReleaseTask extends Task implements ShellCommandServiceAwareInterfa
         );
 
         $this->shell->executeOrSimulate($command, $node, $deployment);
-        $deployment->getLogger()->notice('<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>');
+        $this->logger->notice('<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>');
     }
 
     /**

@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Model;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception as SurfException;
 use TYPO3\Surf\Exception\TaskExecutionException;
@@ -18,8 +21,14 @@ use TYPO3\Surf\Exception\TaskExecutionException;
 /**
  * A Workflow
  */
-abstract class Workflow
+abstract class Workflow implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
     protected TaskManager $taskManager;
 
     protected array $tasks = [];
@@ -34,7 +43,7 @@ abstract class Workflow
         if (!$deployment->isInitialized()) {
             throw new SurfException('Deployment must be initialized before running it', 1335976529);
         }
-        $deployment->getLogger()->debug('Using workflow "' . $this->getName() . '"');
+        $this->logger->debug('Using workflow "' . $this->getName() . '"');
     }
 
     abstract public function getName(): string;
@@ -253,7 +262,7 @@ abstract class Workflow
                 $label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
 
                 if (isset($this->tasks['stage'][$applicationName][$stage][$stageStep])) {
-                    $deployment->getLogger()->debug('Executing stage "' . $stage . '" (step "' . $stageStep . '") on "' . $node->getName() . '" ' . $label);
+                    $this->logger->debug('Executing stage "' . $stage . '" (step "' . $stageStep . '") on "' . $node->getName() . '" ' . $label);
                     foreach ($this->tasks['stage'][$applicationName][$stage][$stageStep] as $task) {
                         $this->executeTask($task, $node, $application, $deployment, $stage);
                     }
@@ -272,7 +281,7 @@ abstract class Workflow
         foreach (['_', $application->getName()] as $applicationName) {
             if (isset($this->tasks['before'][$applicationName][$task])) {
                 foreach ($this->tasks['before'][$applicationName][$task] as $beforeTask) {
-                    $deployment->getLogger()->debug('Task "' . $beforeTask . '" before "' . $task);
+                    $this->logger->debug('Task "' . $beforeTask . '" before "' . $task);
                     $this->executeTask($beforeTask, $node, $application, $deployment, $stage, $callstack);
                 }
             }
@@ -290,7 +299,7 @@ abstract class Workflow
             $label = $applicationName === '_' ? 'for all' : 'for application ' . $applicationName;
             if (isset($this->tasks['after'][$applicationName][$task])) {
                 foreach ($this->tasks['after'][$applicationName][$task] as $beforeTask) {
-                    $deployment->getLogger()->debug('Task "' . $beforeTask . '" after "' . $task . '" ' . $label);
+                    $this->logger->debug('Task "' . $beforeTask . '" after "' . $task . '" ' . $label);
                     $this->executeTask($beforeTask, $node, $application, $deployment, $stage, $callstack);
                 }
             }

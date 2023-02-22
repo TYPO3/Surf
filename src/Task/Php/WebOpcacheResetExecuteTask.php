@@ -64,7 +64,7 @@ class WebOpcacheResetExecuteTask extends Task
                 throw TaskExecutionException::webOpcacheResetExecuteTaskDidNotReturnExpectedResult($scriptUrl);
             }
 
-            $deployment->getLogger()->warning(sprintf('Executing PHP opcache reset script at "%s" did not return expected result', $scriptUrl));
+            $this->logger->warning(sprintf('Executing PHP opcache reset script at "%s" did not return expected result', $scriptUrl));
         }
     }
 

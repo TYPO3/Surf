@@ -45,15 +45,15 @@ final class RollbackWorkflow extends Workflow
         $this->configureRollbackTasks($deployment);
 
         foreach ($this->stages as $stage) {
-            $deployment->getLogger()->notice('Stage ' . $stage);
+            $this->logger->notice('Stage ' . $stage);
             foreach ($nodes as $node) {
-                $deployment->getLogger()->debug('Node ' . $node->getName());
+                $this->logger->debug('Node ' . $node->getName());
                 foreach ($applications as $application) {
                     if (! $application->hasNode($node)) {
                         continue;
                     }
 
-                    $deployment->getLogger()->debug('Application ' . $application->getName());
+                    $this->logger->debug('Application ' . $application->getName());
 
                     try {
                         $this->executeStage($stage, $node, $application, $deployment);

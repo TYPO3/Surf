@@ -56,7 +56,7 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         if (! isset($options['keepReleases']) && ! isset($options['onlyRemoveReleasesOlderThan'])) {
-            $deployment->getLogger()->debug(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"');
+            $this->logger->debug(($deployment->isDryRun() ? 'Would keep' : 'Keeping') . ' all releases for "' . $application->getName() . '"');
 
             return;
         }
@@ -80,10 +80,10 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
             $removeCommand .= "rm -rf {$releasesPath}/{$removeRelease};rm -f {$releasesPath}/{$removeRelease}REVISION;";
         }
         if (count($removeReleases) > 0) {
-            $deployment->getLogger()->info(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
+            $this->logger->info(($deployment->isDryRun() ? 'Would remove' : 'Removing') . ' releases ' . implode(', ', $removeReleases));
             $this->shell->executeOrSimulate($removeCommand, $node, $deployment);
         } else {
-            $deployment->getLogger()->info('No releases to remove');
+            $this->logger->info('No releases to remove');
         }
     }
 
