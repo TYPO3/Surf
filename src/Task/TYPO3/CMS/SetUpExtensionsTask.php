@@ -16,6 +16,7 @@ use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Version\VersionCheckerInterface;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 use Webmozart\Assert\Assert;
 
@@ -27,6 +28,13 @@ use Webmozart\Assert\Assert;
  */
 class SetUpExtensionsTask extends AbstractCliTask
 {
+    private VersionCheckerInterface $versionChecker;
+
+    public function __construct(VersionCheckerInterface $versionChecker)
+    {
+        $this->versionChecker = $versionChecker;
+    }
+
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         /** @var CMS $application */
@@ -41,11 +49,9 @@ class SetUpExtensionsTask extends AbstractCliTask
 
         $options = $this->configureOptions($options);
 
-        $typo3ConsoleVersion = $this->getTypo3ConsoleVersion($node, $application, $deployment, $options);
-
         $commandArguments = [$scriptFileName];
 
-        if ($typo3ConsoleVersion->getMajor()->getValue() >= 7) {
+        if ($this->versionChecker->isSatisified('helhum/typo3-console', '>= 7.0.0')) {
             $commandArguments[] = 'extension:setup';
             if (!empty($options['extensionKeys'])) {
                 foreach ($options['extensionKeys'] as $extensionKey) {
