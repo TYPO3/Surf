@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
-use Composer\InstalledVersions;
-use Composer\Semver\VersionParser;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
