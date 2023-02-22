@@ -11,24 +11,33 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\Surf\Application\TYPO3\CMS;
+use TYPO3\Surf\Domain\Version\VersionCheckerInterface;
 use TYPO3\Surf\Task\TYPO3\CMS\SetUpExtensionsTask;
 use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SetUpExtensionsTaskTest extends BaseTaskTest
 {
+    /**
+     * @var ObjectProphecy|VersionCheckerInterface
+     */
+    private $versionChecker;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->application = new CMS('TestApplication');
 
         $this->node->setDeploymentPath('/home/jdoe/app');
-        $this->expectTypo3ConsoleVersion('TYPO3 Console 5.8.6');
     }
 
     protected function createTask(): SetUpExtensionsTask
     {
-        return new SetUpExtensionsTask();
+        $this->versionChecker = $this->prophesize(VersionCheckerInterface::class);
+        $this->versionChecker->isSatisified(Argument::any(), Argument::any())->willReturn(false);
+        return new SetUpExtensionsTask($this->versionChecker->reveal());
     }
 
     /**
@@ -96,7 +105,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
      */
     public function consoleIsFoundInCorrectPathWithoutAppDirectoryInVersionEqualOrHigherThanSeven(): void
     {
-        $this->expectTypo3ConsoleVersion('TYPO3 Console 7.0.0');
+        $this->versionChecker->isSatisified(Argument::any(), Argument::any())->willReturn(true);
 
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
@@ -112,7 +121,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
      */
     public function consoleIsFoundInCorrectPathWithoutAppDirectoryInVersionEqualOrHigherThanSevenButInMultilineFormat(): void
     {
-        $this->expectTypo3ConsoleVersion("TYPO3 Console 7.0.5\nTYPO3 CMS 11.5.7 (Application Context: Production)");
+        $this->versionChecker->isSatisified(Argument::any(), Argument::any())->willReturn(true);
 
         $options = [
             'scriptFileName' => 'vendor/bin/typo3cms',
@@ -128,7 +137,7 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
      */
     public function executeWithoutOptionExecutesSetUpInVersionEqualOrHigherThanSeven(): void
     {
-        $this->expectTypo3ConsoleVersion('TYPO3 Console 7.0.0');
+        $this->versionChecker->isSatisified(Argument::any(), Argument::any())->willReturn(true);
 
         $this->task->execute(
             $this->node,
@@ -145,8 +154,6 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
      */
     public function executeWithoutOptionAndMissingVersionExecutesSetUpActive(): void
     {
-        $this->expectTypo3ConsoleVersion('');
-
         $this->task->execute(
             $this->node,
             $this->application,
@@ -155,12 +162,5 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
         );
 
         $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setupactive'");
-    }
-
-    private function expectTypo3ConsoleVersion(string $typo3ConsoleVersion): void
-    {
-        $versionCommand = 'php \'vendor/bin/typo3cms\' \'--version\'';
-        $this->commands['versionCommand'] = $versionCommand;
-        $this->responses[$versionCommand] = $typo3ConsoleVersion;
     }
 }
