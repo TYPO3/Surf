@@ -9,6 +9,7 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
+        "consolidation/self-update": "^2.1",
         "guzzlehttp/guzzle": "^6.0 || ^7.0",
         "monolog/monolog": "^2.9.1",
         "myclabs/php-enum": "^1.8",
