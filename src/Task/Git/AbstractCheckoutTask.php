@@ -35,9 +35,7 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
     {
         if (isset($options['sha1'])) {
             $sha1 = $options['sha1'];
-            if (preg_match('/[a-f0-9]{40}/', $sha1) === 0) {
-                throw new TaskExecutionException('The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
-            }
+            $this->guardAgainstInvalidSha1($sha1, 'The given sha1  "' . $options['sha1'] . '" is invalid', 1335974900);
         } elseif (isset($options['tag'])) {
             $sha1 = $this->shell->execute(
                 "git ls-remote --sort=version:refname {$options['repositoryUrl']} 'refs/tags/{$options['tag']}' "
@@ -47,15 +45,11 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
                 $deployment,
                 true
             );
-            if (preg_match('/[a-f0-9]{40}/', $sha1) === 0) {
-                throw new TaskExecutionException('Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
-            }
+            $this->guardAgainstInvalidSha1($sha1, 'Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
         } else {
             $branch = $options['branch'] ?? 'master';
             $sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/heads/$branch | awk '{print $1 }'", $node, $deployment, true);
-            if (preg_match('/^[a-f0-9]{40}$/', $sha1) === 0) {
-                throw new TaskExecutionException('Could not retrieve sha1 of git branch "' . $branch . '"', 1335974926);
-            }
+            $this->guardAgainstInvalidSha1($sha1, 'Could not retrieve sha1 of git branch "' . $branch . '"', 1335974926);
         }
         return $sha1;
     }
@@ -118,6 +112,16 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
                     ", "\t\n", '  ');
                 $this->shell->executeOrSimulate($command, $node, $deployment);
             }
+        }
+    }
+
+    /**
+     * @param mixed $sha1
+     */
+    private function guardAgainstInvalidSha1($sha1, string $message, int $code): void
+    {
+        if (preg_match('/^[a-f0-9]{40}$/i', $sha1) === 0) {
+            throw new TaskExecutionException($message, $code);
         }
     }
 }
