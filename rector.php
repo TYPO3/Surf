@@ -19,8 +19,8 @@ return static function (RectorConfig $rectorConfig): void {
 
     // get parameters
     $rectorConfig->paths([
-        __DIR__.'/src',
-        __DIR__.'/tests',
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
     ]);
     $rectorConfig->skip([
         AddLiteralSeparatorToNumberRector::class,
