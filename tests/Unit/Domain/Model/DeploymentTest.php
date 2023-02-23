@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -25,6 +26,7 @@ use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
  */
 class DeploymentTest extends TestCase
 {
+    use ProphecyTrait;
     use KernelAwareTrait;
 
     /**

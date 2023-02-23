@@ -13,6 +13,7 @@ namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
@@ -24,6 +25,7 @@ use TYPO3\Surf\Domain\Service\TaskManager;
 
 class TaskManagerTest extends TestCase
 {
+    use ProphecyTrait;
     /**
      * @var ObjectProphecy|Task
      */

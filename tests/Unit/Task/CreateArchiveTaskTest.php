@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Tests\Unit\Task;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Generator\IdGeneratorInterface;
@@ -20,6 +21,7 @@ use TYPO3\Surf\Task\CreateArchiveTask;
 class CreateArchiveTaskTest extends BaseTaskTest
 {
     private const SOURCE_DIRECTORY = '/var/www/html/source/';
+    use ProphecyTrait;
 
     /**
      * @var FilesystemInterface|ObjectProphecy

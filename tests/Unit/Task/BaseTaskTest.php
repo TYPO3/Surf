@@ -13,6 +13,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
@@ -29,6 +30,7 @@ use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
  */
 abstract class BaseTaskTest extends TestCase
 {
+    use ProphecyTrait;
     use KernelAwareTrait;
 
     /**

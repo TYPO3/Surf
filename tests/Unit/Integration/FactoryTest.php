@@ -15,6 +15,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
@@ -25,6 +26,7 @@ use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class FactoryTest extends TestCase
 {
+    use ProphecyTrait;
     use KernelAwareTrait;
 
     /**

@@ -1,32 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit
-    backupGlobals="true"
-    backupStaticAttributes="false"
-    bootstrap="vendor/autoload.php"
-    colors="true"
-    convertErrorsToExceptions="true"
-    convertWarningsToExceptions="true"
-    forceCoversAnnotation="false"
-    processIsolation="false"
-    stopOnError="false"
-    stopOnFailure="false"
-    stopOnIncomplete="false"
-    stopOnSkipped="false"
-    verbose="false"
-    beStrictAboutTestsThatDoNotTestAnything="false"
-    failOnRisky="true"
-    failOnWarning="true"
->
-    <testsuites>
-        <testsuite name="Surf Test Suite">
-            <directory>./tests/</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="true" backupStaticAttributes="false" bootstrap="vendor/autoload.php" colors="true" convertErrorsToExceptions="true" convertWarningsToExceptions="true" forceCoversAnnotation="false" processIsolation="false" stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" verbose="false" beStrictAboutTestsThatDoNotTestAnything="false" failOnRisky="true" failOnWarning="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="Surf Test Suite">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>

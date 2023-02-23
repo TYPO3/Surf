@@ -38,7 +38,7 @@ class AssertCommandExecuted extends Constraint
     protected function matches($other): bool
     {
         if (!is_array($other)) {
-            throw new \InvalidArgumentException('Expected an array of executed commands as value, ' . gettype($other) . ' given');
+            throw new InvalidArgumentException('Expected an array of executed commands as value, ' . gettype($other) . ' given');
         }
 
         foreach ($other as $command) {

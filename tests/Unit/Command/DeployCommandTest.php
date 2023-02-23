@@ -13,6 +13,7 @@ namespace TYPO3\Surf\Tests\Unit\Command;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\Surf\Command\DeployCommand;
@@ -22,6 +23,7 @@ use TYPO3\Surf\Integration\FactoryInterface;
 
 final class DeployCommandTest extends TestCase
 {
+    use ProphecyTrait;
     /**
      * @var DeployCommand
      */

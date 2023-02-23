@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Application\Neos;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\Surf\Application\Neos\Flow;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -21,6 +22,7 @@ use TYPO3\Surf\Task\Composer\InstallTask;
 
 class FlowTest extends TestCase
 {
+    use ProphecyTrait;
     protected Flow $subject;
 
     protected function setUp(): void

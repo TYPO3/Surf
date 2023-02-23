@@ -13,6 +13,7 @@ namespace TYPO3\Surf\Tests\Unit\Application;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -23,6 +24,7 @@ use TYPO3\Surf\Tests\Unit\FluidPromise;
 
 class BaseApplicationTest extends TestCase
 {
+    use ProphecyTrait;
     private BaseApplication $subject;
 
     protected function setUp(): void

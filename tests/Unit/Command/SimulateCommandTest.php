@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Command;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\Surf\Command\SimulateCommand;
 use TYPO3\Surf\Domain\Enum\DeploymentStatus;
@@ -20,6 +21,7 @@ use TYPO3\Surf\Integration\FactoryInterface;
 
 class SimulateCommandTest extends TestCase
 {
+    use ProphecyTrait;
     /**
      * @test
      */

@@ -223,8 +223,8 @@ class ShellCommandServiceTest extends TestCase
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);
 
-        $mockLogger->expects(self::at(0))->method('debug')->with('$ out');
-        $mockLogger->expects(self::at(1))->method('error')->with('$ err');
+        $mockLogger->expects(self::once())->method('debug')->with('$ out');
+        $mockLogger->expects(self::once())->method('error')->with('$ err');
 
         $shellCommandService->setLogger($mockLogger);
         $shellCommandService->executeProcess($deployment, 'echo "out" ; echo "err" >&2 ', true, '$ ');
