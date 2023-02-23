@@ -13,6 +13,7 @@ namespace TYPO3\Surf\Tests\Unit\Task;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\Surf\Domain\Clock\ClockInterface;
 use TYPO3\Surf\Domain\Model\Application;
@@ -25,6 +26,7 @@ use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class CleanupReleasesTaskTest extends BaseTaskTest
 {
+    use ProphecyTrait;
     use KernelAwareTrait;
 
     /**
@@ -99,7 +101,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
     public function removeReleases(): void
     {
         $folders = array_keys($this->folderStructure);
-        $this->shellCommandService->expects(self::at(1))->method('execute')->willReturn(implode(' ', $folders));
+        $this->shellCommandService->method('execute')->willReturnOnConsecutiveCalls(null, implode(' ', $folders));
 
         $command = array_reduce(
             ['20171108132211', '20171109193135'],
@@ -145,7 +147,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $folders = array_keys($folderStructure);
 
-        $this->shellCommandService->expects(self::at(1))->method('execute')->willReturn(implode(' ', $folders));
+        $this->shellCommandService->method('execute')->willReturnOnConsecutiveCalls(null, implode(' ', $folders));
 
         $command = array_reduce(
             array_map(

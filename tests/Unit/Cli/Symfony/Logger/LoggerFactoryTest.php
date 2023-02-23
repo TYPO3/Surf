@@ -13,11 +13,13 @@ namespace TYPO3\Surf\Tests\Unit\Cli\Symfony\Logger;
 
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
 use TYPO3\Surf\Cli\Symfony\Logger\LoggerFactory;
 
 class LoggerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
     /**
      * @test
      */

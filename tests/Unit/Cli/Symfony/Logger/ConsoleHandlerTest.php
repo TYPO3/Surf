@@ -13,12 +13,14 @@ namespace TYPO3\Surf\Tests\Unit\Cli\Symfony\Logger;
 
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\Surf\Cli\Symfony\Logger\ConsoleFormatter;
 use TYPO3\Surf\Cli\Symfony\Logger\ConsoleHandler;
 
 class ConsoleHandlerTest extends TestCase
 {
+    use ProphecyTrait;
     /**
      * @test
      */

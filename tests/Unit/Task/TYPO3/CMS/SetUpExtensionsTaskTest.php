@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Version\VersionCheckerInterface;
@@ -20,6 +21,7 @@ use TYPO3\Surf\Tests\Unit\Task\BaseTaskTest;
 
 class SetUpExtensionsTaskTest extends BaseTaskTest
 {
+    use ProphecyTrait;
     /**
      * @var ObjectProphecy|VersionCheckerInterface
      */
