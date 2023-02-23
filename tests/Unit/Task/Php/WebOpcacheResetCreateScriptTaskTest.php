@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Tests\Unit\Task\Php;
 
+use Neos\Utility\Files;
 use PHPUnit\Framework\MockObject\MockObject;
-use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Generator\RandomBytesGeneratorInterface;
 use TYPO3\Surf\Exception\TaskExecutionException;

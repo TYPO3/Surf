@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Domain\Service;
 
 use Monolog\Logger;
+use Neos\Utility\Files;
 use Phar;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Process\Process;
-use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Exception\TaskExecutionException;

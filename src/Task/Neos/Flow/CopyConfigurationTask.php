@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Task\Neos\Flow;
 
+use Neos\Utility\Files;
 use Phar;
-use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;

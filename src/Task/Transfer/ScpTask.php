@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Task\Transfer;
 
-use TYPO3\Flow\Utility\Files;
+use Neos\Utility\Files;
 use TYPO3\Surf\Domain\Enum\SimpleWorkflowStage;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;

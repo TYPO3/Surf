@@ -17,6 +17,7 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+use TYPO3\Surf\Exception\TaskExecutionException;
 
 abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareInterface
 {
@@ -41,7 +42,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
      * @param Deployment $deployment
      * @param array $options
      * @return bool|mixed
-     * @throws \TYPO3\Surf\Exception\TaskExecutionException
+     * @throws TaskExecutionException
      */
     protected function executeCliCommand(
         array $cliArguments,
