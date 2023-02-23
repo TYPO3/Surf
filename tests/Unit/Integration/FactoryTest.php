@@ -259,8 +259,6 @@ class FactoryTest extends TestCase
     {
         putenv('HOME=' . __DIR__ . '/Fixtures');
 
-        $files = [getenv('HOME') . '/.surf/deployments/deploy.php'];
-
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
@@ -278,15 +276,13 @@ class FactoryTest extends TestCase
     {
         putenv('HOME=' . __DIR__ . '/Fixtures');
 
-        $files = [getenv('HOME') . '/.surf/deployments/deploy.php'];
-
         $this->filesystem->getRealPath('./.surf')->willReturn('foo');
         $this->filesystem->isDirectory('foo')->willReturn(false);
         $this->filesystem->fileExists(Argument::any())->willReturn(true);
 
-        $deployment = $this->subject->getDeployment('deploy', null, false);
+        $this->logger->pushHandler(new StreamHandler(getenv('HOME') . '/.surf/workspace/logs/deploy.log'))->shouldBeCalledOnce()->willReturn($this->logger);
 
-        $this->logger->pushHandler(new StreamHandler(getenv('HOME') . '/.surf/workspace/logs/deploy.log'))->shouldBeCalledOnce();
+        $deployment = $this->subject->getDeployment('deploy', null, false);
 
         self::assertFalse($deployment->getForceRun());
         self::assertTrue($deployment->isInitialized());
