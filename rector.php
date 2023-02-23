@@ -10,34 +10,27 @@ declare(strict_types=1);
  */
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->parallel();
     $rectorConfig->importNames();
 
     // get parameters
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(Option::PATHS, [
+    $rectorConfig->paths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
-    $parameters->set(Option::SKIP, [
-        AddLiteralSeparatorToNumberRector::class
+    $rectorConfig->skip([
+        AddLiteralSeparatorToNumberRector::class,
+
     ]);
-    $rectorConfig->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
-    $rectorConfig->import(PHPUnitSetList::PHPUNIT_SPECIFIC_METHOD);
-    $rectorConfig->import(PHPUnitSetList::PHPUNIT_EXCEPTION);
-    $rectorConfig->import(PHPUnitSetList::PHPUNIT_YIELD_DATA_PROVIDER);
-    $rectorConfig->import(LevelSetList::UP_TO_PHP_74);
-
-    // get services (needed for register a single rule)
-    $services = $rectorConfig->services();
-
-    // register a single rule
-    //$services->set(TypedPropertyRector::class);
-    //$services->set(AddVoidReturnTypeWhereNoReturnRector::class);
+    $rectorConfig->sets([
+        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+        PHPUnitSetList::PHPUNIT_SPECIFIC_METHOD,
+        PHPUnitSetList::PHPUNIT_EXCEPTION,
+        PHPUnitSetList::PHPUNIT_YIELD_DATA_PROVIDER,
+        LevelSetList::UP_TO_PHP_74,
+    ]);
 };

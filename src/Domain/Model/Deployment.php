@@ -11,11 +11,11 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Model;
 
+use Neos\Utility\Files;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 use TYPO3\Surf\Exception as SurfException;
 use UnexpectedValueException;

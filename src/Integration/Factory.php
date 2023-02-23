@@ -13,11 +13,11 @@ namespace TYPO3\Surf\Integration;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Neos\Utility\Files;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\FailedDeployment;

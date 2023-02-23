@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7003fdbacda16f98bdd14dfd6983bc6",
+    "content-hash": "80bd38920cfa94a0212259fbb1df8c42",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -579,25 +579,69 @@
             "time": "2022-08-04T09:53:51+00:00"
         },
         {
-            "name": "neos/utility-files",
-            "version": "3.3.29",
+            "name": "neos/error-messages",
+            "version": "7.3.10",
             "source": {
                 "type": "git",
-                "url": "https://github.com/neos/utility-files.git",
-                "reference": "ab494d51ec2e1f04cd03f7886c4e891dd5076a3e"
+                "url": "https://github.com/neos/error-messages.git",
+                "reference": "e1155ada01016bd35e133fd21e83d3924bcd9e41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/neos/utility-files/zipball/ab494d51ec2e1f04cd03f7886c4e891dd5076a3e",
-                "reference": "ab494d51ec2e1f04cd03f7886c4e891dd5076a3e",
+                "url": "https://api.github.com/repos/neos/error-messages/zipball/e1155ada01016bd35e133fd21e83d3924bcd9e41",
+                "reference": "e1155ada01016bd35e133fd21e83d3924bcd9e41",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.0"
+                "php": "^7.3 || ^8.0"
             },
             "require-dev": {
-                "mikey179/vfsstream": "~1.6",
-                "phpunit/phpunit": "~4.8 || ~5.2.0"
+                "phpunit/phpunit": "~9.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Neos\\Error\\Messages\\": "Classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Flow error messages",
+            "homepage": "http://flow.neos.io",
+            "support": {
+                "source": "https://github.com/neos/error-messages/tree/7.3.10"
+            },
+            "funding": [
+                {
+                    "url": "https://shop.neos.io/neosfunding/",
+                    "type": "custom"
+                }
+            ],
+            "time": "2021-08-15T18:05:19+00:00"
+        },
+        {
+            "name": "neos/utility-files",
+            "version": "7.3.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/neos/utility-files.git",
+                "reference": "00da3ef308705555ed96866949ef8040b742ac28"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/neos/utility-files/zipball/00da3ef308705555ed96866949ef8040b742ac28",
+                "reference": "00da3ef308705555ed96866949ef8040b742ac28",
+                "shasum": ""
+            },
+            "require": {
+                "neos/error-messages": "*",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "^1.6.1",
+                "phpunit/phpunit": "~9.1"
             },
             "type": "library",
             "extra": {
@@ -606,8 +650,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "TYPO3\\Flow\\Utility": "Classes"
+                "psr-4": {
+                    "Neos\\Utility\\": "Classes"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -615,11 +659,17 @@
                 "MIT"
             ],
             "description": "Flow Files Utilities",
-            "homepage": "http://flow.typo3.org",
+            "homepage": "http://flow.neos.io",
             "support": {
-                "source": "https://github.com/neos/utility-files/tree/3.3"
+                "source": "https://github.com/neos/utility-files/tree/7.3.10"
             },
-            "time": "2017-04-12T12:44:29+00:00"
+            "funding": [
+                {
+                    "url": "https://shop.neos.io/neosfunding/",
+                    "type": "custom"
+                }
+            ],
+            "time": "2022-03-15T17:50:33+00:00"
         },
         {
             "name": "padraic/humbug_get_contents",

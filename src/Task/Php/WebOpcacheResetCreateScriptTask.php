@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Task\Php;
 
+use Neos\Utility\Files;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use TYPO3\Flow\Utility\Files;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Generator\RandomBytesGeneratorInterface;
 use TYPO3\Surf\Domain\Model\Application;
