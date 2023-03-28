@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Service;
 
-use Monolog\Logger;
 use Neos\Utility\Files;
 use Phar;
 use Psr\Log\LoggerAwareInterface;
