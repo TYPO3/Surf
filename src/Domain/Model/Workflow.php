@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Domain\Model;
 
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception as SurfException;
 use TYPO3\Surf\Exception\TaskExecutionException;
+use TYPO3\Surf\Integration\LoggerAwareTrait;
 
 /**
  * A Workflow
@@ -25,16 +25,13 @@ abstract class Workflow implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
     protected TaskManager $taskManager;
 
     protected array $tasks = [];
 
     public function __construct(TaskManager $taskManager)
     {
+        $this->logger = new NullLogger();
         $this->taskManager = $taskManager;
     }
 
