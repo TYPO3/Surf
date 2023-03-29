@@ -11,27 +11,27 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Service;
 
-use Monolog\Logger;
 use Neos\Utility\Files;
 use Phar;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 use Symfony\Component\Process\Process;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Exception\TaskExecutionException;
+use TYPO3\Surf\Integration\LoggerAwareTrait;
 
 /**
  * A shell command service
  */
 class ShellCommandService implements LoggerAwareInterface
 {
-    /**
-     * @var Logger
-     */
-    protected $logger;
-
     use LoggerAwareTrait;
+
+    public function __construct()
+    {
+        $this->logger = new NullLogger();
+    }
 
     /**
      * Execute a shell command (locally or remote depending on the node hostname)

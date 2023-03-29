@@ -18,7 +18,6 @@ use UnexpectedValueException;
  */
 class Filesystem implements FilesystemInterface
 {
-
     /**
      * @inheritDoc
      */

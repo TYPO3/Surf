@@ -13,7 +13,6 @@ namespace TYPO3\Surf\Domain\Filesystem;
 
 interface FilesystemInterface
 {
-
     /**
      * @return bool|int
      */
