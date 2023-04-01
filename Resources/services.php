@@ -33,7 +33,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set('name', 'TYPO3 Surf');
 
-    $parameters->set('version', '3.3.7');
+    $parameters->set('version', '3.3.8');
 
     $services = $containerConfigurator->services();
 
