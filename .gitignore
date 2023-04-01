@@ -9,3 +9,4 @@ _Output/
 Documentation/.doctrees
 var/
 /release/
+release.sh
