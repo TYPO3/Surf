@@ -8,14 +8,20 @@
  * file that was distributed with this source code.
  */
 
+use SelfUpdate\SelfUpdateCommand;
+use Symfony\Component\DependencyInjection\Container;
+use TYPO3\Surf\Cli\Symfony\ConsoleApplication;
+
 requireAutoloader();
 
 $kernel = new \TYPO3\Surf\Cli\Symfony\ConsoleKernel('prod', false);
 $kernel->boot();
-/** @var \Symfony\Component\DependencyInjection\Container $container */
+/** @var Container $container */
 $container = $kernel->getContainer();
 
+/** @var ConsoleApplication $application */
 $application = $container->get(\TYPO3\Surf\Cli\Symfony\ConsoleApplication::class);
+$application->add(new SelfUpdateCommand('TYPO3 Surf', $application->getVersion(), 'typo3/surf'));
 $application->run();
 
 function requireAutoloader()
@@ -30,7 +36,6 @@ function requireAutoloader()
     ];
     foreach ($autoloadPaths as $path) {
         if (file_exists($path)) {
-            /** @noinspection PhpIncludeInspection */
             return include $path;
         }
     }
