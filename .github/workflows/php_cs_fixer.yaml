@@ -15,7 +15,7 @@ jobs:
     if: github.event.pull_request.draft == false && github.repository == 'TYPO3/Surf' && github.actor != 'dependabot[bot]'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PHP_CS_FIXER }}
           ref: ${{ github.head_ref }}
@@ -30,7 +30,7 @@ jobs:
           coverage: none # disable xdebug, pcov
 
       - name: Cache Composer Dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
