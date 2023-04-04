@@ -67,15 +67,8 @@ final class ConsoleKernel extends Kernel
         );
     }
 
-    public function getCacheDir(): string
+    public function getProjectDir(): string
     {
-        // manually configured, so it can be replaced in phar
-        return sys_get_temp_dir() . '/_surf';
-    }
-
-    public function getLogDir(): string
-    {
-        // manually configured, so it can be replaced in phar
-        return sys_get_temp_dir() . '/_surf_log';
+        return \dirname(__DIR__, 3);
     }
 }
