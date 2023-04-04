@@ -18,6 +18,10 @@ final class ComposerVersionChecker implements VersionCheckerInterface
 {
     public function isSatisified(string $packageName, string $constraint): bool
     {
-        return InstalledVersions::satisfies(new VersionParser(), $packageName, $constraint);
+        try {
+            return InstalledVersions::satisfies(new VersionParser(), $packageName, $constraint);
+        } catch (\OutOfBoundsException $outOfBoundsException) {
+            return false;
+        }
     }
 }

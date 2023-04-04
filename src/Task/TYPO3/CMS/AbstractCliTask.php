@@ -124,6 +124,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
         $pathAndFileName = $this->workingDirectory . '/' . $pathAndFileName;
+
         return $this->shell->executeOrSimulate('test -f ' . escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) !== false;
     }
 }
