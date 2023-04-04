@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Task\TYPO3\CMS;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -123,7 +124,8 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     protected function fileExists(string $pathAndFileName, Node $node, CMS $application, Deployment $deployment, array $options = []): bool
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
-        $pathAndFileName = $this->workingDirectory . '/' . $pathAndFileName;
-        return $this->shell->executeOrSimulate('test -f ' . escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) !== false;
+        $pathAndFileName = $this->workingDirectory.'/'.$pathAndFileName;
+
+        return $this->shell->executeOrSimulate('test -f '.escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) !== false;
     }
 }

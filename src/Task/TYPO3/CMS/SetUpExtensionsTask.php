@@ -51,7 +51,7 @@ class SetUpExtensionsTask extends AbstractCliTask
 
         $commandArguments = [$scriptFileName];
 
-        if ($this->versionChecker->isSatisified('helhum/typo3-console', '>= 7.0.0')) {
+        if (version_compare($options['scriptFileVersion'], '7.0.0') >= 0  || $this->versionChecker->isSatisified('helhum/typo3-console', '>= 7.0.0')) {
             $commandArguments[] = 'extension:setup';
             if (!empty($options['extensionKeys'])) {
                 foreach ($options['extensionKeys'] as $extensionKey) {
@@ -77,6 +77,7 @@ class SetUpExtensionsTask extends AbstractCliTask
 
     protected function resolveOptions(OptionsResolver $resolver): void
     {
+        $resolver->setDefault('scriptFileVersion', '0.0.0');
         $resolver->setDefault('extensionKeys', []);
         $resolver->setAllowedTypes('extensionKeys', 'array');
     }

@@ -121,6 +121,21 @@ class SetUpExtensionsTaskTest extends BaseTaskTest
     /**
      * @test
      */
+    public function consoleIsFoundInCorrectPathWithoutAppDirectoryDefinedWithVersionHigherOrEqualSeven(): void
+    {
+        $options = [
+            'scriptFileName' => 'vendor/bin/typo3cms',
+            'extensionKeys' => ['foo', 'bar'],
+            'scriptFileVersion' => '7.0.0'
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+        $this->assertCommandExecuted("cd '{$this->deployment->getApplicationReleasePath($this->node)}'");
+        $this->assertCommandExecuted("php 'vendor/bin/typo3cms' 'extension:setup' '-e' 'foo' '-e' 'bar'");
+    }
+
+    /**
+     * @test
+     */
     public function consoleIsFoundInCorrectPathWithoutAppDirectoryInVersionEqualOrHigherThanSevenButInMultilineFormat(): void
     {
         $this->versionChecker->isSatisified(Argument::any(), Argument::any())->willReturn(true);
