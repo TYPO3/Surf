@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Cli\Symfony;
 
+use Phar;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -67,8 +68,21 @@ final class ConsoleKernel extends Kernel
         );
     }
 
-    public function getProjectDir(): string
+    public function getCacheDir(): string
     {
-        return \dirname(__DIR__, 3);
+        if(Phar::running() !== '') {
+            return sys_get_temp_dir() . '/_surf';
+        }
+
+        return parent::getCacheDir();
+    }
+
+    public function getLogDir(): string
+    {
+        if(Phar::running() !== '') {
+            return sys_get_temp_dir() . '/_surf_log';
+        }
+
+        return parent::getLogDir();
     }
 }
