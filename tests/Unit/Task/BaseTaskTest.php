@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Tests\Unit\Task;
 
+use PHPUnit\Framework\Constraint\LogicalNot;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -142,8 +143,11 @@ abstract class BaseTaskTest extends TestCase
         self::assertThat($this->commands['executed'], new AssertCommandExecuted($commandSubstring));
     }
 
-    /**
-     * @return Task
-     */
-    abstract protected function createTask();
+    protected function assertCommandNotExecuted(string $commandSubstring): void
+    {
+        $constraint = new LogicalNot(new AssertCommandExecuted($commandSubstring));
+        self::assertThat($this->commands['executed'], $constraint);
+    }
+
+    abstract protected function createTask(): Task;
 }
