@@ -54,7 +54,9 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
 
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
             // creates empty directory if path does not exist
-            $commands[] = sprintf('test -e %s || mkdir -p %s', $sourcePath, $sourcePath);
+            if ($options['createNonExistingSharedDirectories'] === true) {
+                $commands[] = sprintf('test -e %s || mkdir -p %s', $sourcePath, $sourcePath);
+            }
 
             $commands[] = sprintf('ln -s %s %s', $sourcePath, $linkPath);
         }
@@ -74,6 +76,10 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
     {
         $resolver->setDefault('symlinks', []);
         $resolver->setAllowedTypes('symlinks', 'array');
+
+        $resolver->setDefault('createNonExistingSharedDirectories', true);
+        $resolver->setAllowedTypes('createNonExistingSharedDirectories', 'bool');
+
         $resolver->setDefault('genericSymlinksBaseDir', null);
         $resolver->setAllowedTypes('genericSymlinksBaseDir', ['string', 'null']);
         $resolver->setNormalizer('genericSymlinksBaseDir', fn (Options $options, $value) => ! empty($value) ? $value : null);

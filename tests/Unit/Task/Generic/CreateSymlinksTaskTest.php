@@ -60,7 +60,21 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
         $this->assertCommandExecuted('cd /home/foobar/data');
+        $this->assertCommandExecuted('test -e ../media || mkdir -p ../media');
         $this->assertCommandExecuted('ln -s ../media media');
+    }
+
+    /**
+     * @test
+     */
+    public function doNotTryToCreateSymlinksIfOptionIsSetToFalse(): void
+    {
+        $options = [
+            'createNonExistingSharedDirectories' => false
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandNotExecuted('test -e ../media || mkdir -p ../media');
     }
 
     /**

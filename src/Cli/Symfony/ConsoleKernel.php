@@ -70,7 +70,7 @@ final class ConsoleKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        if(Phar::running() !== '') {
+        if (Phar::running() !== '') {
             return sys_get_temp_dir() . '/_surf';
         }
 
@@ -79,7 +79,7 @@ final class ConsoleKernel extends Kernel
 
     public function getLogDir(): string
     {
-        if(Phar::running() !== '') {
+        if (Phar::running() !== '') {
             return sys_get_temp_dir() . '/_surf_log';
         }
 
