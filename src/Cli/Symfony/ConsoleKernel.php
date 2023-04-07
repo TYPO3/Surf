@@ -101,7 +101,7 @@ final class ConsoleKernel
             }
         }
 
-        $file = $this->getCacheDir() .'/container.php';
+        $file = $this->getCacheDir() . '/container.php';
 
         if (file_exists($file)) {
             require_once $file;
@@ -129,7 +129,7 @@ final class ConsoleKernel
             return sys_get_temp_dir() . '/_surf';
         }
 
-        return $this->getProjectDir().'/var/cache/'.$this->environment;
+        return $this->getProjectDir() . '/var/cache/' . $this->environment;
     }
 
     private function getProjectDir(): string
@@ -144,7 +144,7 @@ final class ConsoleKernel
             }
 
             $dir = $rootDir = \dirname($dir);
-            while (!is_file($dir.'/composer.json')) {
+            while (!is_file($dir . '/composer.json')) {
                 if ($dir === \dirname($dir)) {
                     return $this->projectDir = $rootDir;
                 }
