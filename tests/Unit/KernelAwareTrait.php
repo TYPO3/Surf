@@ -11,20 +11,19 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Tests\Unit;
 
-use Symfony\Component\HttpKernel\Kernel;
 use TYPO3\Surf\Cli\Symfony\ConsoleKernel;
 
 trait KernelAwareTrait
 {
     /**
-     * @var Kernel
+     * @var ConsoleKernel
      */
     protected static $kernel;
 
-    public static function getKernel(): Kernel
+    public static function getKernel(): ConsoleKernel
     {
         if (static::$kernel === null) {
-            $kernel = new ConsoleKernel('test', true);
+            $kernel = new ConsoleKernel('test');
             $kernel->boot();
             static::$kernel = $kernel;
         }
