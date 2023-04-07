@@ -9,18 +9,21 @@
  */
 
 use SelfUpdate\SelfUpdateCommand;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use TYPO3\Surf\Cli\Symfony\ConsoleApplication;
+use TYPO3\Surf\Cli\Symfony\ConsoleKernel;
 
 requireAutoloader();
 
-$kernel = new \TYPO3\Surf\Cli\Symfony\ConsoleKernel('prod', false);
-$kernel->boot();
-/** @var Container $container */
-$container = $kernel->getContainer();
 
+$kernel = new ConsoleKernel('prod');
+$kernel->boot();
+$container = $kernel->getContainer();
 /** @var ConsoleApplication $application */
-$application = $container->get(\TYPO3\Surf\Cli\Symfony\ConsoleApplication::class);
+$application = $container->get(ConsoleApplication::class);
 $application->add(new SelfUpdateCommand('TYPO3 Surf', $application->getVersion(), 'typo3/surf'));
 $application->run();
 
