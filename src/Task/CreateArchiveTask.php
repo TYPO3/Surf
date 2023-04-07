@@ -48,6 +48,9 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
  *          ]
  *      );
  */
+/**
+ * @deprecated Will be removed in version 4.0
+ */
 class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
@@ -64,6 +67,7 @@ class CreateArchiveTask extends Task implements ShellCommandServiceAwareInterfac
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
+        $this->logger->warning('This task is deprecated and will be removed in Version 4.0');
         $options = $this->configureOptions($options);
 
         $this->shell->execute('rm -f ' . $options['targetFile'] . '; mkdir -p ' . dirname($options['targetFile']), $node, $deployment);
