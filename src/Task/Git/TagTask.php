@@ -40,12 +40,16 @@ use TYPO3\Surf\Exception\InvalidConfigurationException;
  *          ]
  *      );
  */
+/**
+ * @deprecated Will be removed in version 4.0
+ */
 class TagTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
+        $this->logger->warning('This task is deprecated and will be removed in Version 4.0');
         $this->validateOptions($options);
         $options = $this->processOptions($options, $deployment);
 

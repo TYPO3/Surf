@@ -37,12 +37,16 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
  *          ]
  *      );
  */
+/**
+ * @deprecated Will be removed in version 4.0
+ */
 class PushTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
+        $this->logger->warning('This task is deprecated and will be removed in Version 4.0');
         $options = $this->configureOptions($options);
 
         $targetPath = $deployment->getApplicationReleasePath($node);
