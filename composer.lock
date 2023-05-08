@@ -637,7 +637,7 @@
         },
         {
             "name": "neos/error-messages",
-            "version": "7.3.11",
+            "version": "7.3.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/neos/error-messages.git",
@@ -668,7 +668,7 @@
             "description": "Flow error messages",
             "homepage": "http://flow.neos.io",
             "support": {
-                "source": "https://github.com/neos/error-messages/tree/7.3.11"
+                "source": "https://github.com/neos/error-messages/tree/7.3.12"
             },
             "funding": [
                 {
@@ -680,7 +680,7 @@
         },
         {
             "name": "neos/utility-files",
-            "version": "7.3.11",
+            "version": "7.3.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/neos/utility-files.git",
@@ -718,7 +718,7 @@
             "description": "Flow Files Utilities",
             "homepage": "http://flow.neos.io",
             "support": {
-                "source": "https://github.com/neos/utility-files/tree/7.3.11"
+                "source": "https://github.com/neos/utility-files/tree/7.3.12"
             },
             "funding": [
                 {
