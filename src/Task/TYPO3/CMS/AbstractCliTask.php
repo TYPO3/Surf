@@ -109,10 +109,6 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
             throw InvalidConfigurationException::createTypo3ConsoleScriptNotFound(get_class($this));
         }
 
-        if (false === strpos($options['scriptFileName'], 'typo3cms')) {
-            throw InvalidConfigurationException::createTypo3ConsoleScriptNotFound(get_class($this));
-        }
-
         if (false === $this->fileExists($options['scriptFileName'], $node, $application, $deployment, $options)) {
             throw InvalidConfigurationException::createTypo3ConsoleScriptNotFound(get_class($this));
         }
