@@ -14,6 +14,7 @@
         "monolog/monolog": "^2.9.1",
         "myclabs/php-enum": "^1.8",
         "neos/utility-files": "^7.3.10",
+        "psr/log": "^1.0 || ^2.0",
         "symfony/config": "^5.0 || ^6.0",
         "symfony/console": "^5.0 || ^6.0",
         "symfony/dependency-injection": "^5.0 || ^6.0",
