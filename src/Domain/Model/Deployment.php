@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 use TYPO3\Surf\Exception as SurfException;
+use TYPO3\Surf\Integration\LoggerAwareTrait;
 use UnexpectedValueException;
 
 /**
@@ -26,6 +27,7 @@ use UnexpectedValueException;
  */
 class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 {
+    use LoggerAwareTrait;
     use ContainerAwareTrait;
 
     /**
@@ -281,13 +283,6 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     public function setWorkflow(Workflow $workflow): self
     {
         $this->workflow = $workflow;
-
-        return $this;
-    }
-
-    public function setLogger(LoggerInterface $logger): self
-    {
-        $this->logger = $logger;
 
         return $this;
     }
