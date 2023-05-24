@@ -32,21 +32,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: none # disable xdebug, pcov
 
-      - run: composer update --no-interaction --no-suggest --no-progress
+      - uses: "ramsey/composer-install@v2"
+        with:
+          composer-options: "--no-interaction --no-suggest"
 
       - run: vendor/bin/phpunit
