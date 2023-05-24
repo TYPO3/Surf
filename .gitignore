@@ -10,3 +10,4 @@ Documentation/.doctrees
 var/
 /release/
 release.sh
+composer.lock

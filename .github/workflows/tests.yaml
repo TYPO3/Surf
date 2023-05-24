@@ -47,6 +47,6 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none # disable xdebug, pcov
 
-      - run: composer install --no-interaction --no-suggest --no-progress
+      - run: composer update --no-interaction --no-suggest --no-progress
 
       - run: vendor/bin/phpunit
