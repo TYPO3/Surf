@@ -1,6 +1,0 @@
-parameters:
-	ignoreErrors:
-		-
-			message: "#^Instantiated class ProjectServiceContainer not found\\.$#"
-			count: 1
-			path: src/Cli/Symfony/ConsoleKernel.php

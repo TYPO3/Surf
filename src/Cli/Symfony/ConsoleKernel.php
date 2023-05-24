@@ -105,8 +105,13 @@ final class ConsoleKernel
 
         if (file_exists($file)) {
             require_once $file;
+            if (!class_exists(\ProjectServiceContainer::class, false)) {
+                throw new \UnexpectedValueException('Class ProjectServiceContainer does not exist');
+            }
+
             /** @var Container $container */
             $container = new \ProjectServiceContainer();
+
         } else {
             $container = new ContainerBuilder();
             $loader = new PhpFileLoader($container, new FileLocator());
