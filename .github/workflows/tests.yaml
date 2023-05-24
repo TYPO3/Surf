@@ -26,10 +26,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.4', '8.0', '8.1']
-        dependencies: ['locked', 'latest']
+        php: ['7.4', '8.0', '8.1', '8.2']
 
-    name: PHP ${{ matrix.php }} unittests with ${{ matrix.dependencies }} deps
+    name: PHP ${{ matrix.php }} unittests
     steps:
       - uses: actions/checkout@v3
 
@@ -49,8 +48,5 @@ jobs:
           coverage: none # disable xdebug, pcov
 
       - run: composer install --no-interaction --no-suggest --no-progress
-
-      - run: composer update --no-interaction --no-suggest --no-progress
-        if: matrix.dependencies == 'latest'
 
       - run: vendor/bin/phpunit
