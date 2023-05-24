@@ -43,7 +43,7 @@ if (!function_exists('TYPO3\Surf\findPreviousReleaseIdentifier')) {
      */
     function findPreviousReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
     {
-        $previousReleasePath = $node->getReleasesPath().'/previous';
+        $previousReleasePath = $node->getReleasesPath() . '/previous';
 
         return trim($shell->execute("if [ -h $previousReleasePath ]; then basename `readlink $previousReleasePath` ; fi", $node, $deployment) ?? '');
     }
@@ -55,7 +55,7 @@ if (!function_exists('TYPO3\Surf\findCurrentReleaseIdentifier')) {
      */
     function findCurrentReleaseIdentifier(Deployment $deployment, Node $node, Application $application, ShellCommandService $shell): string
     {
-        $currentReleasePath = $node->getReleasesPath().'/current';
+        $currentReleasePath = $node->getReleasesPath() . '/current';
 
         return trim($shell->execute("if [ -h $currentReleasePath ]; then basename `readlink $currentReleasePath` ; fi", $node, $deployment));
     }
