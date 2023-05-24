@@ -50,7 +50,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         }
         $commandPrefix .= $phpBinaryPathAndFilename . ' ';
 
-        if (!$this->targetNode instanceof Node) {
+        if ($this->targetNode === null) {
             return false;
         }
 
@@ -120,6 +120,10 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);
         $pathAndFileName = $this->workingDirectory . '/' . $pathAndFileName;
+
+        if ($this->targetNode === null) {
+            return false;
+        }
 
         return $this->shell->executeOrSimulate('test -f ' . escapeshellarg($pathAndFileName), $this->targetNode, $deployment, true) !== false;
     }

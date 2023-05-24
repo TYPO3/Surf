@@ -4,8 +4,3 @@ parameters:
 			message: "#^Instantiated class ProjectServiceContainer not found\\.$#"
 			count: 1
 			path: src/Cli/Symfony/ConsoleKernel.php
-
-		-
-			message: "#^Parameter \\#2 \\$node of method TYPO3\\\\Surf\\\\Domain\\\\Service\\\\ShellCommandService\\:\\:executeOrSimulate\\(\\) expects TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Node, TYPO3\\\\Surf\\\\Domain\\\\Model\\\\Node\\|null given\\.$#"
-			count: 1
-			path: src/Task/TYPO3/CMS/AbstractCliTask.php
