@@ -12,21 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
           coverage: none
 
-      - run: composer install --no-progress
+      - uses: "ramsey/composer-install@v2"
 
       - run: vendor/bin/phpstan analyse --ansi

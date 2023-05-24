@@ -14,6 +14,8 @@ use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use TYPO3\Surf\Cli\Symfony\ConsoleApplication;
 use TYPO3\Surf\Cli\Symfony\ConsoleOutputFactory;
@@ -79,4 +81,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(FactoryInterface::class, Factory::class);
 
     $services->alias(VersionCheckerInterface::class, ComposerVersionChecker::class);
+    $services->set(Container::class);
+    $services->alias(ContainerInterface::class, Container::class);
 };

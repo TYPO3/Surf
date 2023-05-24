@@ -20,24 +20,12 @@ jobs:
           token: ${{ secrets.PHP_CS_FIXER }}
           ref: ${{ github.head_ref }}
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
           coverage: none # disable xdebug, pcov
 
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer Dependencies
-        run: composer install --no-progress
+      - uses: "ramsey/composer-install@v2"
 
       - name: Run php-cs-fixer
         run: vendor/bin/php-cs-fixer fix --diff
