@@ -111,7 +111,6 @@ final class ConsoleKernel
 
             /** @var Container $container */
             $container = new \ProjectServiceContainer();
-
         } else {
             $container = new ContainerBuilder();
             $loader = new PhpFileLoader($container, new FileLocator());
