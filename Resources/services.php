@@ -11,9 +11,11 @@ declare(strict_types=1);
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -81,6 +83,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(FactoryInterface::class, Factory::class);
 
     $services->alias(VersionCheckerInterface::class, ComposerVersionChecker::class);
-    $services->set(Container::class);
-    $services->alias(ContainerInterface::class, Container::class);
+
+    $services->alias(PsrContainerInterface::class, 'service_container');
+    $services->alias(ContainerInterface::class, 'service_container');
 };
