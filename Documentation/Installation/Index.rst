@@ -19,7 +19,7 @@ Download phar archive
 To install Surf as phar archive, run the following commands::
 
     mkdir /usr/local/surf
-    curl -L https://github.com/TYPO3/Surf/releases/download/3.4.2/surf.phar -o /usr/local/surf/surf.phar
+    curl -L https://github.com/TYPO3/Surf/releases/download/3.4.3/surf.phar -o /usr/local/surf/surf.phar
     chmod +x /usr/local/surf/surf.phar
     ln -s /usr/local/surf/surf.phar /usr/local/bin/surf
 
