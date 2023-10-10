@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Domain\Model\Task;
 use UnexpectedValueException;
+use Webmozart\Assert\Assert;
 
 /**
  * @final
@@ -32,12 +33,14 @@ class TaskFactory implements ContainerAwareInterface
 
     private function createTask(string $taskName): Task
     {
-        if ($this->container === null || ! $this->container->has($taskName)) {
+        Assert::notNull($this->container);
+
+        if (! $this->container->has($taskName)) {
             $task = new $taskName();
             if ($task instanceof ShellCommandServiceAwareInterface) {
                 $task->setShellCommandService(new ShellCommandService());
             }
-            if ($this->container !== null && $task instanceof LoggerAwareInterface) {
+            if($task instanceof LoggerAwareInterface) {
                 /** @var LoggerInterface $logger */
                 $logger = $this->container->get(LoggerInterface::class);
                 $task->setLogger($logger);

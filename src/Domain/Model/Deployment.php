@@ -20,6 +20,7 @@ use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 use TYPO3\Surf\Exception as SurfException;
 use TYPO3\Surf\Integration\LoggerAwareTrait;
 use UnexpectedValueException;
+use Webmozart\Assert\Assert;
 
 /**
  * This is the base object exposed to a deployment configuration script and serves as a configuration builder and
@@ -458,9 +459,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     public function rollback(bool $dryRun = false): void
     {
-        if ($this->container === null) {
-            throw new UnexpectedValueException('Container must not be null');
-        }
+        Assert::notNull($this->container);
 
         $this->logger->notice('Rollback deployment ' . $this->name . ' (' . $this->releaseIdentifier . ')');
 
@@ -501,9 +500,7 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     private function createSimpleWorkflow(): SimpleWorkflow
     {
-        if ($this->container === null) {
-            throw new UnexpectedValueException('Container must not be null');
-        }
+        Assert::notNull($this->container);
 
         $workflow = $this->container->get(SimpleWorkflow::class);
 
