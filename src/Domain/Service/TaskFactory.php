@@ -40,7 +40,7 @@ class TaskFactory implements ContainerAwareInterface
             if ($task instanceof ShellCommandServiceAwareInterface) {
                 $task->setShellCommandService(new ShellCommandService());
             }
-            if($task instanceof LoggerAwareInterface) {
+            if ($task instanceof LoggerAwareInterface) {
                 /** @var LoggerInterface $logger */
                 $logger = $this->container->get(LoggerInterface::class);
                 $task->setLogger($logger);
