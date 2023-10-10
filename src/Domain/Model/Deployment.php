@@ -458,6 +458,10 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     public function rollback(bool $dryRun = false): void
     {
+        if ($this->container === null) {
+            throw new UnexpectedValueException('Container must not be null');
+        }
+
         $this->logger->notice('Rollback deployment ' . $this->name . ' (' . $this->releaseIdentifier . ')');
 
         /** @var RollbackWorkflow $workflow */
@@ -497,6 +501,10 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     private function createSimpleWorkflow(): SimpleWorkflow
     {
+        if ($this->container === null) {
+            throw new UnexpectedValueException('Container must not be null');
+        }
+
         $workflow = $this->container->get(SimpleWorkflow::class);
 
         if (!$workflow instanceof SimpleWorkflow) {

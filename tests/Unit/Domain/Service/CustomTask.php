@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 
+use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -30,5 +31,10 @@ class CustomTask extends Task implements ShellCommandServiceAwareInterface
     public function getShell(): ShellCommandService
     {
         return $this->shell;
+    }
+
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 }

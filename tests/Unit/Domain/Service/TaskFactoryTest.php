@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Domain\Service;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\TaskFactory;
 use TYPO3\Surf\Task\CreateArchiveTask;
 use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
@@ -49,11 +51,11 @@ class TaskFactoryTest extends TestCase
      */
     public function createSyntheticServiceIfNotExists(): void
     {
-        /** @var CustomTask $customTask */
         $customTask = $this->subject->createTaskInstance(CustomTask::class);
 
-        self::assertNotNull($customTask->getShell());
         self::assertInstanceOf(CustomTask::class, $customTask);
+        self::assertInstanceOf(LoggerInterface::class, $customTask->getLogger());
+        self::assertInstanceOf(ShellCommandService::class, $customTask->getShell());
     }
 
     /**
