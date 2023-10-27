@@ -53,6 +53,9 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
         ];
 
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
+            $linkPath = rtrim($linkPath, '/');
+            $sourcePath = rtrim($sourcePath, '/');
+
             // creates empty directory if path does not exist
             if ($options['createNonExistingSharedDirectories'] === true) {
                 $folderDepth = substr_count($linkPath, '/');

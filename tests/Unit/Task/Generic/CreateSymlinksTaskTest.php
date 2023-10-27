@@ -126,7 +126,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
     {
         $options = [
             'symlinks' => [
-                'var/log' => '../../../shared/var/log',
+                'var/log/' => '../../../shared/var/log/',
                 'var/temp' => '/tmp',
             ],
             'genericSymlinksBaseDir' => '/home/foobar/data',
