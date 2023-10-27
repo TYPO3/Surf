@@ -55,13 +55,24 @@ class CreateSymlinksTask extends Task implements ShellCommandServiceAwareInterfa
         foreach ($options['symlinks'] as $linkPath => $sourcePath) {
             // creates empty directory if path does not exist
             if ($options['createNonExistingSharedDirectories'] === true) {
-                $commands[] = sprintf('test -e %s || mkdir -p %s', $sourcePath, $sourcePath);
+                $folderDepth = substr_count($linkPath, '/');
+                $changedSourceDirectoryAccordingToDeepnessOfLinkPath = $this->changeDeepnessOfPath($sourcePath, $folderDepth);
+                $commands[] = sprintf('test -e %s || mkdir -p %s', $changedSourceDirectoryAccordingToDeepnessOfLinkPath, $changedSourceDirectoryAccordingToDeepnessOfLinkPath);
             }
 
             $commands[] = sprintf('ln -s %s %s', $sourcePath, $linkPath);
         }
 
         $this->shell->executeOrSimulate($commands, $node, $deployment);
+    }
+
+    protected function changeDeepnessOfPath(string $path, int $level = 0): string
+    {
+        if ($level === 0 || substr($path, 0, 1) === '/') {
+            return $path;
+        }
+        $directoryParts = explode(DIRECTORY_SEPARATOR, $path);
+        return implode(DIRECTORY_SEPARATOR, array_splice($directoryParts, $level));
     }
 
     /**

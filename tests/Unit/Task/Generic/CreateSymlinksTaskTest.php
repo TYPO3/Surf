@@ -55,7 +55,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
     {
         $options = [
             'symlinks' => ['media' => '../media'],
-            'genericSymlinksBaseDir' => '/home/foobar/data'
+            'genericSymlinksBaseDir' => '/home/foobar/data',
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -70,7 +70,7 @@ class CreateSymlinksTaskTest extends BaseTaskTest
     public function doNotTryToCreateSymlinksIfOptionIsSetToFalse(): void
     {
         $options = [
-            'createNonExistingSharedDirectories' => false
+            'createNonExistingSharedDirectories' => false,
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
 
@@ -97,5 +97,46 @@ class CreateSymlinksTaskTest extends BaseTaskTest
         $this->assertCommandExecuted('ln -s ../media media');
         $this->assertCommandExecuted('ln -s ../log log');
         $this->assertCommandExecuted('ln -s ../var var');
+    }
+
+    /**
+     * @test
+     */
+    public function createsMultipleDeepSymlinks(): void
+    {
+        $options = [
+            'symlinks' => [
+                'var/log' => '../../../shared/var/log',
+                'var/temp' => '/tmp',
+            ],
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted("cd {$this->deployment->getApplicationReleasePath($this->node)}");
+        $this->assertCommandExecuted('test -e ../../shared/var/log || mkdir -p ../../shared/var/log');
+        $this->assertCommandExecuted('ln -s ../../../shared/var/log var/log');
+        $this->assertCommandExecuted('test -e /tmp || mkdir -p /tmp');
+        $this->assertCommandExecuted('ln -s /tmp var/temp');
+    }
+
+    /**
+     * @test
+     */
+    public function createsMultipleDeepSymlinksWithDifferentBaseDir(): void
+    {
+        $options = [
+            'symlinks' => [
+                'var/log' => '../../../shared/var/log',
+                'var/temp' => '/tmp',
+            ],
+            'genericSymlinksBaseDir' => '/home/foobar/data',
+        ];
+        $this->task->execute($this->node, $this->application, $this->deployment, $options);
+
+        $this->assertCommandExecuted('cd /home/foobar/data');
+        $this->assertCommandExecuted('test -e ../../shared/var/log || mkdir -p ../../shared/var/log');
+        $this->assertCommandExecuted('ln -s ../../../shared/var/log var/log');
+        $this->assertCommandExecuted('test -e /tmp || mkdir -p /tmp');
+        $this->assertCommandExecuted('ln -s /tmp var/temp');
     }
 }
