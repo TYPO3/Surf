@@ -24,13 +24,11 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
     $rectorConfig->skip([
         AddLiteralSeparatorToNumberRector::class,
-
     ]);
     $rectorConfig->sets([
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
         PHPUnitSetList::PHPUNIT_SPECIFIC_METHOD,
         PHPUnitSetList::PHPUNIT_EXCEPTION,
-        PHPUnitSetList::PHPUNIT_YIELD_DATA_PROVIDER,
         LevelSetList::UP_TO_PHP_74,
     ]);
 };
