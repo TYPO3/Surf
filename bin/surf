@@ -24,6 +24,11 @@ $kernel->boot();
 $container = $kernel->getContainer();
 /** @var ConsoleApplication $application */
 $application = $container->get(ConsoleApplication::class);
+$commandNamesToHide = ['list', 'completion', 'help'];
+foreach ($commandNamesToHide as $commandNameToHide) {
+    $commandToHide = $application->get($commandNameToHide);
+    $commandToHide->setHidden(true);
+}
 $application->add(new SelfUpdateCommand('TYPO3 Surf', $application->getVersion(), 'typo3/surf'));
 $application->run();
 
