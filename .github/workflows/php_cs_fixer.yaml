@@ -30,7 +30,7 @@ jobs:
       - name: Run php-cs-fixer
         run: vendor/bin/php-cs-fixer fix --diff
 
-      - name: Commit changed files
+      - name: "Commit changed files"
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply php-cs-fixer changes
