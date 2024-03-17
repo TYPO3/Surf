@@ -1,7 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/typo3/surf/v/stable.svg)](https://packagist.org/packages/TYPO3/Surf)
 [![Total Downloads](https://poser.pugx.org/typo3/surf/downloads.svg)](https://packagist.org/packages/TYPO3/Surf)
 [![Monthly Downloads](https://poser.pugx.org/typo3/surf/d/monthly)](https://packagist.org/packages/TYPO3/Surf)
-![Tests](https://github.com/TYPO3/Surf/workflows/Tests/badge.svg?branch=main&event=push)
+[![Tests](https://github.com/TYPO3/Surf/actions/workflows/tests.yaml/badge.svg)](https://github.com/TYPO3/Surf/actions/workflows/tests.yaml)
 [![Coverage Status](https://img.shields.io/coveralls/TYPO3/Surf/main.svg?style=flat-square)](https://coveralls.io/github/TYPO3/Surf?branch=main)
 
 # Surf
