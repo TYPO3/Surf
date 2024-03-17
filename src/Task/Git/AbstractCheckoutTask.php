@@ -47,7 +47,7 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
             );
             $this->guardAgainstInvalidSha1($sha1, 'Could not retrieve sha1 of git tag "' . $options['tag'] . '"', 1335974915);
         } else {
-            $branch = $options['branch'] ?? 'master';
+            $branch = $options['branch'] ?? 'main';
             $sha1 = $this->shell->execute("git ls-remote {$options['repositoryUrl']} refs/heads/$branch | awk '{print $1 }'", $node, $deployment, true);
             $this->guardAgainstInvalidSha1($sha1, 'Could not retrieve sha1 of git branch "' . $branch . '"', 1335974926);
         }

@@ -21,7 +21,7 @@ If you would like to deploy a Neos website a good starting point is to use the N
       ->setOption('keepReleases', 3)
       ->setOption('composerCommandPath', 'composer')
       ->setOption('repositoryUrl', '<my repository url>')
-      ->setOption('branch', 'master')
+      ->setOption('branch', 'main')
       ->setOption('updateMethod', null)
       ->setOption('baseUrl', 'https://my.node.com')
       ->setOption('flushCacheList', [

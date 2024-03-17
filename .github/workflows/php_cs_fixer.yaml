@@ -3,7 +3,7 @@ name: Format (PHP)
 on:
   pull_request:
     branches:
-      - master
+      - main
       - 2.0
 
 jobs:

@@ -50,7 +50,7 @@ class PushTaskTest extends BaseTaskTest
      */
     public function executeGitPushSuccessfully(): void
     {
-        $options = ['remote' => 'https://github.com/12345/12345', 'refspec' => 'master:refs/heads/qa/master'];
+        $options = ['remote' => 'https://github.com/12345/12345', 'refspec' => 'master:refs/heads/qa/main'];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
         $this->assertCommandExecuted(
             sprintf(
@@ -68,7 +68,7 @@ class PushTaskTest extends BaseTaskTest
     {
         $options = [
             'remote' => 'https://github.com/12345/12345',
-            'refspec' => 'master:refs/heads/qa/master',
+            'refspec' => 'master:refs/heads/qa/main',
             'recurseIntoSubmodules' => true
         ];
         $this->task->execute($this->node, $this->application, $this->deployment, $options);

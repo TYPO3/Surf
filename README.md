@@ -1,8 +1,8 @@
 [![Latest Stable Version](https://poser.pugx.org/typo3/surf/v/stable.svg)](https://packagist.org/packages/TYPO3/Surf)
 [![Total Downloads](https://poser.pugx.org/typo3/surf/downloads.svg)](https://packagist.org/packages/TYPO3/Surf)
 [![Monthly Downloads](https://poser.pugx.org/typo3/surf/d/monthly)](https://packagist.org/packages/TYPO3/Surf)
-![Tests](https://github.com/TYPO3/Surf/workflows/Tests/badge.svg?branch=master&event=push)
-[![Coverage Status](https://img.shields.io/coveralls/TYPO3/Surf/master.svg?style=flat-square)](https://coveralls.io/github/TYPO3/Surf?branch=master)
+![Tests](https://github.com/TYPO3/Surf/workflows/Tests/badge.svg?branch=main&event=push)
+[![Coverage Status](https://img.shields.io/coveralls/TYPO3/Surf/main.svg?style=flat-square)](https://coveralls.io/github/TYPO3/Surf?branch=main)
 
 # Surf
 
@@ -20,14 +20,14 @@ Some features of the Surf package:
 
 ## Documentation
 
-For further information please read the documentation https://docs.typo3.org/other/typo3/surf/master/en-us/.
+For further information please read the documentation https://docs.typo3.org/other/typo3/surf/main/en-us/.
 
 ### Contributing to the documentation
 
 You can simply edit or add a .rst file in the `Documentation` folder on GitHub and create a pull request.
 
-The online documentation will automatically update after changes to the master branch.
-To preview the documentation locally please follow this [guide](https://github.com/t3docs/docker-render-documentation).
+The online documentation will automatically update after changes to the main branch.
+To preview the documentation locally, please follow this [guide](https://github.com/t3docs/docker-render-documentation).
 
 The documentation was set up according to the [TYPO3 documentation guide](https://docs.typo3.org/typo3cms/RenderTYPO3DocumentationGuide/Index.html).
 
