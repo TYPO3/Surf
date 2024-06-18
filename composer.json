@@ -13,7 +13,7 @@
         "guzzlehttp/guzzle": "^6.0 || ^7.0",
         "monolog/monolog": "^2.9.1",
         "myclabs/php-enum": "^1.8",
-        "neos/utility-files": "^7.3.10",
+        "neos/utility-files": "^8.3.9",
         "symfony/config": "^5.0 || ^6.0",
         "symfony/console": "^5.0 || ^6.0",
         "symfony/dependency-injection": "^5.0 || ^6.0",
