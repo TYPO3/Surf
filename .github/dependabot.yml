@@ -13,16 +13,3 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-
-  # Enable version updates for composer
-  - package-ecosystem: "composer"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    labels:
-      - "dependencies"
-    assignees:
-      - "simonschaufi"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
