@@ -2,6 +2,13 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of TYPO3 Surf.
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 namespace TYPO3\Surf\Cli\Symfony\DependencyInjection;
 
 use BadMethodCallException;
@@ -62,7 +69,7 @@ abstract class Extension implements ExtensionInterface
 
         $instanceofClosure = &\Closure::bind(fn &() => $this->instanceof, $extensionLoader, $extensionLoader)();
 
-        (fn(ContainerConfigurator $configurator) => $this->loadExtension($configurator, $container))((new ContainerConfigurator(
+        (fn (ContainerConfigurator $configurator) => $this->loadExtension($configurator, $container))((new ContainerConfigurator(
             $container,
             $extensionLoader,
             $instanceofClosure,

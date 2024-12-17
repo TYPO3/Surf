@@ -129,7 +129,7 @@ final class ConsoleKernel
 
             foreach ($this->extensions as $extension) {
                 $container->registerExtension($extension);
-                
+
                 $container->loadFromExtension($extension->getAlias(), null);
             }
             $container->getCompilerPassConfig()->setMergePass(new MergeExtensionConfigurationPass());
