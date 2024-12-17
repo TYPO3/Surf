@@ -16,6 +16,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,6 +27,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use TYPO3\Surf\Cli\Symfony\CompilerPasses\CommandsToApplicationCompilerPass;
 use TYPO3\Surf\Domain\Service\ShellCommandService;
 use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 final class ConsoleKernel
 {
@@ -33,10 +35,16 @@ final class ConsoleKernel
     private ?Container $container = null;
     private string $environment;
     private ?string $projectDir = null;
+    private array $extensions = [];
 
     public function __construct(string $environment = 'dev')
     {
         $this->environment = $environment;
+    }
+
+    public function addExtension(ExtensionInterface $extension): void
+    {
+        $this->extensions[] = $extension;
     }
 
     private function registerContainerConfiguration(LoaderInterface $loader): void
@@ -113,11 +121,20 @@ final class ConsoleKernel
             $container = new \ProjectServiceContainer();
         } else {
             $container = new ContainerBuilder();
+            $container->setParameter('kernel.environment', $this->environment);
+
             $loader = new PhpFileLoader($container, new FileLocator());
 
             $this->registerContainerConfiguration($loader);
-            $this->build($container);
 
+            foreach ($this->extensions as $extension) {
+                $container->registerExtension($extension);
+                
+                $container->loadFromExtension($extension->getAlias(), null);
+            }
+            $container->getCompilerPassConfig()->setMergePass(new MergeExtensionConfigurationPass());
+
+            $this->build($container);
             $container->compile();
 
             $dumper = new PhpDumper($container);
