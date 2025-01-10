@@ -93,9 +93,9 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $releasesPath = $this->deployment->getApplicationReleasePath($this->node);
 
         $this->assertCommandExecuted("ssh remote \"mkdir -p '{$releasesPath}/Configuration/'\"");
-        $this->assertCommandExecuted("scp '{$configPath}/Settings.yaml' remote:\"'{$releasesPath}/Configuration/'\"");
+        $this->assertCommandExecuted("scp '{$configPath}/Settings.yaml' remote:'{$releasesPath}/Configuration/'");
         $this->assertCommandExecuted("ssh remote \"mkdir -p '{$releasesPath}/Configuration/Production/'\"");
-        $this->assertCommandExecuted("scp '{$configPath}/Production/Settings.yaml' remote:\"'{$releasesPath}/Configuration/Production/'\"");
+        $this->assertCommandExecuted("scp '{$configPath}/Production/Settings.yaml' remote:'{$releasesPath}/Configuration/Production/'");
     }
 
     /**
@@ -115,9 +115,9 @@ class CopyConfigurationTaskTest extends BaseTaskTest
         $releasesPath = $this->deployment->getApplicationReleasePath($this->node);
 
         $this->assertCommandExecuted("ssh -o PubkeyAuthentication=no remote \"mkdir -p '{$releasesPath}/Configuration/'\"");
-        $this->assertCommandExecuted("scp -o PubkeyAuthentication=no '{$configPath}/Settings.yaml' remote:\"'{$releasesPath}/Configuration/'\"");
+        $this->assertCommandExecuted("scp -o PubkeyAuthentication=no '{$configPath}/Settings.yaml' remote:'{$releasesPath}/Configuration/'");
         $this->assertCommandExecuted("ssh -o PubkeyAuthentication=no remote \"mkdir -p '{$releasesPath}/Configuration/Production/'\"");
-        $this->assertCommandExecuted("scp -o PubkeyAuthentication=no '{$configPath}/Production/Settings.yaml' remote:\"'{$releasesPath}/Configuration/Production/'\"");
+        $this->assertCommandExecuted("scp -o PubkeyAuthentication=no '{$configPath}/Production/Settings.yaml' remote:'{$releasesPath}/Configuration/Production/'");
     }
 
     /**
@@ -138,6 +138,6 @@ class CopyConfigurationTaskTest extends BaseTaskTest
 
         $this->assertCommandExecuted("ssh -p '22' foo@remote \"");
         $this->assertCommandExecuted("scp -P '22'");
-        $this->assertCommandExecuted("' foo@remote:\"");
+        $this->assertCommandExecuted("' foo@remote:");
     }
 }
