@@ -60,8 +60,7 @@ class FactoryTest extends TestCase
 
         $this->logger = $this->prophesize(Logger::class);
 
-        $this->subject = new Factory($this->filesystem->reveal(), $this->logger->reveal());
-        $this->subject->setContainer(static::getKernel()->getContainer());
+        $this->subject = new Factory(static::getKernel()->getContainer(), $this->filesystem->reveal(), $this->logger->reveal());
     }
 
     /**

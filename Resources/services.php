@@ -76,7 +76,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->share(false);
 
     $services->set(Factory::class)
-        ->args([service(FilesystemInterface::class), service(LoggerInterface::class)]);
+        ->args([service('service_container'), service(FilesystemInterface::class), service(LoggerInterface::class)]);
 
     $services->alias(FactoryInterface::class, Factory::class);
 

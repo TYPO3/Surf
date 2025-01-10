@@ -21,9 +21,12 @@ use TYPO3\Surf\Domain\Model\RollbackWorkflow;
 use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception as SurfException;
 use TYPO3\Surf\Task\Generic\RollbackTask;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class RollbackWorkflowTest extends TestCase
 {
+    use KernelAwareTrait;
+
     /**
      * @test
      */
@@ -367,7 +370,7 @@ class RollbackWorkflowTest extends TestCase
      */
     protected function buildDeployment(array &$executedTasks = []): Deployment
     {
-        $deployment = new Deployment('Test rollback deployment');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Test rollback deployment');
         $mockLogger = $this->createMock(LoggerInterface::class);
         // Enable log to console to debug tests
         // $mockLogger->expects(self::any())->method('log')->will($this->returnCallback(function($message) {

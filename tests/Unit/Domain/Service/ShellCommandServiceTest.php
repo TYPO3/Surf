@@ -17,12 +17,15 @@ use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Service\ShellCommandService;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 /**
  * Unit test for the ShellCommandService
  */
 class ShellCommandServiceTest extends TestCase
 {
+    use KernelAwareTrait;
+
     /**
      * Test, if the given options are respected in executed SSH command
      *
@@ -57,7 +60,7 @@ class ShellCommandServiceTest extends TestCase
             $node->setOption('privateKeyFile', $privateKey);
         }
 
-        $deployment = new Deployment('TestDeployment');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
@@ -131,7 +134,7 @@ class ShellCommandServiceTest extends TestCase
             return [0, 'Hello World'];
         });
 
-        $deployment = new Deployment('TestDeployment');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
@@ -161,7 +164,7 @@ class ShellCommandServiceTest extends TestCase
         $node = new Node('TestNode');
         $node->setHostname('asdf');
 
-        $deployment = new Deployment('TestDeployment');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
@@ -192,7 +195,7 @@ class ShellCommandServiceTest extends TestCase
         $node = new Node('TestNode');
         $node->onLocalhost();
 
-        $deployment = new Deployment('TestDeployment');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
@@ -218,7 +221,7 @@ class ShellCommandServiceTest extends TestCase
     public function executeProcessProperlyLogsStandardAndErrorOutput(): void
     {
         $shellCommandService = new ShellCommandService();
-        $deployment = new Deployment('TestDeployment');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
         /** @var LoggerInterface|MockObject $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
         $deployment->setLogger($mockLogger);

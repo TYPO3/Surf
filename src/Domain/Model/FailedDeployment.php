@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Model;
 
+use Psr\Container\ContainerInterface;
 use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 
 /**
@@ -20,9 +21,9 @@ use TYPO3\Surf\Domain\Enum\DeploymentStatus;
  */
 class FailedDeployment extends Deployment
 {
-    public function __construct(string $name)
+    public function __construct(ContainerInterface $container, string $name)
     {
-        parent::__construct($name);
+        parent::__construct($container, $name);
         $this->releaseIdentifier = null;
     }
 

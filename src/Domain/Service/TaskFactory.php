@@ -11,20 +11,24 @@ declare(strict_types=1);
 
 namespace TYPO3\Surf\Domain\Service;
 
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Domain\Model\Task;
 use UnexpectedValueException;
-use Webmozart\Assert\Assert;
 
 /**
  * @final
  */
-class TaskFactory implements ContainerAwareInterface
+class TaskFactory
 {
-    use ContainerAwareTrait;
+
+    private ContainerInterface $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     public function createTaskInstance(string $taskName): Task
     {
@@ -33,8 +37,6 @@ class TaskFactory implements ContainerAwareInterface
 
     private function createTask(string $taskName): Task
     {
-        Assert::notNull($this->container);
-
         if (! $this->container->has($taskName)) {
             $task = new $taskName();
             if ($task instanceof ShellCommandServiceAwareInterface) {

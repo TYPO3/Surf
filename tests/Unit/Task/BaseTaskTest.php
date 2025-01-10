@@ -116,8 +116,7 @@ abstract class BaseTaskTest extends TestCase
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
 
-        $this->deployment = new Deployment('TestDeployment');
-        $this->deployment->setContainer(static::getKernel()->getContainer());
+        $this->deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
         $this->mockLogger = $this->prophesize(LoggerInterface::class);
         $this->task->setLogger($this->mockLogger->reveal());

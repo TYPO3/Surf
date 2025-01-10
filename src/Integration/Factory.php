@@ -14,27 +14,28 @@ namespace TYPO3\Surf\Integration;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Neos\Utility\Files;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Domain\Filesystem\FilesystemInterface;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\FailedDeployment;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
 
-class Factory implements FactoryInterface, ContainerAwareInterface
+class Factory implements FactoryInterface
 {
-    use ContainerAwareTrait;
-
     protected OutputInterface $output;
 
-    protected Logger $logger;
+    protected LoggerInterface $logger;
 
     protected FilesystemInterface $filesystem;
 
-    public function __construct(FilesystemInterface $filesystem, Logger $logger)
+    protected ContainerInterface $container;
+
+    public function __construct(ContainerInterface $container, FilesystemInterface $filesystem, LoggerInterface $logger)
     {
+        $this->container = $container;
         $this->filesystem = $filesystem;
         $this->logger = $logger;
     }
@@ -45,7 +46,9 @@ class Factory implements FactoryInterface, ContainerAwareInterface
 
         if (! $simulateDeployment) {
             $logFilePath = Files::concatenatePaths([$this->getWorkspacesBasePath($configurationPath), 'logs', $deployment->getName() . '.log']);
-            $this->logger->pushHandler(new StreamHandler($logFilePath));
+            if ($this->logger instanceof Logger) {
+                $this->logger->pushHandler(new StreamHandler($logFilePath));
+            }
         }
 
         $deployment->setForceRun($forceDeployment);
@@ -145,15 +148,14 @@ class Factory implements FactoryInterface, ContainerAwareInterface
 
         if (! $this->filesystem->fileExists($deploymentPathAndFilename)) {
             $this->logger->error(sprintf("The deployment file %s does not exist.\n", $deploymentPathAndFilename));
-            $deployment = new FailedDeployment($deploymentName);
+            $deployment = new FailedDeployment($this->container, $deploymentName);
             $deployment->setLogger($this->logger);
 
             return $deployment;
         }
 
-        $deployment = new Deployment($deploymentName);
+        $deployment = new Deployment($this->container, $deploymentName);
         $deployment->setLogger($this->logger);
-        $deployment->setContainer($this->container);
         $deployment->setDeploymentBasePath($deploymentConfigurationPath);
         $deployment->setWorkspacesBasePath($workspacesBasePath);
 

@@ -30,9 +30,7 @@ class TaskFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $container = self::getKernel()->getContainer();
-        $this->subject = new TaskFactory();
-        $this->subject->setContainer($container);
+        $this->subject = new TaskFactory(static::getKernel()->getContainer());
     }
 
     /**
