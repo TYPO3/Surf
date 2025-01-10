@@ -22,10 +22,13 @@ use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\Task;
 use TYPO3\Surf\Domain\Service\TaskFactory;
 use TYPO3\Surf\Domain\Service\TaskManager;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class TaskManagerTest extends TestCase
 {
+    use KernelAwareTrait;
     use ProphecyTrait;
+
     /**
      * @var ObjectProphecy|Task
      */
@@ -55,7 +58,7 @@ class TaskManagerTest extends TestCase
     {
         $this->node = new Node('Test node');
         $this->application = new Application('Test application');
-        $this->deployment = new Deployment('Test deployment');
+        $this->deployment = new Deployment(static::getKernel()->getContainer(), 'Test deployment');
 
         $logger = $this->prophesize(LoggerInterface::class);
         $this->deployment->setLogger($logger->reveal());

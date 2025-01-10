@@ -16,7 +16,7 @@
         "neos/utility-files": "^7.3.10 || ^8.3.9",
         "symfony/config": "^5.0 || ^6.0 || ^7.0",
         "symfony/console": "^5.0 || ^6.0 || ^7.0",
-        "symfony/dependency-injection": "^5.0 || ^6.0",
+        "symfony/dependency-injection": "^5.0 || ^6.0 || ^7.0",
         "symfony/finder": "^5.1 || ^6.0 || ^7.0",
         "symfony/options-resolver": "^5.0 || ^6.0 || ^7.0",
         "symfony/process": "^5.0 || ^6.0 || ^7.0",

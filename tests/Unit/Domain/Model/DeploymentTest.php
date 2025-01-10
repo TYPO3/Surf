@@ -42,8 +42,7 @@ class DeploymentTest extends TestCase
      */
     public function initializeUsesSimpleWorkflowAsDefault(): void
     {
-        $deployment = new Deployment('Test deployment');
-        $deployment->setContainer(static::getKernel()->getContainer());
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Test deployment');
         $deployment->initialize();
 
         self::assertInstanceOf(SimpleWorkflow::class, $deployment->getWorkflow());
@@ -54,8 +53,7 @@ class DeploymentTest extends TestCase
      */
     public function getNodesReturnsNodesFromApplicationsAsSet(): void
     {
-        $deployment = new Deployment('Test deployment');
-        $deployment->setContainer(static::getKernel()->getContainer());
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Test deployment');
         $application1 = new Application('Test application 1');
         $application2 = new Application('Test application 2');
 
@@ -81,8 +79,7 @@ class DeploymentTest extends TestCase
      */
     public function constructorCreatesReleaseIdentifier(): void
     {
-        $deployment = new Deployment('Test deployment');
-        $deployment->setContainer(static::getKernel()->getContainer());
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Test deployment');
 
         $releaseIdentifier = $deployment->getReleaseIdentifier();
 
@@ -98,7 +95,7 @@ class DeploymentTest extends TestCase
 
         $workflow = new SimpleWorkflow($this->prophesize(TaskManager::class)->reveal());
 
-        $deployment = new Deployment('Test deployment');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Test deployment');
         $deployment->setWorkflow($workflow);
         $deployment->initialize();
 
@@ -113,8 +110,7 @@ class DeploymentTest extends TestCase
      */
     public function deploymentHasDefaultLockIdentifierIfNoIdentifierIsGiven($deploymentLockIdentifier): void
     {
-        $deployment = new Deployment('Some name', $deploymentLockIdentifier);
-        $deployment->setContainer(static::getKernel()->getContainer());
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Some name', $deploymentLockIdentifier);
 
         self::assertSame($deployment->getReleaseIdentifier(), $deployment->getDeploymentLockIdentifier());
     }
@@ -125,7 +121,7 @@ class DeploymentTest extends TestCase
     public function deploymentHasDefinedLockIdentifier(): void
     {
         $deploymentLockIdentifier = 'Deployment lock identifier';
-        $deployment = new Deployment('Some name', $deploymentLockIdentifier);
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Some name', $deploymentLockIdentifier);
 
         self::assertSame($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
     }
@@ -138,7 +134,7 @@ class DeploymentTest extends TestCase
         $deploymentLockIdentifier = 'Deployment lock identifier';
         putenv(sprintf('SURF_DEPLOYMENT_LOCK_IDENTIFIER=%s', $deploymentLockIdentifier));
 
-        $deployment = new Deployment('Some name');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Some name');
 
         self::assertSame($deploymentLockIdentifier, $deployment->getDeploymentLockIdentifier());
     }
@@ -148,7 +144,7 @@ class DeploymentTest extends TestCase
      */
     public function deploymentContainsRelativeProjectRootPathForApplicationReleasePath(): void
     {
-        $deployment = new Deployment('Some name');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Some name');
 
         $node = new Node('Node');
         $node->setDeploymentPath('/deployment/path');
@@ -166,7 +162,7 @@ class DeploymentTest extends TestCase
      */
     public function deploymentContainsChangedRelativeProjectRootPathForApplicationReleasePath(): void
     {
-        $deployment = new Deployment('Some name');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Some name');
         $deployment->setRelativeProjectRootPath('htdocs');
 
         $node = new Node('Node');

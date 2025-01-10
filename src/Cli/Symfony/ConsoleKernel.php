@@ -17,9 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -47,12 +45,6 @@ final class ConsoleKernel
     private function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new CommandsToApplicationCompilerPass());
-        $container->registerForAutoconfiguration(
-            ContainerAwareInterface::class
-        )->addMethodCall(
-            'setContainer',
-            [new Reference(ContainerInterface::class)]
-        );
         $container->registerForAutoconfiguration(
             ShellCommandServiceAwareInterface::class
         )->addMethodCall(

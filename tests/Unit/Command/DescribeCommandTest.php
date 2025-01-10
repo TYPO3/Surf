@@ -42,8 +42,7 @@ class DescribeCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->deployment = new Deployment('TestDeployment');
-        $this->deployment->setContainer(static::getKernel()->getContainer());
+        $this->deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');

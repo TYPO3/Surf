@@ -12,24 +12,21 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Domain\Model;
 
 use Neos\Utility\Files;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use TYPO3\Surf\Domain\Enum\DeploymentStatus;
 use TYPO3\Surf\Exception as SurfException;
 use TYPO3\Surf\Integration\LoggerAwareTrait;
 use UnexpectedValueException;
-use Webmozart\Assert\Assert;
 
 /**
  * This is the base object exposed to a deployment configuration script and serves as a configuration builder and
  * model for an actual deployment.
  */
-class Deployment implements LoggerAwareInterface, ContainerAwareInterface
+class Deployment implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
-    use ContainerAwareTrait;
 
     /**
      * The name of this deployment
@@ -97,9 +94,11 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
     private bool $forceRun = false;
 
     private string $deploymentLockIdentifier;
+    private ContainerInterface $container;
 
-    public function __construct(string $name, string $deploymentLockIdentifier = null)
+    public function __construct(ContainerInterface $container, string $name, string $deploymentLockIdentifier = null)
     {
+        $this->container = $container;
         $this->name = $name;
         $this->status = DeploymentStatus::UNKNOWN();
         $this->releaseIdentifier = date('YmdHis');
@@ -459,8 +458,6 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     public function rollback(bool $dryRun = false): void
     {
-        Assert::notNull($this->container);
-
         $this->logger->notice('Rollback deployment ' . $this->name . ' (' . $this->releaseIdentifier . ')');
 
         /** @var RollbackWorkflow $workflow */
@@ -500,8 +497,6 @@ class Deployment implements LoggerAwareInterface, ContainerAwareInterface
 
     private function createSimpleWorkflow(): SimpleWorkflow
     {
-        Assert::notNull($this->container);
-
         $workflow = $this->container->get(SimpleWorkflow::class);
 
         if (!$workflow instanceof SimpleWorkflow) {

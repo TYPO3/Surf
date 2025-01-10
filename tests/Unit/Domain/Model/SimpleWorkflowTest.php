@@ -21,9 +21,12 @@ use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Domain\Service\TaskManager;
 use TYPO3\Surf\Exception as SurfException;
+use TYPO3\Surf\Tests\Unit\KernelAwareTrait;
 
 class SimpleWorkflowTest extends TestCase
 {
+    use KernelAwareTrait;
+
     /**
      * @test
      */
@@ -696,7 +699,7 @@ class SimpleWorkflowTest extends TestCase
      */
     protected function buildDeployment(array &$executedTasks = []): Deployment
     {
-        $deployment = new Deployment('Test deployment');
+        $deployment = new Deployment(static::getKernel()->getContainer(), 'Test deployment');
         $mockLogger = $this->createMock(LoggerInterface::class);
         // Enable log to console to debug tests
         // $mockLogger->expects(self::any())->method('log')->will($this->returnCallback(function($message) {

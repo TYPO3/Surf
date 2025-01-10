@@ -54,8 +54,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         $this->node = new Node('TestNode');
         $this->node->setHostname('hostname');
 
-        $this->deployment = new Deployment('TestDeployment');
-        $this->deployment->setContainer(static::getKernel()->getContainer());
+        $this->deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
         $this->deployment->setLogger($this->mockLogger->reveal());
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
