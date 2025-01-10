@@ -75,7 +75,7 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
                 }
                 $createDirectoryCommand = '"mkdir -p ' . $escapedTargetPath . '"';
                 $commands[] = ltrim("{$expect} ssh {$sshOptions}{$sshPort}{$username}{$hostname} {$createDirectoryCommand}");
-                $commands[] = ltrim("{$expect} scp {$sshOptions}{$scpPort}{$escapedSourcePath} {$username}{$hostname}:\"{$escapedTargetPath}\"");
+                $commands[] = ltrim("{$expect} scp {$sshOptions}{$scpPort}{$escapedSourcePath} {$username}{$hostname}:{$escapedTargetPath}");
             }
         }
 
