@@ -8,11 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Custom\MyExtension;
 use SelfUpdate\SelfUpdateCommand;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use TYPO3\Surf\Cli\Symfony\ConsoleApplication;
 use TYPO3\Surf\Cli\Symfony\ConsoleKernel;
 
@@ -20,6 +17,22 @@ requireAutoloader();
 
 
 $kernel = new ConsoleKernel('prod');
+$vendorPackages = array_map(
+    fn($dir) => json_decode(file_get_contents($dir . '/composer/installed.json'), true)['packages'] ?? [], 
+    array_keys(\Composer\Autoload\ClassLoader::getRegisteredLoaders())
+);
+foreach ($vendorPackages as $packages) {
+    foreach ($packages as $package) {
+        if (
+            'typo3-surf-exstension' == $package['type']
+            && null !== ($extension = $package['extra']['typo3-surf']['extension'] ?? null)
+            && class_exists($extension)
+        ) {
+            $kernel->addExtension(new $extension());
+        }
+    }
+}
+
 $kernel->boot();
 $container = $kernel->getContainer();
 /** @var ConsoleApplication $application */
