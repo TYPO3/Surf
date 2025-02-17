@@ -9,6 +9,7 @@
  */
 
 use SelfUpdate\SelfUpdateCommand;
+use SelfUpdate\SelfUpdateManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,7 +30,15 @@ foreach ($commandNamesToHide as $commandNameToHide) {
     $commandToHide = $application->get($commandNameToHide);
     $commandToHide->setHidden(true);
 }
-$application->add(new SelfUpdateCommand('TYPO3 Surf', $application->getVersion(), 'typo3/surf'));
+
+if(class_exists(SelfUpdateManager::class)){
+    $selfUpdateManager = new SelfUpdateManager('TYPO3 Surf', $application->getVersion(), 'typo3/surf');
+    $selfUpdateCommand = new SelfUpdateCommand($selfUpdateManager);
+} else {
+    $selfUpdateCommand = new SelfUpdateCommand('TYPO3 Surf', $application->getVersion(), 'typo3/surf');
+}
+$application->add($selfUpdateCommand);
+
 $application->run();
 
 function requireAutoloader()
