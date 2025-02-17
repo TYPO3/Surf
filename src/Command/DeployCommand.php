@@ -27,6 +27,11 @@ class DeployCommand extends Command
      */
     protected static $defaultName = 'deploy';
 
+    public static function getDefaultName(): ?string
+    {
+        return 'deploy';
+    }
+
     public function __construct(FactoryInterface $factory)
     {
         parent::__construct();

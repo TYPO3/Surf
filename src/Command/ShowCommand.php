@@ -32,6 +32,11 @@ class ShowCommand extends Command
         $this->factory = $factory;
     }
 
+    public static function getDefaultName(): ?string
+    {
+        return 'show';
+    }
+
     protected function configure(): void
     {
         $this->setDescription('Shows all the deployments depending on the directory configuration')

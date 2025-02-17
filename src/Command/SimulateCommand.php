@@ -33,6 +33,11 @@ class SimulateCommand extends Command
         $this->factory = $factory;
     }
 
+    public static function getDefaultName(): ?string
+    {
+        return 'simulate';
+    }
+
     protected function configure(): void
     {
         $this->setDescription('Simulates the deployment for the given name')

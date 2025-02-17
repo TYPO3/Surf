@@ -31,7 +31,7 @@ foreach ($commandNamesToHide as $commandNameToHide) {
     $commandToHide->setHidden(true);
 }
 
-if(class_exists(SelfUpdateManager::class)){
+if (class_exists(SelfUpdateManager::class)) {
     $selfUpdateManager = new SelfUpdateManager('TYPO3 Surf', $application->getVersion(), 'typo3/surf');
     $selfUpdateCommand = new SelfUpdateCommand($selfUpdateManager);
 } else {

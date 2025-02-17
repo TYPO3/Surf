@@ -35,6 +35,11 @@ class DescribeCommand extends Command
      */
     protected static $defaultName = 'describe';
 
+    public static function getDefaultName(): ?string
+    {
+        return 'describe';
+    }
+
     public function __construct(FactoryInterface $factory)
     {
         parent::__construct();

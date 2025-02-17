@@ -33,6 +33,11 @@ class RollbackCommand extends Command
         $this->factory = $factory;
     }
 
+    public static function getDefaultName(): ?string
+    {
+        return 'rollback';
+    }
+
     protected function configure(): void
     {
         $this->setDescription('Rollback current to previous release and remove current folder')
