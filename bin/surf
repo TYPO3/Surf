@@ -20,7 +20,7 @@ use TYPO3\Surf\Cli\Symfony\ConsoleKernel;
 requireAutoloader();
 
 
-$kernel = new ConsoleKernel('prod');
+$kernel = new ConsoleKernel('prod', '3.6.1');
 $kernel->boot();
 $container = $kernel->getContainer();
 /** @var ConsoleApplication $application */
