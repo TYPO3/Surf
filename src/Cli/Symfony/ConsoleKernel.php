@@ -31,10 +31,12 @@ final class ConsoleKernel
     private ?Container $container = null;
     private string $environment;
     private ?string $projectDir = null;
+    private string $version;
 
-    public function __construct(string $environment = 'dev')
+    public function __construct(string $environment = 'dev', string $version = '')
     {
         $this->environment = $environment;
+        $this->version = str_replace('.', '_', $version);
     }
 
     private function registerContainerConfiguration(LoaderInterface $loader): void
@@ -122,10 +124,10 @@ final class ConsoleKernel
     protected function getCacheDir(): string
     {
         if (Phar::running() !== '') {
-            return sys_get_temp_dir() . '/_surf';
+            return sys_get_temp_dir() . '/_surf_' . $this->version;
         }
 
-        return $this->getProjectDir() . '/var/cache/' . $this->environment;
+        return $this->getProjectDir() . '/var/cache/' . $this->version . '/' . $this->environment;
     }
 
     private function getProjectDir(): string
