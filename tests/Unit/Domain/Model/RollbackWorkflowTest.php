@@ -356,7 +356,7 @@ class RollbackWorkflowTest extends TestCase
             ],
         ];
 
-        self::assertEquals($expected, $executedTasks);
+        self::assertSame($expected, $executedTasks);
     }
 
     /**

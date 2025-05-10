@@ -60,7 +60,7 @@ class NodeTest extends TestCase
     {
         $node = new Node('Node');
 
-        self::assertEquals('shared', $node->getSharedDirectory());
+        self::assertSame('shared', $node->getSharedDirectory());
     }
 
     /**
@@ -75,7 +75,7 @@ class NodeTest extends TestCase
         $node = new Node('Node');
         $node->setOption('sharedDirectory', 'sharedAssets');
 
-        self::assertEquals('sharedAssets', $node->getSharedDirectory());
+        self::assertSame('sharedAssets', $node->getSharedDirectory());
     }
 
     /**

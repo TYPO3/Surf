@@ -71,7 +71,7 @@ class DeploymentTest extends TestCase
         $nodeNames = array_map(static fn (Node $node): string => $node->getName(), $nodes);
         sort($nodeNames);
 
-        self::assertEquals(['test1.example.com', 'test2.example.com'], $nodeNames);
+        self::assertSame(['test1.example.com', 'test2.example.com'], $nodeNames);
     }
 
     /**

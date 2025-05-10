@@ -430,7 +430,7 @@ class SimpleWorkflowTest extends TestCase
             ]
         ];
 
-        self::assertEquals($expected, $executedTasks);
+        self::assertSame($expected, $executedTasks);
     }
 
     public function taskRegistrationExamplesForDifferentApplications(): \Iterator
