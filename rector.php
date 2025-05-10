@@ -10,10 +10,12 @@ declare(strict_types=1);
  */
 
 use Rector\Config\RectorConfig;
+use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
+use Rector\ValueObject\PhpVersion;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
@@ -32,4 +34,8 @@ return static function (RectorConfig $rectorConfig): void {
         PHPUnitSetList::PHPUNIT_90,
         LevelSetList::UP_TO_PHP_74,
     ]);
+    $rectorConfig->rules([
+        ExplicitNullableParamTypeRector::class,
+    ]);
+    $rectorConfig->phpVersion(PhpVersion::PHP_84);
 };

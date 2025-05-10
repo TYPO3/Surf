@@ -15,7 +15,7 @@ use TYPO3\Surf\Domain\Model\Deployment;
 
 interface FactoryInterface
 {
-    public function getDeployment(string $deploymentName, string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment;
+    public function getDeployment(string $deploymentName, ?string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment;
 
     /**
      * Get available deployment names
@@ -24,17 +24,17 @@ interface FactoryInterface
      *
      * @return string[]
      */
-    public function getDeploymentNames(string $path = null): array;
+    public function getDeploymentNames(?string $path = null): array;
 
     /**
      * Get the root path of the surf deployment declarations
      *
      * This defaults to ./.surf if a NULL path is given.
      */
-    public function getDeploymentsBasePath(string $path = null): string;
+    public function getDeploymentsBasePath(?string $path = null): string;
 
     /**
      * Get the base path to local workspaces
      */
-    public function getWorkspacesBasePath(string $path = null): string;
+    public function getWorkspacesBasePath(?string $path = null): string;
 }

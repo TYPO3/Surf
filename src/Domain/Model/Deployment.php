@@ -101,7 +101,7 @@ class Deployment implements LoggerAwareInterface
     private string $deploymentLockIdentifier;
     private ContainerInterface $container;
 
-    public function __construct(ContainerInterface $container, string $name, string $deploymentLockIdentifier = null)
+    public function __construct(ContainerInterface $container, string $name, ?string $deploymentLockIdentifier = null)
     {
         $this->container = $container;
         $this->name = $name;
