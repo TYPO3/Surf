@@ -1,10 +1,15 @@
-parameters:
-  level: 8
-  editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
-  paths:
-    - src
-    - tests
+includes:
+    - phpstan-baseline.neon
 
-  inferPrivatePropertyTypeFromConstructor: true
-  checkMissingIterableValueType: false
-  checkGenericClassInNonGenericObjectType: false
+parameters:
+    level: 8
+    parallel:
+        # to prevent full thread lagging pc
+        maximumNumberOfProcesses: 7
+    editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+    paths:
+        - src
+        - tests
+
+    inferPrivatePropertyTypeFromConstructor: true
+    treatPhpDocTypesAsCertain: false

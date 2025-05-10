@@ -20,6 +20,9 @@ use TYPO3\Surf\Task\Generic\RollbackTask;
 
 final class RollbackWorkflow extends Workflow
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $stages;
 
     public function __construct(TaskManager $taskManager)

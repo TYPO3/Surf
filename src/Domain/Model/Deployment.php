@@ -61,6 +61,8 @@ class Deployment implements LoggerAwareInterface
 
     /**
      * Callbacks that should be executed after initialization
+     *
+     * @var array<int,mixed>
      */
     protected array $initCallbacks = [];
 
@@ -68,6 +70,9 @@ class Deployment implements LoggerAwareInterface
 
     protected bool $initialized = false;
 
+    /**
+     * @var array<string,mixed>
+     */
     protected array $options = [];
 
     /**
@@ -344,7 +349,7 @@ class Deployment implements LoggerAwareInterface
      * The options will include the deploymentPath and sharedPath for
      * unified option handling.
      *
-     * @return array An array of options indexed by option key
+     * @return array<string, mixed> An array of options indexed by option key
      */
     public function getOptions(): array
     {
@@ -367,8 +372,7 @@ class Deployment implements LoggerAwareInterface
     /**
      * Sets all options for the deployment
      *
-     * @param array $options The options to set indexed by option key
-     *
+     * @param array<string, mixed> $options The options to set indexed by option key
      * @return Deployment The current instance for chaining
      */
     public function setOptions(array $options): self

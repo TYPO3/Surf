@@ -36,11 +36,8 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     /**
      * Execute this task
      *
-     * @param array $cliArguments
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
+     * @param string[] $cliArguments
+     * @param array<string,mixed> $options
      * @return bool|mixed
      * @throws TaskExecutionException
      */
@@ -68,10 +65,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     /**
      * Simulate this task
      *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
@@ -81,10 +75,7 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     /**
      * Determines the path to the working directory and the target node by given options
      *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
+     * @param array<string,mixed> $options
      */
     protected function determineWorkingDirectoryAndTargetNode(
         Node $node,

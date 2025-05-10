@@ -49,6 +49,9 @@ use TYPO3\Surf\Task\Git\AbstractCheckoutTask;
  */
 class GitTask extends AbstractCheckoutTask
 {
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);

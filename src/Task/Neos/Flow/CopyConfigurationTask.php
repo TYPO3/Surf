@@ -38,6 +38,9 @@ class CopyConfigurationTask extends Task implements ShellCommandServiceAwareInte
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $configurationFileExtension = $options['configurationFileExtension'] ?? 'yaml';

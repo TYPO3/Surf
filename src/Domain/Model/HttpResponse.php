@@ -28,10 +28,16 @@ final class HttpResponse
 {
     private string $body;
 
+    /**
+     * @var string[][]
+     */
     private array $headers;
 
     private int $statusCode;
 
+    /**
+     * @param string[][] $headers
+     */
     public function __construct(string $body, array $headers, int $statusCode)
     {
         $this->body = $body;
@@ -44,6 +50,9 @@ final class HttpResponse
         return $this->body;
     }
 
+    /**
+     * @return string[][]
+     */
     public function getHeaders(): array
     {
         return $this->headers;

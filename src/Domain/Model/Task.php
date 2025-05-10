@@ -28,20 +28,31 @@ abstract class Task implements LoggerAwareInterface
     use LoggerAwareTrait;
 
     /**
+     * @param array<string,mixed> $options
      * @return mixed|void
      */
     abstract public function execute(Node $node, Application $application, Deployment $deployment, array $options = []);
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->configureOptions($options);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->configureOptions($options);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
     protected function configureOptions(array $options = []): array
     {
         try {

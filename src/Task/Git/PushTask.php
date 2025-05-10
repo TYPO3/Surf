@@ -44,6 +44,9 @@ class PushTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->logger->warning('This task is deprecated and will be removed in Version 4.0');
@@ -59,6 +62,7 @@ class PushTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {

@@ -33,6 +33,9 @@ class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareI
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $targetReleasePath = $deployment->getApplicationReleasePath($node);
@@ -58,6 +61,7 @@ class SymlinkConfigurationTask extends Task implements ShellCommandServiceAwareI
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {

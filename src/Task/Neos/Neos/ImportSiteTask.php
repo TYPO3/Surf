@@ -42,6 +42,9 @@ class ImportSiteTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for ImportSiteTask, got "%s"', get_class($application)));

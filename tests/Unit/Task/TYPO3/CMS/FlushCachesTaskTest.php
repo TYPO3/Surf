@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Task\TYPO3\CMS;
 
 use InvalidArgumentException;
-use Prophecy\Argument;
 use TYPO3\Surf\Application\BaseApplication;
 use TYPO3\Surf\Application\TYPO3\CMS;
 use TYPO3\Surf\Exception\InvalidConfigurationException;
@@ -62,8 +61,8 @@ class FlushCachesTaskTest extends BaseTaskTest
      */
     public function noSuitableCliArgumentsGiven(): void
     {
+        $this->mockLogger->expects(self::once())->method('warning')->with(self::anything());
         $this->task->execute($this->node, $this->application, $this->deployment, []);
-        $this->mockLogger->warning(Argument::any())->shouldBeCalledOnce();
     }
 
     /**

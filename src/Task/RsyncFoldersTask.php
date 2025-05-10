@@ -47,6 +47,9 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array{username?: string, folders?: array<int, string>, ignoreErrors?: bool, logOutput?: bool} $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
@@ -78,6 +81,7 @@ class RsyncFoldersTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * @codeCoverageIgnore
+     * @param array{username?: string, folders?: array<int, string>, ignoreErrors?: bool, logOutput?: bool} $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {

@@ -32,6 +32,9 @@ class PublishResourcesTask extends Task implements ShellCommandServiceAwareInter
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for PublishResourcesTask, got "%s"', get_class($application)));
@@ -45,6 +48,7 @@ class PublishResourcesTask extends Task implements ShellCommandServiceAwareInter
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {

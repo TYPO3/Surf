@@ -26,11 +26,17 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected function resolveSha1(Node $node, Deployment $deployment, array $options): string
     {
         if (isset($options['sha1'])) {
@@ -54,6 +60,9 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
         return $sha1;
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected function executeOrSimulateGitCloneOrUpdate(string $checkoutPath, Node $node, Deployment $deployment, array $options): string
     {
         $sha1 = $this->resolveSha1($node, $deployment, $options);
@@ -90,6 +99,9 @@ abstract class AbstractCheckoutTask extends Task implements ShellCommandServiceA
         return $sha1;
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected function executeOrSimulatePostGitCheckoutCommands(string $gitPath, string $sha1, Node $node, Deployment $deployment, array $options): void
     {
         if (!isset($options['gitPostCheckoutCommands'])) {

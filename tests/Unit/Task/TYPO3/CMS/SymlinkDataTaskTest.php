@@ -145,6 +145,10 @@ class SymlinkDataTaskTest extends BaseTaskTest
         $this->assertCommandExecuted("ln -sf '../{$dataPath}/test/assets' 'test/assets'");
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private function mergeOptions(array $options): array
     {
         return array_merge($this->application->getOptions(), $options);

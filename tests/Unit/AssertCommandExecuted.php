@@ -20,9 +20,6 @@ class AssertCommandExecuted extends Constraint
 
     public function __construct(string $expectedCommand)
     {
-        if (!is_string($expectedCommand)) {
-            throw new InvalidArgumentException('Expected command should be a string, ' . gettype($expectedCommand) . ' given');
-        }
         $this->expectedCommand = $expectedCommand;
     }
 

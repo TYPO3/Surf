@@ -46,6 +46,8 @@ class Node
      *
      * username: SSH username for connecting to this node (optional)
      * port: SSH port for connecting to the node (optional)
+     *
+     * @var array{hostname?: string, username?: string, port?: int}
      */
     protected array $options = [];
 
@@ -143,6 +145,9 @@ class Node
         return $this->setOption('hostname', $hostname);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOptions(): array
     {
         return array_merge($this->options, [
@@ -152,6 +157,9 @@ class Node
         ]);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setOptions(array $options): self
     {
         $this->options = $options;
@@ -171,7 +179,7 @@ class Node
             case 'sharedPath':
                 return $this->getSharedPath();
             default:
-                return $this->options[$key];
+                return $this->options[$key] ?? null;
         }
     }
 

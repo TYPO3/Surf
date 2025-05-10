@@ -27,6 +27,9 @@ abstract class Workflow implements LoggerAwareInterface
 
     protected TaskManager $taskManager;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $tasks = [];
 
     public function __construct(TaskManager $taskManager)
@@ -91,7 +94,7 @@ abstract class Workflow implements LoggerAwareInterface
     }
 
     /**
-     * @param array|string $tasks
+     * @param class-string[]|string $tasks
      */
     public function forStage(string $stage, $tasks): self
     {
@@ -104,7 +107,7 @@ abstract class Workflow implements LoggerAwareInterface
      * The tasks will be executed for the given stage. If an application is given,
      * the tasks will be executed only for the stage and application.
      *
-     * @param array|string $tasks
+     * @param class-string[]|string $tasks
      * @param string $stage The name of the stage when this task shall be executed
      * @param string $step A stage has three steps "before", "tasks" and "after"
      */
@@ -129,7 +132,7 @@ abstract class Workflow implements LoggerAwareInterface
      * The tasks will be executed for the given stage. If an application is given,
      * the tasks will be executed only for the stage and application.
      *
-     * @param array|string $tasks
+     * @param class-string[]|string $tasks
      * @param string $stage The name of the stage when this task shall be executed
      *
      * @return Workflow
@@ -146,7 +149,7 @@ abstract class Workflow implements LoggerAwareInterface
      *
      * The execution will not depend on a stage but on an optional application.
      *
-     * @param array|string $tasks
+     * @param array<int, class-string|string>|string $tasks
      */
     public function afterTask(string $task, $tasks, Application $application = null): self
     {
@@ -169,7 +172,7 @@ abstract class Workflow implements LoggerAwareInterface
      *
      * The execution will not depend on a stage but on an optional application.
      *
-     * @param array|string $tasks
+     * @param array<int, class-string|string>|string $tasks
      */
     public function beforeTask(string $task, $tasks, Application $application = null): self
     {
@@ -189,6 +192,8 @@ abstract class Workflow implements LoggerAwareInterface
 
     /**
      * Define a new task based on an existing task by setting options
+     *
+     * @param array<string, mixed> $options
      */
     public function defineTask(string $taskName, string $baseTask, array $options): self
     {
@@ -202,7 +207,7 @@ abstract class Workflow implements LoggerAwareInterface
     /**
      * Add tasks that shall be executed before the given stage
      *
-     * @param array|string $tasks
+     * @param class-string[]|string $tasks
      */
     public function beforeStage(string $stage, $tasks, Application $application = null): self
     {
@@ -214,7 +219,7 @@ abstract class Workflow implements LoggerAwareInterface
     /**
      * Add tasks that shall be executed after the given stage
      *
-     * @param array|string $tasks
+     * @param class-string[]|string $tasks
      */
     public function afterStage(string $stage, $tasks, Application $application = null): self
     {
@@ -225,6 +230,8 @@ abstract class Workflow implements LoggerAwareInterface
 
     /**
      * Override options for given task
+     *
+     * @param array<string,string> $options
      */
     public function setTaskOptions(string $taskName, array $options): self
     {
@@ -243,6 +250,8 @@ abstract class Workflow implements LoggerAwareInterface
 
     /**
      * Returns list of all registered tasks
+     *
+     * @return array<string, mixed>
      */
     public function getTasks(): array
     {
@@ -272,6 +281,8 @@ abstract class Workflow implements LoggerAwareInterface
      * Execute a task and consider configured before / after "hooks"
      *
      * Will also execute tasks that are registered to run before or after this task.
+     *
+     * @param array<int|string, mixed> $callstack
      */
     protected function executeTask(string $task, Node $node, Application $application, Deployment $deployment, string $stage, array &$callstack = []): void
     {

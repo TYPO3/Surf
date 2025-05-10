@@ -45,6 +45,9 @@ class FlushCacheListTask extends Task implements ShellCommandServiceAwareInterfa
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, FlowApplication::class, sprintf('Flow application needed for FlushCacheListTask, got "%s"', get_class($application)));

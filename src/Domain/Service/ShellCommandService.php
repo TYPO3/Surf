@@ -36,7 +36,7 @@ class ShellCommandService implements LoggerAwareInterface
     /**
      * Execute a shell command (locally or remote depending on the node hostname)
      *
-     * @param array|string $command The shell command to execute, either string or array of commands
+     * @param array<string>|string $command The shell command to execute, either string or array of commands
      * @param bool $ignoreErrors If this command should ignore exit codes unequal zero
      * @param bool $logOutput TRUE if the output of the command should be logged
      * @return mixed The output of the shell command or false if the command returned a non-zero exit code and $ignoreErrors was enabled.
@@ -58,7 +58,7 @@ class ShellCommandService implements LoggerAwareInterface
     /**
      * Simulate a command by just outputting what would be executed
      *
-     * @param array|string $command
+     * @param array<string>|string $command
      */
     public function simulate($command, Node $node, Deployment $deployment): bool
     {
@@ -75,7 +75,7 @@ class ShellCommandService implements LoggerAwareInterface
     /**
      * Execute or simulate a command (if the deployment is in dry run mode)
      *
-     * @param array|string $command
+     * @param array<string>|string $command
      * @param bool $ignoreErrors
      * @param bool $logOutput true if the output of the command should be logged
      * @return mixed false if command failed or command output as string
@@ -91,8 +91,9 @@ class ShellCommandService implements LoggerAwareInterface
     /**
      * Execute a shell command locally
      *
-     * @param array|string $command
+     * @param array<string>|string $command
      * @param bool $logOutput TRUE if the output of the command should be logged
+     * @return array<int, int|string>
      */
     protected function executeLocalCommand($command, Deployment $deployment, bool $logOutput = true): array
     {
@@ -105,9 +106,9 @@ class ShellCommandService implements LoggerAwareInterface
     /**
      * Execute a shell command via SSH
      *
-     * @param array|string $command
+     * @param array<string>|string $command
      * @param bool $logOutput TRUE if the output of the command should be logged
-     * @return array
+     * @return array<int, int|string>|mixed
      */
     protected function executeRemoteCommand($command, Node $node, Deployment $deployment, bool $logOutput = true)
     {
@@ -116,7 +117,7 @@ class ShellCommandService implements LoggerAwareInterface
 
         if ($node->hasOption('remoteCommandExecutionHandler')) {
             $remoteCommandExecutionHandler = $node->getOption('remoteCommandExecutionHandler');
-            /** @var $remoteCommandExecutionHandler callable */
+            /** @var callable $remoteCommandExecutionHandler */
             return $remoteCommandExecutionHandler($this, $command, $node, $deployment, $logOutput);
         }
 
@@ -164,7 +165,7 @@ class ShellCommandService implements LoggerAwareInterface
      * Open a process with symfony/process and process each line by logging and
      * collecting its output.
      *
-     * @return array The exit code of the command and the returned output
+     * @return array<int, int|string> The exit code of the command and the returned output
      */
     public function executeProcess(Deployment $deployment, string $command, bool $logOutput, string $logPrefix): array
     {
@@ -187,7 +188,7 @@ class ShellCommandService implements LoggerAwareInterface
     /**
      * Prepare a command
      *
-     * @param array|string|null $command
+     * @param array<string>|string|null $command
      * @return string
      * @throws TaskExecutionException
      */

@@ -19,6 +19,9 @@ use Webmozart\Assert\Assert;
 
 class MigrateFreshTask extends AbstractCliTask
 {
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         Assert::isInstanceOf(
@@ -38,6 +41,7 @@ class MigrateFreshTask extends AbstractCliTask
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {

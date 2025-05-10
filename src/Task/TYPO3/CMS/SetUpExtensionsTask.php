@@ -35,11 +35,13 @@ class SetUpExtensionsTask extends AbstractCliTask
         $this->versionChecker = $versionChecker;
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
-        /** @var CMS $application */
         Assert::isInstanceOf($application, CMS::class);
-
+        /** @var CMS $application */
         try {
             $scriptFileName = $this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options);
         } catch (InvalidConfigurationException $e) {

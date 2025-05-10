@@ -29,6 +29,9 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $fileName = sprintf('%s.tar.gz', $deployment->getReleaseIdentifier());
@@ -96,18 +99,25 @@ final class ScpTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $releasePath = $deployment->getApplicationReleasePath($node);
         $this->shell->execute(sprintf('rm -rf %s', $releasePath), $node, $deployment, true);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     private function getExcludes(array $options, string $fileName): string
     {
         $excludes = ['.git', $fileName];

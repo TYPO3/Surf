@@ -29,6 +29,9 @@ class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for UnitTestTask, got "%s"', get_class($application)));
@@ -39,6 +42,7 @@ class UnitTestTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {

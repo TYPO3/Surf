@@ -38,6 +38,8 @@ class InstallTask extends AbstractComposerTask
 
     /**
      * Arguments for the command
+     *
+     * @var string[]
      */
     protected array $arguments = [
         '--no-ansi',

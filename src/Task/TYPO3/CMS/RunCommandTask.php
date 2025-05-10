@@ -24,11 +24,13 @@ use Webmozart\Assert\Assert;
  */
 class RunCommandTask extends AbstractCliTask
 {
+    /**
+     * @param array<string,array<string,mixed>|string> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
-        /** @var CMS $application */
         Assert::isInstanceOf($application, CMS::class);
-
+        /** @var CMS $application */
         $options = $this->configureOptions($options);
 
         $arguments = array_merge([$this->getTypo3ConsoleScriptFileName($node, $application, $deployment, $options), $options['command']], $options['arguments']);

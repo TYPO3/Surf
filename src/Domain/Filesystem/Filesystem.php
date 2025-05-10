@@ -65,6 +65,9 @@ class Filesystem implements FilesystemInterface
         return mkdir($directory, 0777, true);
     }
 
+    /**
+     * @return string[]
+     */
     public function glob(string $pattern): array
     {
         $matches = glob($pattern);

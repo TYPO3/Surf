@@ -26,8 +26,14 @@ final class TaskInHistory
 
     private string $stage;
 
+    /**
+     * @var string[]
+     */
     private array $options;
 
+    /**
+     * @param array<string,string> $options
+     */
     private function __construct(Task $task, Node $node, Application $application, Deployment $deployment, string $stage, array $options)
     {
         $this->task = $task;
@@ -38,6 +44,9 @@ final class TaskInHistory
         $this->options = $options;
     }
 
+    /**
+     * @param array<string,string> $options
+     */
     public static function create(Task $task, Node $node, Application $application, Deployment $deployment, string $stage, array $options): TaskInHistory
     {
         return new self($task, $node, $application, $deployment, $stage, $options);
@@ -68,6 +77,9 @@ final class TaskInHistory
         return $this->stage;
     }
 
+    /**
+     * @return array<string,string>
+     */
     public function options(): array
     {
         return $this->options;

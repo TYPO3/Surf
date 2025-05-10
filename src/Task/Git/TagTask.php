@@ -47,6 +47,9 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->logger->warning('This task is deprecated and will be removed in Version 4.0');
@@ -71,12 +74,16 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
+    /**
+     * @param array<string,string|null> $options
+     */
     protected function validateOptions(array $options): void
     {
         if (!isset($options['tagName'])) {
@@ -88,6 +95,10 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
+    /**
+     * @param array<string, string> $options
+     * @return array<string, string>
+     */
     protected function processOptions(array $options, Deployment $deployment): array
     {
         foreach (['tagName', 'description'] as $optionName) {
@@ -97,7 +108,7 @@ class TagTask extends Task implements ShellCommandServiceAwareInterface
                     '{deploymentName}'
                 ],
                 [
-                    $deployment->getReleaseIdentifier(),
+                    $deployment->getReleaseIdentifier() ?? '',
                     $deployment->getName()
                 ],
                 $options[$optionName]
