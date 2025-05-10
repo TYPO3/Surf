@@ -15,7 +15,7 @@ interface ClockInterface
 {
     public function currentTime(): int;
 
-    public function stringToTime(string $string, int $time = null): int;
+    public function stringToTime(string $string, ?int $time = null): int;
 
     public function createTimestampFromFormat(string $format, string $time): int;
 }

@@ -51,7 +51,7 @@ abstract class Workflow implements LoggerAwareInterface
     /**
      * Remove the given task from all stages and applications
      */
-    public function removeTask(string $removeTask, Application $application = null): self
+    public function removeTask(string $removeTask, ?Application $application = null): self
     {
         $removeApplicationName = $application instanceof Application ? $application->getName() : null;
 
@@ -111,7 +111,7 @@ abstract class Workflow implements LoggerAwareInterface
      * @param string $stage The name of the stage when this task shall be executed
      * @param string $step A stage has three steps "before", "tasks" and "after"
      */
-    protected function addTaskToStage($tasks, string $stage, Application $application = null, string $step = 'tasks'): void
+    protected function addTaskToStage($tasks, string $stage, ?Application $application = null, string $step = 'tasks'): void
     {
         if (!is_array($tasks)) {
             $tasks = [$tasks];
@@ -137,7 +137,7 @@ abstract class Workflow implements LoggerAwareInterface
      *
      * @return Workflow
      */
-    public function addTask($tasks, string $stage, Application $application = null)
+    public function addTask($tasks, string $stage, ?Application $application = null)
     {
         $this->addTaskToStage($tasks, $stage, $application);
 
@@ -151,7 +151,7 @@ abstract class Workflow implements LoggerAwareInterface
      *
      * @param array<int, class-string|string>|string $tasks
      */
-    public function afterTask(string $task, $tasks, Application $application = null): self
+    public function afterTask(string $task, $tasks, ?Application $application = null): self
     {
         if (!is_array($tasks)) {
             $tasks = [$tasks];
@@ -174,7 +174,7 @@ abstract class Workflow implements LoggerAwareInterface
      *
      * @param array<int, class-string|string>|string $tasks
      */
-    public function beforeTask(string $task, $tasks, Application $application = null): self
+    public function beforeTask(string $task, $tasks, ?Application $application = null): self
     {
         if (!is_array($tasks)) {
             $tasks = [$tasks];
@@ -209,7 +209,7 @@ abstract class Workflow implements LoggerAwareInterface
      *
      * @param class-string[]|string $tasks
      */
-    public function beforeStage(string $stage, $tasks, Application $application = null): self
+    public function beforeStage(string $stage, $tasks, ?Application $application = null): self
     {
         $this->addTaskToStage($tasks, $stage, $application, 'before');
 
@@ -221,7 +221,7 @@ abstract class Workflow implements LoggerAwareInterface
      *
      * @param class-string[]|string $tasks
      */
-    public function afterStage(string $stage, $tasks, Application $application = null): self
+    public function afterStage(string $stage, $tasks, ?Application $application = null): self
     {
         $this->addTaskToStage($tasks, $stage, $application, 'after');
 

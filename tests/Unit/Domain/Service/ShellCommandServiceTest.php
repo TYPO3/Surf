@@ -34,10 +34,10 @@ class ShellCommandServiceTest extends TestCase
      */
     public function executeRemoteCommandRespectsOptionsInSshCommand(
         string $expectedCommandArguments,
-        string $username = null,
-        string $password = null,
-        int $port = null,
-        string $privateKey = null
+        ?string $username = null,
+        ?string $password = null,
+        ?int $port = null,
+        ?string $privateKey = null
     ): void {
         /** @var MockObject|ShellCommandService $service */
         $service = $this->createPartialMock(ShellCommandService::class, ['executeProcess']);

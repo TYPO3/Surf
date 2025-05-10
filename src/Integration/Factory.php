@@ -40,7 +40,7 @@ class Factory implements FactoryInterface
         $this->logger = $logger;
     }
 
-    public function getDeployment(string $deploymentName, string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment
+    public function getDeployment(string $deploymentName, ?string $configurationPath = null, bool $simulateDeployment = true, bool $initialize = true, bool $forceDeployment = false): Deployment
     {
         $deployment = $this->createDeployment($deploymentName, $configurationPath);
 
@@ -65,7 +65,7 @@ class Factory implements FactoryInterface
     /**
      * @inheritDoc
      */
-    public function getDeploymentNames(string $path = null): array
+    public function getDeploymentNames(?string $path = null): array
     {
         $path = $this->getDeploymentsBasePath($path);
         $files = $this->filesystem->glob(Files::concatenatePaths([$path, '*.php']));
@@ -76,7 +76,7 @@ class Factory implements FactoryInterface
     /**
      * @inheritDoc
      */
-    public function getDeploymentsBasePath(string $path = null): string
+    public function getDeploymentsBasePath(?string $path = null): string
     {
         $localDeploymentDescription = $this->filesystem->getRealPath('./.surf');
         if (! $path && $this->filesystem->isDirectory($localDeploymentDescription)) {
@@ -91,7 +91,7 @@ class Factory implements FactoryInterface
     /**
      * @inheritDoc
      */
-    public function getWorkspacesBasePath(string $path = null): string
+    public function getWorkspacesBasePath(?string $path = null): string
     {
         $workspacesBasePath = getenv('SURF_WORKSPACE');
 
@@ -124,7 +124,7 @@ class Factory implements FactoryInterface
      * The script has access to a deployment object as "$deployment". This could change
      * in the future.
      */
-    protected function createDeployment(string $deploymentName, string $path = null): Deployment
+    protected function createDeployment(string $deploymentName, ?string $path = null): Deployment
     {
         $deploymentConfigurationPath = $this->getDeploymentsBasePath($path);
         $workspacesBasePath = $this->getWorkspacesBasePath();
