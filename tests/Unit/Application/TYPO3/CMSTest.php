@@ -35,7 +35,7 @@ class CMSTest extends TestCase
     public function setContextSuccessfully(): void
     {
         $this->subject->setContext('Production');
-        self::assertSame($this->subject->getContext(), 'Production');
+        self::assertSame('Production', $this->subject->getContext());
     }
 
     /**
