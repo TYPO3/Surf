@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2']
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
 
     name: PHP ${{ matrix.php }} unittests
     steps:
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2']
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
 
     name: Can be executed with PHP ${{ matrix.php }}
     steps:
