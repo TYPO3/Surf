@@ -131,7 +131,10 @@ class ShellCommandServiceTest extends TestCase
 
         $node->setRemoteCommandExecutionHandler(function (ShellCommandService $shellCommandService, $command, Node $node, Deployment $deployment, $logOutput) use (&$arguments): array {
             $arguments = func_get_args();
-            return [0, 'Hello World'];
+            return [
+                0,
+                'Hello World',
+            ];
         });
 
         $deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
