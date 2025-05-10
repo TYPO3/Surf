@@ -176,10 +176,8 @@ class DeploymentTest extends TestCase
         );
     }
 
-    public function wrongDeploymentLockIdentifiersProvided(): array
+    public function wrongDeploymentLockIdentifiersProvided(): \Iterator
     {
-        return [
-            [''],
-        ];
+        yield [''];
     }
 }

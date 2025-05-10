@@ -73,32 +73,26 @@ class FlowTest extends TestCase
         self::assertContains(InstallTask::class, $tasks['stage'][$this->subject->getName()]['update']['tasks']);
     }
 
-    public function commandPackageKeyProvider(): array
+    public function commandPackageKeyProvider(): \Iterator
     {
-        return [
-            ['1.0', 'typo3.flow3'],
-            ['2.0', 'typo3.flow'],
-            ['3.8', 'typo3.flow'],
-            ['4.0', 'neos.flow'],
-        ];
+        yield ['1.0', 'typo3.flow3'];
+        yield ['2.0', 'typo3.flow'];
+        yield ['3.8', 'typo3.flow'];
+        yield ['4.0', 'neos.flow'];
     }
 
-    public function flowScriptNameProvider(): array
+    public function flowScriptNameProvider(): \Iterator
     {
-        return [
-            ['1.0', 'flow3'],
-            ['1.1', 'flow3'],
-            ['1.2', 'flow']
-        ];
+        yield ['1.0', 'flow3'];
+        yield ['1.1', 'flow3'];
+        yield ['1.2', 'flow'];
     }
 
-    public function essentialsDirectoryNameProvider(): array
+    public function essentialsDirectoryNameProvider(): \Iterator
     {
-        return [
-            ['1.0', 'Common'],
-            ['1.1', 'Common'],
-            ['1.2', 'BuildEssentials']
-        ];
+        yield ['1.0', 'Common'];
+        yield ['1.1', 'Common'];
+        yield ['1.2', 'BuildEssentials'];
     }
 
     /**

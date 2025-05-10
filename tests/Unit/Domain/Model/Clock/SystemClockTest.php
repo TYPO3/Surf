@@ -52,27 +52,21 @@ class SystemClockTest extends TestCase
         self::assertSame($expected, $this->subject->createTimestampFromFormat($format, $time));
     }
 
-    public function validFormatCanBeConvertedToTimestamp(): array
+    public function validFormatCanBeConvertedToTimestamp(): \Iterator
     {
-        return [
-            ['YmdHis', date('YmdHis', 1535216980), 1535216980],
-        ];
+        yield ['YmdHis', date('YmdHis', 1535216980), 1535216980];
     }
 
-    public function validStringCanBeConvertedToTimestamp(): array
+    public function validStringCanBeConvertedToTimestamp(): \Iterator
     {
-        return [
-            ['1 day ago', 1535216980],
-            ['2 days ago', 1535216980],
-            ['1 second ago', 1535216980],
-        ];
+        yield ['1 day ago', 1535216980];
+        yield ['2 days ago', 1535216980];
+        yield ['1 second ago', 1535216980];
     }
 
-    public function invalidStringsCannotBeConvertedToTimestamp(): array
+    public function invalidStringsCannotBeConvertedToTimestamp(): \Iterator
     {
-        return [
-            ['2 apples ago'],
-            ['One second and half'],
-        ];
+        yield ['2 apples ago'];
+        yield ['One second and half'];
     }
 }

@@ -60,10 +60,8 @@ class LocalShellTaskTest extends BaseTaskTest
         $this->assertCommandExecuted($expectedCommand);
     }
 
-    public function commands(): array
+    public function commands(): \Iterator
     {
-        return [
-            ['ln -s {workspacePath}', sprintf('ln -s %s', escapeshellarg('./Data/Surf/TestDeployment/TestApplication'))],
-        ];
+        yield ['ln -s {workspacePath}', sprintf('ln -s %s', escapeshellarg('./Data/Surf/TestDeployment/TestApplication'))];
     }
 }

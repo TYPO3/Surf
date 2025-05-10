@@ -84,126 +84,124 @@ class RollbackWorkflowTest extends TestCase
      *
      * Tests a simple setup with one node and one application.
      */
-    public function globalTaskDefinitions(): array
+    public function globalTaskDefinitions(): \Iterator
     {
-        return [
+        yield [
+            'Just one global task in stage initialize',
+            static fn (RollbackWorkflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                $workflow
+                    ->addTask('typo3.surf:test:setup', RollbackWorkflowStage::STEP_01_INITIALIZE);
+            },
             [
-                'Just one global task in stage initialize',
-                static fn (RollbackWorkflow $workflow, Application $application): callable => static function () use ($workflow): void {
-                    $workflow
-                        ->addTask('typo3.surf:test:setup', RollbackWorkflowStage::STEP_01_INITIALIZE);
-                },
                 [
-                    [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
-                        'options' => []
-                    ],
-                    [
-                        'task' => RollbackTask::class,
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_02_EXECUTE,
-                        'options' => []
-                    ]
+                    'task' => 'typo3.surf:test:setup',
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
+                    'options' => []
+                ],
+                [
+                    'task' => RollbackTask::class,
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_02_EXECUTE,
+                    'options' => []
                 ]
-            ],
+            ]
+        ];
+        yield [
+            'Add multiple tasks with afterTask',
+            fn (RollbackWorkflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                $workflow
+                    ->addTask('typo3.surf:test:setup', RollbackWorkflowStage::STEP_01_INITIALIZE)
+                    ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
+                    ->afterTask('typo3.surf:test:secondsetup', 'typo3.surf:test:finalize');
+            },
             [
-                'Add multiple tasks with afterTask',
-                fn (RollbackWorkflow $workflow, Application $application): callable => static function () use ($workflow): void {
-                    $workflow
-                        ->addTask('typo3.surf:test:setup', RollbackWorkflowStage::STEP_01_INITIALIZE)
-                        ->afterTask('typo3.surf:test:setup', ['typo3.surf:test:secondsetup', 'typo3.surf:test:thirdsetup'])
-                        ->afterTask('typo3.surf:test:secondsetup', 'typo3.surf:test:finalize');
-                },
                 [
-                    [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
-                        'options' => []
-                    ],
-                    [
-                        'task' => 'typo3.surf:test:secondsetup',
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
-                        'options' => []
-                    ],
-                    [
-                        'task' => 'typo3.surf:test:finalize',
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
-                        'options' => []
-                    ],
-                    [
-                        'task' => 'typo3.surf:test:thirdsetup',
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
-                        'options' => []
-                    ],
-                    [
-                        'task' => RollbackTask::class,
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_02_EXECUTE,
-                        'options' => []
-                    ]
+                    'task' => 'typo3.surf:test:setup',
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
+                    'options' => []
+                ],
+                [
+                    'task' => 'typo3.surf:test:secondsetup',
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
+                    'options' => []
+                ],
+                [
+                    'task' => 'typo3.surf:test:finalize',
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
+                    'options' => []
+                ],
+                [
+                    'task' => 'typo3.surf:test:thirdsetup',
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
+                    'options' => []
+                ],
+                [
+                    'task' => RollbackTask::class,
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_02_EXECUTE,
+                    'options' => []
                 ]
-            ],
+            ]
+        ];
+        yield [
+            'Tasks in different stages',
+            static fn (RollbackWorkflow $workflow, Application $application): callable => static function () use ($workflow): void {
+                $workflow
+                    ->addTask('typo3.surf:test:setup', RollbackWorkflowStage::STEP_01_INITIALIZE)
+                    ->addTask('typo3.surf:test:checkout', RollbackWorkflowStage::STEP_02_EXECUTE)
+                    ->addTask('typo3.surf:test:symlink', RollbackWorkflowStage::STEP_03_CLEANUP);
+            },
             [
-                'Tasks in different stages',
-                static fn (RollbackWorkflow $workflow, Application $application): callable => static function () use ($workflow): void {
-                    $workflow
-                        ->addTask('typo3.surf:test:setup', RollbackWorkflowStage::STEP_01_INITIALIZE)
-                        ->addTask('typo3.surf:test:checkout', RollbackWorkflowStage::STEP_02_EXECUTE)
-                        ->addTask('typo3.surf:test:symlink', RollbackWorkflowStage::STEP_03_CLEANUP);
-                },
                 [
-                    [
-                        'task' => 'typo3.surf:test:setup',
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
-                        'options' => []
-                    ],
-                    [
-                        'task' => 'typo3.surf:test:checkout',
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_02_EXECUTE,
-                        'options' => []
-                    ],
-                    [
-                        'task' => RollbackTask::class,
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_02_EXECUTE,
-                        'options' => []
-                    ],
-                    [
-                        'task' => 'typo3.surf:test:symlink',
-                        'node' => 'test1.example.com',
-                        'application' => 'Test application',
-                        'deployment' => 'Test rollback deployment',
-                        'stage' => RollbackWorkflowStage::STEP_03_CLEANUP,
-                        'options' => []
-                    ]
+                    'task' => 'typo3.surf:test:setup',
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_01_INITIALIZE,
+                    'options' => []
+                ],
+                [
+                    'task' => 'typo3.surf:test:checkout',
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_02_EXECUTE,
+                    'options' => []
+                ],
+                [
+                    'task' => RollbackTask::class,
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_02_EXECUTE,
+                    'options' => []
+                ],
+                [
+                    'task' => 'typo3.surf:test:symlink',
+                    'node' => 'test1.example.com',
+                    'application' => 'Test application',
+                    'deployment' => 'Test rollback deployment',
+                    'stage' => RollbackWorkflowStage::STEP_03_CLEANUP,
+                    'options' => []
                 ]
             ]
         ];

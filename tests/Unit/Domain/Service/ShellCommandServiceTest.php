@@ -80,41 +80,39 @@ class ShellCommandServiceTest extends TestCase
     /**
      * Data provider for executeRemoteCommandRespectsOptionsInSshCommand
      */
-    public function commandOptionDataProvider(): array
+    public function commandOptionDataProvider(): \Iterator
     {
         $resourcesPath = realpath(__DIR__ . '/../../../../Resources');
-        return [
-            [
-                'ssh -A \'remote-host.example.com\'',
-                null,
-                null,
-                null
-            ],
-            [
-                'ssh -A \'jdoe@remote-host.example.com\'',
-                'jdoe',
-                null,
-                null
-            ],
-            [
-                'ssh -A -p \'12345\' \'jdoe@remote-host.example.com\'',
-                'jdoe',
-                null,
-                12345
-            ],
-            [
-                'ssh -A -i \'~/.ssh/foo\' \'jdoe@remote-host.example.com\'',
-                'jdoe',
-                null,
-                null,
-                '~/.ssh/foo'
-            ],
-            [
-                'expect \'' . $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',
-                'jdoe',
-                'myPassword',
-                null
-            ],
+        yield [
+            'ssh -A \'remote-host.example.com\'',
+            null,
+            null,
+            null
+        ];
+        yield [
+            'ssh -A \'jdoe@remote-host.example.com\'',
+            'jdoe',
+            null,
+            null
+        ];
+        yield [
+            'ssh -A -p \'12345\' \'jdoe@remote-host.example.com\'',
+            'jdoe',
+            null,
+            12345
+        ];
+        yield [
+            'ssh -A -i \'~/.ssh/foo\' \'jdoe@remote-host.example.com\'',
+            'jdoe',
+            null,
+            null,
+            '~/.ssh/foo'
+        ];
+        yield [
+            'expect \'' . $resourcesPath . '/Private/Scripts/PasswordSshLogin.expect\' \'myPassword\' ssh -A -o PubkeyAuthentication=no \'jdoe@remote-host.example.com\'',
+            'jdoe',
+            'myPassword',
+            null
         ];
     }
 

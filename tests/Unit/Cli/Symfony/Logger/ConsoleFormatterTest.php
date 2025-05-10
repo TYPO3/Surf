@@ -36,41 +36,39 @@ class ConsoleFormatterTest extends TestCase
         self::assertSame($expectedOutput, $this->subject->format($record));
     }
 
-    public function records(): array
+    public function records(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'level' => Logger::ERROR,
-                    'extra' => [],
-                    'context' => []
-                ],
-                "<error>%message%</error>\n"
+                'level' => Logger::ERROR,
+                'extra' => [],
+                'context' => []
             ],
+            "<error>%message%</error>\n"
+        ];
+        yield [
             [
-                [
-                    'level' => Logger::NOTICE,
-                    'extra' => [],
-                    'context' => []
-                ],
-                "<comment>%message%</comment>\n"
+                'level' => Logger::NOTICE,
+                'extra' => [],
+                'context' => []
             ],
+            "<comment>%message%</comment>\n"
+        ];
+        yield [
             [
-                [
-                    'level' => Logger::INFO,
-                    'extra' => [],
-                    'context' => []
-                ],
-                "<info>%message%</info>\n"
+                'level' => Logger::INFO,
+                'extra' => [],
+                'context' => []
             ],
+            "<info>%message%</info>\n"
+        ];
+        yield [
             [
-                [
-                    'level' => Logger::DEBUG,
-                    'extra' => [],
-                    'context' => []
-                ],
-                "<debug>%message%</debug>\n"
+                'level' => Logger::DEBUG,
+                'extra' => [],
+                'context' => []
             ],
+            "<debug>%message%</debug>\n"
         ];
     }
 }

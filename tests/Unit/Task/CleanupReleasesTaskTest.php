@@ -171,33 +171,31 @@ class CleanupReleasesTaskTest extends BaseTaskTest
         );
     }
 
-    public function keepReleasesByAgeDataProvider(): array
+    public function keepReleasesByAgeDataProvider(): \Iterator
     {
-        return [
-            // Remove folders older than 121 seconds
+        // Remove folders older than 121 seconds
+        yield [
+            1535191400,
             [
-                1535191400,
-                [
-                    '0 seconds ago',
-                    '60 seconds ago',
-                    '120 seconds ago',
-                    '180 seconds ago',
-                ],
-                '121 seconds ago',
-                ['180 seconds ago'],
+                '0 seconds ago',
+                '60 seconds ago',
+                '120 seconds ago',
+                '180 seconds ago',
             ],
-            // Remove folders older than 2 days
+            '121 seconds ago',
+            ['180 seconds ago'],
+        ];
+        // Remove folders older than 2 days
+        yield [
+            1535191400,
             [
-                1535191400,
-                [
-                    '1 second ago',
-                    '10 minutes ago',
-                    '2 days 1 second ago',
-                    '3 days ago',
-                ],
-                '2 days ago',
-                ['2 days 1 second ago', '3 days ago'],
+                '1 second ago',
+                '10 minutes ago',
+                '2 days 1 second ago',
+                '3 days ago',
             ],
+            '2 days ago',
+            ['2 days 1 second ago', '3 days ago'],
         ];
     }
 }

@@ -61,10 +61,8 @@ class ShellTaskTest extends BaseTaskTest
         $this->assertCommandExecuted($expectedCommand);
     }
 
-    public function commands(): array
+    public function commands(): \Iterator
     {
-        return [
-            ['ln -s {sharedPath}', sprintf('ln -s %s', escapeshellarg('/shared'))],
-        ];
+        yield ['ln -s {sharedPath}', sprintf('ln -s %s', escapeshellarg('/shared'))];
     }
 }

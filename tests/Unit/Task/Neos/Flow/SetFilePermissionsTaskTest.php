@@ -46,30 +46,28 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
         $this->assertCommandExecuted(sprintf($expectedCommand, $this->deployment->getReleaseIdentifier()));
     }
 
-    public function executeWithDifferentOptions(): array
+    public function executeWithDifferentOptions(): \Iterator
     {
-        return [
-            [
-                // Default
-                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'www-data\' \'www-data\'',
-            ],
-            [
-                // Override the shellUsername and the username. The shellUsername has the precedence
-                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'shellUsername\' \'www-data\' \'www-data\'',
-                ['shellUsername' => 'shellUsername', 'username' => 'no_effect']
-            ],
-            [
-                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'username\' \'www-data\' \'www-data\'',
-                ['username' => 'username']
-            ],
-            [
-                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'www-data\'',
-                ['webserverUsername' => 'webserverUsername']
-            ],
-            [
-                'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'webserverGroupname\'',
-                ['webserverUsername' => 'webserverUsername', 'webserverGroupname' => 'webserverGroupname']
-            ],
+        yield [
+            // Default
+            'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'www-data\' \'www-data\'',
+        ];
+        yield [
+            // Override the shellUsername and the username. The shellUsername has the precedence
+            'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'shellUsername\' \'www-data\' \'www-data\'',
+            ['shellUsername' => 'shellUsername', 'username' => 'no_effect']
+        ];
+        yield [
+            'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'username\' \'www-data\' \'www-data\'',
+            ['username' => 'username']
+        ];
+        yield [
+            'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'www-data\'',
+            ['webserverUsername' => 'webserverUsername']
+        ];
+        yield [
+            'cd /releases/%s && FLOW_CONTEXT=Production php ./flow neos.flow:core:setfilepermissions \'root\' \'webserverUsername\' \'webserverGroupname\'',
+            ['webserverUsername' => 'webserverUsername', 'webserverGroupname' => 'webserverGroupname']
         ];
     }
 }
