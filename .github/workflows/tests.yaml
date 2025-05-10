@@ -12,13 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
           coverage: none
+
       - name: Install overtrue/phplint
         run: composer global require "overtrue/phplint:^2.0" --no-ansi --no-interaction --no-progress --classmap-authoritative
+
       - name: Run overtrue/phplint
         run: phplint ./
 
@@ -37,7 +40,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none # disable xdebug, pcov
 
-      - uses: "ramsey/composer-install@v2"
+      - uses: ramsey/composer-install@v2
         with:
           composer-options: "--no-interaction --no-suggest"
 
@@ -58,7 +61,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none # disable xdebug, pcov
 
-      - uses: "ramsey/composer-install@v2"
+      - uses: ramsey/composer-install@v2
         with:
           composer-options: "--no-interaction --no-suggest"
 

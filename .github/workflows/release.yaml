@@ -22,7 +22,7 @@ jobs:
       - name: Install Box global
         run: composer global require "humbug/box:^3.8" --no-ansi --no-interaction --no-progress --classmap-authoritative
 
-      - uses: "ramsey/composer-install@v2"
+      - uses: ramsey/composer-install@v2
         with:
           composer-options: "--no-ansi --no-interaction --no-dev --classmap-authoritative"
 
