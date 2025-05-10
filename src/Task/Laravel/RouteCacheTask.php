@@ -19,6 +19,9 @@ use Webmozart\Assert\Assert;
 
 class RouteCacheTask extends AbstractCliTask
 {
+    /**
+     * @param array<string,string> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         Assert::isInstanceOf(

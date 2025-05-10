@@ -26,6 +26,9 @@ class SymlinkStorageTask extends Task implements ShellCommandServiceAwareInterfa
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $targetReleasePath = $deployment->getApplicationReleasePath($node);

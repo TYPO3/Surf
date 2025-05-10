@@ -33,6 +33,9 @@ class ConsoleHandler extends AbstractProcessingHandler
 {
     private OutputInterface $output;
 
+    /**
+     * @var array<int, mixed>
+     */
     private array $verbosityLevelMap = [
         OutputInterface::VERBOSITY_NORMAL => Logger::INFO,
         OutputInterface::VERBOSITY_VERBOSE => Logger::DEBUG,
@@ -40,6 +43,9 @@ class ConsoleHandler extends AbstractProcessingHandler
         OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
     ];
 
+    /**
+     * @param array<int, array<int, mixed>> $verbosityLevelMap
+     */
     public function __construct(OutputInterface $output, bool $bubble = true, array $verbosityLevelMap = [])
     {
         parent::__construct(Logger::DEBUG, $bubble);

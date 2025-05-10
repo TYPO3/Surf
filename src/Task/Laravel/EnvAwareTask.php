@@ -29,7 +29,7 @@ class EnvAwareTask extends Task implements ShellCommandServiceAwareInterface
      * @param Node $node
      * @param Application $application
      * @param Deployment $deployment
-     * @param array $options
+     * @param array<string,mixed> $options
      *
      * @throws TaskExecutionException
      */

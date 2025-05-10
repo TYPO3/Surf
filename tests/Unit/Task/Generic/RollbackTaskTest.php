@@ -61,7 +61,7 @@ previous',
 current
 previous',
         ];
-        $this->mockLogger->notice('No more releases you can revert to.')->shouldBeCalledOnce();
+        $this->mockLogger->expects(self::once())->method('notice')->with('No more releases you can revert to.');
 
         $this->task->execute($this->node, $this->application, $this->deployment);
 

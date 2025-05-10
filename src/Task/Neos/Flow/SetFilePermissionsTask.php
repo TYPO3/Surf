@@ -46,6 +46,9 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,string> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf($application, Flow::class, sprintf('Flow application needed for SetFilePermissionsTask, got "%s"', get_class($application)));
@@ -70,6 +73,7 @@ class SetFilePermissionsTask extends Task implements ShellCommandServiceAwareInt
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {

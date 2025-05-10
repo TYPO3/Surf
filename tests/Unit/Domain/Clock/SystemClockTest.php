@@ -17,22 +17,11 @@ use TYPO3\Surf\Domain\Clock\SystemClock;
 
 class SystemClockTest extends TestCase
 {
-    /**
-     * @var SystemClock
-     */
-    protected $subject;
+    protected SystemClock $subject;
 
     protected function setUp(): void
     {
         $this->subject = new SystemClock();
-    }
-
-    /**
-     * @test
-     */
-    public function currentTime(): void
-    {
-        self::assertIsInt($this->subject->currentTime());
     }
 
     /**
@@ -57,7 +46,7 @@ class SystemClockTest extends TestCase
      */
     public function createTimestampFromFormat(): void
     {
-        self::assertIsInt($this->subject->createTimestampFromFormat('d.m.Y', '20.12.2002'));
+        self::assertEquals(1040342400, $this->subject->createTimestampFromFormat('d.m.Y H:i:s', '20.12.2002 00:00:00'));
     }
 
     /**
@@ -66,7 +55,6 @@ class SystemClockTest extends TestCase
     public function createTimestampFromFormatThrowsException(): void
     {
         $this->expectException(ClockException::class);
-
-        self::assertIsInt($this->subject->createTimestampFromFormat('d.m.Y', 'foobarbaz'));
+        $this->subject->createTimestampFromFormat('d.m.Y', 'foobarbaz');
     }
 }

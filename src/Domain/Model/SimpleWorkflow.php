@@ -28,6 +28,9 @@ class SimpleWorkflow extends Workflow
      */
     protected bool $enableRollback = true;
 
+    /**
+     * @var array<string,string>
+     */
     protected array $stages = [];
 
     public function __construct(TaskManager $taskManager)
@@ -118,6 +121,9 @@ class SimpleWorkflow extends Workflow
         return $this->enableRollback;
     }
 
+    /**
+     * @return string[]
+     */
     public function getStages(): array
     {
         return $this->stages;

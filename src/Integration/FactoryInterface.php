@@ -21,6 +21,8 @@ interface FactoryInterface
      * Get available deployment names
      *
      * Will look up all .php files in the directory ./.surf/ or the given path if specified.
+     *
+     * @return string[]
      */
     public function getDeploymentNames(string $path = null): array;
 

@@ -156,6 +156,9 @@ Content-Type: text/html; charset=UTF-8',
         $this->task->execute($this->node, $this->application, $this->deployment, $options);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     protected function assertNoExceptionThrown(array $options): void
     {
         $exception = null;

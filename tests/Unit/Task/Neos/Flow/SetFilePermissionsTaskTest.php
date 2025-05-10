@@ -37,9 +37,9 @@ class SetFilePermissionsTaskTest extends BaseTaskTest
      * @dataProvider executeWithDifferentOptions
      *
      * @param string $expectedCommand
-     * @param array $options
+     * @param array<string, mixed> $options
      */
-    public function executeSuccessfully($expectedCommand, array $options = []): void
+    public function executeSuccessfully(string $expectedCommand, array $options = []): void
     {
         $this->application = new Flow();
         $this->task->execute($this->node, $this->application, $this->deployment, $options);

@@ -31,8 +31,14 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @var array<string>
+     */
     protected array $replacePaths = [];
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
@@ -86,12 +92,16 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $releasePath = $deployment->getApplicationReleasePath($node);
@@ -102,6 +112,8 @@ class RsyncTask extends Task implements ShellCommandServiceAwareInterface
      * Generates the --exclude flags for a given array of exclude patterns
      *
      * Example: ['foo', '/bar'] => --exclude 'foo' --exclude '/bar'
+     *
+     * @param array<mixed|string> $rsyncExcludes
      */
     protected function getExcludeFlags(array $rsyncExcludes): string
     {

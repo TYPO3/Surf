@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\FailedDeployment;
+use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Integration\FactoryInterface;
@@ -91,6 +92,9 @@ class DescribeCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @param Node[] $nodes
+     */
     protected function printNodes(array $nodes): void
     {
         $this->output->writeln('Nodes:' . PHP_EOL);
@@ -99,6 +103,9 @@ class DescribeCommand extends Command
         }
     }
 
+    /**
+     * @param Application[] $applications
+     */
     protected function printApplications(array $applications, Workflow $workflow): void
     {
         $this->output->writeln(PHP_EOL . 'Applications:' . PHP_EOL);
@@ -127,6 +134,10 @@ class DescribeCommand extends Command
         }
     }
 
+    /**
+     * @param array<string, mixed> $stages
+     * @param array<string, mixed> $tasks
+     */
     protected function printStages(Application $application, array $stages, array $tasks): void
     {
         foreach ($stages as $stage) {
@@ -155,6 +166,7 @@ class DescribeCommand extends Command
     /**
      * Print all tasks before or after a task
      *
+     * @param array<string, mixed> $tasks
      * @param string $output
      */
     private function printBeforeAfterTasks(array $tasks, string $applicationName, string $task, string $step, &$output): void

@@ -130,7 +130,9 @@ class Flow extends BaseApplication
     }
 
     /**
-     * Returns a executable flow command including the context
+     * Returns an executable flow command including the context
+     *
+     * @param string[] $arguments
      */
     public function buildCommand(
         string $targetPath,

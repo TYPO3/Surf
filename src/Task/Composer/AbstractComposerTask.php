@@ -36,11 +36,15 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
 
     /**
      * Arguments for the command
+     *
+     * @var string[]
      */
     protected array $arguments = [];
 
     /**
      * Suffix for the command
+     *
+     * @var string[]
      */
     protected array $suffix = ['2>&1'];
 
@@ -67,6 +71,9 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
         }
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
@@ -74,6 +81,9 @@ abstract class AbstractComposerTask extends Task implements ShellCommandServiceA
 
     /**
      * Build the composer command in the given $path.
+     *
+     * @param array<string,mixed> $options
+     * @return string[]
      */
     private function buildComposerCommands(string $manifestPath, array $options): array
     {

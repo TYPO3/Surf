@@ -39,6 +39,9 @@ class TaskManager implements LoggerAwareInterface
         $this->taskFactory = $taskFactory;
     }
 
+    /**
+     * @param array<string,string> $options
+     */
     public function execute(string $taskName, Node $node, Application $application, Deployment $deployment, string $stage, array $options = [], string $definedTaskName = ''): void
     {
         $definedTaskName = $definedTaskName ?: $taskName;
@@ -89,6 +92,9 @@ class TaskManager implements LoggerAwareInterface
      * Global options for a task should be prefixed with the task name to prevent naming
      * issues between different tasks. For example passing a special option to the
      * GitCheckoutTask could be expressed like GitCheckoutTask::class . '[sha1]' => '1234...'.
+     *
+     * @param array<string,string> $taskOptions
+     * @return array<string,string>
      */
     protected function overrideOptions(string $taskName, Deployment $deployment, Node $node, Application $application, array $taskOptions): array
     {

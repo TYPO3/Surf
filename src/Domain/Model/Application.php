@@ -48,6 +48,9 @@ class Application
      */
     protected string $releasesDirectory = 'releases';
 
+    /**
+     * @var array<string,mixed>
+     */
     protected array $options = [];
 
     public function __construct(string $name)
@@ -219,6 +222,8 @@ class Application
      *
      * The options will include the deploymentPath and sharedPath for
      * unified option handling.
+     *
+     * @return array<string,mixed>
      */
     public function getOptions(): array
     {
@@ -267,6 +272,9 @@ class Application
         return (string)$this->getOption($key);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setOptions(array $options): self
     {
         $this->options = $options;

@@ -210,6 +210,7 @@ class RollbackWorkflowTest extends TestCase
     /**
      * @test
      * @dataProvider globalTaskDefinitions
+     * @param array<string, mixed> $expectedExecutions
      */
     public function globalTaskDefinitionsAreExecutedCorrectly(
         string $message,

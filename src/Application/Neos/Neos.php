@@ -13,6 +13,9 @@ namespace TYPO3\Surf\Application\Neos;
 
 class Neos extends Flow
 {
+    /**
+     * @var string[]
+     */
     private array $neosCommands = [
         'domain:add',
         'domain:list',

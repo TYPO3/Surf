@@ -53,6 +53,9 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         $this->clock = $clock;
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         if (! isset($options['keepReleases']) && ! isset($options['onlyRemoveReleasesOlderThan'])) {
@@ -89,12 +92,18 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     * @param string[] $removableReleases
+     * @return string[]
+     */
     private function removeReleasesByAge(array $options, array $removableReleases): array
     {
         $onlyRemoveReleasesOlderThan = $this->clock->stringToTime($options['onlyRemoveReleasesOlderThan']);
@@ -102,6 +111,11 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         return array_filter($removableReleases, fn ($removeRelease): bool => ($currentTime - $this->clock->createTimestampFromFormat('YmdHis', $removeRelease)) > ($currentTime - $onlyRemoveReleasesOlderThan));
     }
 
+    /**
+     * @param array<string,mixed> $options
+     * @param string[] $removableReleases
+     * @return string[]
+     */
     private function removeReleasesByNumber(array $options, array $removableReleases): array
     {
         sort($removableReleases);
@@ -109,6 +123,10 @@ class CleanupReleasesTask extends Task implements ShellCommandServiceAwareInterf
         return array_slice($removableReleases, 0, count($removableReleases) - $keepReleases);
     }
 
+    /**
+     * @param string[] $allReleases
+     * @return string[]
+     */
     private function extractRemovableReleases(array $allReleases, ?string $currentReleaseIdentifier, string $previousReleaseIdentifier): array
     {
         return array_map('trim', array_filter($allReleases, static fn ($release): bool => $release !== '.' && $release !== $currentReleaseIdentifier && $release !== $previousReleaseIdentifier && $release !== 'current' && $release !== 'previous'));

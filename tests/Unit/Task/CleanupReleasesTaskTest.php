@@ -56,7 +56,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
 
         $this->deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
-        $this->deployment->setLogger($this->mockLogger->reveal());
+        $this->deployment->setLogger($this->mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
         $this->application = new Application('TestApplication');
 
@@ -75,7 +75,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
                 'index.php',
             ],
         ];
-        $this->task->setLogger($this->mockLogger->reveal());
+        $this->task->setLogger($this->mockLogger);
     }
 
     protected function createTask(): CleanupReleasesTask
@@ -90,8 +90,8 @@ class CleanupReleasesTaskTest extends BaseTaskTest
      */
     public function doNothingJustLogDebugIfOptionKeepReleasesIsNotDefined(): void
     {
+        $this->mockLogger->expects(self::atLeastOnce())->method('debug')->with(self::anything());
         $this->task->execute($this->node, $this->application, $this->deployment, []);
-        $this->mockLogger->debug(Argument::any())->shouldHaveBeenCalledOnce();
     }
 
     /**

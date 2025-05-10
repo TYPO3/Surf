@@ -107,6 +107,10 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
+    /**
+     * @param array<mixed|string> $expected
+     * @param array<mixed|string> $actual
+     */
     protected function assertExpectedHeaders(array $expected, array $actual): void
     {
         if (count($expected) > 0) {
@@ -132,6 +136,9 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
+    /**
+     * @param array<int|mixed> $expectedRegexp
+     */
     protected function assertExpectedRegexp(array $expectedRegexp, string $responseBody): void
     {
         if (count($expectedRegexp) > 0) {
@@ -172,6 +179,7 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
     }
 
     /**
+     * @param array<string,mixed> $options
      * @throws TaskExecutionException
      * @throws GuzzleException
      */
@@ -234,6 +242,8 @@ class HttpTestTask extends Task implements ShellCommandServiceAwareInterface
 
     /**
      * Split response into headers and body part
+     *
+     * @return string[][]
      */
     protected function extractHeadersFromMultiLineString(string $headerText): array
     {

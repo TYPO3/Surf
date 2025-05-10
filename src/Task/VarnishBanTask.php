@@ -41,15 +41,23 @@ class VarnishBanTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
+    /**
+     * @param array<string,string> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
+        /** @var array<string, string> $options */
         $this->shell->executeOrSimulate($options['varnishadm'] . ' -S ' . $options['secretFile'] . ' -T 127.0.0.1:6082 ban.url ' . escapeshellarg($options['banUrl']), $node, $deployment);
     }
 
+    /**
+     * @param array<string,string> $options
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
+        /** @var array<string, string> $options */
         $this->shell->executeOrSimulate($options['varnishadm'] . ' -S ' . $options['secretFile'] . ' -T 127.0.0.1:6082 status', $node, $deployment);
     }
 

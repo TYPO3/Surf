@@ -46,6 +46,7 @@ class RunCommandTaskTest extends BaseTaskTest
     /**
      * @test
      * @dataProvider executeWithDifferentOptions
+     * @param array<string, mixed> $options
      */
     public function executeSuccessfully(string $expectedCommand, array $options = []): void
     {

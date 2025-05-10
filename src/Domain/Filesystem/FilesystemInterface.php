@@ -35,5 +35,8 @@ interface FilesystemInterface
 
     public function createDirectory(string $directory): bool;
 
+    /**
+     * @return string[]
+     */
     public function glob(string $pattern): array;
 }

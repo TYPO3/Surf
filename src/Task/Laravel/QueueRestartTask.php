@@ -19,6 +19,9 @@ use Webmozart\Assert\Assert;
 
 class QueueRestartTask extends AbstractCliTask
 {
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         Assert::isInstanceOf(

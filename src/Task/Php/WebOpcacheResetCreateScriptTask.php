@@ -58,6 +58,9 @@ class WebOpcacheResetCreateScriptTask extends Task implements ShellCommandServic
         $this->randomBytesGenerator = $randomBytesGenerator;
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);
@@ -101,6 +104,9 @@ echo "success";
         }
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);

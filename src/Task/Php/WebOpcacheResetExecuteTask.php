@@ -51,6 +51,9 @@ class WebOpcacheResetExecuteTask extends Task
         $this->filesystem = $filesystem;
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $options = $this->configureOptions($options);

@@ -19,6 +19,9 @@ use Webmozart\Assert\Assert;
 
 class MigrateTask extends AbstractCliTask
 {
+    /**
+     * @param array<string,mixed> $options
+     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         Assert::isInstanceOf(
@@ -38,12 +41,16 @@ class MigrateTask extends AbstractCliTask
 
     /**
      * @codeCoverageIgnore
+     * @param array<string,mixed> $options
      */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         Assert::isInstanceOf(

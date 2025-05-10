@@ -15,7 +15,6 @@ use PHPUnit\Framework\Constraint\LogicalNot;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
@@ -36,11 +35,15 @@ abstract class BaseTaskTest extends TestCase
 
     /**
      * Executed commands
+     *
+     * @var array<string, mixed>
      */
     protected array $commands = [];
 
     /**
      * Predefined command responses
+     *
+     * @var array<string, mixed>
      */
     protected array $responses = [];
 
@@ -53,7 +56,7 @@ abstract class BaseTaskTest extends TestCase
     protected Deployment $deployment;
 
     /**
-     * @var LoggerInterface|ObjectProphecy
+     * @var LoggerInterface
      */
     protected $mockLogger;
 
@@ -118,10 +121,10 @@ abstract class BaseTaskTest extends TestCase
 
         $this->deployment = new Deployment(static::getKernel()->getContainer(), 'TestDeployment');
 
-        $this->mockLogger = $this->prophesize(LoggerInterface::class);
-        $this->task->setLogger($this->mockLogger->reveal());
+        $this->mockLogger = $this->createMock(LoggerInterface::class);
+        $this->task->setLogger($this->mockLogger);
 
-        $this->deployment->setLogger($this->mockLogger->reveal());
+        $this->deployment->setLogger($this->mockLogger);
         $this->deployment->setWorkspacesBasePath('./Data/Surf');
 
         $this->application = new Application('TestApplication');

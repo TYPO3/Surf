@@ -30,11 +30,10 @@ class RsyncFoldersTaskTest extends BaseTaskTest
 
     /**
      * @test
-     *
      * @dataProvider executeWithDifferentOptions
      *
-     * @param array|string $expectedCommands
-     * @param array $options
+     * @param array<int, string>|string $expectedCommands
+     * @param array<string, mixed> $options
      */
     public function executeSuccessfully($expectedCommands, array $options): void
     {

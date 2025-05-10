@@ -38,6 +38,8 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
     protected ?Node $targetNode = null;
 
     /**
+     * @param array<string> $cliArguments
+     * @param array<string,mixed> $options
      * @return bool|mixed
      */
     protected function executeCliCommand(array $cliArguments, Node $node, CMS $application, Deployment $deployment, array $options = [])
@@ -60,11 +62,17 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         ], $this->targetNode, $deployment);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected function determineWorkingDirectoryAndTargetNode(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         if (isset($options['useApplicationWorkspace']) && $options['useApplicationWorkspace'] === true) {
@@ -76,6 +84,9 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         $this->targetNode = $node;
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected function getAvailableCliPackage(Node $node, CMS $application, Deployment $deployment, array $options = []): ?string
     {
         try {
@@ -86,6 +97,9 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         }
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected function getTypo3CoreCliFileName(Node $node, CMS $application, Deployment $deployment, array $options = []): string
     {
         if (!isset($options['typo3CliFileName'])) {
@@ -103,6 +117,9 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         return $options['typo3CliFileName'];
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected function getTypo3ConsoleScriptFileName(Node $node, CMS $application, Deployment $deployment, array $options = []): string
     {
         if (!isset($options['scriptFileName'])) {
@@ -116,6 +133,9 @@ abstract class AbstractCliTask extends Task implements ShellCommandServiceAwareI
         return $options['scriptFileName'];
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected function fileExists(string $pathAndFileName, Node $node, CMS $application, Deployment $deployment, array $options = []): bool
     {
         $this->determineWorkingDirectoryAndTargetNode($node, $application, $deployment, $options);

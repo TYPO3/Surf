@@ -39,11 +39,14 @@ class BaseApplication extends Application
      * Symlinks, which should be created for each release.
      *
      * @see \TYPO3\Surf\Task\Generic\CreateSymlinksTask
+     * @var string[]
      */
     protected array $symlinks = [];
 
     /**
      * Directories which should be created on deployment. E.g. shared folders.
+     *
+     * @var string[]
      */
     protected array $directories = [];
 
@@ -125,6 +128,9 @@ class BaseApplication extends Application
         }
     }
 
+    /**
+     * @param string[] $symlinks
+     */
     public function setSymlinks(array $symlinks): self
     {
         $this->symlinks = $symlinks;
@@ -132,6 +138,9 @@ class BaseApplication extends Application
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getSymlinks(): array
     {
         return $this->symlinks;
@@ -144,6 +153,9 @@ class BaseApplication extends Application
         return $this;
     }
 
+    /**
+     * @param string[] $symlinks
+     */
     public function addSymlinks(array $symlinks): self
     {
         foreach ($symlinks as $linkPath => $sourcePath) {
@@ -153,6 +165,9 @@ class BaseApplication extends Application
         return $this;
     }
 
+    /**
+     * @param string[] $directories
+     */
     public function setDirectories(array $directories): self
     {
         $this->directories = $directories;
@@ -160,6 +175,9 @@ class BaseApplication extends Application
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getDirectories(): array
     {
         return $this->directories;
@@ -172,6 +190,9 @@ class BaseApplication extends Application
         return $this;
     }
 
+    /**
+     * @param string[] $directories
+     */
     public function addDirectories(array $directories): self
     {
         foreach ($directories as $path) {
