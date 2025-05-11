@@ -15,7 +15,8 @@ jobs:
     if: github.event.pull_request.draft == false && github.repository == 'TYPO3/Surf' && github.actor != 'dependabot[bot]'
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.PHP_CS_FIXER }}
           ref: ${{ github.head_ref }}
@@ -25,12 +26,12 @@ jobs:
           php-version: 7.4
           coverage: none # disable xdebug, pcov
 
-      - uses: ramsey/composer-install@v2
+      - uses: ramsey/composer-install@v3
 
       - name: Run php-cs-fixer
         run: vendor/bin/php-cs-fixer fix --diff
 
-      - name: "Commit changed files"
+      - name: Commit changed files
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply php-cs-fixer changes

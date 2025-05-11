@@ -11,7 +11,7 @@ jobs:
     name: Lint PHP
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -33,14 +33,15 @@ jobs:
 
     name: PHP ${{ matrix.php }} unittests
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: none # disable xdebug, pcov
 
-      - uses: ramsey/composer-install@v2
+      - uses: ramsey/composer-install@v3
         with:
           composer-options: "--no-interaction --no-suggest"
 
@@ -54,14 +55,14 @@ jobs:
 
     name: Can be executed with PHP ${{ matrix.php }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: none # disable xdebug, pcov
 
-      - uses: ramsey/composer-install@v2
+      - uses: ramsey/composer-install@v3
         with:
           composer-options: "--no-interaction --no-suggest"
 

@@ -12,14 +12,15 @@ jobs:
     if: github.actor != 'dependabot[bot]'
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
           coverage: none
 
-      - uses: ramsey/composer-install@v2
+      - uses: ramsey/composer-install@v3
 
       - run: |
           phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit --coverage-clover build/logs/clover.xml
