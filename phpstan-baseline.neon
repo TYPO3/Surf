@@ -91,30 +91,6 @@ parameters:
 			path: tests/Unit/Command/DeployCommandTest.php
 
 		-
-			message: '#^Parameter \#2 \$configurationPath of method Prophecy\\Prophecy\\ObjectProphecy\<object\>\:\:getDeployment\(\) expects string\|null, Prophecy\\Argument\\Token\\ExactValueToken given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/Unit/Command/DeployCommandTest.php
-
-		-
-			message: '#^Parameter \#3 \$simulateDeployment of method Prophecy\\Prophecy\\ObjectProphecy\<object\>\:\:getDeployment\(\) expects bool, Prophecy\\Argument\\Token\\ExactValueToken given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/Unit/Command/DeployCommandTest.php
-
-		-
-			message: '#^Parameter \#4 \$initialize of method Prophecy\\Prophecy\\ObjectProphecy\<object\>\:\:getDeployment\(\) expects bool, Prophecy\\Argument\\Token\\ExactValueToken given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/Unit/Command/DeployCommandTest.php
-
-		-
-			message: '#^Parameter \#5 \$forceDeployment of method Prophecy\\Prophecy\\ObjectProphecy\<object\>\:\:getDeployment\(\) expects bool, Prophecy\\Argument\\Token\\ExactValueToken given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/Unit/Command/DeployCommandTest.php
-
-		-
 			message: '#^Property TYPO3\\Surf\\Tests\\Unit\\Command\\DeployCommandTest\:\:\$factory with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
 			identifier: missingType.generics
 			count: 1
@@ -265,12 +241,6 @@ parameters:
 			path: tests/Unit/Integration/FactoryTest.php
 
 		-
-			message: '#^Parameter \#1 \$file of method Prophecy\\Prophecy\\ObjectProphecy\<object\>\:\:fileExists\(\) expects string, Prophecy\\Argument\\Token\\AnyValueToken given\.$#'
-			identifier: argument.type
-			count: 4
-			path: tests/Unit/Integration/FactoryTest.php
-
-		-
 			message: '#^Property TYPO3\\Surf\\Tests\\Unit\\Integration\\FactoryTest\:\:\$filesystem with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
 			identifier: missingType.generics
 			count: 1
@@ -315,12 +285,6 @@ parameters:
 		-
 			message: '#^Method TYPO3\\Surf\\Tests\\Unit\\Task\\CleanupReleasesTaskTest\:\:removeReleasesByAge\(\) has parameter \$identifiers with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: tests/Unit/Task/CleanupReleasesTaskTest.php
-
-		-
-			message: '#^Parameter \#1 \$string of method Prophecy\\Prophecy\\ObjectProphecy\<object\>\:\:stringToTime\(\) expects string, Prophecy\\Argument\\Token\\TypeToken given\.$#'
-			identifier: argument.type
 			count: 1
 			path: tests/Unit/Task/CleanupReleasesTaskTest.php
 

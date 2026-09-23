@@ -13,3 +13,10 @@ parameters:
 
     inferPrivatePropertyTypeFromConstructor: true
     treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        # Prophecy wildcard tokens can not satisfy the typed parameter of the stubbed method
+        -
+            identifier: argument.type
+            path: tests/Unit/Integration/FactoryTest.php
+            count: 4

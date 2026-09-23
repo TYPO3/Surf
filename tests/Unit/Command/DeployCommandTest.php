@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Command;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -51,10 +50,10 @@ final class DeployCommandTest extends TestCase
 
         $this->factory->getDeployment(
             'Foo',
-            Argument::exact(null),
-            Argument::exact(false),
-            Argument::exact(true),
-            Argument::exact(true)
+            null,
+            false,
+            true,
+            true
         )->willReturn($deployment);
 
         $commandTester = new CommandTester($this->subject);
