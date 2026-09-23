@@ -13,19 +13,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
           coverage: none
 
-      - uses: ramsey/composer-install@v3
+      - uses: ramsey/composer-install@v4
 
       - run: |
           phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit --coverage-clover build/logs/clover.xml
           # Coveralls.io
-          wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+          wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.9.1/php-coveralls.phar
           php php-coveralls.phar --verbose
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
