@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace TYPO3\Surf\Tests\Unit\Task;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\Surf\Domain\Clock\ClockInterface;
@@ -142,7 +141,7 @@ class CleanupReleasesTaskTest extends BaseTaskTest
             $folderStructure[$folderName] = ['index.php'];
         }
 
-        $this->clockMock->stringToTime(Argument::type('string'))->willReturn(strtotime($stringToTime, $currentTime));
+        $this->clockMock->stringToTime('foo')->willReturn(strtotime($stringToTime, $currentTime));
 
         $folders = array_keys($folderStructure);
 
