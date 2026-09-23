@@ -45,6 +45,15 @@ If you would like to deploy a TYPO3 website a good starting point is to use TYPO
            }
        );
 
+Configuration file in TYPO3 12 and later
+========================================
+
+Since TYPO3 12 the configuration lives in :file:`config/system/settings.php`
+instead of :file:`typo3conf/LocalConfiguration.php`. Replace the symlink of the
+example above with::
+
+   $application->addSymlink('config/system/settings.php', '../../../../shared/Configuration/settings.php');
+
 Publishing extension assets (TYPO3 14.2 and later)
 ==================================================
 
